@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Instagram, Linkedin, Youtube, Search, Twitter } from "lucide-react";
+import { Facebook, Instagram, Linkedin, Youtube, Search, Twitter, Menu, X } from "lucide-react";
 import UserLogin from "./components/UserLogin";
+import MobileNavbar from "./components/MobileNavbar";
 
 const navItems = [
   { label: "ANASAYFA", href: "/" },
@@ -15,8 +17,10 @@ const navItems = [
 ];
 
 export default function Header() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   return (
-    <header className="w-full">
+    <header className="w-full relative">
       <div className="bg-primary-600 border-b-2 border-secondary-500">
         <div className="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -51,8 +55,8 @@ export default function Header() {
 
       <div className="bg-primary-500">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
-          <Link href="/" className="shrink-0">
-            <Image src="/logo.png" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-16 w-auto" priority/>
+          <Link href="/" className="shrink-0 py-2">
+            <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-10 w-auto" priority/>
           </Link>
 
           <div className="flex items-center gap-6">
@@ -64,16 +68,26 @@ export default function Header() {
               ))}
             </nav>
 
-            <button className="text-neutral-400 hover:text-white transition-colors">
+            <button className="hidden lg:block text-neutral-400 hover:text-white transition-colors">
               <Search size={14} />
             </button>
 
-            <div className="w-[0.5px] h-6 bg-neutral-600"></div>
+            <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 
-            <UserLogin />
+            <div className="hidden lg:block">
+              <UserLogin />
+            </div>
+
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden text-neutral-400 hover:text-white transition-colors"
+            >
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+            </button>
           </div>
         </div>
       </div>
+      <MobileNavbar isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
     </header>
   );
 }
