@@ -3,7 +3,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Facebook, Instagram, Linkedin, Youtube, Search, Twitter } from "lucide-react";
-import UserLogin from "./UserLogin";
+import UserLogin from "./components/UserLogin";
 
 const navItems = [
   { label: "ANASAYFA", href: "/" },
