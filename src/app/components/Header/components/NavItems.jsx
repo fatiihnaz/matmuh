@@ -104,17 +104,17 @@ export default function NavItems({ item, children }) {
 
   if (!item.children) {
     return (
-      <Link href={item.href} className={`hidden xl:block text-xs tracking-wide font-light transition-colors ${isActive ? "text-white" : "text-white/80 hover:text-white"}`}>
+      <Link href={item.href} className={`hidden xl:block text-xs tracking-wide transition-colors ${isActive ? "text-secondary-500 font-semibold" : "text-white/80 font-light hover:text-secondary-500"}`}>
         {children}
       </Link>
     );
   }
 
   const categorized = hasCategories(item.children);
-
+  
   return (
     <div className="relative" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
-      <Link href={item.children[0]?.href || "#"} className={`flex items-center gap-0.5 text-xs tracking-wide font-light transition-colors ${isActive || isOpen ? "text-white" : "text-white/80 hover:text-white"}`}>
+      <Link href={item.children[0]?.href || "#"} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
         {children}
         <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25, ease: "easeInOut" }}>
           <ChevronDown size={12} strokeWidth={1.5} className="text-white/60" />
