@@ -14,6 +14,8 @@ const labelMap = {
   "akademik-kadro": "Akademik Kadro",
 };
 
+const unclickablePaths = ["bolum", "personel", "egitim", "arge", "dis-iliskiler"];
+
 export default function Breadcrumb() {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
@@ -23,6 +25,7 @@ export default function Breadcrumb() {
     ...segments.map((seg, i) => ({
       label: labelMap[seg] || seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, " "),
       href: "/" + segments.slice(0, i + 1).join("/"),
+      isClickable: !unclickablePaths.includes(seg)
     })),
   ];
 
@@ -35,10 +38,12 @@ export default function Breadcrumb() {
             {i > 0 && <ChevronRight size={12} className="text-neutral-500" />}
             {isLast ? (
               <span className="text-secondary-400 font-medium">{crumb.label}</span>
-            ) : (
+            ) : crumb.isClickable ? (
               <Link href={crumb.href} className="text-neutral-400 hover:text-white transition-colors">
                 {crumb.label}
               </Link>
+            ) : (
+              <span className="text-neutral-400">{crumb.label}</span>
             )}
           </span>
         );

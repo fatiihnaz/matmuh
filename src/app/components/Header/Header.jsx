@@ -6,22 +6,15 @@ import Image from "next/image";
 import { Facebook, Instagram, Linkedin, Youtube, Search, Twitter, Menu, X } from "lucide-react";
 import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
-
-const navItems = [
-  { label: "ANASAYFA", href: "/" },
-  { label: "BÖLÜM", href: "/bolum" },
-  { label: "PERSONEL", href: "/personel" },
-  { label: "EĞİTİM", href: "/egitim" },
-  { label: "AR-GE", href: "/arge" },
-  { label: "DIŞ İLİŞKİLER", href: "/dis-iliskiler" },
-];
+import NavItems from "./components/NavItems";
+import { navigationItems } from "@/app/data/navigation";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
     <header className="w-full relative">
-      <div className="bg-primary-600 border-b-2 border-secondary-500">
+      <div className="bg-primary-600">
         <div className="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:text-white transition-colors">
@@ -46,25 +39,33 @@ export default function Header() {
               YTÜ Ana Site
             </a>
             <div className="w-px h-3 bg-neutral-600"></div>
-            <button className="text-white border border-white/40 px-3 py-0.5 rounded text-[10px] font-medium hover:bg-white/10 transition-colors">
-              TR
-            </button>
+            <div className="flex items-center gap-1.5 text-[11px] tracking-wide">
+              <button className="text-white font hover:opacity-80 transition-opacity">
+                TR
+              </button>
+              <span className="text-white/30 font-light">/</span>
+              <button className="text-white/50 hover:text-white transition-colors">
+                EN
+              </button>
+            </div>
           </div>
         </div>
       </div>
 
+      <div className="w-full h-0.5" style={{ background: "linear-gradient(to right, var(--color-primary-500) 0%, var(--color-secondary-500) 30%, var(--color-secondary-500) 70%, var(--color-primary-500) 100%)" }} />
+
       <div className="bg-primary-500">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
           <Link href="/" className="shrink-0 py-2">
-            <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-10 w-auto" priority/>
+            <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-10 w-auto" priority />
           </Link>
 
           <div className="flex items-center gap-6">
             <nav className="hidden lg:flex items-center gap-6">
-              {navItems.map((item) => (
-                <Link key={item.href} href={item.href} className="text-white text-sm tracking-wide font-light hover:text-secondary-500 transition-colors">
-                  {item.label}
-                </Link>
+              {navigationItems.map((item) => (
+                <NavItems key={item.label} item={item}>
+                  {item.label.toUpperCase()}
+                </NavItems>
               ))}
             </nav>
 
@@ -78,10 +79,7 @@ export default function Header() {
               <UserLogin />
             </div>
 
-            <button
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-neutral-400 hover:text-white transition-colors"
-            >
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden text-neutral-400 hover:text-white transition-colors">
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
