@@ -13,7 +13,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <header className="w-full relative">
+    <header className="w-full sticky top-0 z-50">
       <div className="bg-primary-600">
         <div className="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
           <div className="flex items-center gap-3">
@@ -57,25 +57,25 @@ export default function Header() {
       <div className="bg-primary-500">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
           <Link href="/" className="shrink-0 py-2">
-            <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-10 w-auto" priority />
+            <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-8 sm:h-10 w-auto" priority />
           </Link>
 
-          <div className="flex items-center gap-6">
+          <div className="flex items-center gap-2">
             <nav className="hidden lg:flex items-center gap-6">
               {navigationItems.map((item) => (
                 <NavItems key={item.label} item={item}>
-                  {item.label.toUpperCase()}
+                  {item.label.toLocaleUpperCase('tr-TR')}
                 </NavItems>
               ))}
             </nav>
 
-            <button className="hidden lg:block text-neutral-400 hover:text-white transition-colors">
+            <button className="hidden lg:block pl-2 text-neutral-400 hover:text-white transition-colors">
               <Search size={14} />
             </button>
 
             <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 
-            <div className="hidden lg:block">
+            <div className="hidden sm:block">
               <UserLogin />
             </div>
 

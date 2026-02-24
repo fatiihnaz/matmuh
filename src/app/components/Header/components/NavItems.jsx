@@ -104,7 +104,7 @@ export default function NavItems({ item, children }) {
 
   if (!item.children) {
     return (
-      <Link href={item.href} className={`text-xs tracking-wide font-light transition-colors ${isActive ? "text-white" : "text-white/80 hover:text-white"}`}>
+      <Link href={item.href} className={`hidden xl:block text-xs tracking-wide font-light transition-colors ${isActive ? "text-white" : "text-white/80 hover:text-white"}`}>
         {children}
       </Link>
     );

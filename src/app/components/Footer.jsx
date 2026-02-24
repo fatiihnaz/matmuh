@@ -4,7 +4,7 @@ export default function Footer() {
   return (
     <footer className="w-full">
       <div className="bg-primary-600">
-        <div className="max-w-7xl mx-auto px-6 md:px-16 py-12 flex flex-col md:flex-row md:justify-between gap-10">
+        <div className="max-w-7xl mx-auto px-6 md:px-16 py-10 flex flex-col md:flex-row md:justify-between gap-10">
           <div>
             <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <MapPin size={14} className="text-secondary-500 -mt-0.5" />
