@@ -1,7 +1,10 @@
+import Landing from "./components/Landing";
+
 export default function LandingPage() {
   return (
-    <div>
-      Mat muh site.
-    </div>
-  )
+    <>
+      <Landing />
+      <div className="min-h-screen"/>
+    </>
+  );
 }
