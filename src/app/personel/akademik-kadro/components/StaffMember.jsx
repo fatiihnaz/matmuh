@@ -17,7 +17,7 @@ const StaffMember = ({ member, idx, bgColors }) => {
     
     return (
     <div
-        className="group cursor-pointer rounded-xl border border-black/5 bg-white p-5 shadow-[0_1px_3px_rgba(0,0,0,0.04)] transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
+        className="group cursor-pointer rounded-xl p-5 bg-white shadow-sm shadow-black/10 transition-all duration-200 hover:-translate-y-1 hover:shadow-md"
     >
         <div className="flex flex-col items-center text-center">
         <div
