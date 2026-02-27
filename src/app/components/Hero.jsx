@@ -3,10 +3,11 @@ import React, { useRef, useMemo, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Search } from "lucide-react";
 
-const Hero = () => {
+export default function Hero() {
   const containerRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [activeGraph, setActiveGraph] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -114,7 +115,7 @@ const Hero = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveGraph((prev) => (prev + 1) % functionPaths.length);
-    }, 7000);
+    }, 9500);
     return () => clearInterval(interval);
   }, [functionPaths.length]);
 
@@ -122,7 +123,9 @@ const Hero = () => {
     <div
       ref={containerRef}
       onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => {
+        setIsHovered(false);
         mouseX.set(0);
         mouseY.set(0);
       }}
@@ -138,50 +141,55 @@ const Hero = () => {
           transformStyle: "preserve-3d",
         }}
       >
-        <div className="absolute inset-0 opacity-70">
-          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+        <div className="absolute inset-0 opacity-70 pointer-events-none">
+          <svg
+            viewBox="0 0 1600 1000"
+            preserveAspectRatio="xMidYMid slice"
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[140vh]"
+            xmlns="http://www.w3.org/2000/svg"
+          >
             <defs>
               <pattern
                 id="blueprint-grid-small"
-                width="50"
-                height="50"
+                width="20"
+                height="20"
                 patternUnits="userSpaceOnUse"
-                x="50%"
-                y="50%"
+                x="800"
+                y="500"
               >
                 <path
-                  d="M 50 0 L 0 0 0 50"
+                  d="M 20 0 L 0 0 0 20"
                   fill="none"
                   stroke="#626D9E"
-                  strokeWidth="0.8"
+                  strokeWidth="0.5"
                   opacity="0.4"
                 />
               </pattern>
               <pattern
                 id="blueprint-grid-large"
-                width="250"
-                height="250"
+                width="100"
+                height="100"
                 patternUnits="userSpaceOnUse"
-                x="50%"
-                y="50%"
+                x="800"
+                y="500"
               >
                 <rect
-                  width="250"
-                  height="250"
+                  width="100"
+                  height="100"
                   fill="url(#blueprint-grid-small)"
                 />
                 <path
-                  d="M 250 0 L 0 0 0 250"
+                  d="M 100 0 L 0 0 0 100"
                   fill="none"
                   stroke="#626D9E"
-                  strokeWidth="1.5"
+                  strokeWidth="1.2"
                   opacity="0.7"
                 />
               </pattern>
             </defs>
             <rect
-              width="100%"
-              height="100%"
+              width="1600"
+              height="1000"
               fill="url(#blueprint-grid-large)"
             />
           </svg>
@@ -250,14 +258,15 @@ const Hero = () => {
             fill="none"
             stroke={functionPaths[activeGraph].stroke}
             strokeWidth={functionPaths[activeGraph].width}
-            initial={{ pathLength: 0, opacity: 0 }}
+            initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
             animate={{
               pathLength: [0, 1, 1, 1],
+              pathOffset: [0, 0, 0, 1],
               opacity: [0, 0.6, 0.6, 0],
             }}
             transition={{
-              duration: 6.5,
-              times: [0, 0.4, 0.8, 1],
+              duration: 9,
+              times: [0, 0.4, 0.7, 1],
               ease: "easeInOut",
             }}
           />
@@ -330,10 +339,15 @@ const Hero = () => {
             </svg>
 
             <motion.div
-              className="absolute w-[22%] max-w-[400px] aspect-square flex items-center justify-center z-20 overflow-visible"
-              style={{
-                filter:
-                  "drop-shadow(0 0 0px #1D2445) drop-shadow(0 0 4px #1D2445) drop-shadow(0 0 20px rgba(173,151,111,0.6))",
+              className="absolute w-[22%] max-w-[400px] aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
+              animate={{
+                filter: isHovered
+                  ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 35px rgba(173,151,111,0.9))"
+                  : "drop-shadow(0 0 4px #0D112B) drop-shadow(0 0 20px rgba(173,151,111,0.6))",
+              }}
+              transition={{
+                duration: 0.7,
+                ease: "easeInOut",
               }}
             >
               <svg
@@ -363,39 +377,39 @@ const Hero = () => {
       <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(29,36,69,0.2)_0%,rgba(29,36,69,0.95)_100%)] pointer-events-none" />
 
       <motion.div
-        className="relative z-[100] flex flex-col items-center px-4 w-full max-w-7xl -mt-24 sm:-mt-12"
+        className="relative z-[100] flex flex-col items-center px-4 w-full max-w-7xl sm:-mt-12"
         initial={{ opacity: 0, translateZ: 100 }}
         animate={{ opacity: 1, translateZ: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        <div className="text-center flex flex-col items-center">
+        <div className="text-center flex flex-col items-center w-full px-2">
           <motion.div
             initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-4 sm:gap-6 mb-2"
+            className="flex items-center justify-center gap-3 sm:gap-6 mb-2 w-full max-w-full sm:max-w-none"
           >
-            <div className="w-2 h-2 rotate-45 bg-[#AD976F]" />
-            <h1 className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight leading-none uppercase">
+            <div className="flex-shrink-0 w-2 h-2 rotate-45 bg-[#AD976F]" />
+            <h1 className="text-[1.35rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight uppercase text-center break-words max-w-[80vw] sm:max-w-none">
               YILDIZ TEKNİK ÜNİVERSİTESİ
             </h1>
-            <div className="w-2 h-2 rotate-45 bg-[#AD976F]" />
+            <div className="flex-shrink-0 w-2 h-2 rotate-45 bg-[#AD976F]" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center gap-3 mt-4 sm:mt-6"
+            className="flex items-center justify-center gap-2 mt-4 sm:mt-6 w-full"
           >
-            <span className="text-[#AD976F]/60 font-light text-2xl sm:text-4xl">
+            <span className="text-[#AD976F]/60 font-light text-2xl sm:text-4xl leading-none select-none">
               [
             </span>
-            <h2 className="text-lg sm:text-2xl md:text-3xl lg:text-4xl font-medium text-[#AD976F] tracking-[0.2em] uppercase">
+            <h2 className="text-[1.05rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-[#AD976F] tracking-[0.15em] uppercase text-center">
               MATEMATİK MÜHENDİSLİĞİ
             </h2>
-            <span className="text-[#AD976F]/60 font-light text-2xl sm:text-4xl">
+            <span className="text-[#AD976F]/60 font-light text-2xl sm:text-4xl leading-none select-none">
               ]
             </span>
           </motion.div>
@@ -426,6 +440,4 @@ const Hero = () => {
       </motion.div>
     </div>
   );
-};
-
-export default Hero;
+}
