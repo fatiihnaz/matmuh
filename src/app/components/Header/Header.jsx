@@ -7,7 +7,7 @@ import { Facebook, Instagram, Linkedin, Youtube, Search, Twitter, Menu, X } from
 import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
-import { navigationItems } from "@/app/data/navigation";
+import { navigationItems } from "@/data/navigation";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);

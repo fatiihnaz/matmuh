@@ -98,7 +98,7 @@ export default function Landing() {
               </div>
               <div>
                 <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 1 + (index * 0.2) }}
-                  className="text-lg sm:text-2xl font-bold text-primary-600"
+                  className="text-lg sm:text-xl font-bold text-primary-600"
                 >
                   <CountUp value={stat.value} suffix={stat.suffix} delay={1} />
                 </motion.p>

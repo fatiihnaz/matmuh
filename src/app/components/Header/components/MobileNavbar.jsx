@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Search, ChevronUp, LogIn } from "lucide-react";
-import { navigationItems } from "@/app/data/navigation";
+import { navigationItems } from "@/data/navigation";
 
 function hasCategories(children) {
   return children.length > 0 && children[0].category !== undefined;
