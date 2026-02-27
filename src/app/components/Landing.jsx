@@ -1,9 +1,10 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Image from "next/image";
+// import Image from "next/image";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Search, Users, GraduationCap, BookOpen, FlaskConical } from "lucide-react";
+import Hero from "./Hero";
 
 const stats = [
   { icon: Users, value: 32, suffix: "", label: "Akademik Kadro" },
@@ -54,6 +55,8 @@ export default function Landing() {
 
   return (
     <div className="relative pb-12 sm:pb-14">
+      <Hero/>
+      {/* eski hero şimdilik dursun
       <section className="relative w-full h-[40vh] sm:h-[60vh] md:h-[70vh] min-h-80 flex items-center justify-center overflow-hidden bg-[#2c3760]">
         <Image src="/Landing.png" alt="YTÜ Davutpaşa Kampüsü" fill className="object-cover" priority />
 
@@ -87,7 +90,7 @@ export default function Landing() {
           </motion.div>
 
         </div>
-      </section>
+      </section>*/}
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 -mt-20 sm:-mt-12">
         <div className="bg-white rounded-xl shadow-sm shadow-black/10 py-5 sm:py-6 px-4 sm:px-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
