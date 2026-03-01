@@ -2,11 +2,11 @@
 import React, { useRef, useMemo, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Search } from "lucide-react";
+import BackgroundVisuals from "./BackgroundVisuals";
 
 export default function Hero() {
   const containerRef = useRef(null);
   const [searchQuery, setSearchQuery] = useState("");
-  const [activeGraph, setActiveGraph] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
 
   const mouseX = useMotionValue(0);
@@ -29,96 +29,6 @@ export default function Hero() {
   const planeRotateY = useTransform(smoothMouseX, [-1, 1], [-5, 5]);
   const planeTranslateZ = useTransform(smoothMouseY, [-1, 1], [-40, 40]);
 
-  const { functionPaths, mathCodeNodes } = useMemo(() => {
-    const width = 1600;
-    const height = 1000;
-    const points = 300;
-
-    let sine = "",
-      gauss = "",
-      cubic = "",
-      damped = "";
-
-    for (let i = 0; i <= points; i++) {
-      const x = (i / points) * width;
-      const nx = (i / points) * 2 - 1;
-
-      const ySin = height / 2 + Math.sin(nx * Math.PI * 3) * 180;
-      sine += `${i === 0 ? "M" : "L"} ${x} ${ySin} `;
-
-      const yGauss = height / 2 - Math.exp(-(nx * nx) / 0.08) * 250 + 120;
-      gauss += `${i === 0 ? "M" : "L"} ${x} ${yGauss} `;
-
-      const yCubic = height / 2 - Math.pow(nx, 3) * 300;
-      cubic += `${i === 0 ? "M" : "L"} ${x} ${yCubic} `;
-
-      const yDamped =
-        height / 2 +
-        Math.exp(-Math.abs(nx) * 3) * Math.cos(nx * Math.PI * 8) * 250;
-      damped += `${i === 0 ? "M" : "L"} ${x} ${yDamped} `;
-    }
-
-    const paths = [
-      { id: "sine", d: sine, stroke: "#626D9E", width: 1.5 },
-      { id: "gauss", d: gauss, stroke: "#AD976F", width: 2 },
-      { id: "damped", d: damped, stroke: "#8E99C2", width: 1.5 },
-      { id: "cubic", d: cubic, stroke: "#4A5585", width: 1.5 },
-    ];
-
-    const symbols = [
-      "∂²u/∂t² = c²∇²u",
-      "∮_C E · dl = -dΦ_B/dt",
-      "O(n log n)",
-      "∫_a^b f(x)dx = F(b) - F(a)",
-      "d/dx [∫_a^x f(t)dt] = f(x)",
-      "∇×B = μ₀J + μ₀ε₀(∂E/∂t)",
-      "e^{iπ} + 1 = 0",
-      "λ",
-      "μ",
-      "σ²",
-      "∫_(-∞)^∞ e^{-x²} dx = √π",
-      "y'' + p(x)y' + q(x)y = 0",
-      "lim_{h→0} [f(x+h)-f(x)]/h",
-      "w^T x + b = 0",
-      "L = ∫ √(1 + (dy/dx)²) dx",
-      "P(A|B) = [P(B|A)P(A)] / P(B)",
-      "L(y, ŷ) = −Σ y log(ŷ)",
-      "softmax(z)ᵢ = eᶻⁱ / Σ eᶻʲ",
-      "ReLU(x) = max(0, x)",
-      "E[X] = Σ x P(X=x)",
-      "Var(X) = E[X²] − (E[X])²",
-      "β̂ = (XᵀX)⁻¹Xᵀy",
-      "MSE = (1/n) Σ (y - ŷ)²",
-      "∇²ϕ = 0",
-      "xₙ₊₁ = xₙ − f(xₙ)/f'(xₙ)",
-      "lim_{n→∞} (1 + 1/n)ⁿ = e",
-      "K(x, y) = exp(−γ ||x - y||²)",
-      "Cov(X, Y) = E[(X-μₓ)(Y-μᵧ)]",
-      "det(A - λI) = 0",
-      "Tr(A) = Σ aᵢᵢ",
-      "C(n,k) = n! / (k!(n-k)!)",
-    ];
-
-    const nodes = Array.from({ length: 35 }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      symbol: symbols[Math.floor(Math.random() * symbols.length)],
-      delay: Math.random() * 5,
-      duration: 6 + Math.random() * 12,
-      fontSize: 10 + Math.random() * 10,
-    }));
-
-    return { functionPaths: paths, mathCodeNodes: nodes };
-  }, []);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveGraph((prev) => (prev + 1) % functionPaths.length);
-    }, 9500);
-    return () => clearInterval(interval);
-  }, [functionPaths.length]);
-
   return (
     <div
       ref={containerRef}
@@ -129,7 +39,7 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className="relative w-full h-[60vh] min-h-[450px] sm:h-[70vh] sm:min-h-[600px] md:h-[80vh] md:min-h-[700px] flex items-center justify-center overflow-hidden bg-[#1D2445]"
+      className="relative w-full h-[60vh] min-h-[450px] sm:h-[75vh] sm:min-h-[580px] md:h-[82vh] md:min-h-[650px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12"
       style={{ perspective: "1500px" }}
     >
       <motion.div
@@ -141,136 +51,7 @@ export default function Hero() {
           transformStyle: "preserve-3d",
         }}
       >
-        <div className="absolute inset-0 opacity-70 pointer-events-none">
-          <svg
-            viewBox="0 0 1600 1000"
-            preserveAspectRatio="xMidYMid slice"
-            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[140vh]"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <defs>
-              <pattern
-                id="blueprint-grid-small"
-                width="20"
-                height="20"
-                patternUnits="userSpaceOnUse"
-                x="800"
-                y="500"
-              >
-                <path
-                  d="M 20 0 L 0 0 0 20"
-                  fill="none"
-                  stroke="#626D9E"
-                  strokeWidth="0.5"
-                  opacity="0.4"
-                />
-              </pattern>
-              <pattern
-                id="blueprint-grid-large"
-                width="100"
-                height="100"
-                patternUnits="userSpaceOnUse"
-                x="800"
-                y="500"
-              >
-                <rect
-                  width="100"
-                  height="100"
-                  fill="url(#blueprint-grid-small)"
-                />
-                <path
-                  d="M 100 0 L 0 0 0 100"
-                  fill="none"
-                  stroke="#626D9E"
-                  strokeWidth="1.2"
-                  opacity="0.7"
-                />
-              </pattern>
-            </defs>
-            <rect
-              width="1600"
-              height="1000"
-              fill="url(#blueprint-grid-large)"
-            />
-          </svg>
-        </div>
-
-        {mathCodeNodes.map((node) => (
-          <motion.div
-            key={node.id}
-            className="absolute whitespace-nowrap text-[#626D9E]"
-            style={{
-              left: node.left,
-              top: node.top,
-              fontFamily: "var(--font-mono, monospace)",
-              fontSize: `${node.fontSize}px`,
-            }}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{
-              opacity: [0, 0.6, 0],
-              y: [0, -40],
-              scale: [0.8, 1, 0.8],
-            }}
-            transition={{
-              repeat: Infinity,
-              duration: node.duration,
-              delay: node.delay,
-              ease: "linear",
-            }}
-          >
-            {node.symbol}
-          </motion.div>
-        ))}
-
-        <svg
-          viewBox="0 0 1600 1000"
-          preserveAspectRatio="xMidYMid slice"
-          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140vw] h-[140vh] opacity-60"
-        >
-          <motion.line
-            x1="0"
-            y1="500"
-            x2="1600"
-            y2="500"
-            stroke="#626D9E"
-            strokeWidth="1.5"
-            strokeDasharray="6,6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ duration: 1.5, delay: 0.5 }}
-          />
-          <motion.line
-            x1="800"
-            y1="0"
-            x2="800"
-            y2="1000"
-            stroke="#626D9E"
-            strokeWidth="1.5"
-            strokeDasharray="6,6"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 0.5 }}
-            transition={{ duration: 1.5, delay: 0.5 }}
-          />
-
-          <motion.path
-            key={functionPaths[activeGraph].id}
-            d={functionPaths[activeGraph].d}
-            fill="none"
-            stroke={functionPaths[activeGraph].stroke}
-            strokeWidth={functionPaths[activeGraph].width}
-            initial={{ pathLength: 0, pathOffset: 0, opacity: 0 }}
-            animate={{
-              pathLength: [0, 1, 1, 1],
-              pathOffset: [0, 0, 0, 1],
-              opacity: [0, 0.6, 0.6, 0],
-            }}
-            transition={{
-              duration: 9,
-              times: [0, 0.4, 0.7, 1],
-              ease: "easeInOut",
-            }}
-          />
-        </svg>
+        <BackgroundVisuals />
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
           <motion.div className="relative flex items-center justify-center w-[96vw] max-w-none aspect-[2.38] drop-shadow-[0_0_30px_rgba(29,36,69,0.5)]">
@@ -377,67 +158,66 @@ export default function Hero() {
       <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(29,36,69,0.2)_0%,rgba(29,36,69,0.95)_100%)] pointer-events-none" />
 
       <motion.div
-        className="relative z-[100] flex flex-col items-center px-4 w-full max-w-7xl sm:-mt-12"
+        className="relative z-[100] flex flex-col items-center px-4 w-full max-w-7xl mx-auto"
         initial={{ opacity: 0, translateZ: 100 }}
         animate={{ opacity: 1, translateZ: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
         style={{ transformStyle: "preserve-3d" }}
       >
-        <div className="text-center flex flex-col items-center w-full px-2">
+        <div className="text-center flex flex-col items-center w-full">
           <motion.div
             initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-center gap-3 sm:gap-6 mb-2 w-full max-w-full sm:max-w-none"
+            className="flex items-center justify-between gap-2 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
           >
-            <div className="flex-shrink-0 w-2 h-2 rotate-45 bg-[#AD976F]" />
-            <h1 className="text-[1.35rem] leading-[1.1] sm:text-5xl md:text-6xl lg:text-7xl font-bold text-white tracking-tight uppercase text-center break-words max-w-[80vw] sm:max-w-none">
+            <div className="flex-shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-[#AD976F]" />
+            <h1 className="text-[1.1rem] xs:text-[1.25rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center flex-grow whitespace-nowrap">
               YILDIZ TEKNİK ÜNİVERSİTESİ
             </h1>
-            <div className="flex-shrink-0 w-2 h-2 rotate-45 bg-[#AD976F]" />
+            <div className="flex-shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-[#AD976F]" />
           </motion.div>
 
           <motion.div
             initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-center gap-2 mt-4 sm:mt-6 w-full"
+            className="flex items-center justify-center gap-2 mt-4 w-full"
           >
-            <span className="text-[#AD976F]/60 font-light text-2xl sm:text-4xl leading-none select-none">
+            <span className="text-[#AD976F]/60 font-light text-xl sm:text-4xl leading-none select-none">
               [
             </span>
-            <h2 className="text-[1.05rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-[#AD976F] tracking-[0.15em] uppercase text-center">
+            <h2 className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-[#AD976F] tracking-[0.15em] uppercase text-center">
               MATEMATİK MÜHENDİSLİĞİ
             </h2>
-            <span className="text-[#AD976F]/60 font-light text-2xl sm:text-4xl leading-none select-none">
+            <span className="text-[#AD976F]/60 font-light text-xl sm:text-4xl leading-none select-none">
               ]
             </span>
           </motion.div>
-        </div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.8 }}
-          className="hidden sm:block w-full max-w-2xl pointer-events-auto mt-12 sm:mt-16"
-        >
-          <div className="relative group">
-            <div className="absolute -inset-0.5 bg-[#AD976F]/10 rounded-xl blur-sm opacity-0 group-focus-within:opacity-100 transition-opacity duration-500"></div>
-            <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 focus-within:shadow-xl">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Aramak için yazınız..."
-                className="w-full py-2.5 sm:py-3 px-6 text-sm text-slate-700 placeholder-slate-400 outline-none bg-transparent font-medium"
-              />
-              <button className="px-5 text-slate-400 hover:text-[#1D2445] transition-colors border-l border-slate-100">
-                <Search size={18} />
-              </button>
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.8 }}
+            className="hidden sm:block w-full sm:max-w-5xl mt-12 sm:mt-16 mb-8 mx-auto"
+          >
+            <div className="relative group w-full">
+              <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 focus-within:shadow-xl w-full">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Aramak için yazınız..."
+                  className="w-full py-3 px-6 text-base text-slate-700 placeholder-slate-400 outline-none bg-transparent font-medium"
+                />
+                <button className="px-6 py-3 text-slate-400 hover:text-[#1D2445] transition-colors border-l border-slate-100 flex items-center justify-center">
+                  <Search size={22} />
+                </button>
+              </div>
             </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </motion.div>
     </div>
   );
-}
+};
