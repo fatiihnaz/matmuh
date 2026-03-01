@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 // import Image from "next/image";
 import { motion, useMotionValue, useTransform, animate } from "framer-motion";
 import { Search, Users, GraduationCap, BookOpen, FlaskConical } from "lucide-react";
-import Hero from "./Hero";
+import Hero from "./components/Hero";
 
 const stats = [
   { icon: Users, value: 32, suffix: "", label: "Akademik Kadro" },
