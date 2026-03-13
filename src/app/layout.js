@@ -1,5 +1,6 @@
-import { Inter, JetBrains_Mono } from 'next/font/google'
 import "./globals.css";
+import { Inter, JetBrains_Mono } from 'next/font/google'
+import { Providers } from "@/app/providers"
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
@@ -22,13 +23,15 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="tr" className={`${inter.variable} ${jbMono.variable}`}>
-      <body className={`font-sans antialiased flex flex-col min-h-screen bg-background`}>
-        <Header />
-        <main className="flex-1">
-          {children}
-        </main>
-        <Footer />
-      </body>
+      <Providers>
+        <body className={`font-sans antialiased flex flex-col min-h-screen bg-background`}>
+          <Header />
+          <main className="flex-1">
+            {children}
+          </main>
+          <Footer />
+        </body>
+      </Providers>
     </html>
   );
 }
