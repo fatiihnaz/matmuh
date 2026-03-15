@@ -15,6 +15,14 @@ import {
 } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
+import { useEditableContent } from "@/lib/hooks/useEditableContent";
+import {
+  workingAreas as defaultWorkingAreas,
+  milestones as defaultMilestones,
+  keyMetrics as defaultKeyMetrics,
+  academicStats as defaultAcademicStats,
+  missionVision as defaultMissionVision,
+} from "@/data/departmentInfo";
 
 const workingAreas = [
   {
@@ -174,10 +182,10 @@ function NodeGraphCanvas() {
     setIsMounted(true);
   }, []);
 
-  if (!isMounted) return <div className="w-full h-full bg-[#1D2445]" />;
+  if (!isMounted) return <div className="w-full h-full bg-primary-500" />;
 
   return (
-    <div className="relative w-full h-full bg-[#1D2445] overflow-hidden select-none">
+    <div className="relative w-full h-full bg-primary-500 overflow-hidden select-none">
       <div
         className="absolute inset-0 opacity-10"
         style={{
@@ -355,13 +363,13 @@ export default function DepartmentInfo() {
 
           <MainCard title="Çalışma ve Araştırma Alanları">
             <div className="flex flex-col -mx-6 -mb-6">
-              <div className="relative bg-[#1D2445] h-[340px] w-full group border-y border-primary-500/10">
-                <div className="absolute inset-0 bg-gradient-to-b from-black/10 via-transparent to-black/20 pointer-events-none z-10" />
+              <div className="relative bg-primary-500 h-85 w-full group border-y border-primary-500/10">
+                <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/20 pointer-events-none z-10" />
                 <div className="absolute inset-0 z-0">
                   <NodeGraphCanvas />
                 </div>
                 <div className="absolute bottom-4 right-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <p className="text-[10px] text-white/30 uppercase font-bold tracking-[0.1em] bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
+                  <p className="text-[10px] text-white/30 uppercase font-bold tracking-widest bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5">
                     Grafik alanlar arası akademik bağları temsil eder
                   </p>
                 </div>
@@ -378,7 +386,7 @@ export default function DepartmentInfo() {
                         key={area.label}
                         className={`group flex items-center gap-2.5 px-3.5 py-2 rounded-xl border transition-all duration-300 hover:shadow-md hover:border-secondary-500/30 cursor-pointer ${
                           isLarge
-                            ? "bg-secondary-500/[0.03] border-secondary-500/10"
+                            ? "bg-secondary-500/3 border-secondary-500/10"
                             : "bg-transparent border-primary-500/5"
                         }`}
                       >
@@ -386,7 +394,7 @@ export default function DepartmentInfo() {
                           className={`p-1.5 rounded-lg transition-colors ${
                             isLarge
                               ? "bg-secondary-500/10 text-secondary-500"
-                              : "bg-primary-500/[0.03] text-primary-500/30 group-hover:text-secondary-500"
+                              : "bg-primary-500/3 text-primary-500/30 group-hover:text-secondary-500"
                           }`}
                         >
                           <Icon size={14} strokeWidth={isLarge ? 2 : 1.5} />
@@ -412,14 +420,14 @@ export default function DepartmentInfo() {
         <div className="lg:col-span-5 flex flex-col gap-6">
           <MainCard title="Kilometre Taşları">
             <div className="relative pt-2">
-              <div className="absolute left-[18px] top-2 bottom-4 w-px bg-primary-500/10" />
+              <div className="absolute left-4.5 top-2 bottom-4 w-px bg-primary-500/10" />
               <div className="flex flex-col">
                 {milestones.map((item, idx) => (
                   <div
                     key={item.year}
                     className="relative flex items-start gap-4 py-3 group"
                   >
-                    <div className="relative z-10 flex-shrink-0 w-9 flex justify-center">
+                    <div className="relative z-10 shrink-0 w-9 flex justify-center">
                       <div
                         className={`w-3 h-3 rounded-full mt-1.5 transition-all duration-300 ${
                           idx === milestones.length - 1
@@ -463,10 +471,10 @@ export default function DepartmentInfo() {
               ].map((acc) => (
                 <div
                   key={acc.name}
-                  className="p-4 rounded-lg flex items-start gap-3 bg-primary-500/[0.02] border border-primary-500/5"
+                  className="p-4 rounded-lg flex items-start gap-3 bg-primary-500/2 border border-primary-500/5"
                 >
                   <div
-                    className={`flex-shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
+                    className={`shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
                       acc.active ? "bg-secondary-500/10" : "bg-primary-500/5"
                     }`}
                   >

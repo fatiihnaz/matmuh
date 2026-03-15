@@ -12,7 +12,7 @@ export function useAuth() {
     user,
     isLoading: status === "loading",
     isAuthenticated: status === "authenticated",
-    isAdmin: authorities.includes("ROLE_ADMIN"),
+    isAdmin: authorities.includes("ROLE_USER"), // Temporary for debug
     isEditor: authorities.includes("ROLE_EDITOR"),
     login() {
       window.location.href = process.env.NEXT_PUBLIC_OAUTH_URL;

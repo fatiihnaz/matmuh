@@ -4,6 +4,7 @@ import { Providers } from "@/app/providers"
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
+import AdminLayout from "./components/Admin/AdminLayout";
 
 const inter = Inter({
   subsets: ['latin'],
@@ -24,12 +25,14 @@ export default function RootLayout({ children }) {
   return (
     <html lang="tr" className={`${inter.variable} ${jbMono.variable}`}>
       <Providers>
-        <body className={`font-sans antialiased flex flex-col min-h-screen bg-background`}>
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
+        <body className={`font-sans antialiased flex flex-col min-h-screen bg-background overflow-x-hidden`}>
+          <AdminLayout>
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </AdminLayout>
         </body>
       </Providers>
     </html>

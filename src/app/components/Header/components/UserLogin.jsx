@@ -2,12 +2,14 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { LogIn, ChevronDown, User, GraduationCap, Settings, LogOut } from "lucide-react";
+import { LogIn, ChevronDown, User, GraduationCap, Settings, LogOut, PanelLeftOpen } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/hooks/useAuth";
+import { useContentDispatch } from "@/lib/hooks/useContent";
 
 export default function UserLogin() {
-  const { user, isLoading, isAuthenticated, login, logout } = useAuth();
+  const { user, isLoading, isAuthenticated, isAdmin, isEditor, login, logout } = useAuth();
+  const { togglePanel } = useContentDispatch();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -46,6 +48,8 @@ export default function UserLogin() {
 
   const roles = (user.authorities || []).map((a) => authorityLabels[a] || a);
 
+  const canManageContent = isAdmin || isEditor;
+
   const menuItems = [
     { label: "Profilim", href: "/profil", icon: User },
     { label: "Derslerim", href: "/derslerim", icon: GraduationCap },
@@ -53,6 +57,9 @@ export default function UserLogin() {
   ];
 
   const dropdownItems = [
+    ...(canManageContent
+      ? [{ type: "admin-panel" }]
+      : []),
     ...menuItems.map((item) => ({ type: "link", ...item })),
     { type: "divider" },
     { type: "logout" },
@@ -96,6 +103,19 @@ export default function UserLogin() {
               </motion.div>
 
               {dropdownItems.map((item, i) => {
+                if (item.type === "admin-panel") {
+                  return (
+                    <motion.div key="admin-panel"
+                      initial={{ opacity: 0, y: -6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2, delay: 0.08 + i * 0.04 }}
+                    >
+                      <button onClick={() => { setOpen(false); togglePanel(); }} className="flex items-center gap-2 w-full px-2 py-2 text-[11px] text-secondary-600 hover:bg-secondary-500/10 transition-colors rounded-lg font-medium">
+                        <PanelLeftOpen size={13} className="text-secondary-500" />
+                        <span>Admin Panel</span>
+                      </button>
+                    </motion.div>
+                  );
+                }
+
                 if (item.type === "divider") {
                   return (
                     <motion.div key="divider" className="border-t border-black/5"
