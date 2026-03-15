@@ -54,7 +54,7 @@ export default function Landing() {
   const [searchQuery, setSearchQuery] = useState("");
 
   return (
-    <div className="relative pb-12 sm:pb-14">
+    <div className="relative">
       <Hero/>
       {/* eski hero şimdilik dursun
       <section className="relative w-full h-[40vh] sm:h-[60vh] md:h-[70vh] min-h-80 flex items-center justify-center overflow-hidden bg-[#2c3760]">

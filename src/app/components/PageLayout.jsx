@@ -1,6 +1,6 @@
 export default function PageLayout({ children, sidebar }) {
   return (
-    <main className="w-full flex-1 py-12">
+    <main className="w-full flex-1 py-8">
       <div className="max-w-7xl mx-auto px-4 w-full">
         {sidebar ? (
           <div className="flex flex-col lg:flex-row gap-8 lg:items-start">

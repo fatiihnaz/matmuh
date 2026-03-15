@@ -20,11 +20,13 @@ export const navigationItems = [
     label: "Personel",
     basePath: "/personel",
     children: [
-      { label: "Yönetim", href: "/personel/yonetim", icon: Shield, description: "Bölüm başkanlığı" },
-      { label: "Akademik Kadro", href: "/personel/akademik-kadro", icon: GraduationCap, description: "Profesör ve doçentler" },
-      { label: "Öğretim & Araştırma Gör.", href: "/personel/ogretim-arastirma", icon: Microscope, description: "Araştırma görevlileri" },
-      { label: "İdari Personel", href: "/personel/idari-personel", icon: Briefcase, description: "İdari kadro" },
-    ],
+    { label: "Yönetim", href: "/personel?type=yonetim", icon: Shield, description: "Bölüm başkanlığı" },
+    { label: "Akademik Kadro", href: "/personel?type=akademik", icon: GraduationCap, description: "Profesör ve doçentler" 
+    },
+    { label: "Öğretim & Araştırma Gör.", href: "/personel?type=arastirma", icon: Microscope, description: "Araştırma görevlileri" 
+    },
+    { label: "İdari Personel", href: "/personel?type=idari", icon: Briefcase, description: "İdari kadro" },
+  ],
   },
   {
     label: "Eğitim",

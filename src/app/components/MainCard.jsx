@@ -2,13 +2,13 @@ import { ChevronRight } from "lucide-react";
 
 export default function MainCard({ title, icon: Icon, buttonTitle, href, children, dark }) {
     return (
-        <div className={`rounded-xl shadow-sm w-full overflow-hidden ${dark ? "bg-primary-500" : "bg-white"}`}>
+        <div className={`rounded-xl border border-primary-500/10 shadow-xs w-full overflow-hidden ${dark ? "bg-primary-500" : "bg-white"}`}>
             <div className="p-6">
                 <div className="flex justify-between items-center mb-6">
                     <div className="flex items-center gap-3">
                         <div className="w-1 h-5 bg-secondary-500 rounded-full" />
 
-                        <h2 className={`text-xs font-semibold uppercase tracking-wide flex items-center gap-2 ${dark ? "text-white" : "text-primary-700"}`}>
+                        <h2 className={`text-xs font-semibold uppercase tracking-widest flex items-center gap-2 ${dark ? "text-white" : "text-primary-700"}`}>
                             {title}
                             {Icon && <Icon className="w-4 h-4 text-secondary-400" />}
                         </h2>

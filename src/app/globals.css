@@ -18,3 +18,14 @@
   --color-secondary-600: #8E7B5A;
   --color-secondary-700: #6F5F45;
 }
+
+select {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  font-family: inherit !important;
+}
+
+select option {
+  font-family: sans-serif !important;
+}
