@@ -1,14 +1,7 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
-import { ContentProvider } from "@/lib/context/ContentContext";
-
+// Global client providers. Passthrough for now: the auth session provider
+// re-attaches here once the new auth layer lands.
 export function Providers({ children }) {
-  return (
-    <SessionProvider>
-      <ContentProvider>
-        {children}
-      </ContentProvider>
-    </SessionProvider>
-  );
+  return <>{children}</>;
 }

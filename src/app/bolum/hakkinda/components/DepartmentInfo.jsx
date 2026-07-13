@@ -15,14 +15,6 @@ import {
 } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
-import { useEditableContent } from "@/lib/hooks/useEditableContent";
-import {
-  workingAreas as defaultWorkingAreas,
-  milestones as defaultMilestones,
-  keyMetrics as defaultKeyMetrics,
-  academicStats as defaultAcademicStats,
-  missionVision as defaultMissionVision,
-} from "@/data/departmentInfo";
 
 const workingAreas = [
   {
