@@ -1,25 +1,74 @@
 "use client";
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Search } from "lucide-react";
 import BackgroundVisuals from "./BackgroundVisuals";
+import { useHeroActive, useReducedMotion } from "./heroMotion";
 
 export default function Hero() {
   const containerRef = useRef(null);
+  const rectRef = useRef(null);
+  const staleRectRef = useRef(true);
+  const pointerRef = useRef({ x: 0, y: 0 });
+  const frameRef = useRef(0);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isHovered, setIsHovered] = useState(false);
+
+  const reducedMotion = useReducedMotion();
+  const active = useHeroActive(containerRef);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-    mouseX.set(x);
-    mouseY.set(y);
+  const cancelFrame = () => {
+    if (!frameRef.current) return;
+    cancelAnimationFrame(frameRef.current);
+    frameRef.current = 0;
   };
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || reducedMotion) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const invalidateRect = () => {
+      staleRectRef.current = true;
+    };
+
+    const flush = () => {
+      frameRef.current = 0;
+
+      if (staleRectRef.current) {
+        rectRef.current = node.getBoundingClientRect();
+        staleRectRef.current = false;
+      }
+
+      const rect = rectRef.current;
+      if (!rect.width || !rect.height) return;
+
+      mouseX.set(((pointerRef.current.x - rect.left) / rect.width) * 2 - 1);
+      mouseY.set(((pointerRef.current.y - rect.top) / rect.height) * 2 - 1);
+    };
+
+    const onPointerMove = (event) => {
+      pointerRef.current.x = event.clientX;
+      pointerRef.current.y = event.clientY;
+      if (!frameRef.current) frameRef.current = requestAnimationFrame(flush);
+    };
+
+    node.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("resize", invalidateRect, { passive: true });
+    window.addEventListener("scroll", invalidateRect, { passive: true });
+
+    return () => {
+      node.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("resize", invalidateRect);
+      window.removeEventListener("scroll", invalidateRect);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+    };
+  }, [reducedMotion, mouseX, mouseY]);
 
   const springConfig = { stiffness: 150, damping: 30, mass: 1 };
   const smoothMouseX = useSpring(mouseX, springConfig);
@@ -32,14 +81,19 @@ export default function Hero() {
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
+      onPointerEnter={() => {
+        staleRectRef.current = true;
+        setIsHovered(true);
+      }}
+      onPointerLeave={() => {
         setIsHovered(false);
+        cancelFrame();
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className="relative w-full h-[60vh] min-h-112.5 sm:h-[75vh] sm:min-h-145 md:h-[82vh] md:min-h-162.5 flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12"
+      className={`relative w-full h-[60vh] min-h-112.5 sm:h-[75vh] sm:min-h-145 md:h-[82vh] md:min-h-162.5 flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12${
+        active ? "" : " mm-paused"
+      }`}
       style={{ perspective: "1500px" }}
     >
       <motion.div
@@ -51,7 +105,7 @@ export default function Hero() {
           transformStyle: "preserve-3d",
         }}
       >
-        <BackgroundVisuals />
+        <BackgroundVisuals active={active} reducedMotion={reducedMotion} />
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
           <motion.div className="relative flex items-center justify-center w-[96vw] max-w-none aspect-[2.38] drop-shadow-[0_0_30px_rgba(29,36,69,0.5)]">
@@ -172,7 +226,7 @@ export default function Hero() {
             className="flex items-center justify-between gap-2 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
           >
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
-            <h1 className="text-[1.1rem] xs:text-[1.25rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow whitespace-nowrap">
+            <h1 className="text-[1.1rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow whitespace-nowrap">
               YILDIZ TEKNİK ÜNİVERSİTESİ
             </h1>
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
