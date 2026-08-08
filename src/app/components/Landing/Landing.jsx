@@ -1,9 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
+import { useState, useEffect, useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useInView,
+  animate,
+} from "framer-motion";
 import { Users, GraduationCap, BookOpen, FlaskConical } from "lucide-react";
 import Hero from "./components/Hero";
+import { useReducedMotion } from "./components/heroMotion";
 
 const stats = [
   { icon: Users, value: 32, suffix: "", label: "Akademik Kadro" },
@@ -13,39 +20,50 @@ const stats = [
 ];
 
 function CountUp({ value, suffix, delay }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  const reducedMotion = useReducedMotion();
+
   const motionVal = useMotionValue(0);
   const rounded = useTransform(motionVal, (v) => Math.round(v));
-  const [display, setDisplay] = useState(0);
-
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    if (!inView) return;
+
+    if (reducedMotion) {
+      motionVal.set(value);
+      return;
+    }
+
+    let controls;
     const timeout = setTimeout(() => {
-      const controls = animate(motionVal, value, {
+      controls = animate(motionVal, value, {
         duration: 2.5,
         ease: [0.22, 1, 0.36, 1],
         onComplete: () => setIsFinished(true),
       });
-      return () => controls.stop();
     }, delay * 1000);
 
-    return () => clearTimeout(timeout);
-  }, [motionVal, value, delay]);
-
-  useEffect(() => {
-    const unsubscribe = rounded.on("change", (v) => setDisplay(v));
-    return () => unsubscribe();
-  }, [rounded]);
+    return () => {
+      clearTimeout(timeout);
+      controls?.stop();
+    };
+  }, [inView, reducedMotion, motionVal, value, delay]);
 
   return (
-    <>
-      {display}
+    <span ref={ref}>
+      <motion.span>{rounded}</motion.span>
       {suffix && (
-        <motion.span initial={{ opacity: 0 }} animate={{ opacity: isFinished ? 1 : 0 }} transition={{ duration: 0.5, ease: "easeInOut" }}>
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isFinished || reducedMotion ? 1 : 0 }}
+          transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeInOut" }}
+        >
           {suffix}
         </motion.span>
       )}
-    </>
+    </span>
   );
 }
 
