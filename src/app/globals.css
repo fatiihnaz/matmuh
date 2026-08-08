@@ -40,3 +40,48 @@ select option {
   height: 0;
   display: none;
 }
+
+:root {
+  --header-h: 90px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --header-h: 98px;
+  }
+}
+
+@keyframes mm-float {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate3d(0, -15px, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -30px, 0) scale(0.9);
+  }
+}
+
+.mm-float {
+  animation-name: mm-float;
+  animation-duration: var(--mm-dur, 12s);
+  animation-delay: var(--mm-delay, 0s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+}
+
+.mm-paused .mm-float {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-float {
+    animation: none;
+    opacity: 0.35;
+  }
+}
