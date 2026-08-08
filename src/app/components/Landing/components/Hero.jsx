@@ -91,7 +91,7 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className={`relative w-full h-[60vh] min-h-112.5 sm:h-[75vh] sm:min-h-145 md:h-[82vh] md:min-h-162.5 flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12${
+      className={`relative w-full h-[calc(72svh_-_var(--header-h))] min-h-[380px] sm:h-[calc(76svh_-_var(--header-h))] sm:min-h-[440px] md:h-[calc(78svh_-_var(--header-h))] md:min-h-[500px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12${
         active ? "" : " mm-paused"
       }`}
       style={{ perspective: "1500px" }}
@@ -108,7 +108,7 @@ export default function Hero() {
         <BackgroundVisuals active={active} reducedMotion={reducedMotion} />
 
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-          <motion.div className="relative flex items-center justify-center w-[96vw] max-w-none aspect-[2.38] drop-shadow-[0_0_30px_rgba(29,36,69,0.5)]">
+          <motion.div className="relative flex items-center justify-center h-[78%] aspect-[2.38] max-w-[96vw] drop-shadow-[0_0_30px_rgba(29,36,69,0.5)]">
             <svg
               viewBox="0 0 368.25 154.79"
               fill="none"
@@ -272,6 +272,15 @@ export default function Hero() {
           </motion.div>
         </div>
       </motion.div>
+
+      <div
+        aria-hidden="true"
+        className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 hidden sm:block pointer-events-none"
+      >
+        <div className="relative h-10 w-px overflow-hidden bg-secondary-500/20">
+          <div className="mm-cue absolute inset-x-0 top-0 h-4 bg-secondary-500/70" />
+        </div>
+      </div>
     </div>
   );
 }
