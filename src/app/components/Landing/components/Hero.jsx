@@ -39,7 +39,7 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className="relative w-full h-[60vh] min-h-[450px] sm:h-[75vh] sm:min-h-[580px] md:h-[82vh] md:min-h-[650px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12"
+      className="relative w-full h-[60vh] min-h-112.5 sm:h-[75vh] sm:min-h-145 md:h-[82vh] md:min-h-162.5 flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12"
       style={{ perspective: "1500px" }}
     >
       <motion.div
@@ -120,7 +120,7 @@ export default function Hero() {
             </svg>
 
             <motion.div
-              className="absolute w-[22%] max-w-[400px] aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
+              className="absolute w-[22%] max-w-100 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
               animate={{
                 filter: isHovered
                   ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 35px rgba(173,151,111,0.9))"
@@ -220,4 +220,4 @@ export default function Hero() {
       </motion.div>
     </div>
   );
-};
+}

@@ -6,15 +6,53 @@ import { usePathname } from "next/navigation";
 
 const labelMap = {
   "": "Anasayfa",
-  "bolum": "Bölüm",
-  "personel": "Personel",
-  "egitim": "Eğitim",
-  "arge": "AR-GE",
-  "dis-iliskiler": "Dış İlişkiler",
+  bolum: "Bölüm",
+  hakkinda: "Hakkımızda",
+  "yonetim-kurullar": "Yönetim & Kurullar",
+  komisyonlar: "Komisyonlar",
+  paydaslar: "Paydaşlar",
+  mezunlar: "Mezunlar",
+  personel: "Personel",
   "akademik-kadro": "Akademik Kadro",
+  egitim: "Eğitim",
+  "ders-programi": "Ders Programı",
+  mufredat: "Müfredat",
+  yonetmelikler: "Yönetmelikler",
+  "lisansustu-ders-programi": "Lisansüstü Ders Programı",
+  programlar: "Programlar",
+  "tez-arsivi": "Tez Arşivi",
+  "lisansustu-yonetmelikler": "Lisansüstü Yönetmelikler",
+  staj: "Staj",
+  arge: "AR-GE",
+  laboratuvarlar: "Laboratuvarlar",
+  projeler: "Devam Eden Projeler",
+  "bilgi-kaynaklari": "Bilgi Kaynakları",
+  "dis-iliskiler": "Dış İlişkiler",
+  erasmus: "Erasmus+",
+  endustriyel: "Endüstriyel İşbirlikleri",
 };
 
-const unclickablePaths = ["bolum", "personel", "egitim", "arge", "dis-iliskiler"];
+const unclickablePaths = [
+  "bolum",
+  "personel",
+  "egitim",
+  "arge",
+  "dis-iliskiler",
+];
+
+function formatSegmentLabel(seg) {
+  if (labelMap[seg]) return labelMap[seg];
+  if (/^[a-zA-Z]{3,4}\d{4}$/i.test(seg)) return seg.toUpperCase();
+  return seg
+    .split("-")
+    .map((word) =>
+      word
+        ? word.charAt(0).toLocaleUpperCase("tr-TR") +
+          word.slice(1).toLocaleLowerCase("tr-TR")
+        : "",
+    )
+    .join(" ");
+}
 
 export default function Breadcrumb() {
   const pathname = usePathname();
@@ -23,9 +61,9 @@ export default function Breadcrumb() {
   const crumbs = [
     { label: "Anasayfa", href: "/" },
     ...segments.map((seg, i) => ({
-      label: labelMap[seg] || seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, " "),
+      label: formatSegmentLabel(seg),
       href: "/" + segments.slice(0, i + 1).join("/"),
-      isClickable: !unclickablePaths.includes(seg)
+      isClickable: !unclickablePaths.includes(seg),
     })),
   ];
 
@@ -37,9 +75,14 @@ export default function Breadcrumb() {
           <span key={crumb.href} className="flex items-center gap-2">
             {i > 0 && <ChevronRight size={12} className="text-neutral-500" />}
             {isLast ? (
-              <span className="text-secondary-400 font-medium">{crumb.label}</span>
+              <span className="text-secondary-400 font-medium">
+                {crumb.label}
+              </span>
             ) : crumb.isClickable ? (
-              <Link href={crumb.href} className="text-neutral-400 hover:text-white transition-colors">
+              <Link
+                href={crumb.href}
+                className="text-neutral-400 hover:text-white transition-colors"
+              >
                 {crumb.label}
               </Link>
             ) : (
