@@ -40,4 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# never push — internal working files
+/docs/
+/public/belgeler/
+
 .vercel
