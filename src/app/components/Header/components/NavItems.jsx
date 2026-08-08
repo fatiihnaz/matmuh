@@ -111,10 +111,16 @@ export default function NavItems({ item, children }) {
   }
 
   const categorized = hasCategories(item.children);
-  
+
+  const getPrimaryHref = () => {
+    if (item.href) return item.href;
+    if (categorized && item.children[0]?.items) return item.children[0].items[0]?.href || "#";
+    return item.children[0]?.href || "#";
+  };
+
   return (
     <div className="relative" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
-      <Link href={item.children[0]?.href || "#"} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
+      <Link href={getPrimaryHref()} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
         {children}
         <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25, ease: "easeInOut" }}>
           <ChevronDown size={12} strokeWidth={1.5} className="text-white/60" />

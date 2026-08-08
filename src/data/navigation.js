@@ -31,12 +31,13 @@ export const navigationItems = [
   {
     label: "Eğitim",
     basePath: "/egitim",
+    href: "/egitim/mufredat",
     children: [
       {
         category: "Lisans",
         items: [
-          { label: "Ders Programı", href: "/egitim/ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
           { label: "Müfredat", href: "/egitim/mufredat", icon: BookOpen, description: "Ders içerikleri ve krediler" },
+          { label: "Ders Programı", href: "/egitim/ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
           { label: "Yönetmelikler", href: "/egitim/yonetmelikler", icon: Scale, description: "Lisans yönetmelikleri" },
         ],
       },
