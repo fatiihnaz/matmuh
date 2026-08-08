@@ -3,7 +3,6 @@ import {
   ArrowUpRight,
   CalendarClock,
   ClipboardList,
-  Download,
   FileText,
   Info,
   Mail,
@@ -11,6 +10,7 @@ import {
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import MainCard from "@/app/components/MainCard";
+import DocumentLink from "@/app/egitim/components/DocumentLink";
 import {
   INTERNSHIP_CONTACT,
   INTERNSHIP_DOCUMENTS,
@@ -22,26 +22,6 @@ import {
 } from "@/data/internship";
 
 const totalDays = MANDATORY_INTERNSHIPS.reduce((sum, i) => sum + i.days, 0);
-
-function DocumentLink({ item }) {
-  return (
-    <a
-      href={item.href}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-center gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5 hover:border-secondary-500/30 hover:bg-secondary-500/4 transition-colors"
-    >
-      <FileText className="size-4 shrink-0 text-secondary-500" />
-      <span className="flex-1 min-w-0 text-[13px] text-primary-500 leading-snug">
-        {item.label}
-      </span>
-      <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-primary-500/40">
-        {item.kind}
-      </span>
-      <Download className="size-3.5 shrink-0 text-primary-500/30 group-hover:text-secondary-500 transition-colors" />
-    </a>
-  );
-}
 
 export default function InternshipPage() {
   return (
@@ -137,7 +117,7 @@ export default function InternshipPage() {
                   )}
                   <div className="grid grid-cols-1 lg:grid-cols-2 gap-2">
                     {group.items.map((item) => (
-                      <DocumentLink key={item.href} item={item} />
+                      <DocumentLink key={item.href} {...item} />
                     ))}
                   </div>
                 </div>
