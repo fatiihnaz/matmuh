@@ -4,8 +4,11 @@ import { motion } from "framer-motion";
 const BackgroundVisuals = React.memo(() => {
   const [isMobile, setIsMobile] = useState(false);
   const [activeGraph, setActiveGraph] = useState(0);
+  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
+    setIsMounted(true);
+
     const mediaQuery = window.matchMedia("(max-width: 767px)");
     const handleMediaChange = (e) => setIsMobile(e.matches);
 
@@ -16,6 +19,8 @@ const BackgroundVisuals = React.memo(() => {
   }, []);
 
   const { functionPaths, mathCodeNodes } = useMemo(() => {
+    if (!isMounted) return { functionPaths: [], mathCodeNodes: [] };
+
     const width = 1600;
     const height = 1000;
     const points = 300;
@@ -162,14 +167,18 @@ const BackgroundVisuals = React.memo(() => {
     });
 
     return { functionPaths: paths, mathCodeNodes: nodes };
-  }, [isMobile]);
+  }, [isMobile, isMounted]);
 
   useEffect(() => {
+    if (!functionPaths.length) return;
+
     const interval = setInterval(() => {
       setActiveGraph((prev) => (prev + 1) % functionPaths.length);
     }, 9500);
     return () => clearInterval(interval);
-  }, [functionPaths.length]);
+  }, [isMounted, functionPaths.length]);
+
+  if (!isMounted) return null;
 
   return (
     <>

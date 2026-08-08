@@ -43,6 +43,7 @@ export const navigationItems = [
       {
         category: "Lisansüstü",
         items: [
+          { label: "Ders Programı", href: "/egitim/lisansustu-ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
           { label: "Programlar", href: "/egitim/programlar", icon: Library, description: "Yüksek lisans ve doktora" },
           { label: "Tez Arşivi", href: "/egitim/tez-arsivi", icon: Archive, description: "Tamamlanmış tezler" },
           { label: "Yönetmelikler", href: "/egitim/lisansustu-yonetmelikler", icon: Scale, description: "Lisansüstü yönetmelikleri" },

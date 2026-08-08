@@ -1,5 +1,4 @@
 import { getCourseByCode } from "@/data/courses";
-import { notFound } from "next/navigation";
 import CourseInfo from "./components/CourseInfo";
 
 export default async function CoursePage({ params }) {
