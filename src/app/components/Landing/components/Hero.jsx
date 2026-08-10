@@ -91,18 +91,16 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className={`relative w-full h-[calc(72svh_-_var(--header-h))] min-h-[380px] sm:h-[calc(76svh_-_var(--header-h))] sm:min-h-[440px] md:h-[calc(78svh_-_var(--header-h))] md:min-h-[500px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12${
-        active ? "" : " mm-paused"
+      className={`relative isolate w-full h-[calc(72svh_-_var(--header-h))] min-h-[380px] sm:h-[calc(76svh_-_var(--header-h))] sm:min-h-[440px] md:h-[calc(78svh_-_var(--header-h))] md:min-h-[500px] md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12 ${
+        active ? "" : "mm-paused"
       }`}
-      style={{ perspective: "1500px" }}
     >
       <motion.div
-        className="absolute inset-0 origin-center pointer-events-none z-0"
+        className="absolute inset-0 origin-center pointer-events-none z-0 md:transform-3d"
         style={{
           rotateX: planeRotateX,
           rotateY: planeRotateY,
           z: planeTranslateZ,
-          transformStyle: "preserve-3d",
         }}
       >
         <BackgroundVisuals active={active} reducedMotion={reducedMotion} />
@@ -212,11 +210,10 @@ export default function Hero() {
       <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(29,36,69,0.2)_0%,rgba(29,36,69,0.95)_100%)] pointer-events-none" />
 
       <motion.div
-        className="relative z-100 flex flex-col items-center px-4 w-full max-w-7xl mx-auto"
+        className="relative z-100 flex flex-col items-center px-4 w-full max-w-7xl mx-auto md:transform-3d"
         initial={{ opacity: 0, translateZ: 100 }}
         animate={{ opacity: 1, translateZ: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        style={{ transformStyle: "preserve-3d" }}
       >
         <div className="text-center flex flex-col items-center w-full">
           <motion.div

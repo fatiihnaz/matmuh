@@ -79,7 +79,7 @@ const SymbolField = React.memo(function SymbolField({
         <div
           key={node.id}
           data-cell={node.cell}
-          className="mm-float absolute whitespace-nowrap text-primary-300/60"
+          className={`mm-float absolute whitespace-nowrap ${field.tone}`}
           style={{
             left: node.left,
             top: node.top,

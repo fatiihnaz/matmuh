@@ -42,6 +42,7 @@ export const DESKTOP_FIELD = {
   nominalH: 900,
   minFont: 14,
   maxFont: 20,
+  tone: "text-primary-300/60",
 };
 
 export const MOBILE_FIELD = {
@@ -52,8 +53,9 @@ export const MOBILE_FIELD = {
   seed: 71042,
   nominalW: 390,
   nominalH: 844,
-  minFont: 10,
-  maxFont: 13,
+  minFont: 11,
+  maxFont: 14,
+  tone: "text-primary-300/85",
 };
 
 function mulberry32(seed) {
