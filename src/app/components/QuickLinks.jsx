@@ -56,13 +56,16 @@ function QuickLinkRow({ link }) {
   );
 }
 
-export default function QuickLinks() {
+export default function QuickLinks({
+  items = quickLinks,
+  title = "Hızlı Erişim",
+}) {
   return (
     <>
       <div className="lg:hidden bg-white rounded-xl shadow-sm p-4">
         <div className="flex overflow-x-auto no-scrollbar pb-1">
           <div className="flex gap-2 mx-auto">
-            {quickLinks.map((link) => (
+            {items.map((link) => (
               <QuickLinkTile key={link.label} link={link} />
             ))}
           </div>
@@ -70,9 +73,9 @@ export default function QuickLinks() {
       </div>
 
       <div className="hidden lg:block">
-        <MainCard title="Hızlı Erişim">
+        <MainCard title={title}>
           <nav className="space-y-1">
-            {quickLinks.map((link) => (
+            {items.map((link) => (
               <QuickLinkRow key={link.label} link={link} />
             ))}
           </nav>

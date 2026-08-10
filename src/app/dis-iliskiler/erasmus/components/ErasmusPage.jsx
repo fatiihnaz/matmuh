@@ -7,8 +7,11 @@ import PageSection from "@/app/components/PageSection";
 import PersonRow from "@/app/components/PersonRow";
 import RelatedPages from "@/app/components/RelatedPages";
 import QuickLinks from "@/app/components/QuickLinks";
+import { institutionalLinks } from "@/data/landing";
 import DocumentLink from "@/app/egitim/components/DocumentLink";
 import {
+  AGREEMENT_PERIOD,
+  BILATERAL_AGREEMENTS,
   ERASMUS_CONTACT,
   ERASMUS_COORDINATORS,
   ERASMUS_DOCUMENTS,
@@ -52,7 +55,7 @@ function Sidebar() {
       </MainCard>
 
       <RelatedPages items={RELATED} />
-      <QuickLinks />
+      <QuickLinks items={institutionalLinks} title="Kurumsal Sistemler" />
     </div>
   );
 }
@@ -85,19 +88,62 @@ export default function ErasmusPage() {
             </Panel>
           </PageSection>
 
-          <PageSection title="İkili Anlaşmalar">
-            <Panel>
-              <div className="flex flex-col gap-3">
-                <p className="text-[13px] text-primary-500/60 leading-relaxed">
-                  Bölümün Erasmus+ ikili anlaşmaları aşağıdaki listede yer alır.
-                  Güncel anlaşmalar ve başvuru duyuruları için YTÜ Erasmus+
-                  Koordinatörlüğü sayfası takip edilmelidir.
-                </p>
-                {ERASMUS_DOCUMENTS.map((item) => (
-                  <DocumentLink key={item.href} {...item} />
-                ))}
+          <PageSection
+            title="İkili Anlaşmalar"
+            count={BILATERAL_AGREEMENTS.length}
+            action={
+              <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-600 px-2 py-1 rounded bg-secondary-500/10">
+                {AGREEMENT_PERIOD}
+              </span>
+            }
+          >
+            <Panel className="p-0 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-left">
+                  <thead>
+                    <tr className="border-b border-primary-500/8">
+                      <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45">
+                        Kurum
+                      </th>
+                      <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45">
+                        Ülke
+                      </th>
+                      <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45 whitespace-nowrap">
+                        Erasmus Kodu
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {BILATERAL_AGREEMENTS.map((row) => (
+                      <tr
+                        key={row.code}
+                        className="border-b border-primary-500/5 last:border-0 hover:bg-primary-500/2 transition-colors"
+                      >
+                        <td className="px-5 py-2.5 text-[13px] text-primary-500">
+                          {row.institution}
+                        </td>
+                        <td className="px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
+                          {row.country}
+                        </td>
+                        <td className="px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
+                          {row.code}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
             </Panel>
+
+            <p className="text-[12px] text-primary-500/45 leading-relaxed">
+              Kontenjanlar, dil koşulları ve başvuru tarihleri anlaşma
+              dosyasında yer alır. Güncel duyurular için YTÜ Erasmus+
+              Koordinatörlüğü sayfası takip edilmelidir.
+            </p>
+
+            {ERASMUS_DOCUMENTS.map((item) => (
+              <DocumentLink key={item.href} {...item} />
+            ))}
           </PageSection>
 
           <PageSection title="Erasmus+ ile Staj">

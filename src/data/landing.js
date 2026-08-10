@@ -11,6 +11,8 @@ export const quickLinks = [
   { label: "OBS Şifresi ve Öğrenci E-postası", shortLabel: "OBS Şifre", icon: KeyRound, href: "https://teknikdestek.yildiz.edu.tr/kb/index.php", external: true },
 ];
 
+export const institutionalLinks = quickLinks.filter((link) => link.external);
+
 export const news = [
   {
     date: "10 Şubat 2026",

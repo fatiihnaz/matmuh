@@ -6,6 +6,7 @@ import PageSection from "@/app/components/PageSection";
 import StatStrip from "@/app/components/StatStrip";
 import RelatedPages from "@/app/components/RelatedPages";
 import QuickLinks from "@/app/components/QuickLinks";
+import { institutionalLinks } from "@/data/landing";
 import { FBE_LINKS, GRADUATE_PROGRAMS } from "@/data/graduatePrograms";
 
 const RELATED = [
@@ -28,7 +29,7 @@ function Sidebar() {
   return (
     <div className="flex flex-col gap-6">
       <RelatedPages items={RELATED} />
-      <QuickLinks />
+      <QuickLinks items={institutionalLinks} title="Kurumsal Sistemler" />
     </div>
   );
 }
