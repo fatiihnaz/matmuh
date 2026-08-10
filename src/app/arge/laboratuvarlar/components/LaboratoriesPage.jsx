@@ -1,7 +1,7 @@
-import { FlaskConical, Monitor, Users } from "lucide-react";
+import { Monitor, Users } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import MainCard from "@/app/components/MainCard";
+import PageSection from "@/app/components/PageSection";
 import PendingContent from "@/app/components/PendingContent";
 import { LABORATORIES } from "@/data/research";
 
@@ -13,13 +13,13 @@ export default function LaboratoriesPage() {
         subTitle="Bölüm laboratuvarları ve donanımları"
       />
       <PageLayout>
-        <div className="space-y-6">
-          <MainCard title="Laboratuvarlar" icon={FlaskConical}>
-            <div className="flex flex-col gap-4 pt-1">
+        <div className="flex flex-col gap-8">
+          <PageSection title="Laboratuvarlar" count={LABORATORIES.length}>
+            <div className="flex flex-col gap-3">
               {LABORATORIES.map((lab) => (
                 <div
                   key={lab.name}
-                  className="flex flex-col gap-3 p-4 rounded-lg bg-primary-500/2 border border-primary-500/5"
+                  className="flex flex-col gap-3 p-5 rounded-xl border border-primary-500/10 shadow-xs bg-white"
                 >
                   <div className="flex items-center gap-2">
                     <Monitor className="size-4 text-secondary-500" />
@@ -50,13 +50,13 @@ export default function LaboratoriesPage() {
                   </div>
                 </div>
               ))}
-
-              <PendingContent>
-                Laboratuvar donanım ve yazılım envanteri güncellenmektedir.
-                Ayrıntılı bilgi için bölüm sekreterliğine başvurabilirsiniz.
-              </PendingContent>
             </div>
-          </MainCard>
+          </PageSection>
+
+          <PendingContent>
+            Laboratuvar donanım ve yazılım envanteri güncellenmektedir.
+            Ayrıntılı bilgi için bölüm sekreterliğine başvurabilirsiniz.
+          </PendingContent>
         </div>
       </PageLayout>
     </>

@@ -1,13 +1,10 @@
-import {
-  AlertTriangle,
-  Building2,
-  CheckCircle2,
-  FileText,
-  Quote,
-} from "lucide-react";
+import { AlertTriangle, Briefcase, BookOpen, FileStack } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import MainCard from "@/app/components/MainCard";
+import Panel from "@/app/components/Panel";
+import PageSection from "@/app/components/PageSection";
+import RelatedPages from "@/app/components/RelatedPages";
+import QuickLinks from "@/app/components/QuickLinks";
 import DocumentLink from "@/app/egitim/components/DocumentLink";
 import {
   APPROVAL_PATHS,
@@ -19,6 +16,21 @@ import {
   SUMMER_TERM,
 } from "@/data/summerSchool";
 
+const RELATED = [
+  { label: "Müfredat", href: "/egitim/mufredat", icon: BookOpen },
+  { label: "Staj İşlemleri", href: "/egitim/staj", icon: Briefcase },
+  { label: "Formlar / Belgeler", href: "/egitim/formlar", icon: FileStack },
+];
+
+function Sidebar() {
+  return (
+    <div className="flex flex-col gap-6">
+      <RelatedPages items={RELATED} />
+      <QuickLinks />
+    </div>
+  );
+}
+
 export default function SummerSchoolPage() {
   return (
     <>
@@ -26,9 +38,9 @@ export default function SummerSchoolPage() {
         title="Yaz Okulu"
         subTitle={`Başka üniversiteden ve başka bölümden ders alma · ${SUMMER_TERM}`}
       />
-      <PageLayout>
-        <div className="space-y-6">
-          <div className="flex gap-4 p-4 rounded-xl border border-secondary-500/25 bg-secondary-500/6">
+      <PageLayout sidebar={<Sidebar />}>
+        <div className="flex flex-col gap-8">
+          <div className="flex gap-4 p-5 rounded-xl border border-secondary-500/25 bg-secondary-500/6">
             <AlertTriangle className="size-5 shrink-0 text-secondary-600" />
             <div className="flex flex-col gap-1">
               <span className="text-[14px] font-semibold text-primary-600">
@@ -36,32 +48,37 @@ export default function SummerSchoolPage() {
                 geçemez
               </span>
               <span className="text-[13px] text-primary-500/70 leading-relaxed">
-                {CREDIT_LIMIT} krediyi geçmesi durumunda diğer
-                üniversitelerden veya diğer bölümlerden alınan dersler hiçbir
-                şekilde kabul edilmez.
+                {CREDIT_LIMIT} krediyi geçmesi durumunda diğer üniversitelerden
+                veya diğer bölümlerden alınan dersler hiçbir şekilde kabul
+                edilmez.
               </span>
             </div>
           </div>
 
-          <MainCard title="Ders Alınabilecek Üniversiteler" icon={Building2}>
-            <div className="flex flex-wrap gap-2 pt-1">
-              {PARTNER_UNIVERSITIES.map((name) => (
-                <span
-                  key={name}
-                  className="px-3 py-1.5 rounded-lg bg-primary-500/2 border border-primary-500/5 text-[13px] text-primary-500"
-                >
-                  {name}
-                </span>
-              ))}
-            </div>
-          </MainCard>
+          <PageSection
+            title="Ders Alınabilecek Üniversiteler"
+            count={PARTNER_UNIVERSITIES.length}
+          >
+            <Panel>
+              <div className="flex flex-wrap gap-2">
+                {PARTNER_UNIVERSITIES.map((name) => (
+                  <span
+                    key={name}
+                    className="px-3 py-1.5 rounded-lg bg-primary-500/2 border border-primary-500/5 text-[13px] text-primary-500"
+                  >
+                    {name}
+                  </span>
+                ))}
+              </div>
+            </Panel>
+          </PageSection>
 
-          <MainCard title="Hangi Yolu İzleyeceksin" icon={CheckCircle2}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+          <PageSection title="Hangi Yolu İzleyeceksin">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-3">
               {APPROVAL_PATHS.map((path) => (
                 <div
                   key={path.id}
-                  className="flex flex-col gap-3 p-4 rounded-lg bg-primary-500/2 border border-primary-500/5"
+                  className="flex flex-col gap-3 p-5 rounded-xl border border-primary-500/10 shadow-xs bg-white"
                 >
                   <div className="flex flex-col gap-1">
                     <span className="text-[14px] font-semibold text-primary-500">
@@ -86,42 +103,46 @@ export default function SummerSchoolPage() {
                 </div>
               ))}
             </div>
-          </MainCard>
+          </PageSection>
 
-          <MainCard title="Ders İçerik Uygunluğu" icon={Quote}>
-            <div className="flex flex-col gap-4 pt-1">
-              <p className="text-[13px] text-primary-500/60 leading-relaxed">
-                {EQUIVALENCE_NOTE}
-              </p>
+          <PageSection title="Ders İçerik Uygunluğu">
+            <Panel>
+              <div className="flex flex-col gap-4">
+                <p className="text-[13px] text-primary-500/60 leading-relaxed">
+                  {EQUIVALENCE_NOTE}
+                </p>
 
-              <div className="flex flex-col gap-3">
-                <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
-                  Örnek ifadeler
-                </span>
-                {EQUIVALENCE_EXAMPLES.map((example) => (
-                  <div
-                    key={example.context}
-                    className="flex flex-col gap-1.5 p-3 rounded-lg bg-primary-500/2 border-l-2 border-secondary-500/40"
-                  >
-                    <span className="text-[11px] font-medium text-primary-500/45">
-                      {example.context}
-                    </span>
-                    <span className="text-[13px] text-primary-500/70 leading-relaxed italic">
-                      “{example.text}”
-                    </span>
-                  </div>
+                <div className="flex flex-col gap-3">
+                  <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
+                    Örnek ifadeler
+                  </span>
+                  {EQUIVALENCE_EXAMPLES.map((example) => (
+                    <div
+                      key={example.context}
+                      className="flex flex-col gap-1.5 p-3 rounded-lg bg-primary-500/2 border-l-2 border-secondary-500/40"
+                    >
+                      <span className="text-[11px] font-medium text-primary-500/45">
+                        {example.context}
+                      </span>
+                      <span className="text-[13px] text-primary-500/70 leading-relaxed italic">
+                        “{example.text}”
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </Panel>
+          </PageSection>
+
+          <PageSection title="Belgeler" count={SUMMER_DOCUMENTS.length}>
+            <Panel>
+              <div className="grid grid-cols-1 xl:grid-cols-2 gap-2">
+                {SUMMER_DOCUMENTS.map((item) => (
+                  <DocumentLink key={item.href} {...item} />
                 ))}
               </div>
-            </div>
-          </MainCard>
-
-          <MainCard title="Belgeler" icon={FileText}>
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-2 pt-1">
-              {SUMMER_DOCUMENTS.map((item) => (
-                <DocumentLink key={item.href} {...item} />
-              ))}
-            </div>
-          </MainCard>
+            </Panel>
+          </PageSection>
         </div>
       </PageLayout>
     </>

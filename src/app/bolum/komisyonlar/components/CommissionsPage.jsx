@@ -1,9 +1,10 @@
 "use client";
 import { useState } from "react";
-import { BookUser, ChevronDown, FileText } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import MainCard from "@/app/components/MainCard";
+import Panel from "@/app/components/Panel";
+import PageSection from "@/app/components/PageSection";
 import Avatar from "@/app/components/Avatar";
 import DocumentLink from "@/app/egitim/components/DocumentLink";
 import { COMMISSIONS, COMMISSIONS_SOURCE } from "@/data/commissions";
@@ -81,24 +82,24 @@ export default function CommissionsPage() {
         subTitle={`Bölüm komisyonları ve üyeleri · ${COMMISSIONS_SOURCE.date}`}
       />
       <PageLayout>
-        <div className="space-y-6">
-          <MainCard title="Bölüm Komisyonları" icon={BookUser}>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start pt-1">
+        <div className="flex flex-col gap-8">
+          <PageSection title="Bölüm Komisyonları" count={COMMISSIONS.length}>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start">
               {COMMISSIONS.map((commission) => (
                 <CommissionCard key={commission.name} commission={commission} />
               ))}
             </div>
-          </MainCard>
+          </PageSection>
 
-          <MainCard title="Belgeler" icon={FileText}>
-            <div className="pt-1">
+          <PageSection title="Belgeler">
+            <Panel>
               <DocumentLink
                 label={`${COMMISSIONS_SOURCE.label} (${COMMISSIONS_SOURCE.date})`}
                 kind="pdf"
                 href={COMMISSIONS_SOURCE.href}
               />
-            </div>
-          </MainCard>
+            </Panel>
+          </PageSection>
         </div>
       </PageLayout>
     </>
