@@ -14,12 +14,6 @@ export function announcementHref(item) {
   return `/duyurular/${item.slug}`;
 }
 
-/* ------------------------------------------------------------------ *
- * Normalleştirme
- * ------------------------------------------------------------------ */
-
-// Gövde HTML'i bugün kendi verimizden geliyor; CMS bağlandığında editörden
-// gelecek. Etiket süzgeci ilk günden burada duruyor ki o gün tek yer değişsin.
 const ALLOWED_TAGS = new Set(["p", "br", "strong", "em", "u", "a", "ul", "ol", "li", "h3", "h4"]);
 
 function sanitize(html) {
@@ -41,8 +35,6 @@ function sanitize(html) {
   });
 }
 
-// Türkçe'de "İ".toLowerCase() nokta bırakır, "I".toLowerCase() "ı" vermez.
-// Aramanın "sınav" ile "SINAV"ı eşleştirebilmesi için harfler elle eşlenir.
 const FOLD = { İ: "i", I: "i", ı: "i", Ş: "s", ş: "s", Ğ: "g", ğ: "g", Ü: "u", ü: "u", Ö: "o", ö: "o", Ç: "c", ç: "c", Â: "a", â: "a", Î: "i", î: "i", Û: "u", û: "u" };
 
 export function normalizeTr(value) {
@@ -78,12 +70,6 @@ function toAnnouncement(raw) {
   };
 }
 
-/* ------------------------------------------------------------------ *
- * Sorgular
- * ------------------------------------------------------------------ */
-
-// Tek sıralama tanımı. id kırılması şart: aynı günlü kayıtlar aksi hâlde
-// sunucu ve istemcide farklı sıralanabilir.
 function compare(a, b) {
   if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
   if (a.publishedAt !== b.publishedAt) return a.publishedAt < b.publishedAt ? 1 : -1;
@@ -116,8 +102,6 @@ export const getAnnouncements = cache(
   },
 );
 
-// /haberler ayrı bir koleksiyon değil: kariyer ve mezuniyet içerikleri,
-// sınav programları dışarıda bırakılarak.
 export const getNews = cache(async ({ limit, offset = 0 } = {}) =>
   getAnnouncements({ categoriesAny: NEWS_CATEGORY_IDS, excludeCategory: "sinav", limit, offset }),
 );
@@ -126,8 +110,6 @@ export const getAnnouncementBySlug = cache(async (slug) =>
   allSorted().find((item) => item.slug === slug) ?? null,
 );
 
-// Liste yeniden eskiye sıralı, bu yüzden dizideki bir önceki kayıt daha yeni
-// olandır. Karışmasın diye adlandırma doğrudan "newer"/"older".
 export const getAdjacent = cache(async (slug) => {
   const items = allSorted();
   const index = items.findIndex((item) => item.slug === slug);

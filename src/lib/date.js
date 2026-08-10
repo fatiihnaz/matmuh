@@ -5,10 +5,6 @@ const MONTHS = [
 
 const SHORT = ["OCA", "ŞUB", "MAR", "NİS", "MAY", "HAZ", "TEM", "AĞU", "EYL", "EKİ", "KAS", "ARA"];
 
-// Yalnız-tarih ISO stringleri sözlüksel ayrıştırılır, Date'ten geçirilmez:
-// new Date("2026-02-10") UTC gece yarısı olarak okunur ve negatif saat
-// diliminde bir gün geriye kayar, bu da sunucu/istemci arasında hydration
-// uyuşmazlığı üretir.
 function parts(iso) {
   if (typeof iso !== "string" || iso.length < 10) return null;
   const year = iso.slice(0, 4);

@@ -56,9 +56,6 @@ function formatSegmentLabel(seg) {
     .join(" ");
 }
 
-// lastLabel: son kırıntı bir slug ise başlığın title-case hâli okunmaz olur
-// ("Kontenjan artirimlari hk 2025 2026 bahar"). Detay sayfaları gerçek başlığı
-// buradan geçirir.
 export default function Breadcrumb({ lastLabel }) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);

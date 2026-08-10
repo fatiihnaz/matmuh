@@ -8,7 +8,6 @@ import { X } from "lucide-react";
 const FOCUSABLE =
   'a[href], button:not([disabled]), input, select, textarea, [tabindex]:not([tabindex="-1"])';
 
-// Portal sunucuda render edilemez; hydration'dan önce null döndürmek gerekiyor.
 const neverChanges = () => () => {};
 
 export default function Modal({ open, onClose, label, children }) {
@@ -41,8 +40,6 @@ export default function Modal({ open, onClose, label, children }) {
     [onClose],
   );
 
-  // Kaydırma kilidi: scrollbar genişliği kadar telafi verilmezse sayfa açılışta
-  // yatayda zıplar.
   useEffect(() => {
     if (!open) return;
     restoreRef.current = document.activeElement;

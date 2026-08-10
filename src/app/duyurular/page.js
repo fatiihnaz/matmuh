@@ -10,13 +10,12 @@ import Pagination from "../components/Announcements/Pagination";
 import { PAGE_SIZE, getAnnouncements, getCategoriesWithCounts } from "@/data/content";
 
 export const metadata = {
-  title: "Duyurular | YTÜ Matematik Mühendisliği",
+  title: "Duyurular",
   description:
     "Sınav programları, staj, mezuniyet ve ders kayıtlarına ilişkin bölüm duyuruları.",
 };
 
 export default async function AnnouncementsPage({ searchParams }) {
-  // Next 16'da searchParams bir Promise.
   const params = await searchParams;
   const category = params?.kategori ?? null;
   const q = params?.q ?? "";

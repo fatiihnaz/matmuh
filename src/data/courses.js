@@ -1,5 +1,9 @@
 import { SEMESTERS, ELECTIVE_GROUPS, COURSE_DETAILS } from "./coursesData";
 
+export async function getAllCourseCodes() {
+  return Object.keys(COURSE_DETAILS);
+}
+
 export async function getCourseByCode(code) {
   if (!code) return null;
   const course = COURSE_DETAILS[code.toUpperCase()];

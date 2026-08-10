@@ -9,9 +9,6 @@ const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
 export const PREVIEWABLE_KINDS = new Set(["pdf", ...OFFICE_KINDS, ...IMAGE_KINDS]);
 
-// Office belgelerini tarayıcı açamıyor; eski ikili .doc/.xls'i ise hiçbir JS
-// kütüphanesi çözemiyor. Microsoft'un genel görüntüleyicisi ikisini de açıyor
-// ve paket ağırlığı getirmiyor. Dosyalar zaten herkese açık adreslerde duruyor.
 function officeEmbedSrc(href) {
   return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(href)}`;
 }

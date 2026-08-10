@@ -12,8 +12,6 @@ export default function AnnouncementFilters({ placeholder = "Duyurularda ara..."
   const [value, setValue] = useState(current);
   const [syncedWith, setSyncedWith] = useState(current);
 
-  // URL dışarıdan değişirse (çip tıklaması, geri tuşu) input'u eşitle.
-  // Efekt yerine render sırasında ayarlanır; efekt fazladan bir tur render eder.
   if (current !== syncedWith) {
     setSyncedWith(current);
     setValue(current);

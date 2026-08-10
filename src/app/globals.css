@@ -113,8 +113,6 @@ select option {
     animation: none;
   }
 }
-/* Duyuru gövdesi: içerik CMS/editör HTML'i olduğu için stiller sınıf yerine
-   etiket üzerinden verilir. Tailwind preflight tüm varsayılanları sıfırlar. */
 .announcement-body > * + * {
   margin-top: 0.85rem;
 }

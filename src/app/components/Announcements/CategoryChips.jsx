@@ -1,8 +1,6 @@
 import Link from "next/link";
 import { CalendarCheck, GraduationCap, Briefcase, Sparkles, Layers, LayoutGrid } from "lucide-react";
 
-// Veri katmanı JSON-serileştirilebilir kalmalı, bu yüzden ikon eşlemesi
-// kategorinin kendisinde değil burada durur.
 const ICONS = {
   sinav: CalendarCheck,
   mezuniyet: GraduationCap,

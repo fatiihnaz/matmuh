@@ -1,8 +1,6 @@
 import Image from "next/image";
 import StarMark from "@/app/components/StarMark";
 
-// Kayıtların çoğunda fotoğraf yok. Boş bırakmak kart ızgarasını çökertiyor,
-// bu yüzden aynı orana sahip kesikli bir yer tutucu konuyor.
 export default function NewsThumb({ cover, sizes, priority = false, className = "" }) {
   if (!cover) {
     return (

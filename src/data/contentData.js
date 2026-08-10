@@ -1,17 +1,3 @@
-// Duyuru ve haber kayıtları. Ham veri; mantık yok, import yok.
-// Bu dosyayı yalnızca src/data/content.js okur.
-//
-// Kaynak: mtm.yildiz.edu.tr/duyurular (1-3. sayfa) ve /haberler. Başlıklar,
-// gövdeler, ekli dosyalar ve fotoğraflar oradan alındı; hiçbiri uydurulmadı.
-//
-// publishedAt hakkında: eski sitede yayın tarihi diye bir alan yok. Tarih,
-// kayda ekli dosyaların HTTP Last-Modified başlığından (yükleme anı) türetildi.
-// Tarihi bu yolla bulunan 36 kaydın tamamı kayıt id sırasıyla birebir monoton
-// çıktığı için yöntem güvenilir sayıldı. Hiç eki olmayan 21 kayıtta tarih,
-// komşu kayıtların tarihleri arasında id'ye orantılı olarak tahmin edildi ve
-// bunlar dateEstimated: true ile işaretlendi. Gerçek tarihler bölümden
-// alınabilirse doğrudan bu alanlar düzeltilmelidir.
-
 export const CONTENT_CATEGORIES = [
   { id: "sinav", label: "Sınav & Program" },
   { id: "mezuniyet", label: "Mezuniyet" },
@@ -22,7 +8,6 @@ export const CONTENT_CATEGORIES = [
 
 export const HOME_CATEGORY_IDS = ["sinav", "mezuniyet", "kariyer"];
 
-// /haberler: kariyer ve mezuniyet içerikleri, sınav programları hariç.
 export const NEWS_CATEGORY_IDS = ["kariyer", "mezuniyet"];
 
 export const contentRecords = [

@@ -91,7 +91,7 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className={`relative isolate w-full h-[calc(72svh_-_var(--header-h))] min-h-[380px] sm:h-[calc(76svh_-_var(--header-h))] sm:min-h-[440px] md:h-[calc(78svh_-_var(--header-h))] md:min-h-[500px] md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 pb-20 sm:pb-12 ${
+      className={`relative isolate w-full h-[calc(72svh-var(--header-h))] min-h-95 sm:h-[calc(76svh-var(--header-h))] sm:min-h-110 md:h-[calc(78svh-var(--header-h))] md:min-h-125 md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 pb-20 sm:pb-12 ${
         active ? "" : "mm-paused"
       }`}
     >

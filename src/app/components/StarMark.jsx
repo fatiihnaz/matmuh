@@ -1,5 +1,3 @@
-// YTÜ ambleminin yıldızı. Hero'daki animasyonlu sürümün durağan hâli;
-// görseli olmayan kartlarda yer tutucu olarak kullanılır.
 export default function StarMark({ className = "" }) {
   return (
     <svg

@@ -7,8 +7,6 @@ import {
 export const navigationItems = [
   { label: "Anasayfa", href: "/" },
   {
-    // Çocuklu olması şart: NavItems çocuksuz üst düzey girdileri xl'e kadar
-    // gizliyor, nav kabı ise lg'de görünüyor; aradaki genişlikte kaybolurdu.
     label: "Duyurular",
     basePath: "/duyurular",
     href: "/duyurular",

@@ -29,7 +29,6 @@ function Card({ item, label, direction }) {
   );
 }
 
-// Sol ok geriye, yani daha eski duyuruya gider.
 export default function AdjacentNav({ older, newer }) {
   if (!older && !newer) return null;
   return (
