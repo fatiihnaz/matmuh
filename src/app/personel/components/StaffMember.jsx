@@ -1,15 +1,8 @@
 import React from 'react';
 import { Mail, ExternalLink } from 'lucide-react';
+import Avatar from '@/app/components/Avatar';
 
-const StaffMember = ({ member, idx, bgColors }) => {
-    const getInitials = (name) => {
-        const parts = name.split(' ').filter(Boolean);
-        if (parts.length === 0) return "?";
-        if (parts.length === 1) return parts[0].slice(0, 2).toUpperCase();
-        return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
-    };
-
-    const initials = getInitials(member.name);
+const StaffMember = ({ member, idx }) => {
     const isAcademic = member.email && !member.rank.includes("Personel") && !member.rank.includes("İşletmeni");
     const avesisUrl = isAcademic ? `https://avesis.yildiz.edu.tr/${member.id}` : null;
 
@@ -20,14 +13,12 @@ const StaffMember = ({ member, idx, bgColors }) => {
             className="group cursor-pointer rounded-xl p-5 bg-white border border-primary-500/10 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary-500/20 hover:shadow-sm"
         >
             <div className="flex flex-col items-center text-center">
-                <div
-                    className="mb-3 flex h-16 w-16 items-center justify-center rounded-full transition-transform duration-300 group-hover:scale-105"
-                    style={{ backgroundColor: bgColors[idx % bgColors.length] }}
-                >
-                    <span className="font-sans text-base font-semibold tracking-wider text-secondary-500">
-                        {initials}
-                    </span>
-                </div>
+                <Avatar
+                    name={member.name}
+                    idx={idx}
+                    size="mb-3 h-16 w-16 transition-transform duration-300 group-hover:scale-105"
+                    textSize="font-sans text-base tracking-wider"
+                />
 
                 <div className="font-sans text-sm font-semibold text-primary-500 leading-tight transition-colors duration-200 group-hover:text-secondary-500">
                     {member.rank} {member.name}

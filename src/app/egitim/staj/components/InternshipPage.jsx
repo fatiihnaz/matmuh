@@ -11,8 +11,8 @@ import {
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import MainCard from "@/app/components/MainCard";
+import PersonRow from "@/app/components/PersonRow";
 import DocumentLink from "@/app/egitim/components/DocumentLink";
-import { staffData } from "@/data/staff";
 import {
   INTERNSHIP_CONTACT,
   INTERNSHIP_DOCUMENTS,
@@ -25,37 +25,6 @@ import {
 } from "@/data/internship";
 
 const totalDays = MANDATORY_INTERNSHIPS.reduce((sum, i) => sum + i.days, 0);
-
-function findStaff(id) {
-  return [...staffData.academics, ...staffData.researchAssistants].find(
-    (person) => person.id === id,
-  );
-}
-
-function MemberRow({ id }) {
-  const person = findStaff(id);
-  if (!person) return null;
-
-  return (
-    <div className="flex items-center justify-between gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
-      <span className="min-w-0">
-        <span className="block text-[13px] font-medium text-primary-500 truncate">
-          {person.rank} {person.name}
-        </span>
-        <span className="block text-[11px] text-primary-500/45">
-          Oda {person.room} · {person.phone}
-        </span>
-      </span>
-      <a
-        href={`mailto:${person.email}`}
-        title="E-posta gönder"
-        className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/30 hover:bg-secondary-500/10 hover:text-secondary-500 transition-colors"
-      >
-        <Mail className="size-3.5" />
-      </a>
-    </div>
-  );
-}
 
 export default function InternshipPage() {
   return (
@@ -120,7 +89,7 @@ export default function InternshipPage() {
           <MainCard title="Bölüm Staj Komisyonu" icon={Users}>
             <div className="flex flex-col gap-6 pt-1">
               <div className="flex flex-col gap-4">
-                <MemberRow id={STAJ_COMMISSION.chairId} />
+                <PersonRow id={STAJ_COMMISSION.chairId} />
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {STAJ_COMMISSION.groups.map((group) => (
@@ -134,8 +103,8 @@ export default function InternshipPage() {
                         </span>
                       </div>
                       <div className="flex flex-col gap-1.5">
-                        {group.memberIds.map((id) => (
-                          <MemberRow key={id} id={id} />
+                        {group.memberIds.map((id, idx) => (
+                          <PersonRow key={id} id={id} idx={idx} />
                         ))}
                       </div>
                     </div>

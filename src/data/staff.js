@@ -65,3 +65,12 @@ export const staffData = {
     { id: "vcakir", name: "Vedat ÇAKIR", rank: "Bilgisayar İşletmeni", email: null, phone: "0212 383 45 91", room: "Bölüm Sekreteri" }
   ]
 };
+
+export function findStaffById(id) {
+  return [
+    ...staffData.management,
+    ...staffData.academics,
+    ...staffData.researchAssistants,
+    ...staffData.administrative,
+  ].find((person) => person.id === id);
+}
