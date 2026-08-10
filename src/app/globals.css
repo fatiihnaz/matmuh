@@ -113,3 +113,55 @@ select option {
     animation: none;
   }
 }
+/* Duyuru gövdesi: içerik CMS/editör HTML'i olduğu için stiller sınıf yerine
+   etiket üzerinden verilir. Tailwind preflight tüm varsayılanları sıfırlar. */
+.announcement-body > * + * {
+  margin-top: 0.85rem;
+}
+
+.announcement-body a {
+  color: var(--color-secondary-600);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.announcement-body a:hover {
+  color: var(--color-secondary-500);
+}
+
+.announcement-body strong {
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.announcement-body u {
+  text-underline-offset: 2px;
+}
+
+.announcement-body h3,
+.announcement-body h4 {
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.announcement-body ul,
+.announcement-body ol {
+  padding-left: 1.1rem;
+  list-style-position: outside;
+}
+
+.announcement-body ul {
+  list-style-type: disc;
+}
+
+.announcement-body ol {
+  list-style-type: decimal;
+}
+
+.announcement-body li + li {
+  margin-top: 0.4rem;
+}
+
+.announcement-body li::marker {
+  color: var(--color-secondary-500);
+}

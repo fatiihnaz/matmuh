@@ -6,7 +6,7 @@ import SubHeader from "@/app/components/Header/SubHeader";
 import Panel from "@/app/components/Panel";
 import PageSection from "@/app/components/PageSection";
 import Avatar from "@/app/components/Avatar";
-import DocumentLink from "@/app/egitim/components/DocumentLink";
+import DocumentLink from "@/app/components/DocumentLink";
 import { COMMISSIONS, COMMISSIONS_SOURCE } from "@/data/commissions";
 
 function classifyRole(role) {

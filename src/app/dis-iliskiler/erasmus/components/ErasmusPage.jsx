@@ -8,7 +8,7 @@ import PersonRow from "@/app/components/PersonRow";
 import RelatedPages from "@/app/components/RelatedPages";
 import QuickLinks from "@/app/components/QuickLinks";
 import { institutionalLinks } from "@/data/landing";
-import DocumentLink from "@/app/egitim/components/DocumentLink";
+import DocumentLink from "@/app/components/DocumentLink";
 import {
   AGREEMENT_PERIOD,
   BILATERAL_AGREEMENTS,
@@ -97,7 +97,7 @@ export default function ErasmusPage() {
               </span>
             }
           >
-            <Panel className="p-0 overflow-hidden">
+            <Panel padding="p-0" className="overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-left">
                   <thead>

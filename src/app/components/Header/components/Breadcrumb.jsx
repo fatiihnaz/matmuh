@@ -30,6 +30,8 @@ const labelMap = {
   "dis-iliskiler": "Dış İlişkiler",
   erasmus: "Erasmus+",
   endustriyel: "Endüstriyel İşbirlikleri",
+  duyurular: "Duyurular",
+  haberler: "Haberler",
 };
 
 const unclickablePaths = [
@@ -54,14 +56,18 @@ function formatSegmentLabel(seg) {
     .join(" ");
 }
 
-export default function Breadcrumb() {
+// lastLabel: son kırıntı bir slug ise başlığın title-case hâli okunmaz olur
+// ("Kontenjan artirimlari hk 2025 2026 bahar"). Detay sayfaları gerçek başlığı
+// buradan geçirir.
+export default function Breadcrumb({ lastLabel }) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
   const crumbs = [
     { label: "Anasayfa", href: "/" },
     ...segments.map((seg, i) => ({
-      label: formatSegmentLabel(seg),
+      label:
+        lastLabel && i === segments.length - 1 ? lastLabel : formatSegmentLabel(seg),
       href: "/" + segments.slice(0, i + 1).join("/"),
       isClickable: !unclickablePaths.includes(seg),
     })),
@@ -75,7 +81,7 @@ export default function Breadcrumb() {
           <span key={crumb.href} className="flex items-center gap-2">
             {i > 0 && <ChevronRight size={12} className="text-neutral-500" />}
             {isLast ? (
-              <span className="text-secondary-400 font-medium">
+              <span className="text-secondary-400 font-medium max-w-[40ch] truncate">
                 {crumb.label}
               </span>
             ) : crumb.isClickable ? (

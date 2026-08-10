@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
 export default function MainCard({ title, icon: Icon, buttonTitle, href, children, dark }) {
@@ -14,11 +15,11 @@ export default function MainCard({ title, icon: Icon, buttonTitle, href, childre
                         </h2>
                     </div>
 
-                    {buttonTitle && (
-                        <a href={href || "#"} className="group text-xs text-secondary-500 hover:text-secondary-600 flex items-center gap-1 transition-colors">
+                    {buttonTitle && href && (
+                        <Link href={href} className="group text-xs text-secondary-500 hover:text-secondary-600 flex items-center gap-1 transition-colors">
                             {buttonTitle}
                             <ChevronRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5"/>
-                        </a>
+                        </Link>
                     )}
                 </div>
 

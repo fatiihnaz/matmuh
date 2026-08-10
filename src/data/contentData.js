@@ -20,7 +20,7 @@ export const CONTENT_CATEGORIES = [
   { id: "genel", label: "Genel" },
 ];
 
-export const HOME_CATEGORY_IDS = ["sinav", "mezuniyet", "genel"];
+export const HOME_CATEGORY_IDS = ["sinav", "mezuniyet", "kariyer"];
 
 // /haberler: kariyer ve mezuniyet içerikleri, sınav programları hariç.
 export const NEWS_CATEGORY_IDS = ["kariyer", "mezuniyet"];

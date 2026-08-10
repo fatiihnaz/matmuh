@@ -125,13 +125,14 @@ export const getAnnouncementBySlug = cache(async (slug) =>
   allSorted().find((item) => item.slug === slug) ?? null,
 );
 
+// Liste yeniden eskiye sıralı, bu yüzden dizideki bir önceki kayıt daha yeni
+// olandır. Karışmasın diye adlandırma doğrudan "newer"/"older".
 export const getAdjacent = cache(async (slug) => {
   const items = allSorted();
   const index = items.findIndex((item) => item.slug === slug);
-  if (index === -1) return { prev: null, next: null };
+  if (index === -1) return { newer: null, older: null };
   const brief = (item) => (item ? { slug: item.slug, title: item.title } : null);
-  // Liste yeniden eskiye sıralı: bir önceki kayıt daha yeni olandır.
-  return { prev: brief(items[index - 1]), next: brief(items[index + 1]) };
+  return { newer: brief(items[index - 1]), older: brief(items[index + 1]) };
 });
 
 export const getCategoriesWithCounts = cache(async () => {

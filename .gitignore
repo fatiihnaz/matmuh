@@ -45,3 +45,7 @@ next-env.d.ts
 /public/belgeler/
 
 .vercel
+
+# yerel dev sunucusu logları
+.dev-stdout.log
+.dev-stderr.log

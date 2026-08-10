@@ -6,7 +6,7 @@ import PageSection from "@/app/components/PageSection";
 import RelatedPages from "@/app/components/RelatedPages";
 import QuickLinks from "@/app/components/QuickLinks";
 import { institutionalLinks } from "@/data/landing";
-import DocumentLink from "@/app/egitim/components/DocumentLink";
+import DocumentLink from "@/app/components/DocumentLink";
 import {
   APPROVAL_PATHS,
   CREDIT_LIMIT,

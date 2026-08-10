@@ -1,7 +1,7 @@
-export default function Panel({ children, className = "" }) {
+export default function Panel({ children, className = "", padding = "p-5" }) {
   return (
     <div
-      className={`rounded-xl border border-primary-500/10 shadow-xs bg-white p-5 ${className}`}
+      className={`rounded-xl border border-primary-500/10 shadow-xs bg-white ${padding} ${className}`}
     >
       {children}
     </div>
