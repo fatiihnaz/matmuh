@@ -2,6 +2,7 @@ export const COMMISSIONS_SOURCE = {
   label: "Bölüm Komisyonları",
   date: "19.11.2025",
   href: "https://mtm.yildiz.edu.tr/media/files/B%C3%96L%C3%9CM%20KOM%C4%B0SYONLARI%2019_11_2025(1).pdf",
+  size: 76892,
 };
 
 export const COMMISSIONS = [

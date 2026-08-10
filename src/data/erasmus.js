@@ -113,6 +113,7 @@ export const ERASMUS_DOCUMENTS = [
     label: "Erasmus+ İkili Anlaşmalar — Matematik Mühendisliği",
     kind: "xlsx",
     href: "https://mtm.yildiz.edu.tr/media/files/Eramus+%C4%B0kili%20Anla%C5%9Fmalar%20Matematik+M%C3%BChendisli%C4%9Fi(1).xlsx",
+    size: 19921,
   },
 ];
 

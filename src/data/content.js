@@ -66,6 +66,7 @@ function toAnnouncement(raw) {
       label: a.label,
       href: a.href,
       kind: (a.kind ?? "").toLowerCase(),
+      size: a.size ?? 0,
     })),
     gallery: (raw.gallery ?? []).map((g) => ({
       src: g.src,

@@ -58,6 +58,7 @@ export const SUMMER_DOCUMENTS = [
     label: "Ders İçerik Uygunluğu Alınması Gereken Öğretim Üyesi Listesi",
     kind: "pdf",
     href: "https://mtm.yildiz.edu.tr/media/files/Ders%20%C4%B0%C3%A7erik%20Uygunlu%C4%9Fu%20Al%C4%B1nmas%C4%B1%20Gereken%20%C3%96%C4%9Fretim%20%C3%9Cyesi%20Listesi_.pdf",
+    size: 171552,
   },
   {
     label: "Başka Üniversiteden Yaz Okulu Ders Alma Dilekçesi",
@@ -69,5 +70,6 @@ export const SUMMER_DOCUMENTS = [
     label: "YÖ-097 YTÜ Eşdeğerlik ve İntibak İşlemleri Yönergesi",
     kind: "doc",
     href: "https://kalite.yildiz.edu.tr/media/files/YO%CC%88-097-YTU%CC%88%20Es%CC%A7deg%CC%86erlik%20ve%20I%CC%87ntibak%20I%CC%87s%CC%A7lemleri%20Yo%CC%88nergesi.doc",
+    size: 176128,
   },
 ];

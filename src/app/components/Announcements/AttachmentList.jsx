@@ -8,7 +8,13 @@ export default function AttachmentList({ items }) {
         Ekler
       </span>
       {items.map((item) => (
-        <DocumentLink key={item.href} label={item.label} href={item.href} kind={item.kind} />
+        <DocumentLink
+          key={item.href}
+          label={item.label}
+          href={item.href}
+          kind={item.kind}
+          size={item.size}
+        />
       ))}
     </div>
   );

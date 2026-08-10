@@ -97,6 +97,7 @@ export default function CommissionsPage() {
                 label={`${COMMISSIONS_SOURCE.label} (${COMMISSIONS_SOURCE.date})`}
                 kind="pdf"
                 href={COMMISSIONS_SOURCE.href}
+                size={COMMISSIONS_SOURCE.size}
               />
             </Panel>
           </PageSection>
