@@ -91,7 +91,7 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className={`relative isolate w-full h-[calc(72svh_-_var(--header-h))] min-h-[380px] sm:h-[calc(76svh_-_var(--header-h))] sm:min-h-[440px] md:h-[calc(78svh_-_var(--header-h))] md:min-h-[500px] md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12 ${
+      className={`relative isolate w-full h-[calc(72svh_-_var(--header-h))] min-h-[380px] sm:h-[calc(76svh_-_var(--header-h))] sm:min-h-[440px] md:h-[calc(78svh_-_var(--header-h))] md:min-h-[500px] md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 pb-20 sm:pb-12 ${
         active ? "" : "mm-paused"
       }`}
     >
@@ -252,30 +252,36 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="hidden sm:block w-full sm:max-w-5xl mt-12 sm:mt-16 mb-8 mx-auto"
           >
-            <div className="relative group w-full">
+            <form action="/duyurular" className="relative group w-full">
               <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 focus-within:shadow-xl w-full">
                 <input
-                  type="text"
+                  type="search"
+                  name="q"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Aramak için yazınız..."
+                  placeholder="Duyurularda aramak için yazınız..."
+                  aria-label="Duyurularda ara"
                   className="w-full py-3 px-6 text-base text-slate-700 placeholder-slate-400 outline-none bg-transparent font-medium"
                 />
-                <button className="px-6 py-3 text-slate-400 hover:text-primary-500 transition-colors border-l border-slate-100 flex items-center justify-center">
+                <button
+                  type="submit"
+                  aria-label="Ara"
+                  className="px-6 py-3 text-slate-400 hover:text-primary-500 transition-colors border-l border-slate-100 flex items-center justify-center"
+                >
                   <Search size={22} />
                 </button>
               </div>
-            </div>
+            </form>
           </motion.div>
         </div>
       </motion.div>
 
       <div
         aria-hidden="true"
-        className="absolute bottom-16 left-1/2 -translate-x-1/2 z-20 hidden sm:block pointer-events-none"
+        className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
       >
-        <div className="relative h-10 w-px overflow-hidden bg-secondary-500/20">
-          <div className="mm-cue absolute inset-x-0 top-0 h-4 bg-secondary-500/70" />
+        <div className="relative h-12 w-px overflow-hidden bg-secondary-500/25">
+          <div className="mm-cue absolute inset-x-0 top-0 h-5 bg-secondary-500" />
         </div>
       </div>
     </div>
