@@ -1,4 +1,4 @@
-import { Briefcase, ExternalLink, Globe, Mail } from "lucide-react";
+import { Briefcase, ExternalLink, FileDown, Globe, Mail } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import MainCard from "@/app/components/MainCard";
@@ -111,25 +111,61 @@ export default function ErasmusPage() {
                       <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45 whitespace-nowrap">
                         Erasmus Kodu
                       </th>
+                      <th className="w-8" />
                     </tr>
                   </thead>
                   <tbody>
-                    {BILATERAL_AGREEMENTS.map((row) => (
-                      <tr
-                        key={row.code}
-                        className="border-b border-primary-500/5 last:border-0 hover:bg-primary-500/2 transition-colors"
-                      >
-                        <td className="px-5 py-2.5 text-[13px] text-primary-500">
-                          {row.institution}
-                        </td>
-                        <td className="px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
-                          {row.country}
-                        </td>
-                        <td className="px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
-                          {row.code}
-                        </td>
-                      </tr>
-                    ))}
+                    {BILATERAL_AGREEMENTS.map((row) =>
+                      row.href ? (
+                        <tr
+                          key={row.code}
+                          className="group border-b border-primary-500/5 last:border-0 hover:bg-secondary-500/4 transition-colors"
+                        >
+                          <td className="px-5 py-2.5 text-[13px]">
+                            <a
+                              href={row.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="text-primary-500 group-hover:text-secondary-600 hover:underline"
+                            >
+                              {row.institution}
+                            </a>
+                          </td>
+                          <td className="px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
+                            {row.country}
+                          </td>
+                          <td className="px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
+                            {row.code}
+                          </td>
+                          <td className="pr-5 py-2.5 w-8">
+                            <a
+                              href={row.href}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="Anlaşmayı indir"
+                            >
+                              <FileDown className="size-3.5 text-primary-500/25 group-hover:text-secondary-500 transition-colors" />
+                            </a>
+                          </td>
+                        </tr>
+                      ) : (
+                        <tr
+                          key={row.code}
+                          className="border-b border-primary-500/5 last:border-0"
+                        >
+                          <td className="px-5 py-2.5 text-[13px] text-primary-500">
+                            {row.institution}
+                          </td>
+                          <td className="px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
+                            {row.country}
+                          </td>
+                          <td className="px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
+                            {row.code}
+                          </td>
+                          <td className="pr-5 py-2.5 w-8" />
+                        </tr>
+                      ),
+                    )}
                   </tbody>
                 </table>
               </div>
