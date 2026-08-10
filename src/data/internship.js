@@ -24,6 +24,37 @@ export const MANDATORY_INTERNSHIPS = [
   },
 ];
 
+export const STAJ_COMMISSION = {
+  chairId: "hsahin",
+  groups: [
+    {
+      code: "MTM2002",
+      label: "I. Staj Komisyonu",
+      subtitle: "Bilgisayar Donanımı ve Temel Uygulamaları Stajı",
+      memberIds: ["asahiner", "ionder", "huozer", "bguler"],
+    },
+    {
+      code: "MTM3002",
+      label: "II. Staj Komisyonu",
+      subtitle: "Sorun Çözüm Teknikleri",
+      memberIds: ["kemalp", "eugurlu"],
+    },
+  ],
+  composition: [
+    "Bölüm Kurulu tarafından, Bölüm öğretim elemanları arasından, 3 kişiden az olmayacak şekilde belirlenir.",
+    "Görev süresi 2 yıldır; süresi dolan üyeler tekrar seçilebilir.",
+    "Komisyon başkanı öğretim üyesi olmak zorundadır.",
+    "Sekretarya görevini Bölüm Sekreterliği yürütür.",
+  ],
+  duties: [
+    "Öğrencilerin staj yapacağı iş yerlerinin uygunluğuna karar verir.",
+    "Bölüm Başkanlığı'nca iletilen staj belgelerini inceler ve değerlendirir.",
+    "Staja ilişkin duyuruları öğrencilere iletir.",
+    "Değerlendirme ve itiraz sonuçlarını yazılı olarak Bölüm Başkanlığı'na bildirir.",
+    "Gerek gördüğünde, Bölüm Sekreterliği aracılığıyla öğrencilere staj anketi yapabilir.",
+  ],
+};
+
 export const TIMING_RULES = [
   "Stajların yarıyıl veya yaz tatiline rastlayan haftalarda yapılması esastır.",
   "Haftada en az 3 serbest tam iş günü bulunan öğrenciler eğitim-öğretim dönemi, yaz okulu ve genel sınav dönemlerinde de staj yapabilir.",

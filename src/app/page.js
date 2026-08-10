@@ -12,7 +12,7 @@ export default function LandingPage() {
 
       <PageLayout sidebar={<QuickLinks />}>
         <div className="space-y-8">
-          <MainCard title="Duyurular" icon={Bell} buttonTitle="Tümünü Gör" href="/duyurular">
+          <MainCard title="Duyurular" icon={Bell}>
             <div className="divide-y divide-gray-100">
               {announcements.map((item, index) => (
                 <a key={index} href="#" className="flex items-center gap-4 py-3 hover:bg-gray-50 rounded-lg px-2 transition-colors">
@@ -31,7 +31,7 @@ export default function LandingPage() {
           </MainCard>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-            <MainCard title="Haberler ve Etkinlikler" icon={Newspaper} buttonTitle="Tümü" href="/haberler">
+            <MainCard title="Haberler ve Etkinlikler" icon={Newspaper}>
               <div className="space-y-6">
                 {news.map((item, index) => (
                   <a key={index} href="#" className="block group">
@@ -49,7 +49,7 @@ export default function LandingPage() {
               </div>
             </MainCard>
 
-            <MainCard title="Araştırmalar" icon={CalendarDays} buttonTitle="Takvim" href="/arastirmalar">
+            <MainCard title="Araştırmalar" icon={CalendarDays}>
               <div className="divide-y divide-gray-100">
                 {seminars.map((item, index) => (
                   <a key={index} href="#" className="flex items-start gap-4 py-3 hover:bg-gray-50 rounded-lg px-2 transition-colors">
