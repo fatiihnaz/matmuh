@@ -1,20 +1,10 @@
 import {
   Info, Users, GraduationCap, Shield, BookUser, Microscope, Briefcase,
   CalendarDays, BookOpen, Scale, Library, Archive, FlaskConical, FolderOpen, Globe, ClipboardList, Sun, FileStack,
-  Bell, Newspaper,
 } from "lucide-react";
 
 export const navigationItems = [
   { label: "Anasayfa", href: "/" },
-  {
-    label: "Duyurular",
-    basePath: "/duyurular",
-    href: "/duyurular",
-    children: [
-      { label: "Tüm Duyurular", href: "/duyurular", icon: Bell, description: "Sınav, staj ve bölüm duyuruları" },
-      { label: "Haberler", href: "/haberler", icon: Newspaper, description: "Etkinlik ve kariyer haberleri" },
-    ],
-  },
   {
     label: "Bölüm",
     basePath: "/bolum",
