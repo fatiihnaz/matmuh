@@ -5,7 +5,7 @@ export default function SubHeader({ title, subTitle, lastLabel }) {
     <div className="bg-primary-500 -mt-px">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 pt-4 pb-5 sm:pb-6">
         <Breadcrumb lastLabel={lastLabel} />
-        <h1 className="text-white text-[21px] sm:text-[28px] font-light leading-snug mt-3 sm:mt-4">
+        <h1 className="text-white text-[21px] sm:text-[28px] font-light leading-snug mt-3 sm:mt-4 wrap-break-word">
           {title}
         </h1>
         {subTitle && (

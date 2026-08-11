@@ -61,14 +61,9 @@ export const navigationItems = [
         ],
       },
       {
-        category: "Staj",
+        category: "Staj & Belgeler",
         items: [
           { label: "Staj İşlemleri & Evraklar", href: "/egitim/staj", icon: ClipboardList, description: "Staj başvuru ve belgeleri" },
-        ],
-      },
-      {
-        category: "Genel",
-        items: [
           { label: "Formlar / Belgeler", href: "/egitim/formlar", icon: FileStack, description: "Öğrenci ve personel formları" },
         ],
       },

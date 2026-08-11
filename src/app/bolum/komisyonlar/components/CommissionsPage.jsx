@@ -43,7 +43,7 @@ function CommissionCard({ commission }) {
           <span className="block text-[13px] font-semibold text-primary-500 leading-snug">
             {commission.name}
           </span>
-          <span className="block text-[11px] text-primary-500/45 truncate">
+          <span className="block text-[11px] text-primary-500/45 wrap-break-word">
             {chair ? `${chair.rank} ${chair.name}` : `${members.length} üye`}
           </span>
         </span>

@@ -31,8 +31,8 @@ export default function DocumentPreview({ open, onClose, label, href, kind }) {
           )}
         </div>
 
-        <div className="shrink-0 flex items-center justify-center gap-4 pt-3">
-          <span className="text-[11px] text-white/45 truncate max-w-[50ch]">{label}</span>
+        <div className="shrink-0 flex items-center justify-center gap-4 pt-3 min-w-0">
+          <span className="min-w-0 text-[11px] text-white/45 truncate">{label}</span>
           <a
             href={href}
             target="_blank"

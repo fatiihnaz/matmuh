@@ -71,14 +71,17 @@ export default function Breadcrumb({ lastLabel }) {
   ];
 
   return (
-    <nav className="flex items-center gap-2 text-xs">
+    <nav className="flex items-center gap-2 text-xs min-w-0">
       {crumbs.map((crumb, i) => {
         const isLast = i === crumbs.length - 1;
         return (
-          <span key={crumb.href} className="flex items-center gap-2">
-            {i > 0 && <ChevronRight size={12} className="text-neutral-500" />}
+          <span
+            key={crumb.href}
+            className={`flex items-center gap-2 ${isLast ? "min-w-0" : "shrink-0"}`}
+          >
+            {i > 0 && <ChevronRight size={12} className="shrink-0 text-neutral-500" />}
             {isLast ? (
-              <span className="text-secondary-400 font-medium max-w-[40ch] truncate">
+              <span className="text-secondary-400 font-medium truncate">
                 {crumb.label}
               </span>
             ) : crumb.isClickable ? (

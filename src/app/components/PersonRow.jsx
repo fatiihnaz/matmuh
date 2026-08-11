@@ -10,10 +10,10 @@ export default function PersonRow({ id, idx = 0 }) {
     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
       <Avatar name={person.name} idx={idx} />
       <span className="min-w-0 flex-1">
-        <span className="block text-[13px] font-medium text-primary-500 truncate">
+        <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.rank} {person.name}
         </span>
-        <span className="block text-[11px] text-primary-500/45">
+        <span className="block text-[11px] text-primary-500/45 wrap-break-word">
           {person.title && `${person.title} · `}
           Oda {person.room} · {person.phone}
         </span>

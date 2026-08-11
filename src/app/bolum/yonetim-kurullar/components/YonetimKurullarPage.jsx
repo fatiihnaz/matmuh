@@ -13,11 +13,11 @@ function BoardMemberRow({ member, idx }) {
     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
       <Avatar name={member.name} idx={idx} />
       <span className="min-w-0 flex-1">
-        <span className="block text-[13px] font-medium text-primary-500 truncate">
+        <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {member.rank && `${member.rank} `}
           {member.name}
         </span>
-        <span className="block text-[11px] text-primary-500/50">
+        <span className="block text-[11px] text-primary-500/50 wrap-break-word">
           {member.role}
         </span>
       </span>

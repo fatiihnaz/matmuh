@@ -49,3 +49,6 @@ next-env.d.ts
 # yerel dev sunucusu logları
 .dev-stdout.log
 .dev-stderr.log
+
+# PowerShell 2>$null kaçısından kalan artık
+$null

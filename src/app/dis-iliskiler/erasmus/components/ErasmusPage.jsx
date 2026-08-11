@@ -98,77 +98,68 @@ export default function ErasmusPage() {
             }
           >
             <Panel padding="p-0" className="overflow-hidden">
-              <div className="overflow-x-auto">
-                <table className="w-full text-left">
-                  <thead>
-                    <tr className="border-b border-primary-500/8">
-                      <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45">
-                        Kurum
-                      </th>
-                      <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45">
-                        Ülke
-                      </th>
-                      <th className="px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45 whitespace-nowrap">
-                        Erasmus Kodu
-                      </th>
-                      <th className="w-8" />
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {BILATERAL_AGREEMENTS.map((row) =>
-                      row.href ? (
-                        <tr
-                          key={row.code}
-                          className="group border-b border-primary-500/5 last:border-0 hover:bg-secondary-500/4 transition-colors"
-                        >
-                          <td className="px-5 py-2.5 text-[13px]">
-                            <a
-                              href={row.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="text-primary-500 group-hover:text-secondary-600 hover:underline"
-                            >
-                              {row.institution}
-                            </a>
-                          </td>
-                          <td className="px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
-                            {row.country}
-                          </td>
-                          <td className="px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
-                            {row.code}
-                          </td>
-                          <td className="pr-5 py-2.5 w-8">
-                            <a
-                              href={row.href}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              title="Anlaşmayı indir"
-                            >
-                              <FileDown className="size-3.5 text-primary-500/25 group-hover:text-secondary-500 transition-colors" />
-                            </a>
-                          </td>
-                        </tr>
-                      ) : (
-                        <tr
-                          key={row.code}
-                          className="border-b border-primary-500/5 last:border-0"
-                        >
-                          <td className="px-5 py-2.5 text-[13px] text-primary-500">
+              <table className="w-full text-left table-fixed sm:table-auto">
+                <thead>
+                  <tr className="border-b border-primary-500/8">
+                    <th className="px-4 sm:px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45">
+                      Kurum
+                    </th>
+                    <th className="hidden sm:table-cell px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45">
+                      Ülke
+                    </th>
+                    <th className="hidden sm:table-cell px-5 py-3 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45 whitespace-nowrap">
+                      Erasmus Kodu
+                    </th>
+                    <th className="w-10" />
+                  </tr>
+                </thead>
+                <tbody>
+                  {BILATERAL_AGREEMENTS.map((row) => (
+                    <tr
+                      key={row.code}
+                      className={`border-b border-primary-500/5 last:border-0 ${
+                        row.href ? "group hover:bg-secondary-500/4 transition-colors" : ""
+                      }`}
+                    >
+                      <td className="px-4 sm:px-5 py-2.5 text-[13px] text-primary-500 wrap-break-word">
+                        {row.href ? (
+                          <a
+                            href={row.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="group-hover:text-secondary-600 hover:underline"
+                          >
                             {row.institution}
-                          </td>
-                          <td className="px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
-                            {row.country}
-                          </td>
-                          <td className="px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
-                            {row.code}
-                          </td>
-                          <td className="pr-5 py-2.5 w-8" />
-                        </tr>
-                      ),
-                    )}
-                  </tbody>
-                </table>
-              </div>
+                          </a>
+                        ) : (
+                          row.institution
+                        )}
+                        <span className="sm:hidden block mt-0.5 text-[11px] text-primary-500/45">
+                          {row.country} · <span className="font-mono">{row.code}</span>
+                        </span>
+                      </td>
+                      <td className="hidden sm:table-cell px-5 py-2.5 text-[12px] text-primary-500/55 whitespace-nowrap">
+                        {row.country}
+                      </td>
+                      <td className="hidden sm:table-cell px-5 py-2.5 text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
+                        {row.code}
+                      </td>
+                      <td className="pr-4 sm:pr-5 py-2.5 w-10">
+                        {row.href && (
+                          <a
+                            href={row.href}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            title="Anlaşmayı indir"
+                          >
+                            <FileDown className="size-3.5 text-primary-500/25 group-hover:text-secondary-500 transition-colors" />
+                          </a>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </Panel>
 
             <p className="text-[12px] text-primary-500/45 leading-relaxed">
