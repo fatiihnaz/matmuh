@@ -27,7 +27,7 @@ export default async function LandingPage() {
     <>
       <Landing />
 
-      <PageLayout sidebar={<QuickLinks />}>
+      <PageLayout sidebar={<QuickLinks />} sidebarFirst>
         <div className="space-y-8">
           <MainCard title="Duyurular" icon={Bell} buttonTitle="Tümünü Gör" href="/duyurular">
             <div className="pb-3 mb-1 border-b border-primary-500/6">

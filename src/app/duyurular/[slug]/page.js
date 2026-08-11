@@ -11,7 +11,6 @@ import PageSection from "@/app/components/PageSection";
 import RecentAnnouncements from "@/app/components/Announcements/RecentAnnouncements";
 import QuickLinks from "@/app/components/QuickLinks";
 import { institutionalLinks } from "@/data/landing";
-import { formatTrDate } from "@/lib/date";
 import {
   getAdjacent,
   getAllSlugs,
@@ -66,11 +65,7 @@ export default async function AnnouncementDetailPage({ params }) {
 
   return (
     <>
-      <SubHeader
-        title={item.title}
-        subTitle={formatTrDate(item.publishedAt)}
-        lastLabel={item.title}
-      />
+      <SubHeader title={item.title} lastLabel={item.title} />
       <PageLayout sidebar={sidebar}>
         <div className="flex flex-col gap-6">
           <Panel>
