@@ -105,29 +105,36 @@ export default function Hero() {
       >
         <BackgroundVisuals active={active} reducedMotion={reducedMotion} />
 
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-          <motion.div className="relative flex items-center justify-center h-[78%] aspect-[2.38] max-w-[96vw] drop-shadow-[0_0_30px_rgba(29,36,69,0.5)]">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40 md:opacity-100">
+          <motion.div className="relative flex items-center justify-center h-[78%] aspect-[2.38] max-w-[96vw] drop-shadow-[0_0_18px_rgba(98,109,158,0.25)]">
             <svg
               viewBox="0 0 368.25 154.79"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="absolute w-full h-full overflow-visible z-0"
+              style={{
+                maskImage:
+                  "radial-gradient(ellipse 46% 62% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.4) 45%, #000 82%)",
+                WebkitMaskImage:
+                  "radial-gradient(ellipse 46% 62% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.4) 45%, #000 82%)",
+              }}
             >
               <motion.rect
                 x=".5"
                 y=".5"
                 width="367.25"
                 height="153.79"
-                stroke="#3D4775"
-                strokeWidth="1"
+                stroke="#626D9E"
+                strokeWidth="1.2"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.4 }}
+                animate={{ pathLength: 1, opacity: 0.6 }}
                 transition={{ duration: 3, ease: "easeInOut" }}
               />
               <motion.path
                 d="M333.86,77.4c0,26.38-19.75,48.15-45.28,51.33-2.12.27-4.28.41-6.47.41H89.43c-2.9,0-5.74-.24-8.51-.7-24.52-4.06-43.23-25.37-43.23-51.04s18.71-46.99,43.23-51.05c2.77-.46,5.61-.7,8.51-.7h192.68c2.19,0,4.35.14,6.47.41,25.53,3.18,45.28,24.95,45.28,51.34Z"
                 stroke="#626D9E"
                 strokeWidth="1.5"
+                opacity="0.45"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 4, ease: "easeInOut", delay: 0.5 }}
@@ -136,17 +143,17 @@ export default function Hero() {
                 d="M240.07,54.42h-107.91c-12.69,0-22.98,10.29-22.98,22.98s10.29,22.98,22.98,22.98h107.91c12.69,0,22.98-10.29,22.98-22.98s-10.29-22.98-22.98-22.98Z"
                 stroke="#AD976F"
                 strokeWidth="1.5"
-                opacity="0.8"
+                opacity="0.55"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 3, ease: "easeInOut", delay: 1.2 }}
               />
               <motion.polyline
                 points="184.07 1.06 83.65 152.54 83.65 1.06 184.07 152.54 184.07 1.06 285.18 153.74 285.18 1.06 184.07 152.54"
-                stroke="#3D4775"
-                strokeWidth="1"
+                stroke="#626D9E"
+                strokeWidth="1.2"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.6 }}
+                animate={{ pathLength: 1, opacity: 0.65 }}
                 transition={{ duration: 5, ease: "easeInOut", delay: 1.8 }}
               />
               <motion.line
@@ -156,6 +163,7 @@ export default function Hero() {
                 y2="77.4"
                 stroke="#626D9E"
                 strokeWidth="1.5"
+                opacity="0.45"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
               />
@@ -166,6 +174,7 @@ export default function Hero() {
                 y2="77.4"
                 stroke="#626D9E"
                 strokeWidth="1.5"
+                opacity="0.45"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
               />
@@ -175,8 +184,8 @@ export default function Hero() {
               className="absolute w-[22%] max-w-100 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
               animate={{
                 filter: isHovered
-                  ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 35px rgba(173,151,111,0.9))"
-                  : "drop-shadow(0 0 4px #0D112B) drop-shadow(0 0 20px rgba(173,151,111,0.6))",
+                  ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 26px rgba(173,151,111,0.6))"
+                  : "drop-shadow(0 0 5px #0D112B) drop-shadow(0 0 15px rgba(173,151,111,0.35))",
               }}
               transition={{
                 duration: 0.7,
@@ -195,7 +204,7 @@ export default function Hero() {
                   strokeWidth="0.8"
                   fillRule="evenodd"
                   initial={{ pathLength: 0, fill: "rgba(173,151,111,0)" }}
-                  animate={{ pathLength: 1, fill: "rgba(173,151,111,0.2)" }}
+                  animate={{ pathLength: 1, fill: "rgba(173,151,111,0.13)" }}
                   transition={{
                     pathLength: { duration: 4, ease: "easeInOut", delay: 2.5 },
                     fill: { duration: 2, delay: 5 },
@@ -220,10 +229,10 @@ export default function Hero() {
             initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-between gap-2 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
+            className="flex items-center justify-center sm:justify-between gap-3 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
           >
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
-            <h1 className="text-[1.1rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow whitespace-nowrap">
+            <h1 className="text-[clamp(0.85rem,4.4vw,1.1rem)] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow-0 sm:grow whitespace-nowrap [text-shadow:0_2px_18px_rgba(13,17,43,0.9)]">
               YILDIZ TEKNİK ÜNİVERSİTESİ
             </h1>
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
@@ -235,13 +244,13 @@ export default function Hero() {
             transition={{ duration: 1.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-center justify-center gap-2 mt-4 w-full"
           >
-            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none">
+            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none [text-shadow:0_2px_14px_rgba(13,17,43,0.95)]">
               [
             </span>
-            <h2 className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-secondary-500 tracking-[0.15em] uppercase text-center">
+            <h2 className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-secondary-500 tracking-[0.15em] uppercase text-center [text-shadow:0_2px_14px_rgba(13,17,43,0.95),0_0_28px_rgba(13,17,43,0.8)]">
               MATEMATİK MÜHENDİSLİĞİ
             </h2>
-            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none">
+            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none [text-shadow:0_2px_14px_rgba(13,17,43,0.95)]">
               ]
             </span>
           </motion.div>
