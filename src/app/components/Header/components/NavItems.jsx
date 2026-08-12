@@ -4,7 +4,7 @@ import { useState, useRef, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ExternalLink } from "lucide-react";
 
 function hasCategories(children) {
   return children.length > 0 && children[0].category !== undefined;
@@ -30,26 +30,44 @@ const staggerItem = {
 
 function DropdownItem({ item, pathname }) {
   const Icon = item.icon;
-  const isActive = pathname === item.href;
+  const isActive = !item.external && pathname === item.href;
+  const className = `flex items-center gap-3 px-3 py-2.5 rounded-lg group transition-colors duration-200 ${isActive ? "bg-primary-500/5" : "hover:bg-primary-500/3"}`;
+
+  const content = (
+    <>
+      {Icon && (
+        <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 ${isActive ? "bg-primary-500/10" : "bg-primary-500/4 group-hover:bg-primary-500/7"}`}>
+          <Icon size={14} strokeWidth={1.5} className={`transition-colors duration-200 ${isActive ? "text-primary-500" : "text-primary-500/45 group-hover:text-primary-500/70"}`}/>
+        </div>
+      )}
+      <div className="flex flex-col">
+        <span className={`flex items-center gap-1.5 text-xs transition-colors duration-200 text-primary-500 ${isActive? "font-medium" : "font-normal group-hover:text-primary-500"}`}>
+          {item.label}
+          {item.external && <ExternalLink size={10} strokeWidth={1.5} className="text-primary-500/35" />}
+        </span>
+        {item.description && (
+          <span className="text-[10px] text-primary-500/40 font-normal leading-tight mt-0.5">
+            {item.description}
+          </span>
+        )}
+      </div>
+    </>
+  );
+
+  if (item.external) {
+    return (
+      <motion.div variants={staggerItem}>
+        <a href={item.href} target="_blank" rel="noopener noreferrer" className={className}>
+          {content}
+        </a>
+      </motion.div>
+    );
+  }
 
   return (
     <motion.div variants={staggerItem}>
-      <Link href={item.href} className={`flex items-center gap-3 px-3 py-2.5 rounded-lg group transition-colors duration-200 ${isActive ? "bg-primary-500/5" : "hover:bg-primary-500/3"}`}>
-        {Icon && (
-          <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 ${isActive ? "bg-primary-500/10" : "bg-primary-500/4 group-hover:bg-primary-500/7"}`}>
-            <Icon size={14} strokeWidth={1.5} className={`transition-colors duration-200 ${isActive ? "text-primary-500" : "text-primary-500/45 group-hover:text-primary-500/70"}`}/>
-          </div>
-        )}
-        <div className="flex flex-col">
-          <span className={`text-xs transition-colors duration-200 text-primary-500 ${isActive? "font-medium" : "font-normal group-hover:text-primary-500"}`}>
-            {item.label}
-          </span>
-          {item.description && (
-            <span className="text-[10px] text-primary-500/40 font-normal leading-tight mt-0.5">
-              {item.description}
-            </span>
-          )}
-        </div>
+      <Link href={item.href} className={className}>
+        {content}
       </Link>
     </motion.div>
   );
@@ -111,10 +129,16 @@ export default function NavItems({ item, children }) {
   }
 
   const categorized = hasCategories(item.children);
-  
+
+  const getPrimaryHref = () => {
+    if (item.href) return item.href;
+    if (categorized && item.children[0]?.items) return item.children[0].items[0]?.href || "#";
+    return item.children[0]?.href || "#";
+  };
+
   return (
     <div className="relative" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
-      <Link href={item.children[0]?.href || "#"} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
+      <Link href={getPrimaryHref()} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
         {children}
         <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25, ease: "easeInOut" }}>
           <ChevronDown size={12} strokeWidth={1.5} className="text-white/60" />

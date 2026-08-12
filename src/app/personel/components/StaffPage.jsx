@@ -15,7 +15,6 @@ const categories = [
 
 const academicRanks = ["Tümü", "Prof. Dr.", "Doç. Dr.", "Dr. Öğr. Üyesi"];
 const researchRanks = ["Tümü", "Arş. Gör.", "Öğr. Gör."];
-const bgColors = ["#1D2445", "#2a3158", "#33295a", "#1a3348", "#2d3a2e", "#3a2d2d", "#2a2d45"];
 
 function StaffContent() {
   const router = useRouter();
@@ -135,7 +134,7 @@ function StaffContent() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredStaff.map((member, idx) => (
-          <StaffMember key={member.id || member.email} member={member} idx={idx} bgColors={bgColors} />
+          <StaffMember key={member.id || member.email} member={member} idx={idx} />
         ))}
       </div>
 

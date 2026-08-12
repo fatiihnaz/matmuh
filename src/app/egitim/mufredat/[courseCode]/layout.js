@@ -8,13 +8,20 @@ export default async function CourseLayout({ params, children }) {
 
   if (!course) notFound();
 
-  const detailString = `${course.semester}. Yarıyıl · ${course.type} · ${course.hours} · ${course.ects} ECTS`;
+  const detailString = [
+    course.semester ? `${course.semester}. Yarıyıl` : null,
+    course.type,
+    course.hours,
+    course.ects != null ? `${course.ects} ECTS` : null,
+  ]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
     <>
-      <SubHeader 
-        title={`${course.id} — ${course.title}`} 
-        subTitle={detailString} 
+      <SubHeader
+        title={`${course.code} — ${course.title.trim()}`}
+        subTitle={detailString}
       />
       {children}
     </>

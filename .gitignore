@@ -40,4 +40,15 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# never push — internal working files
+/docs/
+/public/belgeler/
+
 .vercel
+
+# yerel dev sunucusu logları
+.dev-stdout.log
+.dev-stderr.log
+
+# PowerShell 2>$null kaçısından kalan artık
+$null

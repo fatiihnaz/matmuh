@@ -1,10 +1,16 @@
 "use client";
 
-import { useState, useEffect } from "react";
-// import Image from "next/image";
-import { motion, useMotionValue, useTransform, animate } from "framer-motion";
-import { Search, Users, GraduationCap, BookOpen, FlaskConical } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import {
+  motion,
+  useMotionValue,
+  useTransform,
+  useInView,
+  animate,
+} from "framer-motion";
+import { Users, GraduationCap, BookOpen, FlaskConical } from "lucide-react";
 import Hero from "./components/Hero";
+import { useReducedMotion } from "./components/heroMotion";
 
 const stats = [
   { icon: Users, value: 32, suffix: "", label: "Akademik Kadro" },
@@ -14,88 +20,69 @@ const stats = [
 ];
 
 function CountUp({ value, suffix, delay }) {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  const reducedMotion = useReducedMotion();
+
   const motionVal = useMotionValue(0);
   const rounded = useTransform(motionVal, (v) => Math.round(v));
-  const [display, setDisplay] = useState(0);
-
   const [isFinished, setIsFinished] = useState(false);
 
   useEffect(() => {
+    if (!inView) return;
+
+    if (reducedMotion) {
+      motionVal.set(value);
+      return;
+    }
+
+    let controls;
     const timeout = setTimeout(() => {
-      const controls = animate(motionVal, value, {
+      controls = animate(motionVal, value, {
         duration: 2.5,
         ease: [0.22, 1, 0.36, 1],
         onComplete: () => setIsFinished(true),
       });
-      return () => controls.stop();
     }, delay * 1000);
 
-    return () => clearTimeout(timeout);
-  }, [motionVal, value, delay]);
-
-  useEffect(() => {
-    const unsubscribe = rounded.on("change", (v) => setDisplay(v));
-    return () => unsubscribe();
-  }, [rounded]);
+    return () => {
+      clearTimeout(timeout);
+      controls?.stop();
+    };
+  }, [inView, reducedMotion, motionVal, value, delay]);
 
   return (
-    <>
-      {display}
+    <span ref={ref}>
+      <motion.span>{rounded}</motion.span>
       {suffix && (
-        <motion.span initial={{ opacity: 0 }} animate={{ opacity: isFinished ? 1 : 0 }} transition={{ duration: 0.5, ease: "easeInOut" }}>
+        <motion.span
+          initial={{ opacity: 0 }}
+          animate={{ opacity: isFinished || reducedMotion ? 1 : 0 }}
+          transition={{ duration: reducedMotion ? 0 : 0.5, ease: "easeInOut" }}
+        >
           {suffix}
         </motion.span>
       )}
-    </>
+    </span>
   );
 }
 
 export default function Landing() {
-  const [searchQuery, setSearchQuery] = useState("");
-
   return (
     <div className="relative">
       <Hero/>
-      {/* eski hero şimdilik dursun
-      <section className="relative w-full h-[40vh] sm:h-[60vh] md:h-[70vh] min-h-80 flex items-center justify-center overflow-hidden bg-[#2c3760]">
-        <Image src="/Landing.png" alt="YTÜ Davutpaşa Kampüsü" fill className="object-cover" priority />
-
-        <div className="relative z-10 flex flex-col items-center gap-8 sm:gap-12 px-4 w-full max-w-7xl -mt-20 sm:-mt-5">
-
-          <div className="text-center">
-            <motion.h1 initial={{ opacity: 0, y: 15, filter: "blur(4px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white tracking-wide leading-tight"
-            >
-              YILDIZ TEKNİK ÜNİVERSİTESİ
-            </motion.h1>
-
-            <motion.h2 initial={{ opacity: 0, y: 15, filter: "blur(4px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ duration: 1.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
-              className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-secondary-500 tracking-wide mt-2 sm:mt-4"
-            >
-              MATEMATİK MÜHENDİSLİĞİ
-            </motion.h2>
-          </div>
-
-          <motion.div initial={{ opacity: 0, y: 15, scale: 0.98, filter: "blur(4px)" }} animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }} transition={{ duration: 1.8, delay: 0.6, ease: [0.22, 1, 0.36, 1] }}
-            className="w-full max-w-7xl mt-20 sm:block hidden"
-          >
-            <div className="relative">
-              <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Aramak için yazınız..."
-                className="w-full py-3.25 px-5 pr-12 rounded-xl bg-white/95 text-xs sm:text-sm text-neutral-700 placeholder-neutral-400 outline-none shadow-lg shadow-black/20 focus:shadow-xl focus:shadow-black/30 transition-shadow duration-300"
-              />
-              <button className="absolute right-4 sm:right-5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-neutral-600 transition-colors">
-                <Search size={14} />
-              </button>
-            </div>
-          </motion.div>
-
-        </div>
-      </section>*/}
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 -mt-20 sm:-mt-12">
-        <div className="bg-white rounded-xl shadow-sm shadow-black/10 py-5 sm:py-6 px-4 sm:px-8 grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
+        <div className="bg-white rounded-xl border border-primary-500/10 shadow-xs shadow-black/10 grid grid-cols-2 md:grid-cols-4 overflow-hidden">
           {stats.map((stat, index) => (
-            <div key={stat.label} className="flex items-center gap-3 sm:gap-4">
+            <div
+              key={stat.label}
+              className={`flex items-center gap-3 sm:gap-4 p-4 sm:p-6 border-black/4 ${
+                index % 2 === 0 ? "border-r" : ""
+              } ${index < 2 ? "border-b" : ""} md:border-b-0 ${
+                index < 3 ? "md:border-r" : "md:border-r-0"
+              }`}
+            >
               <div className="shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-xl bg-secondary-500/15 flex items-center justify-center">
                 <stat.icon size={20} className="text-secondary-400 sm:w-6 sm:h-6" />
               </div>

@@ -12,6 +12,9 @@ import {
   BarChart3,
   Shield,
   Atom,
+  Briefcase,
+  GraduationCap,
+  ArrowUpRight,
 } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
@@ -82,16 +85,30 @@ const workingAreas = [
     cx: 85,
     cy: 35,
   },
-  { id: "top", label: "Topoloji", icon: Atom, size: "sm", cx: 15, cy: 35 },
   {
-    id: "ceb",
-    label: "Cebirsel Geometri",
+    id: "fonk",
+    label: "Fonksiyonel Analiz",
+    icon: Atom,
+    size: "sm",
+    cx: 15,
+    cy: 35,
+  },
+  {
+    id: "ters",
+    label: "Ters Problemler",
     icon: Globe,
     size: "sm",
     cx: 50,
     cy: 80,
   },
-  { id: "kom", label: "Kombinatorik", icon: Atom, size: "sm", cx: 85, cy: 80 },
+  {
+    id: "mfiz",
+    label: "Matematiksel Fizik",
+    icon: Atom,
+    size: "sm",
+    cx: 85,
+    cy: 80,
+  },
 ];
 
 const graphLinks = [
@@ -103,81 +120,144 @@ const graphLinks = [
   { source: "yapay", target: "stok" },
   { source: "opt", target: "num" },
   { source: "opt", target: "dif" },
-  { source: "krip", target: "ceb" },
-  { source: "krip", target: "kom" },
-  { source: "top", target: "stok" },
-  { source: "top", target: "fin" },
+  { source: "dif", target: "ters" },
+  { source: "dif", target: "mfiz" },
+  { source: "fonk", target: "stok" },
+  { source: "fonk", target: "fin" },
   { source: "ist", target: "dif" },
 ];
 
 const milestones = [
-  { year: "1911", event: "Kondüktör Mekteb-i Âlîsi'nin Kurulması" },
+  { year: "1911", event: "Kondüktör Mekteb-i Âlîsi adıyla kuruluş" },
+  { year: "1922", event: "Nafia Fen Mektebi'ne dönüşüm" },
+  { year: "1937", event: "İstanbul Teknik Okulu adını alması" },
   {
-    year: "1982",
-    event: "Yıldız Üniversitesi Adını Alması ve Bölümün Modern Yapılanması",
+    year: "1969",
+    event: "İstanbul Devlet Mühendislik ve Mimarlık Akademisi'ne dönüşüm",
   },
+  { year: "1982", event: "Yıldız Üniversitesi'nin kurulması" },
   {
     year: "1992",
-    event: "Kimya-Metalürji Fakültesi Bünyesine Geçiş ve Akademik Genişleme",
-  },
-  {
-    year: "2011",
-    event: "Hesaplamalı Bilim ve Mühendislik Lisansüstü Programının Açılması",
-  },
-  {
-    year: "2020",
     event:
-      "MÜDEK ve EUR-ACE Uluslararası Mühendislik Akreditasyonunun Alınması",
-  },
-  {
-    year: "2026",
-    event: "YTÜ Cosmos T1 Modeli Çıkışı ve Çok Disiplinli Yapay Zeka Vizyonu",
+      "Yıldız Teknik Üniversitesi adının alınması ve Kimya-Metalurji Fakültesi'nin kurulması",
   },
 ];
 
 const keyMetrics = [
-  { id: "kurulus", value: "1976", label: "Kuruluş", sub: "Matematik Müh." },
+  { id: "akts", value: "240", label: "AKTS", sub: "Lisans Programı" },
+  { id: "yariyil", value: "8", label: "Yarıyıl", sub: "Dört Yıllık Eğitim" },
   {
-    id: "deneyim",
-    value: "50",
-    label: "Yıllık Deneyim",
-    sub: "Akademik Birikim",
+    id: "program",
+    value: "2",
+    label: "Lisans Programı",
+    sub: "%100 ve %30 İngilizce",
   },
   {
-    id: "mezun",
-    value: "1892",
-    label: "Lisans Mezunu",
-    sub: "Güçlü Mezun Ağı",
-  },
-  {
-    id: "doluluk",
-    value: "%100",
-    label: "Doluluk Oranı",
-    sub: "YKS Tercih Performansı",
+    id: "kadro",
+    value: "26",
+    label: "Akademisyen",
+    sub: "Bölüme Özgü Kadro",
   },
 ];
 
 const academicStats = [
-  { id: "ogretimuye", value: "27", label: "Öğretim Üyesi" },
-  { id: "lisansogr", value: "650+", label: "Lisans Öğrencisi" },
-  { id: "ylisansogr", value: "50+", label: "Yüksek Lisans Öğrencisi" },
-  { id: "arsgor", value: "6", label: "Araştırma Görevlisi" },
-  { id: "laboratuvar", value: "290 m2", label: "Laboratuvar Alanı" },
-  { id: "tercihendeks", value: "65.4", label: "İşveren Tercih Endeksi" },
+  { id: "profesor", value: "14", label: "Profesör" },
+  { id: "docent", value: "10", label: "Doçent" },
+  { id: "druyesi", value: "2", label: "Dr. Öğr. Üyesi" },
+  { id: "lisansustu", value: "2", label: "Lisansüstü Program" },
+  { id: "staj", value: "40", label: "İş Günü Zorunlu Staj" },
+  { id: "turkiye", value: "2", label: "Türkiye'de Program Sayısı" },
+];
+
+const educationalGoals = [
+  {
+    id: "ea1",
+    code: "EA1",
+    text: "Meslek içi ve sürekli eğitim programlarına katılan,",
+  },
+  {
+    id: "ea2",
+    code: "EA2",
+    text: "Ulusal ve uluslararası özel sektör ya da kamu kuruluşlarında yönetim ve uygulama kadrolarında çalışan,",
+  },
+  {
+    id: "ea3",
+    code: "EA3",
+    text: "Yurt içinde veya yurt dışında lisansüstü öğrenim gören,",
+  },
+  {
+    id: "ea4",
+    code: "EA4",
+    text: "Üniversitelerde akademisyen olarak görev yapan matematik mühendisleri yetiştirmek.",
+  },
+];
+
+const careerGroups = [
+  {
+    id: "kurumlar",
+    label: "Çalışılan Kurumlar",
+    items: [
+      "TÜBİTAK",
+      "MTA",
+      "TÜİK",
+      "Üniversite araştırma laboratuvarları",
+      "Sigorta ve finans kuruluşları",
+      "Bilgi işlem birimleri",
+    ],
+  },
+  {
+    id: "gorevler",
+    label: "Görev Alanları",
+    items: [
+      "Yazılım Uzmanı / Mühendisi",
+      "Veri Tabanı Uzmanı",
+      "Sistem ve İş Analisti",
+      "İstatistiksel Analist",
+      "Matematikçi",
+    ],
+  },
+];
+
+const internships = [
+  {
+    id: "staj1",
+    code: "MTM2002",
+    title: "Bilgisayar Donanımı ve Temel Uygulamaları Stajı",
+    days: "20 iş günü",
+    note: "Birinci aşama",
+  },
+  {
+    id: "staj2",
+    code: "MTM3002",
+    title: "Sorun Çözüm Teknikleri Stajı",
+    days: "20 iş günü",
+    note: "1. staj tamamlandıktan sonra, en az dört departmanlı orta/büyük ölçekli bir işletmede",
+  },
 ];
 
 function NodeGraphCanvas() {
   const [hoveredNode, setHoveredNode] = useState(null);
   const [isMounted, setIsMounted] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
     setIsMounted(true);
+    const mediaQuery = window.matchMedia("(max-width: 767px)");
+    const handleMediaChange = (e) => setIsMobile(e.matches);
+
+    setIsMobile(mediaQuery.matches);
+    mediaQuery.addEventListener("change", handleMediaChange);
+
+    return () => mediaQuery.removeEventListener("change", handleMediaChange);
   }, []);
 
   if (!isMounted) return <div className="w-full h-full bg-primary-500" />;
 
   return (
-    <div className="relative w-full h-full bg-primary-500 overflow-hidden select-none">
+    <div
+      className="relative w-full h-full bg-primary-500 overflow-hidden select-none"
+      onClick={() => setHoveredNode(null)}
+    >
       <div
         className="absolute inset-0 opacity-10"
         style={{
@@ -209,7 +289,9 @@ function NodeGraphCanvas() {
               x2={`${targetNode.cx}%`}
               y2={`${targetNode.cy}%`}
               stroke={isHighlighted ? "#AD976F" : "rgba(173, 151, 111, 0.15)"}
-              strokeWidth={isHighlighted ? 1.5 : 1}
+              strokeWidth={
+                isHighlighted ? (isMobile ? 1.2 : 1.5) : isMobile ? 0.8 : 1
+              }
               initial={{ pathLength: 0, opacity: 0 }}
               animate={{
                 pathLength: 1,
@@ -227,13 +309,42 @@ function NodeGraphCanvas() {
         {workingAreas.map((node, idx) => {
           const isHovered = hoveredNode === node.id;
           const isDimmed = hoveredNode !== null && !isHovered;
-          const radius = node.size === "lg" ? 6 : node.size === "md" ? 4.5 : 3;
+
+          const radius =
+            node.size === "lg"
+              ? isMobile
+                ? 4.5
+                : 6
+              : node.size === "md"
+                ? isMobile
+                  ? 3.5
+                  : 4.5
+                : isMobile
+                  ? 2.5
+                  : 3;
+
+          const fontSize =
+            node.size === "lg"
+              ? isMobile
+                ? "10px"
+                : "12px"
+              : node.size === "md"
+                ? isMobile
+                  ? "9px"
+                  : "10px"
+                : isMobile
+                  ? "8px"
+                  : "9px";
 
           return (
             <g
               key={node.id}
-              onMouseEnter={() => setHoveredNode(node.id)}
-              onMouseLeave={() => setHoveredNode(null)}
+              onMouseEnter={() => !isMobile && setHoveredNode(node.id)}
+              onMouseLeave={() => !isMobile && setHoveredNode(null)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setHoveredNode(isHovered ? null : node.id);
+              }}
               className="cursor-pointer"
             >
               <motion.circle
@@ -270,16 +381,10 @@ function NodeGraphCanvas() {
               <motion.text
                 x={`${node.cx}%`}
                 y={`${node.cy}%`}
-                dy={radius + 16}
+                dy={radius + (isMobile ? 12 : 16)}
                 textAnchor="middle"
                 fill={isHovered ? "#FFF" : "rgba(255, 255, 255, 0.6)"}
-                fontSize={
-                  node.size === "lg"
-                    ? "12px"
-                    : node.size === "md"
-                    ? "10px"
-                    : "9px"
-                }
+                fontSize={fontSize}
                 fontWeight={node.size === "lg" ? "600" : "500"}
                 className="font-sans pointer-events-none"
                 initial={{ opacity: 0, y: -5 }}
@@ -353,6 +458,33 @@ export default function DepartmentInfo() {
             </div>
           </MainCard>
 
+          <MainCard title="Program Eğitim Amaçları">
+            <div className="flex flex-col gap-3 pt-2">
+              <p className="text-[13px] text-primary-500/60 leading-relaxed">
+                Matematik Mühendisliği, temel ve uygulamalı matematik bilgisiyle
+                mühendislik, ekonomi ve sosyal hayatta karşılaşılan olayların
+                matematiksel modelini kuran, bu modellere çözüm üreten ve bu
+                amaçla bilgisayar yazılım ve uygulamaları geliştiren mühendisler
+                yetiştirir.
+              </p>
+              <div className="flex flex-col gap-2 mt-1">
+                {educationalGoals.map((goal) => (
+                  <div
+                    key={goal.id}
+                    className="flex items-start gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5"
+                  >
+                    <span className="font-mono text-[11px] font-bold text-secondary-500 shrink-0 mt-0.5">
+                      {goal.code}
+                    </span>
+                    <span className="text-[13px] text-primary-500/70 leading-relaxed">
+                      {goal.text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </MainCard>
+
           <MainCard title="Çalışma ve Araştırma Alanları">
             <div className="flex flex-col -mx-6 -mb-6">
               <div className="relative bg-primary-500 h-85 w-full group border-y border-primary-500/10">
@@ -407,6 +539,32 @@ export default function DepartmentInfo() {
               </div>
             </div>
           </MainCard>
+
+          <MainCard title="Kariyer ve Mezun Profili">
+            <div className="flex flex-col md:flex-row gap-8 w-full pt-1">
+              {careerGroups.map((group) => (
+                <div key={group.id} className="flex-1">
+                  <div className="flex items-center gap-2 mb-3">
+                    <Briefcase className="size-4 text-secondary-500" />
+                    <span className="font-semibold text-[13px] text-primary-500">
+                      {group.label}
+                    </span>
+                  </div>
+                  <ul className="flex flex-col gap-1.5">
+                    {group.items.map((item) => (
+                      <li
+                        key={item}
+                        className="flex items-start gap-2 text-[13px] text-primary-500/60 leading-relaxed"
+                      >
+                        <span className="w-1 h-1 rounded-full bg-secondary-500/50 shrink-0 mt-2" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
+          </MainCard>
         </div>
 
         <div className="lg:col-span-5 flex flex-col gap-6">
@@ -442,70 +600,79 @@ export default function DepartmentInfo() {
             </div>
           </MainCard>
 
-          <MainCard title="Akreditasyon">
-            <div className="flex flex-col gap-3">
-              {[
-                {
-                  name: "MÜDEK",
-                  desc: "Mühendislik Eğitim Programları Değerlendirme ve Akreditasyon Derneği",
-                  active: true,
-                },
-                {
-                  name: "EUR-ACE",
-                  desc: "European Accreditation of Engineering Programmes",
-                  active: true,
-                },
-                {
-                  name: "ABET",
-                  desc: "Accreditation Board for Engineering and Technology",
-                  active: false,
-                },
-              ].map((acc) => (
+          <MainCard title="Staj Sistemi">
+            <div className="flex flex-col gap-3 pt-2">
+              <p className="text-[13px] text-primary-500/60 leading-relaxed">
+                Öğrenciler eğitimleri boyunca toplam{" "}
+                <span className="font-semibold text-primary-500">
+                  40 iş günü
+                </span>{" "}
+                zorunlu staj yapar. Staj yapılan departmanda en az bir mühendis
+                bulunmalıdır.
+              </p>
+              {internships.map((item) => (
                 <div
-                  key={acc.name}
-                  className="p-4 rounded-lg flex items-start gap-3 bg-primary-500/2 border border-primary-500/5"
+                  key={item.id}
+                  className="p-4 rounded-lg bg-primary-500/2 border border-primary-500/5"
                 >
-                  <div
-                    className={`shrink-0 w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${
-                      acc.active ? "bg-secondary-500/10" : "bg-primary-500/5"
-                    }`}
-                  >
-                    <Award
-                      size={16}
-                      strokeWidth={1.5}
-                      className={
-                        acc.active
-                          ? "text-secondary-500"
-                          : "text-primary-500/30"
-                      }
-                    />
+                  <div className="flex items-center gap-2 mb-1.5 flex-wrap">
+                    <GraduationCap className="size-4 text-secondary-500 shrink-0" />
+                    <span className="font-mono text-[12px] font-semibold text-primary-500">
+                      {item.code}
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-secondary-500/10 text-secondary-600">
+                      {item.days}
+                    </span>
                   </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2">
-                      <span className="font-mono text-[13px] font-semibold text-primary-500">
-                        {acc.name}
-                      </span>
-                      {acc.active && (
-                        <span className="px-1.5 py-0.5 rounded text-[9px] font-bold bg-green-500/10 text-green-600/80 uppercase tracking-tight">
-                          Aktif
-                        </span>
-                      )}
-                    </div>
-                    <div className="text-[11px] text-primary-500/50 mt-0.5 leading-relaxed">
-                      {acc.desc}
-                    </div>
+                  <div className="text-[13px] font-medium text-primary-500 leading-snug">
+                    {item.title}
+                  </div>
+                  <div className="text-[11px] text-primary-500/45 mt-1 leading-relaxed">
+                    {item.note}
                   </div>
                 </div>
               ))}
             </div>
           </MainCard>
 
+          <MainCard title="Çift Anadal ve Yandal">
+            <div className="flex flex-col gap-3 pt-2">
+              <p className="text-[13px] text-primary-500/60 leading-relaxed">
+                Çift Anadal (ÇAP) ve Yandal başvuruları,{" "}
+                <span className="font-semibold text-primary-500">
+                  YÖ-098 sayılı YTÜ Lisans Düzeyindeki Programlar Arasında Geçiş
+                  ile Çift Anadal ve Yan Dal Yönergesi
+                </span>{" "}
+                çerçevesinde yürütülür. Bölümün yayımlanmış bir Yandal Programı
+                ders planı bulunmaktadır.
+              </p>
+              <p className="text-[12px] text-primary-500/45 leading-relaxed">
+                Başvuru koşulları ve o yıl açılan program listesi her akademik
+                yıl güncellendiğinden, güncel bilgi için Öğrenci İşleri Daire
+                Başkanlığı duyurularını takip ediniz.
+              </p>
+              <a
+                href="https://ogi.yildiz.edu.tr"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 text-[12px] font-medium text-secondary-500 hover:text-secondary-600 transition-colors"
+              >
+                Öğrenci İşleri Daire Başkanlığı
+                <ArrowUpRight size={13} strokeWidth={2} />
+              </a>
+            </div>
+          </MainCard>
+
           <MainCard title="Sayılarla Bölüm" dark>
             <div className="grid grid-cols-2 gap-4 w-full pt-2">
-              {academicStats.map((stat) => (
+              {academicStats.map((stat, idx) => (
                 <div
                   key={stat.id}
-                  className="flex flex-col py-2 border-b border-white/5 last:border-0"
+                  className={`flex flex-col py-2 ${
+                    idx < academicStats.length - (academicStats.length % 2 || 2)
+                      ? "border-b border-white/5"
+                      : ""
+                  }`}
                 >
                   <div className="font-mono text-secondary-500 font-semibold text-xl leading-none">
                     {stat.value}

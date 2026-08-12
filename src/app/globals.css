@@ -29,3 +29,137 @@ select {
 select option {
   font-family: sans-serif !important;
 }
+
+.no-scrollbar {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  display: none;
+}
+
+:root {
+  --header-h: 90px;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --header-h: 98px;
+  }
+}
+
+@keyframes mm-float {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale(0.9);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translate3d(0, -15px, 0) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(0, -30px, 0) scale(0.9);
+  }
+}
+
+.mm-float {
+  animation-name: mm-float;
+  animation-duration: var(--mm-dur, 12s);
+  animation-delay: var(--mm-delay, 0s);
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  animation-fill-mode: backwards;
+}
+
+.mm-paused .mm-float {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-float {
+    animation: none;
+    opacity: 0.35;
+  }
+}
+
+@keyframes mm-cue {
+  0% {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(250%);
+    opacity: 0;
+  }
+}
+
+.mm-cue {
+  animation: mm-cue 2.4s ease-in-out infinite;
+}
+
+.mm-paused .mm-cue {
+  animation-play-state: paused;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-cue {
+    animation: none;
+  }
+}
+.announcement-body > * + * {
+  margin-top: 0.85rem;
+}
+
+.announcement-body a {
+  color: var(--color-secondary-600);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.announcement-body a:hover {
+  color: var(--color-secondary-500);
+}
+
+.announcement-body strong {
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.announcement-body u {
+  text-underline-offset: 2px;
+}
+
+.announcement-body h3,
+.announcement-body h4 {
+  font-weight: 600;
+  color: var(--color-primary-700);
+}
+
+.announcement-body ul,
+.announcement-body ol {
+  padding-left: 1.1rem;
+  list-style-position: outside;
+}
+
+.announcement-body ul {
+  list-style-type: disc;
+}
+
+.announcement-body ol {
+  list-style-type: decimal;
+}
+
+.announcement-body li + li {
+  margin-top: 0.4rem;
+}
+
+.announcement-body li::marker {
+  color: var(--color-secondary-500);
+}

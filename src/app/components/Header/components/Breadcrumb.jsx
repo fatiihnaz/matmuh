@@ -6,40 +6,89 @@ import { usePathname } from "next/navigation";
 
 const labelMap = {
   "": "Anasayfa",
-  "bolum": "Bölüm",
-  "personel": "Personel",
-  "egitim": "Eğitim",
-  "arge": "AR-GE",
-  "dis-iliskiler": "Dış İlişkiler",
+  bolum: "Bölüm",
+  hakkinda: "Hakkımızda",
+  "yonetim-kurullar": "Yönetim & Kurullar",
+  komisyonlar: "Komisyonlar",
+  paydaslar: "Paydaşlar",
+  mezunlar: "Mezunlar",
+  personel: "Personel",
   "akademik-kadro": "Akademik Kadro",
+  egitim: "Eğitim",
+  "ders-programi": "Ders Programı",
+  mufredat: "Müfredat",
+  yonetmelikler: "Yönetmelikler",
+  "lisansustu-ders-programi": "Lisansüstü Ders Programı",
+  programlar: "Programlar",
+  "tez-arsivi": "Tez Arşivi",
+  "lisansustu-yonetmelikler": "Lisansüstü Yönetmelikler",
+  staj: "Staj",
+  arge: "AR-GE",
+  laboratuvarlar: "Laboratuvarlar",
+  projeler: "Devam Eden Projeler",
+  "bilgi-kaynaklari": "Bilgi Kaynakları",
+  "dis-iliskiler": "Dış İlişkiler",
+  erasmus: "Erasmus+",
+  endustriyel: "Endüstriyel İşbirlikleri",
+  duyurular: "Duyurular",
+  haberler: "Haberler",
 };
 
-const unclickablePaths = ["bolum", "personel", "egitim", "arge", "dis-iliskiler"];
+const unclickablePaths = [
+  "bolum",
+  "personel",
+  "egitim",
+  "arge",
+  "dis-iliskiler",
+];
 
-export default function Breadcrumb() {
+function formatSegmentLabel(seg) {
+  if (labelMap[seg]) return labelMap[seg];
+  if (/^[a-zA-Z]{3,4}\d{4}$/i.test(seg)) return seg.toUpperCase();
+  return seg
+    .split("-")
+    .map((word) =>
+      word
+        ? word.charAt(0).toLocaleUpperCase("tr-TR") +
+          word.slice(1).toLocaleLowerCase("tr-TR")
+        : "",
+    )
+    .join(" ");
+}
+
+export default function Breadcrumb({ lastLabel }) {
   const pathname = usePathname();
   const segments = pathname.split("/").filter(Boolean);
 
   const crumbs = [
     { label: "Anasayfa", href: "/" },
     ...segments.map((seg, i) => ({
-      label: labelMap[seg] || seg.charAt(0).toUpperCase() + seg.slice(1).replace(/-/g, " "),
+      label:
+        lastLabel && i === segments.length - 1 ? lastLabel : formatSegmentLabel(seg),
       href: "/" + segments.slice(0, i + 1).join("/"),
-      isClickable: !unclickablePaths.includes(seg)
+      isClickable: !unclickablePaths.includes(seg),
     })),
   ];
 
   return (
-    <nav className="flex items-center gap-2 text-xs">
+    <nav className="flex items-center gap-2 text-xs min-w-0">
       {crumbs.map((crumb, i) => {
         const isLast = i === crumbs.length - 1;
         return (
-          <span key={crumb.href} className="flex items-center gap-2">
-            {i > 0 && <ChevronRight size={12} className="text-neutral-500" />}
+          <span
+            key={crumb.href}
+            className={`flex items-center gap-2 ${isLast ? "min-w-0" : "shrink-0"}`}
+          >
+            {i > 0 && <ChevronRight size={12} className="shrink-0 text-neutral-500" />}
             {isLast ? (
-              <span className="text-secondary-400 font-medium">{crumb.label}</span>
+              <span className="text-secondary-400 font-medium truncate">
+                {crumb.label}
+              </span>
             ) : crumb.isClickable ? (
-              <Link href={crumb.href} className="text-neutral-400 hover:text-white transition-colors">
+              <Link
+                href={crumb.href}
+                className="text-neutral-400 hover:text-white transition-colors"
+              >
                 {crumb.label}
               </Link>
             ) : (

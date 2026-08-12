@@ -1,6 +1,6 @@
 import {
-  Info, Users, Handshake, GraduationCap, Shield, BookUser, Microscope, Briefcase,
-  CalendarDays, BookOpen, Scale, Library, Archive, FlaskConical, FolderOpen, Globe, Factory, ClipboardList,
+  Info, Users, GraduationCap, Shield, BookUser, Microscope, Briefcase,
+  CalendarDays, BookOpen, Scale, Library, Archive, FlaskConical, FolderOpen, Globe, ClipboardList, Sun, FileStack,
 } from "lucide-react";
 
 export const navigationItems = [
@@ -12,8 +12,7 @@ export const navigationItems = [
       { label: "Hakkımızda", href: "/bolum/hakkinda", icon: Info, description: "Bölüm tanıtımı ve tarihçe" },
       { label: "Yönetim & Kurullar", href: "/bolum/yonetim-kurullar", icon: Users, description: "Bölüm yönetimi ve kurulları" },
       { label: "Komisyonlar", href: "/bolum/komisyonlar", icon: BookUser, description: "Akademik komisyonlar" },
-      { label: "Paydaşlar", href: "/bolum/paydaslar", icon: Handshake, description: "Sektör ve akademik ortaklar" },
-      { label: "Mezunlar", href: "/bolum/mezunlar", icon: GraduationCap, description: "Mezun ağı ve iletişim" },
+      { label: "Mezunlar", href: "https://mezun.yildiz.edu.tr/", icon: GraduationCap, description: "Mezunlar Koordinatörlüğü", external: true },
     ],
   },
   {
@@ -21,9 +20,9 @@ export const navigationItems = [
     basePath: "/personel",
     children: [
     { label: "Yönetim", href: "/personel?type=yonetim", icon: Shield, description: "Bölüm başkanlığı" },
-    { label: "Akademik Kadro", href: "/personel?type=akademik", icon: GraduationCap, description: "Profesör ve doçentler" 
+    { label: "Akademik Kadro", href: "/personel?type=akademik", icon: GraduationCap, description: "Profesör ve doçentler"
     },
-    { label: "Öğretim & Araştırma Gör.", href: "/personel?type=arastirma", icon: Microscope, description: "Araştırma görevlileri" 
+    { label: "Öğretim & Araştırma Gör.", href: "/personel?type=arastirma", icon: Microscope, description: "Araştırma görevlileri"
     },
     { label: "İdari Personel", href: "/personel?type=idari", icon: Briefcase, description: "İdari kadro" },
   ],
@@ -31,27 +30,31 @@ export const navigationItems = [
   {
     label: "Eğitim",
     basePath: "/egitim",
+    href: "/egitim/mufredat",
     children: [
       {
         category: "Lisans",
         items: [
-          { label: "Ders Programı", href: "/egitim/ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
           { label: "Müfredat", href: "/egitim/mufredat", icon: BookOpen, description: "Ders içerikleri ve krediler" },
-          { label: "Yönetmelikler", href: "/egitim/yonetmelikler", icon: Scale, description: "Lisans yönetmelikleri" },
+          { label: "Ders Programı", href: "/egitim/ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
+          { label: "Yaz Okulu", href: "/egitim/yaz-okulu", icon: Sun, description: "Başka üniversiteden ders alma" },
+          { label: "Yönetmelikler", href: "https://ogi.yildiz.edu.tr/iletisim/hizli-erisim/yonetmelik-ve-yonergeler", icon: Scale, description: "Lisans yönetmelikleri", external: true },
         ],
       },
       {
         category: "Lisansüstü",
         items: [
+          { label: "Ders Programı", href: "/egitim/lisansustu-ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
           { label: "Programlar", href: "/egitim/programlar", icon: Library, description: "Yüksek lisans ve doktora" },
-          { label: "Tez Arşivi", href: "/egitim/tez-arsivi", icon: Archive, description: "Tamamlanmış tezler" },
-          { label: "Yönetmelikler", href: "/egitim/lisansustu-yonetmelikler", icon: Scale, description: "Lisansüstü yönetmelikleri" },
+          { label: "Tez Arşivi", href: "https://tez.yok.gov.tr/UlusalTezMerkezi/", icon: Archive, description: "YÖK Ulusal Tez Merkezi", external: true },
+          { label: "Yönetmelikler", href: "https://fbe.yildiz.edu.tr/mevzuat", icon: Scale, description: "Lisansüstü yönetmelikleri", external: true },
         ],
       },
       {
-        category: "Staj",
+        category: "Staj & Belgeler",
         items: [
           { label: "Staj İşlemleri & Evraklar", href: "/egitim/staj", icon: ClipboardList, description: "Staj başvuru ve belgeleri" },
+          { label: "Formlar / Belgeler", href: "/egitim/formlar", icon: FileStack, description: "Öğrenci ve personel formları" },
         ],
       },
     ],
@@ -70,7 +73,6 @@ export const navigationItems = [
     basePath: "/dis-iliskiler",
     children: [
       { label: "Erasmus+ (Uluslararası)", href: "/dis-iliskiler/erasmus", icon: Globe, description: "Değişim programları" },
-      { label: "Endüstriyel İşbirlikleri", href: "/dis-iliskiler/endustriyel", icon: Factory, description: "Sanayi ortaklıkları" },
     ],
   },
 ];

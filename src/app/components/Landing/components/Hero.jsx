@@ -1,25 +1,74 @@
 "use client";
-import React, { useRef, useMemo, useState, useEffect } from "react";
+import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Search } from "lucide-react";
 import BackgroundVisuals from "./BackgroundVisuals";
+import { useHeroActive, useReducedMotion } from "./heroMotion";
 
 export default function Hero() {
   const containerRef = useRef(null);
+  const rectRef = useRef(null);
+  const staleRectRef = useRef(true);
+  const pointerRef = useRef({ x: 0, y: 0 });
+  const frameRef = useRef(0);
+
   const [searchQuery, setSearchQuery] = useState("");
   const [isHovered, setIsHovered] = useState(false);
+
+  const reducedMotion = useReducedMotion();
+  const active = useHeroActive(containerRef);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
-  const handleMouseMove = (e) => {
-    if (!containerRef.current) return;
-    const rect = containerRef.current.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
-    const y = ((e.clientY - rect.top) / rect.height) * 2 - 1;
-    mouseX.set(x);
-    mouseY.set(y);
+  const cancelFrame = () => {
+    if (!frameRef.current) return;
+    cancelAnimationFrame(frameRef.current);
+    frameRef.current = 0;
   };
+
+  useEffect(() => {
+    const node = containerRef.current;
+    if (!node || reducedMotion) return;
+    if (!window.matchMedia("(pointer: fine)").matches) return;
+
+    const invalidateRect = () => {
+      staleRectRef.current = true;
+    };
+
+    const flush = () => {
+      frameRef.current = 0;
+
+      if (staleRectRef.current) {
+        rectRef.current = node.getBoundingClientRect();
+        staleRectRef.current = false;
+      }
+
+      const rect = rectRef.current;
+      if (!rect.width || !rect.height) return;
+
+      mouseX.set(((pointerRef.current.x - rect.left) / rect.width) * 2 - 1);
+      mouseY.set(((pointerRef.current.y - rect.top) / rect.height) * 2 - 1);
+    };
+
+    const onPointerMove = (event) => {
+      pointerRef.current.x = event.clientX;
+      pointerRef.current.y = event.clientY;
+      if (!frameRef.current) frameRef.current = requestAnimationFrame(flush);
+    };
+
+    node.addEventListener("pointermove", onPointerMove, { passive: true });
+    window.addEventListener("resize", invalidateRect, { passive: true });
+    window.addEventListener("scroll", invalidateRect, { passive: true });
+
+    return () => {
+      node.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("resize", invalidateRect);
+      window.removeEventListener("scroll", invalidateRect);
+      if (frameRef.current) cancelAnimationFrame(frameRef.current);
+      frameRef.current = 0;
+    };
+  }, [reducedMotion, mouseX, mouseY]);
 
   const springConfig = { stiffness: 150, damping: 30, mass: 1 };
   const smoothMouseX = useSpring(mouseX, springConfig);
@@ -32,50 +81,60 @@ export default function Hero() {
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={() => {
+      onPointerEnter={() => {
+        staleRectRef.current = true;
+        setIsHovered(true);
+      }}
+      onPointerLeave={() => {
         setIsHovered(false);
+        cancelFrame();
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className="relative w-full h-[60vh] min-h-[450px] sm:h-[75vh] sm:min-h-[580px] md:h-[82vh] md:min-h-[650px] flex items-center justify-center overflow-hidden bg-primary-500 sm:pb-12"
-      style={{ perspective: "1500px" }}
+      className={`relative isolate w-full h-[calc(72svh-var(--header-h))] min-h-95 sm:h-[calc(76svh-var(--header-h))] sm:min-h-110 md:h-[calc(78svh-var(--header-h))] md:min-h-125 md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 pb-20 sm:pb-12 ${
+        active ? "" : "mm-paused"
+      }`}
     >
       <motion.div
-        className="absolute inset-0 origin-center pointer-events-none z-0"
+        className="absolute inset-0 origin-center pointer-events-none z-0 md:transform-3d"
         style={{
           rotateX: planeRotateX,
           rotateY: planeRotateY,
           z: planeTranslateZ,
-          transformStyle: "preserve-3d",
         }}
       >
-        <BackgroundVisuals />
+        <BackgroundVisuals active={active} reducedMotion={reducedMotion} />
 
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40">
-          <motion.div className="relative flex items-center justify-center w-[96vw] max-w-none aspect-[2.38] drop-shadow-[0_0_30px_rgba(29,36,69,0.5)]">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40 md:opacity-100">
+          <motion.div className="relative flex items-center justify-center h-[78%] aspect-[2.38] max-w-[96vw] drop-shadow-[0_0_18px_rgba(98,109,158,0.25)]">
             <svg
               viewBox="0 0 368.25 154.79"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="absolute w-full h-full overflow-visible z-0"
+              style={{
+                maskImage:
+                  "radial-gradient(ellipse 46% 62% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.4) 45%, #000 82%)",
+                WebkitMaskImage:
+                  "radial-gradient(ellipse 46% 62% at 50% 50%, rgba(0,0,0,0.06) 0%, rgba(0,0,0,0.4) 45%, #000 82%)",
+              }}
             >
               <motion.rect
                 x=".5"
                 y=".5"
                 width="367.25"
                 height="153.79"
-                stroke="#3D4775"
-                strokeWidth="1"
+                stroke="#626D9E"
+                strokeWidth="1.2"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.4 }}
+                animate={{ pathLength: 1, opacity: 0.6 }}
                 transition={{ duration: 3, ease: "easeInOut" }}
               />
               <motion.path
                 d="M333.86,77.4c0,26.38-19.75,48.15-45.28,51.33-2.12.27-4.28.41-6.47.41H89.43c-2.9,0-5.74-.24-8.51-.7-24.52-4.06-43.23-25.37-43.23-51.04s18.71-46.99,43.23-51.05c2.77-.46,5.61-.7,8.51-.7h192.68c2.19,0,4.35.14,6.47.41,25.53,3.18,45.28,24.95,45.28,51.34Z"
                 stroke="#626D9E"
                 strokeWidth="1.5"
+                opacity="0.45"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 4, ease: "easeInOut", delay: 0.5 }}
@@ -84,17 +143,17 @@ export default function Hero() {
                 d="M240.07,54.42h-107.91c-12.69,0-22.98,10.29-22.98,22.98s10.29,22.98,22.98,22.98h107.91c12.69,0,22.98-10.29,22.98-22.98s-10.29-22.98-22.98-22.98Z"
                 stroke="#AD976F"
                 strokeWidth="1.5"
-                opacity="0.8"
+                opacity="0.55"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
                 transition={{ duration: 3, ease: "easeInOut", delay: 1.2 }}
               />
               <motion.polyline
                 points="184.07 1.06 83.65 152.54 83.65 1.06 184.07 152.54 184.07 1.06 285.18 153.74 285.18 1.06 184.07 152.54"
-                stroke="#3D4775"
-                strokeWidth="1"
+                stroke="#626D9E"
+                strokeWidth="1.2"
                 initial={{ pathLength: 0, opacity: 0 }}
-                animate={{ pathLength: 1, opacity: 0.6 }}
+                animate={{ pathLength: 1, opacity: 0.65 }}
                 transition={{ duration: 5, ease: "easeInOut", delay: 1.8 }}
               />
               <motion.line
@@ -104,6 +163,7 @@ export default function Hero() {
                 y2="77.4"
                 stroke="#626D9E"
                 strokeWidth="1.5"
+                opacity="0.45"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
               />
@@ -114,17 +174,18 @@ export default function Hero() {
                 y2="77.4"
                 stroke="#626D9E"
                 strokeWidth="1.5"
+                opacity="0.45"
                 initial={{ pathLength: 0 }}
                 animate={{ pathLength: 1 }}
               />
             </svg>
 
             <motion.div
-              className="absolute w-[22%] max-w-[400px] aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
+              className="absolute w-[22%] max-w-100 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
               animate={{
                 filter: isHovered
-                  ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 35px rgba(173,151,111,0.9))"
-                  : "drop-shadow(0 0 4px #0D112B) drop-shadow(0 0 20px rgba(173,151,111,0.6))",
+                  ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 26px rgba(173,151,111,0.6))"
+                  : "drop-shadow(0 0 5px #0D112B) drop-shadow(0 0 15px rgba(173,151,111,0.35))",
               }}
               transition={{
                 duration: 0.7,
@@ -143,7 +204,7 @@ export default function Hero() {
                   strokeWidth="0.8"
                   fillRule="evenodd"
                   initial={{ pathLength: 0, fill: "rgba(173,151,111,0)" }}
-                  animate={{ pathLength: 1, fill: "rgba(173,151,111,0.2)" }}
+                  animate={{ pathLength: 1, fill: "rgba(173,151,111,0.13)" }}
                   transition={{
                     pathLength: { duration: 4, ease: "easeInOut", delay: 2.5 },
                     fill: { duration: 2, delay: 5 },
@@ -158,21 +219,20 @@ export default function Hero() {
       <div className="absolute inset-0 z-10 bg-[radial-gradient(ellipse_at_center,rgba(29,36,69,0.2)_0%,rgba(29,36,69,0.95)_100%)] pointer-events-none" />
 
       <motion.div
-        className="relative z-100 flex flex-col items-center px-4 w-full max-w-7xl mx-auto"
+        className="relative z-100 flex flex-col items-center px-4 w-full max-w-7xl mx-auto md:transform-3d"
         initial={{ opacity: 0, translateZ: 100 }}
         animate={{ opacity: 1, translateZ: 0 }}
         transition={{ duration: 1.2, ease: "easeOut" }}
-        style={{ transformStyle: "preserve-3d" }}
       >
         <div className="text-center flex flex-col items-center w-full">
           <motion.div
             initial={{ opacity: 0, y: 15, filter: "blur(4px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             transition={{ duration: 1.8, ease: [0.22, 1, 0.36, 1] }}
-            className="flex items-center justify-between gap-2 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
+            className="flex items-center justify-center sm:justify-between gap-3 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
           >
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
-            <h1 className="text-[1.1rem] xs:text-[1.25rem] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow whitespace-nowrap">
+            <h1 className="text-[clamp(0.85rem,4.4vw,1.1rem)] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow-0 sm:grow whitespace-nowrap [text-shadow:0_2px_18px_rgba(13,17,43,0.9)]">
               YILDIZ TEKNİK ÜNİVERSİTESİ
             </h1>
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
@@ -184,13 +244,13 @@ export default function Hero() {
             transition={{ duration: 1.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
             className="flex items-center justify-center gap-2 mt-4 w-full"
           >
-            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none">
+            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none [text-shadow:0_2px_14px_rgba(13,17,43,0.95)]">
               [
             </span>
-            <h2 className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-secondary-500 tracking-[0.15em] uppercase text-center">
+            <h2 className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-secondary-500 tracking-[0.15em] uppercase text-center [text-shadow:0_2px_14px_rgba(13,17,43,0.95),0_0_28px_rgba(13,17,43,0.8)]">
               MATEMATİK MÜHENDİSLİĞİ
             </h2>
-            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none">
+            <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none [text-shadow:0_2px_14px_rgba(13,17,43,0.95)]">
               ]
             </span>
           </motion.div>
@@ -201,23 +261,38 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="hidden sm:block w-full sm:max-w-5xl mt-12 sm:mt-16 mb-8 mx-auto"
           >
-            <div className="relative group w-full">
+            <form action="/duyurular" className="relative group w-full">
               <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 focus-within:shadow-xl w-full">
                 <input
-                  type="text"
+                  type="search"
+                  name="q"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Aramak için yazınız..."
+                  placeholder="Duyurularda aramak için yazınız..."
+                  aria-label="Duyurularda ara"
                   className="w-full py-3 px-6 text-base text-slate-700 placeholder-slate-400 outline-none bg-transparent font-medium"
                 />
-                <button className="px-6 py-3 text-slate-400 hover:text-primary-500 transition-colors border-l border-slate-100 flex items-center justify-center">
+                <button
+                  type="submit"
+                  aria-label="Ara"
+                  className="px-6 py-3 text-slate-400 hover:text-primary-500 transition-colors border-l border-slate-100 flex items-center justify-center"
+                >
                   <Search size={22} />
                 </button>
               </div>
-            </div>
+            </form>
           </motion.div>
         </div>
       </motion.div>
+
+      <div
+        aria-hidden="true"
+        className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+      >
+        <div className="relative h-12 w-px overflow-hidden bg-secondary-500/25">
+          <div className="mm-cue absolute inset-x-0 top-0 h-5 bg-secondary-500" />
+        </div>
+      </div>
     </div>
   );
-};
+}
