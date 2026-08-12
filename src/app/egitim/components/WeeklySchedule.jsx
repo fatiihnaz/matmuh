@@ -13,8 +13,8 @@ function EntryCard({ entry, fill, href }) {
   const label = [
     `${DAYS[entry.day]} ${TIME_SLOTS[entry.slot]}`,
     `${entry.code} ${entry.name}`,
-    entry.instructor && entry.instructor !== "—" ? entry.instructor : null,
-    entry.room && entry.room !== "—" ? entry.room : null,
+    entry.instructor && entry.instructor !== "-" ? entry.instructor : null,
+    entry.room && entry.room !== "-" ? entry.room : null,
     entry.online ? "Online" : null,
   ]
     .filter(Boolean)
@@ -88,7 +88,7 @@ function EntryCard({ entry, fill, href }) {
       </span>
 
       <div className={`flex flex-col gap-0.5 ${fill ? "mt-auto pt-0.5" : ""}`}>
-        {entry.instructor && entry.instructor !== "—" && (
+        {entry.instructor && entry.instructor !== "-" && (
           <span
             className="inline-flex items-center gap-1"
             style={{ fontSize: "0.625rem", color: "rgba(29,36,69,0.5)" }}
@@ -97,7 +97,7 @@ function EntryCard({ entry, fill, href }) {
             <span className="truncate">{entry.instructor}</span>
           </span>
         )}
-        {entry.room && entry.room !== "—" && (
+        {entry.room && entry.room !== "-" && (
           <span
             className="inline-flex items-center gap-1"
             style={{
@@ -125,7 +125,7 @@ function EntryCard({ entry, fill, href }) {
   return (
     <Link
       href={href}
-      aria-label={`${label} — ders detayına git`}
+      aria-label={`${label} - ders detayına git`}
       className={`block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-500 ${
         fill ? "h-full" : ""
       }`}

@@ -22,13 +22,13 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7666.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 1", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7609(1).JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 2", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7318.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 3", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7413.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 4", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7287.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 5", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7307.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 6", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7473.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 7", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7666.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 1", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7609(1).JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 2", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7318.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 3", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7413.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 4", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7287.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 5", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7307.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 6", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF7473.JPG", alt: "2025-2026 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 7", width: 1600, height: 1067 },
     ],
   },
   {
@@ -477,7 +477,7 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/Milli%20Teknoloji%20Uzmanlik%20Programlari.jpg", alt: "Milli Teknoloji Uzmanlık Programları Başvuruları Başladı — fotoğraf 1", width: 859, height: 1032 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/Milli%20Teknoloji%20Uzmanlik%20Programlari.jpg", alt: "Milli Teknoloji Uzmanlık Programları Başvuruları Başladı - fotoğraf 1", width: 859, height: 1032 },
     ],
   },
   {
@@ -680,14 +680,14 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_2019.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 1", width: 1600, height: 1200 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9828(1).JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 2", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF2058.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 3", width: 1600, height: 1200 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF2214.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 4", width: 1600, height: 1200 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9839.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 5", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9860.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 6", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9853.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 7", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_0002.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği — fotoğraf 8", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_2019.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 1", width: 1600, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9828(1).JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 2", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF2058.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 3", width: 1600, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/DSCF2214.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 4", width: 1600, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9839.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 5", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9860.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 6", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_9853.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 7", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/IMG_0002.JPG", alt: "2024-2025 Mezuniyet Töreni Öncesi Kokteyl ve Fotoğraf Çekimi Etkinliği - fotoğraf 8", width: 1600, height: 1067 },
     ],
   },
   {
@@ -701,7 +701,7 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/photo_59.jpg", alt: "THY Kariyer İmkanı Hk. — fotoğraf 1", width: 848, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/photo_59.jpg", alt: "THY Kariyer İmkanı Hk. - fotoğraf 1", width: 848, height: 1200 },
     ],
   },
   {
@@ -715,7 +715,7 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/photo_5906896233774040544_w(1).jpg", alt: "Ulusal Staj Programı 2025 — fotoğraf 1", width: 1200, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/photo_5906896233774040544_w(1).jpg", alt: "Ulusal Staj Programı 2025 - fotoğraf 1", width: 1200, height: 1200 },
     ],
   },
   {
@@ -729,7 +729,7 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/Lisans%C3%BCst%C3%BCMezuniyeti.jpg", alt: "LİSANSÜSTÜ MEZUNİYET TÖRENİ DAVETİ — fotoğraf 1", width: 1200, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/Lisans%C3%BCst%C3%BCMezuniyeti.jpg", alt: "LİSANSÜSTÜ MEZUNİYET TÖRENİ DAVETİ - fotoğraf 1", width: 1200, height: 1200 },
     ],
   },
   {
@@ -743,7 +743,7 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/LisansMezuniyeti.jpg", alt: "LİSANS MEZUNİYET TÖRENİ DAVETİ — fotoğraf 1", width: 1200, height: 1200 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/LisansMezuniyeti.jpg", alt: "LİSANS MEZUNİYET TÖRENİ DAVETİ - fotoğraf 1", width: 1200, height: 1200 },
     ],
   },
   {
@@ -757,11 +757,11 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1066(1).JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu — fotoğraf 1", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1001.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu — fotoğraf 2", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1027.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu — fotoğraf 3", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1032.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu — fotoğraf 4", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1117.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu — fotoğraf 5", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1066(1).JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu - fotoğraf 1", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1001.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu - fotoğraf 2", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1027.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu - fotoğraf 3", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1032.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu - fotoğraf 4", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/1G6A1117.JPG", alt: "2017-2018 Mezuniyet Töreni Öncesi Fotoğraf Çekimi Organizasyonu - fotoğraf 5", width: 1600, height: 1067 },
     ],
   },
   {
@@ -775,11 +775,11 @@ export const contentRecords = [
     pinned: false,
     attachments: [],
     gallery: [
-      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1423.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu — fotoğraf 1", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1332.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu — fotoğraf 2", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1461.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu — fotoğraf 3", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1497.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu — fotoğraf 4", width: 1600, height: 1067 },
-      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1517.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu — fotoğraf 5", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1423.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu - fotoğraf 1", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1332.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu - fotoğraf 2", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1461.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu - fotoğraf 3", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1497.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu - fotoğraf 4", width: 1600, height: 1067 },
+      { src: "https://mtm.yildiz.edu.tr/media/images/_G6A1517.JPG", alt: "2018-2019 Mezuniyet Töreni Öncesi Fotoğraf Çekimi ve Kokteyl Organizasyonu - fotoğraf 5", width: 1600, height: 1067 },
     ],
   },
   {

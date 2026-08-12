@@ -13,7 +13,7 @@ export const RESEARCH_LINKS = [
     href: "https://bap.yildiz.edu.tr/",
   },
   {
-    label: "AVESİS — Akademik Veri Yönetim Sistemi",
+    label: "AVESİS - Akademik Veri Yönetim Sistemi",
     description: "Öğretim üyelerinin güncel projeleri ve yayınları",
     href: "https://avesis.yildiz.edu.tr/",
   },

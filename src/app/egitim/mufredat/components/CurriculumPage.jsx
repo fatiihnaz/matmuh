@@ -49,8 +49,8 @@ function buildRows(semester) {
       isGroup: false,
       code: c.id,
       name: detail?.title?.trim() ?? c.id,
-      hours: detail?.hours ?? "—",
-      ects: detail?.ects ?? "—",
+      hours: detail?.hours ?? "-",
+      ects: detail?.ects ?? "-",
       status: detail?.type ?? "Zorunlu",
     };
   });
@@ -407,7 +407,7 @@ export default function CurriculumPage() {
                                       color: "rgba(173,151,111,0.35)",
                                     }}
                                   >
-                                    —
+                                    -
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
@@ -448,7 +448,7 @@ export default function CurriculumPage() {
                                       color: row.defaultHours ? "rgba(29,36,69,0.45)" : "rgba(29,36,69,0.2)",
                                     }}
                                   >
-                                    {row.defaultHours ?? "—"}
+                                    {row.defaultHours ?? "-"}
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
@@ -460,7 +460,7 @@ export default function CurriculumPage() {
                                       color: row.defaultEcts ? "var(--color-primary-500)" : "rgba(29,36,69,0.2)",
                                     }}
                                   >
-                                    {row.defaultEcts ?? "—"}
+                                    {row.defaultEcts ?? "-"}
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
@@ -648,8 +648,8 @@ function buildElectiveRows(expandedGroup) {
       isGroup: false,
       code: c.code,
       name: (own?.title ?? c.title)?.trim() ?? c.code,
-      hours: own?.hours ?? c.hours ?? expandedGroup.defaultHours ?? "—",
-      ects: own?.ects ?? c.ects ?? expandedGroup.defaultEcts ?? "—",
+      hours: own?.hours ?? c.hours ?? expandedGroup.defaultHours ?? "-",
+      ects: own?.ects ?? c.ects ?? expandedGroup.defaultEcts ?? "-",
       status: own?.type ?? c.type ?? "Seçmeli",
       href: expandedGroup.external && !own ? bolognaCourseUrl(c.bolognaId) : null,
     };

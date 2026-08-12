@@ -20,7 +20,7 @@ export default async function CourseLayout({ params, children }) {
   return (
     <>
       <SubHeader
-        title={`${course.code} — ${course.title.trim()}`}
+        title={`${course.code} - ${course.title.trim()}`}
         subTitle={detailString}
       />
       {children}

@@ -189,25 +189,25 @@ export const INTERNSHIP_DOCUMENTS = [
     note: "Her staj çalışması için ayrı bir staj defteri hazırlanır.",
     items: [
       {
-        label: "1. Staj Defteri — Türkçe",
+        label: "1. Staj Defteri - Türkçe",
         kind: "docx",
         href: "https://mtm.yildiz.edu.tr/media/files/1_STAJ_B%C4%B0LG%C4%B0SAYAR%20DONANIMI%20VE%20TEMEL%20UYGULAMALARI%20STAJ%20DEFTER%C4%B0(T%C3%9CRK%C3%87E).docx",
         size: 143955,
       },
       {
-        label: "1. Staj Defteri — İngilizce",
+        label: "1. Staj Defteri - İngilizce",
         kind: "docx",
         href: "https://mtm.yildiz.edu.tr/media/files/1_STAJ_B%C4%B0LG%C4%B0SAYAR%20DONANIMI%20VE%20TEMEL%20UYGULAMALARI%20STAJ%20DEFTER%C4%B0(%C4%B0NG%C4%B0L%C4%B0CE).docx",
         size: 127892,
       },
       {
-        label: "2. Staj Defteri — Türkçe",
+        label: "2. Staj Defteri - Türkçe",
         kind: "docx",
         href: "https://mtm.yildiz.edu.tr/media/files/2_STAJ_SORUN%20%C3%87%C3%96Z%C3%9CM%20TEKN%C4%B0KLER%C4%B0%20STAJ%20DEFTER%C4%B0(T%C3%9CRK%C3%87E)(1).docx",
         size: 406002,
       },
       {
-        label: "2. Staj Defteri — İngilizce",
+        label: "2. Staj Defteri - İngilizce",
         kind: "docx",
         href: "https://mtm.yildiz.edu.tr/media/files/2_STAJ_SORUN%20%C3%87%C3%96Z%C3%9CM%20TEKN%C4%B0KLER%C4%B0%20STAJ%20DEFTER%C4%B0(%C4%B0NG%C4%B0L%C4%B0ZCE)(1).docx",
         size: 401356,

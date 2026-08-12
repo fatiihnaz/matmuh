@@ -23,7 +23,7 @@ export const staffData = {
     { id: "sonar", name: "Serkan ONAR", rank: "Doç. Dr.", email: "sonar@yildiz.edu.tr", phone: "0212 383 46 14", room: "108" },
     { id: "ozkoklu", name: "Kevser Özden KÖKLÜ", rank: "Prof. Dr.", email: "ozkoklu@yildiz.edu.tr", phone: "0212 383 46 01", room: "A-229" },
     { id: "ubabuscu", name: "Ülkü BABUŞCU YEŞİL", rank: "Prof. Dr.", email: "ubabuscu@yildiz.edu.tr", phone: "0212 383 45 97", room: "A-231" },
-    { id: "hgonce", name: "Hale GONCE KÖÇKEN", rank: "Prof. Dr.", email: "hgonce@yildiz.edu.tr", phone: "0212 383 46 05", room: "A-227" },
+    { id: "hgonce", name: "Hale KÖÇKEN", rank: "Prof. Dr.", email: "hgonce@yildiz.edu.tr", phone: "0212 383 46 05", room: "A-227" },
     { id: "fakgun", name: "Fatma Aydın AKGÜN", rank: "Prof. Dr.", email: "fakgun@yildiz.edu.tr", phone: "0212 383 46 06", room: "A-236" },
     { id: "sayli", name: "Ayla ŞAYLI", rank: "Prof. Dr.", email: "sayli@yildiz.edu.tr", phone: "0212 383 46 15", room: "A-234" },
     { id: "kosker", name: "Reşat KÖŞKER", rank: "Prof. Dr.", email: "kosker@yildiz.edu.tr", phone: "0212 383 46 07", room: "A-230" },

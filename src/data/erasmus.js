@@ -14,7 +14,7 @@ export const ERASMUS_COORDINATORS = [
 export const ERASMUS_INTERNSHIP_NOTE =
   "Erasmus+ programı kapsamında yurt dışında staj yapılabilir. Bölüm Staj Komisyonunun uygun görüşü, bölüm başkanlığının önerisi ve Fakülte Yönetim Kurulu kararı gerekir; bu kapsamda en az 60 iş günü staj yapılması esastır.";
 
-export const AGREEMENT_PERIOD = "2022-2023 — 2027-2028";
+export const AGREEMENT_PERIOD = "2022-2023 - 2027-2028";
 
 export const BILATERAL_AGREEMENTS = [
   {
@@ -110,7 +110,7 @@ export const BILATERAL_AGREEMENTS = [
 
 export const ERASMUS_DOCUMENTS = [
   {
-    label: "Erasmus+ İkili Anlaşmalar — Matematik Mühendisliği",
+    label: "Erasmus+ İkili Anlaşmalar - Matematik Mühendisliği",
     kind: "xlsx",
     href: "https://mtm.yildiz.edu.tr/media/files/Eramus+%C4%B0kili%20Anla%C5%9Fmalar%20Matematik+M%C3%BChendisli%C4%9Fi(1).xlsx",
     size: 19921,
