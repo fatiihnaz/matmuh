@@ -24,21 +24,21 @@ export const LISANS_CLASSES = [
 
 export const LISANS_SCHEDULE = {
   1: [
-    { day: 0, slot: 0, span: 3, code: "MDB1032", name: "İleri İngilizce 2", instructor: "—", room: "KMB-224", type: "Zorunlu" },
+    { day: 0, slot: 0, span: 3, code: "MDB1032", name: "İleri İngilizce 2", instructor: "-", room: "KMB-224", type: "Zorunlu" },
     { day: 0, slot: 4, span: 2, code: "FIZ1002", name: "Fizik 2", instructor: "R. Köşker", room: "KMB-224", type: "Zorunlu" },
     { day: 1, slot: 0, span: 3, code: "MTM1502", name: "Analiz 2", instructor: "S. G. Körpeoğlu", room: "KMB-202", type: "Zorunlu" },
-    { day: 1, slot: 4, span: 1, code: "TDB1032", name: "Türkçe 2", instructor: "D. Sekman", room: "—", type: "Zorunlu", online: true },
+    { day: 1, slot: 4, span: 1, code: "TDB1032", name: "Türkçe 2", instructor: "D. Sekman", room: "-", type: "Zorunlu", online: true },
     { day: 1, slot: 6, span: 2, code: "FIZ1002", name: "Fizik 2", instructor: "R. Köşker", room: "KMB-211", type: "Zorunlu" },
     { day: 2, slot: 0, span: 3, code: "MTM1531", name: "Lineer Cebir", instructor: "K. Şimşek", room: "KMB-202", type: "Zorunlu" },
     { day: 2, slot: 4, span: 2, code: "MTM1502", name: "Analiz 2", instructor: "S. G. Körpeoğlu", room: "KMB-202", type: "Zorunlu" },
     { day: 3, slot: 0, span: 2, code: "MTM1512", name: "Programlama Dilleri II", instructor: "B. Aslanyürek", room: "KMB-329", type: "Zorunlu", note: "İng · Gr.2" },
     { day: 3, slot: 4, span: 2, code: "MTM1512", name: "Programlama Dilleri II", instructor: "H. Serab", room: "KMB-329", type: "Zorunlu", note: "Gr.1" },
-    { day: 4, slot: 1, span: 2, code: "MTM1552", name: "İş Sağlığı ve Güvenliği 2", instructor: "N. Yahnioğlu", room: "—", type: "Zorunlu", online: true },
-    { day: 4, slot: 5, span: 2, code: "FIZ1002", name: "Fizik 2", instructor: "R. Köşker", room: "—", type: "Zorunlu", online: true },
+    { day: 4, slot: 1, span: 2, code: "MTM1552", name: "İş Sağlığı ve Güvenliği 2", instructor: "N. Yahnioğlu", room: "-", type: "Zorunlu", online: true },
+    { day: 4, slot: 5, span: 2, code: "FIZ1002", name: "Fizik 2", instructor: "R. Köşker", room: "-", type: "Zorunlu", online: true },
   ],
   2: [
     { day: 0, slot: 4, span: 2, code: "MTM2592", name: "Olasılık Teorisi", instructor: "N. Güler", room: "KMB-211", type: "Zorunlu" },
-    { day: 1, slot: 0, span: 3, code: "MTM2522", name: "Veri Yönetimi ve Dosya Yapıları I", instructor: "İ. Emiroğlu", room: "—", type: "Zorunlu", online: true },
+    { day: 1, slot: 0, span: 3, code: "MTM2522", name: "Veri Yönetimi ve Dosya Yapıları I", instructor: "İ. Emiroğlu", room: "-", type: "Zorunlu", online: true },
     { day: 3, slot: 0, span: 3, code: "MTM2532", name: "Analitik Geometri", instructor: "A. T. Dincel", room: "KMB-211", type: "Zorunlu" },
     { day: 3, slot: 4, span: 2, code: "MTM2502", name: "İleri Analiz 2", instructor: "Y. Uçan", room: "KMB-202", type: "Zorunlu" },
     { day: 4, slot: 0, span: 1, code: "MTM2552", name: "İntegral Denklemler", instructor: "N. Yahnioğlu", room: "KMB-224", type: "Seçmeli" },
@@ -55,8 +55,8 @@ export const LISANS_SCHEDULE = {
     { day: 1, slot: 4, span: 2, code: "MTM3562", name: "Adi Dif. Denk. Nümerik Çözümleri", instructor: "D. Sekman", room: "KMB-224", type: "Seçmeli", note: "2G" },
   ],
   4: [
-    { day: 0, slot: 0, span: 3, code: "MTM4502", name: "Optimizasyon Teknikleri", instructor: "H. Köçken", room: "—", type: "Zorunlu", online: true },
-    { day: 0, slot: 4, span: 2, code: "MTM4692", name: "Uygulamalı SQL", instructor: "F. Kıran", room: "—", type: "Seçmeli", online: true, note: "Gr.2" },
+    { day: 0, slot: 0, span: 3, code: "MTM4502", name: "Optimizasyon Teknikleri", instructor: "H. Köçken", room: "-", type: "Zorunlu", online: true },
+    { day: 0, slot: 4, span: 2, code: "MTM4692", name: "Uygulamalı SQL", instructor: "F. Kıran", room: "-", type: "Seçmeli", online: true, note: "Gr.2" },
     { day: 1, slot: 0, span: 3, code: "MTM4582", name: "Kısmi Dif. Denk. Nümerik Çözümleri", instructor: "K. Köklü", room: "KMB-211", type: "Seçmeli", note: "2G" },
     { day: 1, slot: 4, span: 2, code: "MTM4592", name: "Bilişim Etiği", instructor: "İ. Emiroğlu", room: "KMB-329", type: "Seçmeli", note: "İng" },
     { day: 2, slot: 0, span: 3, code: "MTM4562", name: "Mesleki Terminoloji", instructor: "K. Köklü", room: "KMB-211", type: "Seçmeli" },
@@ -67,8 +67,8 @@ export const LISANS_SCHEDULE = {
 };
 
 export const LISANSUSTU_SCHEDULE = [
-  { day: 0, slot: 0, span: 2, code: "MTM5001", name: "Seminer (Yüksek Lisans)", instructor: "Prof. Dr. Fatih Taşçi", room: "—", level: "Yüksek Lisans" },
-  { day: 0, slot: 2, span: 2, code: "MTM6001", name: "Seminer (Doktora)", instructor: "Prof. Dr. Fatih Taşçi", room: "—", level: "Doktora" },
+  { day: 0, slot: 0, span: 2, code: "MTM5001", name: "Seminer (Yüksek Lisans)", instructor: "Prof. Dr. Fatih Taşçi", room: "-", level: "Yüksek Lisans" },
+  { day: 0, slot: 2, span: 2, code: "MTM6001", name: "Seminer (Doktora)", instructor: "Prof. Dr. Fatih Taşçi", room: "-", level: "Doktora" },
   { day: 1, slot: 0, span: 3, code: "MTM5131", name: "Yapay Zekanın Matematiksel Temelleri", instructor: "Doç. Dr. Mert Bal", room: "KMB-211", level: "Yüksek Lisans" },
   { day: 1, slot: 0, span: 3, code: "MTM5107", name: "İntegral Denklemlerin Sayısal Çözümü", instructor: "Kevser Köklü", room: "KMB-212", level: "Yüksek Lisans" },
   { day: 1, slot: 4, span: 3, code: "MTM5134", name: "Derin Öğrenmenin Matematiksel Temelleri", instructor: "Doç. Dr. Mert Bal", room: "KMB-320", level: "Yüksek Lisans" },

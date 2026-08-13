@@ -9,7 +9,7 @@ export const COMMISSIONS = [
   {
     name: "Bilişim ve İletişim Komisyonu",
     roles: [
-      { role: "Komisyon Başkanı", members: [{ rank: "Prof. Dr.", name: "Hale Gonce Köçken" }] },
+      { role: "Komisyon Başkanı", members: [{ rank: "Prof. Dr.", name: "Hale Köçken" }] },
       {
         role: "Komisyon Üyeleri",
         members: [

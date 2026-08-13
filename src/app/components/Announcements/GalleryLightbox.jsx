@@ -47,7 +47,7 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
     "absolute top-1/2 -translate-y-1/2 p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors";
 
   return (
-    <Modal open={open} onClose={onClose} label={title ? `${title} — fotoğraf galerisi` : "Fotoğraf galerisi"}>
+    <Modal open={open} onClose={onClose} label={title ? `${title} - fotoğraf galerisi` : "Fotoğraf galerisi"}>
       <div className="flex flex-col h-full py-14 px-4 sm:px-16">
         <div
           className="relative flex-1 min-h-0 touch-pan-y"

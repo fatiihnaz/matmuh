@@ -25,7 +25,16 @@ import {
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
 import { staffData } from "@/data/staff";
-import { obsdata } from "@/data/obsdata";
+import { getCourseStatistics } from "@/data/statistics";
+
+const LOW_GRADES = new Set(["DD", "FD", "FF", "F0"]);
+const isLowGrade = (grade) => LOW_GRADES.has(grade);
+const isHighlightGrade = (grade) => grade === "DC";
+
+const isFinalExam = (exam) =>
+  exam.type === "FINAL" || /final|yarıyıl sonu|yılsonu/i.test(exam.name);
+const isMakeupExam = (exam) =>
+  exam.type === "RESIT" || /bütünleme/i.test(exam.name);
 
 const bgColors = [
   "#1D2445",
@@ -84,47 +93,49 @@ export default function CourseInfo({ course }) {
     course?.code || course?.id || course?.courseCode || ""
   ).toUpperCase();
 
-  const courseData = useMemo(() => {
-    return obsdata[0]?.[searchCode] || null;
-  }, [searchCode]);
+  const courseData = useMemo(
+    () => getCourseStatistics(searchCode),
+    [searchCode]
+  );
 
-  const availableTerms = useMemo(() => {
-    if (!courseData?.terms) return [];
-    return Object.values(courseData.terms).sort((a, b) =>
-      b.termId.localeCompare(a.termId)
+  const availableTerms = useMemo(() => courseData?.terms ?? [], [courseData]);
+
+  const [selectedTerm, setSelectedTerm] = useState("");
+  const [selectedInstructor, setSelectedInstructor] = useState("");
+  const [selectedSection, setSelectedSection] = useState("");
+
+  const activeTerm = useMemo(() => {
+    if (availableTerms.length === 0) return null;
+    return (
+      availableTerms.find((t) => t.name === selectedTerm) || availableTerms[0]
     );
-  }, [courseData]);
+  }, [availableTerms, selectedTerm]);
 
-  const [selectedTermId, setSelectedTermId] = useState("");
-  const [selectedProfId, setSelectedProfId] = useState("");
+  const availableInstructors = useMemo(
+    () => activeTerm?.instructors ?? [],
+    [activeTerm]
+  );
 
-  const activeTermId = useMemo(() => {
-    if (availableTerms.length === 0) return "";
-    const exists = availableTerms.find((t) => t.termId === selectedTermId);
-    return exists ? exists.termId : availableTerms[0].termId;
-  }, [availableTerms, selectedTermId]);
+  const activeInstructor = useMemo(() => {
+    if (availableInstructors.length === 0) return null;
+    return (
+      availableInstructors.find((i) => i.name === selectedInstructor) ||
+      availableInstructors[0]
+    );
+  }, [availableInstructors, selectedInstructor]);
 
-  const currentTermData = courseData?.terms?.[activeTermId] || null;
-
-  const availableProfs = useMemo(() => {
-    if (!currentTermData?.professors) return [];
-    return Object.values(currentTermData.professors);
-  }, [currentTermData]);
-
-  const activeProfId = useMemo(() => {
-    if (availableProfs.length === 0) return "";
-    const exists = availableProfs.find((p) => p.profId === selectedProfId);
-    return exists ? exists.profId : availableProfs[0].profId;
-  }, [availableProfs, selectedProfId]);
-
-  const currentProfData = currentTermData?.professors?.[activeProfId] || null;
+  const availableSections = useMemo(
+    () => activeInstructor?.sections ?? [],
+    [activeInstructor]
+  );
 
   const activeStats = useMemo(() => {
-    if (!currentProfData?.groups) return null;
-    const groups = Object.values(currentProfData.groups);
-    if (groups.length === 0) return null;
-    return groups[0].stats || null;
-  }, [currentProfData]);
+    if (availableSections.length === 0) return null;
+    return (
+      availableSections.find((s) => s.section === selectedSection) ||
+      availableSections[0]
+    );
+  }, [availableSections, selectedSection]);
 
   const statsSummary = useMemo(() => {
     if (
@@ -148,7 +159,7 @@ export default function CourseInfo({ course }) {
       0
     );
     const passed = dist
-      .filter((g) => !g.low && !["FF", "FD", "F0"].includes(g.grade))
+      .filter((g) => !isLowGrade(g.grade))
       .reduce((acc, curr) => acc + (Number(curr.count) || 0), 0);
 
     const average = activeStats.summary?.average || 0;
@@ -187,8 +198,10 @@ export default function CourseInfo({ course }) {
       );
     }
 
-    const maxCount = Math.max(...data.map((d) => Number(d.count) || 0));
+    const counts = data.map((d) => Number(d.count) || 0);
+    const maxCount = Math.max(...counts);
     const safeMax = maxCount > 0 ? maxCount : 1;
+    const total = counts.reduce((sum, c) => sum + c, 0);
 
     return (
       <div className="relative pt-2 sm:pt-0">
@@ -210,9 +223,10 @@ export default function CourseInfo({ course }) {
             {data.map((item, idx) => {
               const count = Number(item.count) || 0;
               const barWidth = `${(count / safeMax) * 100}%`;
-              const barColor = item.low
+              const percent = total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
+              const barColor = isLowGrade(item.grade)
                 ? "bg-primary-500/20"
-                : item.highlight
+                : isHighlightGrade(item.grade)
                 ? "bg-secondary-500"
                 : "bg-primary-500";
 
@@ -244,7 +258,7 @@ export default function CourseInfo({ course }) {
                     {count}
                   </div>
                   <div className="w-12 text-right text-primary-500/40">
-                    {item.percent}%
+                    {percent}%
                   </div>
                 </div>
               );
@@ -362,7 +376,7 @@ export default function CourseInfo({ course }) {
             { label: "ECTS", value: course.ects },
             {
               label: "Yarıyıl",
-              value: course.semester ? `${course.semester}. Yarıyıl` : "—",
+              value: course.semester ? `${course.semester}. Yarıyıl` : "-",
             },
             { label: "Dil", value: course.language },
           ].map((item, i) => (
@@ -464,7 +478,7 @@ export default function CourseInfo({ course }) {
                     <p className="text-sm font-semibold text-primary-500">
                       {course.assessment
                         ? `Vize %${course.assessment.midterm?.weight ?? 0} + Final %${course.assessment.final?.weight ?? 0}`
-                        : "—"}
+                        : "-"}
                     </p>
                   </div>
                 </div>
@@ -630,16 +644,17 @@ export default function CourseInfo({ course }) {
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                         <div className="relative w-full sm:w-auto">
                           <select
-                            value={activeTermId}
+                            value={activeTerm?.name ?? ""}
                             onChange={(e) => {
-                              setSelectedTermId(e.target.value);
-                              setSelectedProfId("");
+                              setSelectedTerm(e.target.value);
+                              setSelectedInstructor("");
+                              setSelectedSection("");
                             }}
                             className="w-full appearance-none bg-white border border-primary-500/10 rounded-xl px-4 py-2.5 pr-10 text-sm font-medium text-primary-500 outline-none hover:border-primary-500/20 transition-colors cursor-pointer shadow-xs"
                           >
                             {availableTerms.map((t) => (
-                              <option key={t.termId} value={t.termId}>
-                                {t.termName}
+                              <option key={t.name} value={t.name}>
+                                {t.name}
                               </option>
                             ))}
                           </select>
@@ -651,13 +666,16 @@ export default function CourseInfo({ course }) {
 
                         <div className="relative w-full sm:w-auto">
                           <select
-                            value={activeProfId}
-                            onChange={(e) => setSelectedProfId(e.target.value)}
+                            value={activeInstructor?.name ?? ""}
+                            onChange={(e) => {
+                              setSelectedInstructor(e.target.value);
+                              setSelectedSection("");
+                            }}
                             className="w-full appearance-none bg-white border border-primary-500/10 rounded-xl px-4 py-2.5 pr-10 text-sm font-medium text-primary-500 outline-none hover:border-primary-500/20 transition-colors cursor-pointer shadow-xs"
                           >
-                            {availableProfs.map((p) => (
-                              <option key={p.profId} value={p.profId}>
-                                {p.profName}
+                            {availableInstructors.map((p) => (
+                              <option key={p.name} value={p.name}>
+                                {p.name}
                               </option>
                             ))}
                           </select>
@@ -666,6 +684,28 @@ export default function CourseInfo({ course }) {
                             className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/40 pointer-events-none"
                           />
                         </div>
+
+                        {availableSections.length > 1 && (
+                          <div className="relative w-full sm:w-auto">
+                            <select
+                              value={activeStats?.section ?? ""}
+                              onChange={(e) =>
+                                setSelectedSection(e.target.value)
+                              }
+                              className="w-full appearance-none bg-white border border-primary-500/10 rounded-xl px-4 py-2.5 pr-10 text-sm font-medium text-primary-500 outline-none hover:border-primary-500/20 transition-colors cursor-pointer shadow-xs"
+                            >
+                              {availableSections.map((s) => (
+                                <option key={s.section} value={s.section}>
+                                  Şube {s.section}
+                                </option>
+                              ))}
+                            </select>
+                            <ChevronDown
+                              size={14}
+                              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/40 pointer-events-none"
+                            />
+                          </div>
+                        )}
                       </div>
 
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-500/5 border border-primary-500/10 shrink-0">
@@ -844,9 +884,9 @@ export default function CourseInfo({ course }) {
                           <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3 sm:gap-4 shrink-0">
                               <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-500 group-hover:bg-secondary-500 group-hover:text-white transition-all duration-300">
-                                {exam.id === "FINAL" ? (
+                                {isFinalExam(exam) ? (
                                   <GraduationCap size={14} />
-                                ) : exam.id === "MAKEUP" ? (
+                                ) : isMakeupExam(exam) ? (
                                   <Upload size={14} />
                                 ) : (
                                   <FileText size={14} />
@@ -881,10 +921,12 @@ export default function CourseInfo({ course }) {
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
                                 <User size={14} className="text-secondary-500" />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
-                                  {exam.students}
+                                  {exam.total
+                                    ? `${exam.attended}/${exam.total}`
+                                    : exam.attended}
                                 </span>
                                 <span className="text-[10px] sm:text-xs font-sans text-primary-500/40 sm:text-primary-500">
-                                  ÖĞR
+                                  {exam.total ? "GİREN" : "ÖĞR"}
                                 </span>
                               </div>
                             </div>
