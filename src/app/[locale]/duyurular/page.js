@@ -1,12 +1,12 @@
 import { Suspense } from "react";
-import SubHeader from "../components/Header/SubHeader";
-import PageLayout from "../components/PageLayout";
-import QuickLinks from "../components/QuickLinks";
-import Panel from "../components/Panel";
-import AnnouncementList from "../components/Announcements/AnnouncementList";
-import AnnouncementFilters from "../components/Announcements/AnnouncementFilters";
-import CategoryChips from "../components/Announcements/CategoryChips";
-import Pagination from "../components/Announcements/Pagination";
+import SubHeader from "@/app/components/Header/SubHeader";
+import PageLayout from "@/app/components/PageLayout";
+import QuickLinks from "@/app/components/QuickLinks";
+import Panel from "@/app/components/Panel";
+import AnnouncementList from "@/app/components/Announcements/AnnouncementList";
+import AnnouncementFilters from "@/app/components/Announcements/AnnouncementFilters";
+import CategoryChips from "@/app/components/Announcements/CategoryChips";
+import Pagination from "@/app/components/Announcements/Pagination";
 import { PAGE_SIZE, getAnnouncements, getCategoriesWithCounts } from "@/data/content";
 
 export const metadata = {

@@ -1,10 +1,10 @@
-import Landing from "./components/Landing/Landing";
-import PageLayout from "./components/PageLayout";
-import QuickLinks from "./components/QuickLinks";
-import MainCard from "./components/MainCard";
-import AnnouncementList from "./components/Announcements/AnnouncementList";
-import CategoryChips from "./components/Announcements/CategoryChips";
-import NewsList from "./components/Announcements/NewsList";
+import Landing from "@/app/components/Landing/Landing";
+import PageLayout from "@/app/components/PageLayout";
+import QuickLinks from "@/app/components/QuickLinks";
+import MainCard from "@/app/components/MainCard";
+import AnnouncementList from "@/app/components/Announcements/AnnouncementList";
+import CategoryChips from "@/app/components/Announcements/CategoryChips";
+import NewsList from "@/app/components/Announcements/NewsList";
 import {
   CONTENT_CATEGORIES,
   HOME_CATEGORY_IDS,

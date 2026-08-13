@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/app/providers";
+import { CmsPage, getCmsRoute } from "@/app/lib/cms.jsx";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
@@ -43,16 +44,22 @@ export const metadata = {
   },
 };
 
-export default function RootLayout({ children }) {
+export default async function RootLayout({ children }) {
+  // Above the [locale] segment, so the provider survives language switches; the
+  // active locale comes from the same x-pathname header <CmsPage> reads.
+  const { locale } = await getCmsRoute();
+
   return (
-    <html lang="tr" className={`${inter.variable} ${jbMono.variable}`}>
+    <html lang={locale ?? "tr"} className={`${inter.variable} ${jbMono.variable}`}>
       <Providers>
         <body className={`font-sans antialiased flex flex-col min-h-screen bg-background overflow-x-hidden`}>
-          <Header />
-          <main className="flex-1">
-            {children}
-          </main>
-          <Footer />
+          <CmsPage>
+            <Header />
+            <main className="flex-1">
+              {children}
+            </main>
+            <Footer />
+          </CmsPage>
         </body>
       </Providers>
     </html>

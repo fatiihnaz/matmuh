@@ -1,4 +1,4 @@
-import SubHeader from "../../components/Header/SubHeader";
+import SubHeader from "@/app/components/Header/SubHeader";
 
 export default function RootLayout({ children }) {
   return (

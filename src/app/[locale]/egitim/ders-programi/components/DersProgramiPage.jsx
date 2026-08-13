@@ -3,8 +3,8 @@ import { useState } from "react";
 import { CalendarDays } from "lucide-react";
 import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
-import WeeklySchedule from "@/app/egitim/components/WeeklySchedule";
-import ScheduleLegend from "@/app/egitim/components/ScheduleLegend";
+import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
+import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
 import {
   LISANS_CLASSES,
   LISANS_SCHEDULE,

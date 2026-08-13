@@ -1,7 +1,7 @@
-import SubHeader from "../components/Header/SubHeader";
-import PageLayout from "../components/PageLayout";
-import NewsCard from "../components/Announcements/NewsCard";
-import Pagination from "../components/Announcements/Pagination";
+import SubHeader from "@/app/components/Header/SubHeader";
+import PageLayout from "@/app/components/PageLayout";
+import NewsCard from "@/app/components/Announcements/NewsCard";
+import Pagination from "@/app/components/Announcements/Pagination";
 import { getNews } from "@/data/content";
 
 const PER_PAGE = 12;
