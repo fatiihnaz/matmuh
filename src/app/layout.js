@@ -52,13 +52,15 @@ export default async function RootLayout({ children }) {
   return (
     <html lang={locale ?? "tr"} className={`${inter.variable} ${jbMono.variable}`}>
       <Providers>
-        <body className={`font-sans antialiased flex flex-col min-h-screen bg-background overflow-x-hidden`}>
+        <body className={`font-sans antialiased bg-background overflow-x-hidden`}>
           <CmsPage>
-            <Header />
-            <main className="flex-1">
-              {children}
-            </main>
-            <Footer />
+            <div className="flex flex-col min-h-screen">
+              <Header />
+              <main className="flex-1">
+                {children}
+              </main>
+              <Footer />
+            </div>
           </CmsPage>
         </body>
       </Providers>

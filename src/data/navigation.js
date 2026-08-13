@@ -17,6 +17,7 @@ export const navigationItems = [
   },
   {
     label: "Personel",
+    href: "/personel",
     basePath: "/personel",
     children: [
     { label: "Yönetim", href: "/personel?type=yonetim", icon: Shield, description: "Bölüm başkanlığı" },

@@ -19,6 +19,16 @@
   --color-secondary-700: #6F5F45;
 }
 
+html {
+  background-color: var(--color-primary-600);
+}
+
+@media (pointer: fine) {
+  html {
+    overscroll-behavior-y: none;
+  }
+}
+
 select {
   -webkit-appearance: none;
   -moz-appearance: none;
