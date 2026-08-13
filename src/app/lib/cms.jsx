@@ -1,12 +1,14 @@
-// The one factory call: holds the config, the session strategy, and
-// revalidation. Public read-only for now; the auth callbacks (getSession /
-// deriveAdmin / onAfterSave) get added when the new auth layer lands.
+// The one factory call: holds the config, provider, and revalidation. The
+// server stays public (admin is resolved client-side in AppCmsProvider from the
+// in-memory token); onAfterSave drops the ISR cache for the published locale.
 import { createCmsPage } from "inscribed/page";
-import { CmsProvider } from "inscribed";
+import { revalidateCmsSlug } from "inscribed/actions";
 
 import { cmsConfig } from "./cms-config.js";
+import { AppCmsProvider } from "./cms-provider.jsx";
 
 export const { CmsPage, getCmsRoute, localePath } = createCmsPage({
   config: cmsConfig,
-  Provider: CmsProvider,
+  Provider: AppCmsProvider,
+  onAfterSave: revalidateCmsSlug,
 });

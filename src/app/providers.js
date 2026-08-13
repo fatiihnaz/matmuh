@@ -1,7 +1,10 @@
 "use client";
 
-// Global client providers. Passthrough for now: the auth session provider
-// re-attaches here once the new auth layer lands.
+import { AuthProvider } from "@/lib/auth";
+
+// App-wide client providers. Auth wraps everything (the CMS is one consumer;
+// student flows read the same session), and the tree stays server-rendered
+// because children pass straight through.
 export function Providers({ children }) {
-  return <>{children}</>;
+  return <AuthProvider>{children}</AuthProvider>;
 }
