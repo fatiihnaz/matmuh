@@ -8,9 +8,11 @@ import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
 import { navigationItems } from "@/data/navigation";
+import { useCmsRoute } from "inscribed";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { locale, slug, localePath } = useCmsRoute();
 
   return (
     <header className="w-full sticky top-0 z-50">
@@ -40,13 +42,13 @@ export default function Header() {
             </a>
             <div className="w-px h-3 bg-neutral-600"></div>
             <div className="flex items-center gap-1.5 text-[11px] tracking-wide">
-              <button className="text-white font hover:opacity-80 transition-opacity">
+              <Link href={localePath(slug, "tr")} className={locale === "tr" ? "text-white font hover:opacity-80 transition-opacity" : "text-white/50 hover:text-white transition-colors"}>
                 TR
-              </button>
+              </Link>
               <span className="text-white/30 font-light">/</span>
-              <button className="text-white/50 hover:text-white transition-colors">
+              <Link href={localePath(slug, "en")} className={locale === "en" ? "text-white hover:opacity-80 transition-opacity" : "text-white/50 hover:text-white transition-colors"}>
                 EN
-              </button>
+              </Link>
             </div>
           </div>
         </div>

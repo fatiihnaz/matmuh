@@ -1,14 +1,10 @@
 "use client";
 
-import { SessionProvider } from "next-auth/react";
-import { ContentProvider } from "@/lib/context/ContentContext";
+import { AuthProvider } from "@/lib/auth";
 
+// App-wide client providers. Auth wraps everything (the CMS is one consumer;
+// student flows read the same session), and the tree stays server-rendered
+// because children pass straight through.
 export function Providers({ children }) {
-  return (
-    <SessionProvider>
-      <ContentProvider>
-        {children}
-      </ContentProvider>
-    </SessionProvider>
-  );
+  return <AuthProvider>{children}</AuthProvider>;
 }

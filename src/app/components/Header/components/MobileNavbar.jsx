@@ -4,9 +4,15 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ChevronUp, LogIn, LogOut, User, GraduationCap, Settings } from "lucide-react";
+import { Search, ChevronUp, LogIn, LogOut } from "lucide-react";
 import { navigationItems } from "@/data/navigation";
-import { useAuth } from "@/lib/hooks/useAuth";
+import { useAuth } from "@/lib/auth";
+
+const ROLE_LABELS = {
+  ROLE_ADMIN: "Admin",
+  ROLE_EDITOR: "Editör",
+  ROLE_USER: "Öğrenci",
+};
 
 function hasCategories(children) {
   return children.length > 0 && children[0].category !== undefined;
@@ -99,25 +105,14 @@ function AccordionSection({ item, onNavigate, pathname }) {
   );
 }
 
-const authorityLabels = {
-  ROLE_USER: "Öğrenci",
-  ROLE_EDITOR: "Editör",
-  ROLE_ADMIN: "Admin",
-};
-
-const userMenuItems = [
-  { label: "Profilim", href: "/profil", icon: User },
-  { label: "Derslerim", href: "/derslerim", icon: GraduationCap },
-  { label: "Ayarlar", href: "/ayarlar", icon: Settings },
-];
-
 export default function MobileNavbar({ isOpen, onClose }) {
   const pathname = usePathname();
-  const { user, isLoading, isAuthenticated, login, logout } = useAuth();
+  const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
 
-  const initials = user?.name ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase() : "--";
-
-  const roles = (user?.authorities || []).map((a) => authorityLabels[a] || a);
+  const initials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    : "--";
+  const roles = (user?.authorities ?? []).map((a) => ROLE_LABELS[a] ?? a);
 
   return (
     <AnimatePresence>
@@ -152,35 +147,25 @@ export default function MobileNavbar({ isOpen, onClose }) {
                   <div className="w-4 h-4 border-2 border-secondary-500 border-t-transparent rounded-full animate-spin" />
                 </div>
               ) : isAuthenticated ? (
-                <div className="space-y-2.5 px-3">
-                  <div className="flex items-center gap-3 rounded-lg py-3">
+                <div className="space-y-2.5">
+                  <div className="flex items-center gap-3 rounded-lg py-2">
                     <div className="w-9 h-9 rounded-lg bg-secondary-500 text-primary-600 flex items-center justify-center text-sm font-semibold shrink-0">
                       {initials}
                     </div>
                     <div className="flex flex-col min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-sm text-white font-light truncate">{user.name}</span>
+                        <span className="text-sm text-white font-light truncate">{user?.name}</span>
                         {roles.map((role) => (
                           <span key={role} className="text-[9px] text-secondary-500/80 bg-secondary-500/10 px-2 py-px rounded-md shrink-0">
                             {role}
                           </span>
                         ))}
                       </div>
-                      <span className="text-xs text-neutral-400 truncate">{user.email}</span>
+                      <span className="text-xs text-neutral-400 truncate">{user?.email}</span>
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-3 gap-2">
-                    {userMenuItems.map((item) => (
-                      <Link key={item.label} href={item.href} onClick={onClose}
-                        className="flex flex-col items-center gap-1.5 py-2.5 rounded-lg bg-white/5 border border-white/10 text-neutral-400 hover:text-white hover:border-white/20 transition-colors"
-                      >
-                        <item.icon size={16} />
-                      </Link>
-                    ))}
-                  </div>
-
-                  <button onClick={() => { onClose(); logout(); }}
+                  <button onClick={() => { onClose(); signOut(); }}
                     className="flex items-center justify-center gap-2 w-full text-red-400/80 hover:text-red-300 text-sm py-2.5 rounded-lg bg-red-100/5 border border-white/10 hover:border-red-200/30 transition-colors"
                   >
                     <LogOut size={16} />
@@ -188,7 +173,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                   </button>
                 </div>
               ) : (
-                <button onClick={login}
+                <button onClick={() => signIn()}
                   className="flex items-center justify-center gap-2 w-full bg-secondary-500/10 text-secondary-500 font-medium text-sm py-3 rounded-lg border border-secondary-500/30 hover:border-secondary-500/60 transition-colors"
                 >
                   <LogIn size={16} />
