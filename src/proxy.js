@@ -4,7 +4,7 @@
 // without "tr" ever reaching the address bar). Paths already carrying a known
 // locale pass straight through.
 import { createCmsMiddleware } from "inscribed/middleware";
-import * as cms from "../cms.config.js";
+import * as cms from "../cms.config.mjs";
 
 export const proxy = createCmsMiddleware(cms);
 
