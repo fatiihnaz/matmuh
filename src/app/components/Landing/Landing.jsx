@@ -70,10 +70,12 @@ export default function Landing() {
       <Hero/>
 
       <div className="relative z-10 mx-auto max-w-7xl px-4 -mt-20 sm:-mt-12">
-        <div className="bg-white rounded-xl border border-primary-500/10 shadow-xs shadow-black/10 grid grid-cols-2 md:grid-cols-4 overflow-hidden">
+        <div className="bg-white rounded-xl border border-primary-500/10 shadow-xs shadow-black/10 overflow-hidden">
           <EditableList
             blockPath="stats"
             as="div"
+            className="grid grid-cols-2 md:grid-cols-4"
+            style={{ display: "grid" }}
             itemSchema={{
               value: { blockType: "ShortText", defaultValue: "0" },
               suffix: { blockType: "ShortText", defaultValue: "" },
@@ -85,7 +87,6 @@ export default function Landing() {
               { value: "85", suffix: "+", label: "Yayın / Yıl" },
               { value: "4", suffix: "", label: "Araştırma Grubu" },
             ]}
-            inlineAdd={false}
           >
             {(item, index) => {
               const Icon = STAT_ICONS[index] ?? STAT_ICONS[0];
