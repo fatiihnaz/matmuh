@@ -4,11 +4,12 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "predev": "npm run sync",
     "build": "next build",
+    "prebuild": "npm run sync",
     "start": "next start",
     "lint": "eslint",
-    "cms:sync": "cms-sync --app-root src/app --env .env",
-    "prebuild": "node scripts/prebuild-sync.mjs"
+    "sync": "cms-sync --app-root src/app --env .env"
   },
   "dependencies": {
     "framer-motion": "^12.34.3",
