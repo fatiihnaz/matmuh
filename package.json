@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "predev": "npm run sync",
+    "dev:frontend": "next dev --webpack",
     "build": "next build",
     "prebuild": "npm run sync",
     "start": "next start",
@@ -15,7 +16,7 @@
     "framer-motion": "^12.34.3",
     "inscribed": "^4.2.3",
     "lucide-react": "^0.575.0",
-    "next": "16.1.6",
+    "next": "^16.3.0",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.7.0"
