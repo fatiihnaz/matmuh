@@ -1,22 +1,24 @@
 "use client";
-import { useState, useMemo, useEffect, Suspense } from "react";
+
+import { useState, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { Search } from "lucide-react";
+
 import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
-import { staffData } from "@/data/staff";
+import { fullName, useStaff } from "@/app/components/PersonRow";
 
 const categories = [
-  { id: "yonetim", dataKey: "management", label: "Yönetim", sub: "Bölüm Başkanlığı ve Yönetim Kurulu" },
-  { id: "akademik", dataKey: "academics", label: "Akademik Kadro", sub: "Profesör, Doçent ve Doktor Öğretim Üyeleri" },
-  { id: "arastirma", dataKey: "researchAssistants", label: "Öğretim & Araştırma Gör.", sub: "Araştırma Görevlileri ve Öğretim Görevlileri" },
-  { id: "idari", dataKey: "administrative", label: "İdari Personel", sub: "İdari ve Teknik Kadro" },
+  { id: "yonetim", group: "MANAGEMENT", label: "Yönetim" },
+  { id: "akademik", group: "ACADEMIC", label: "Akademik Kadro" },
+  { id: "arastirma", group: "TEACHING_AND_RESEARCH", label: "Öğretim & Araştırma Gör." },
+  { id: "idari", group: "ADMINISTRATIVE", label: "İdari Personel" },
 ];
 
 const academicRanks = ["Tümü", "Prof. Dr.", "Doç. Dr.", "Dr. Öğr. Üyesi"];
 const researchRanks = ["Tümü", "Arş. Gör.", "Öğr. Gör."];
 
-function StaffContent() {
+function StaffContent({ initialStaff }) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const categoryParam = searchParams.get("type") || "akademik";
@@ -24,14 +26,19 @@ function StaffContent() {
   const [rankFilter, setRankFilter] = useState("Tümü");
   const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
+  const { people, isLoading, error } = useStaff();
+  const roster = isLoading && initialStaff.length > 0 ? initialStaff : people;
+
+  const [seenCategory, setSeenCategory] = useState(categoryParam);
+  if (seenCategory !== categoryParam) {
+    setSeenCategory(categoryParam);
     setRankFilter("Tümü");
     setSearchQuery("");
-  }, [categoryParam]);
+  }
 
-  const activeCategory = useMemo(() =>
-    categories.find(c => c.id === categoryParam) || categories[1],
-    [categoryParam]
+  const activeCategory = useMemo(
+    () => categories.find((c) => c.id === categoryParam) || categories[1],
+    [categoryParam],
   );
 
   const availableRanks = useMemo(() => {
@@ -41,20 +48,23 @@ function StaffContent() {
   }, [categoryParam]);
 
   const filteredStaff = useMemo(() => {
-    const list = staffData[activeCategory.dataKey] || [];
-    return list.filter((member) => {
+    const query = searchQuery.toLocaleLowerCase("tr");
+    return roster.filter((member) => {
+      if (!member.groups?.includes(activeCategory.group)) return false;
+
+      const title = member.academicTitle ?? "";
       const isFilterable = availableRanks.length > 0;
       const matchesRank =
         !isFilterable ||
         rankFilter === "Tümü" ||
         (rankFilter === "Arş. Gör."
-          ? member.rank.includes("Arş.") || member.rank.includes("Araş.")
-          : member.rank.includes(rankFilter));
+          ? title.includes("Arş.") || title.includes("Araş.")
+          : title.includes(rankFilter));
 
-      const matchesSearch = member.name.toLowerCase().includes(searchQuery.toLowerCase());
+      const matchesSearch = fullName(member).toLocaleLowerCase("tr").includes(query);
       return matchesRank && matchesSearch;
     });
-  }, [activeCategory, rankFilter, searchQuery, availableRanks]);
+  }, [roster, activeCategory, rankFilter, searchQuery, availableRanks]);
 
   return (
     <>
@@ -134,24 +144,24 @@ function StaffContent() {
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {filteredStaff.map((member, idx) => (
-          <StaffMember key={member.id || member.email} member={member} idx={idx} />
+          <StaffMember key={member.slug} member={member} idx={idx} />
         ))}
       </div>
 
-      {filteredStaff.length === 0 && (
+      {!isLoading && filteredStaff.length === 0 && (
         <div className="text-center py-20 text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-2xl">
-          Kriterlere uygun personel bulunamadı.
+          {error ? "Personel listesi yüklenemedi." : "Kriterlere uygun personel bulunamadı."}
         </div>
       )}
     </>
   );
 }
 
-export default function StaffPage() {
+export default function StaffPage({ initialStaff = [] }) {
   return (
     <PageLayout>
       <Suspense fallback={<div className="py-20 text-center text-xs text-primary-500/40">Yükleniyor...</div>}>
-        <StaffContent />
+        <StaffContent initialStaff={initialStaff} />
       </Suspense>
     </PageLayout>
   );

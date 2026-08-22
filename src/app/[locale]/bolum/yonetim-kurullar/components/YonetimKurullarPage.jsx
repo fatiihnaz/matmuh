@@ -4,12 +4,10 @@ import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import Panel from "@/app/components/Panel";
 import PageSection from "@/app/components/PageSection";
-import PersonRow from "@/app/components/PersonRow";
 import AdvisoryBoard from "./AdvisoryBoard";
+import ManagementRows from "./ManagementRows";
 
-const MANAGEMENT_IDS = ["tasci", "sonar"];
-
-export default function YonetimKurullarPage() {
+export default function YonetimKurullarPage({ initialStaff = [] }) {
   return (
     <>
       <SubHeader
@@ -40,11 +38,7 @@ export default function YonetimKurullarPage() {
             }
           >
             <Panel>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
-                {MANAGEMENT_IDS.map((id, idx) => (
-                  <PersonRow key={id} id={id} idx={idx} />
-                ))}
-              </div>
+              <ManagementRows initialStaff={initialStaff} />
             </Panel>
           </PageSection>
 
