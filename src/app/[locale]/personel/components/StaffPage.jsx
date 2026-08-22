@@ -26,8 +26,7 @@ function StaffContent({ initialStaff }) {
   const [rankFilter, setRankFilter] = useState("Tümü");
   const [searchQuery, setSearchQuery] = useState("");
 
-  const { people, isLoading, error } = useStaff();
-  const roster = isLoading && initialStaff.length > 0 ? initialStaff : people;
+  const { people: roster, isLoading, error } = useStaff(initialStaff);
 
   const [seenCategory, setSeenCategory] = useState(categoryParam);
   if (seenCategory !== categoryParam) {

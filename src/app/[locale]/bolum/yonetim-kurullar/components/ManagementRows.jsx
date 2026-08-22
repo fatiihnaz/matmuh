@@ -6,9 +6,8 @@ import Avatar from "@/app/components/Avatar";
 import { fullName, useStaff } from "@/app/components/PersonRow";
 
 export default function ManagementRows({ initialStaff = [] }) {
-  const { people, isLoading } = useStaff();
-  const roster = isLoading && initialStaff.length > 0 ? initialStaff : people;
-  const management = roster.filter((person) => person.groups?.includes("MANAGEMENT"));
+  const { people } = useStaff(initialStaff);
+  const management = people.filter((person) => person.groups?.includes("MANAGEMENT"));
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">

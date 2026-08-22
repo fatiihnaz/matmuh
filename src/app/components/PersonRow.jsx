@@ -7,23 +7,32 @@ import Avatar from "./Avatar";
 
 export const STAFF_WINDOW = { limit: 100 };
 
-export function staffKey(person) {
-  return String(person?.email ?? "").split("@")[0];
+export function staffKey(value) {
+  return String(value ?? "")
+    .trim()
+    .split("@")[0]
+    .toLocaleLowerCase("tr");
 }
 
 export function fullName(person) {
   return [person?.firstName, person?.lastName].filter(Boolean).join(" ");
 }
 
-export function useStaff() {
+export function useStaff(initial = []) {
   const { items, isLoading, error } = useCollection("staff", STAFF_WINDOW);
   const people = (items ?? []).map((item) => ({ ...item.data, slug: item.slug }));
-  return { people, isLoading, error };
+  const roster = isLoading && initial.length > 0 ? initial : people;
+  return { people: roster, isLoading, error };
 }
 
-export default function PersonRow({ id, idx = 0 }) {
-  const { people } = useStaff();
-  const person = people.find((candidate) => staffKey(candidate) === id);
+export function findPerson(people, id) {
+  const key = staffKey(id);
+  return people.find((person) => staffKey(person.email) === key);
+}
+
+export default function PersonRow({ id, idx = 0, staff = [] }) {
+  const { people } = useStaff(staff);
+  const person = findPerson(people, id);
   if (!person) return null;
 
   const name = fullName(person);
