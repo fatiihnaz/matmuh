@@ -12,6 +12,7 @@ import {
   getNews,
 } from "@/data/content";
 import { Bell, Newspaper } from "lucide-react";
+import { EditableRegion } from "inscribed";
 
 export const revalidate = 3600;
 
@@ -29,14 +30,36 @@ export default async function LandingPage() {
 
       <PageLayout sidebar={<QuickLinks />} sidebarFirst>
         <div className="space-y-8">
-          <MainCard title="Duyurular" icon={Bell} buttonTitle="Tümünü Gör" href="/duyurular">
+          <MainCard
+            title={
+              <EditableRegion
+                blockPath="announcements.title"
+                blockType="ShortText"
+                defaultValue="Duyurular"
+              />
+            }
+            icon={Bell}
+            buttonTitle="Tümünü Gör"
+            href="/duyurular"
+          >
             <div className="pb-3 mb-1 border-b border-primary-500/6">
               <CategoryChips categories={homeCategories} />
             </div>
             <AnnouncementList items={announcements} />
           </MainCard>
 
-          <MainCard title="Haberler ve Etkinlikler" icon={Newspaper} buttonTitle="Tümünü Gör" href="/haberler">
+          <MainCard
+            title={
+              <EditableRegion
+                blockPath="news.title"
+                blockType="ShortText"
+                defaultValue="Haberler ve Etkinlikler"
+              />
+            }
+            icon={Newspaper}
+            buttonTitle="Tümünü Gör"
+            href="/haberler"
+          >
             <NewsList items={news} />
           </MainCard>
         </div>

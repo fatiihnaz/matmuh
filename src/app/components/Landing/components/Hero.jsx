@@ -2,6 +2,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
 import { Search } from "lucide-react";
+import { EditableRegion } from "inscribed";
 import BackgroundVisuals from "./BackgroundVisuals";
 import { useHeroActive, useReducedMotion } from "./heroMotion";
 
@@ -232,9 +233,15 @@ export default function Hero() {
             className="flex items-center justify-center sm:justify-between gap-3 sm:gap-6 mb-2 w-full sm:max-w-5xl mx-auto"
           >
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
-            <h1 className="text-[clamp(0.85rem,4.4vw,1.1rem)] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center grow-0 sm:grow whitespace-nowrap [text-shadow:0_2px_18px_rgba(13,17,43,0.9)]">
-              YILDIZ TEKNİK ÜNİVERSİTESİ
-            </h1>
+            <div className="grow-0 sm:grow">
+              <EditableRegion
+                blockPath="hero.title"
+                blockType="ShortText"
+                defaultValue="YILDIZ TEKNİK ÜNİVERSİTESİ"
+                as="h1"
+                className="text-[clamp(0.85rem,4.4vw,1.1rem)] sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white tracking-tight uppercase text-center whitespace-nowrap [text-shadow:0_2px_18px_rgba(13,17,43,0.9)]"
+              />
+            </div>
             <div className="shrink-0 w-1.5 h-1.5 sm:w-2 sm:h-2 rotate-45 bg-secondary-500" />
           </motion.div>
 
@@ -247,9 +254,13 @@ export default function Hero() {
             <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none [text-shadow:0_2px_14px_rgba(13,17,43,0.95)]">
               [
             </span>
-            <h2 className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-secondary-500 tracking-[0.15em] uppercase text-center [text-shadow:0_2px_14px_rgba(13,17,43,0.95),0_0_28px_rgba(13,17,43,0.8)]">
-              MATEMATİK MÜHENDİSLİĞİ
-            </h2>
+            <EditableRegion
+              blockPath="hero.subtitle"
+              blockType="ShortText"
+              defaultValue="MATEMATİK MÜHENDİSLİĞİ"
+              as="h2"
+              className="text-[0.95rem] sm:text-2xl md:text-3xl lg:text-4xl font-medium text-secondary-500 tracking-[0.15em] uppercase text-center [text-shadow:0_2px_14px_rgba(13,17,43,0.95),0_0_28px_rgba(13,17,43,0.8)]"
+            />
             <span className="text-secondary-500/60 font-light text-xl sm:text-4xl leading-none select-none [text-shadow:0_2px_14px_rgba(13,17,43,0.95)]">
               ]
             </span>
