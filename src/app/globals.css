@@ -23,6 +23,17 @@ html {
   background-color: var(--color-primary-600);
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:not([tabindex="-1"]):focus-visible {
+  outline: 2px solid var(--color-secondary-500);
+  outline-offset: 2px;
+}
+
 @media (pointer: fine) {
   html {
     overscroll-behavior-y: none;

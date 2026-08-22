@@ -32,7 +32,7 @@ function Card({ item, label, direction }) {
 export default function AdjacentNav({ older, newer }) {
   if (!older && !newer) return null;
   return (
-    <nav className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+    <nav aria-label="Önceki ve sonraki duyuru" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       <Card item={older} label="Önceki duyuru" direction="back" />
       <Card item={newer} label="Sonraki duyuru" direction="forward" />
     </nav>

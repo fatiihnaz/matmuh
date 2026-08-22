@@ -7,7 +7,7 @@ export default function RecentAnnouncements({ items }) {
   if (!items.length) return null;
   return (
     <MainCard title="Son Duyurular" buttonTitle="Tümü" href="/duyurular">
-      <nav className="flex flex-col divide-y divide-primary-500/6">
+      <nav aria-label="Son duyurular" className="flex flex-col divide-y divide-primary-500/6">
         {items.map((item) => (
           <Link
             key={item.id}

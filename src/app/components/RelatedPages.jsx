@@ -7,7 +7,7 @@ export default function RelatedPages({ items }) {
 
   return (
     <MainCard title="İlgili Sayfalar">
-      <nav className="flex flex-col gap-0.5">
+      <nav aria-label="İlgili sayfalar" className="flex flex-col gap-0.5">
         {items.map((item) => (
           <Link
             key={item.href}

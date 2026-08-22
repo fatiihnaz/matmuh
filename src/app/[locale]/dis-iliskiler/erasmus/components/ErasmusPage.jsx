@@ -36,7 +36,7 @@ function Sidebar() {
       </MainCard>
 
       <MainCard title="Bağlantılar">
-        <nav className="flex flex-col gap-0.5">
+        <nav aria-label="Sayfa içi bağlantılar" className="flex flex-col gap-0.5">
           {ERASMUS_LINKS.map((link) => (
             <a
               key={link.href}

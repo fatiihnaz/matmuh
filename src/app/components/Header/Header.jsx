@@ -63,7 +63,7 @@ export default function Header() {
           </Link>
 
           <div className="flex items-center gap-2">
-            <nav className="hidden lg:flex items-center gap-6">
+            <nav aria-label="Ana menü" className="hidden lg:flex items-center gap-6">
               {navigationItems.map((item) => (
                 <NavItems key={item.label} item={item}>
                   {item.label.toLocaleUpperCase('tr-TR')}
@@ -71,9 +71,14 @@ export default function Header() {
               ))}
             </nav>
 
-            <button className="hidden lg:block pl-2 text-neutral-400 hover:text-white transition-colors">
+            <Link
+              href="/duyurular"
+              aria-label="Duyurularda ara"
+              title="Duyurularda ara"
+              className="hidden lg:block pl-2 text-neutral-400 hover:text-white transition-colors"
+            >
               <Search size={14} />
-            </button>
+            </Link>
 
             <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 
