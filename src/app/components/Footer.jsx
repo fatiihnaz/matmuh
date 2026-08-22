@@ -1,4 +1,7 @@
-import { MapPin, Mail, Phone, Link } from "lucide-react";
+import { MapPin, Mail, Link } from "lucide-react";
+import { EditableRegion } from "inscribed";
+
+import { FooterLinks, FooterPhones } from "./FooterLists";
 
 export default function Footer() {
   return (
@@ -8,59 +11,64 @@ export default function Footer() {
           <div>
             <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <MapPin size={14} className="text-secondary-500 -mt-0.5" />
-              Adres
+              <EditableRegion
+                blockPath="footer.address.title"
+                blockType="ShortText"
+                defaultValue="Adres"
+                scope="global"
+              />
             </h3>
-            <div className="text-neutral-400 text-xs font-light leading-relaxed space-y-1">
-              <p>Yıldız Teknik Üniversitesi</p>
-              <p>Matematik Mühendisliği Bölümü</p>
-              <p>Davutpaşa Kampüsü</p>
-              <p>34220 Esenler, İstanbul</p>
+            <div className="text-neutral-400 text-xs font-light leading-relaxed">
+              <EditableRegion
+                blockPath="footer.address.body"
+                blockType="LongText"
+                defaultValue={`Yıldız Teknik Üniversitesi
+Matematik Mühendisliği Bölümü
+Davutpaşa Kampüsü
+34220 Esenler, İstanbul`}
+                scope="global"
+                as="p"
+              />
             </div>
           </div>
 
           <div>
             <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <Mail size={14} className="text-secondary-500 -mt-0.5" />
-              İletişim
+              <EditableRegion
+                blockPath="footer.contact.title"
+                blockType="ShortText"
+                defaultValue="İletişim"
+                scope="global"
+              />
             </h3>
             <div className="text-neutral-400 text-xs font-light space-y-3">
-              <a href="mailto:mtmblm@yildiz.edu.tr" className="flex items-center gap-2 hover:text-white transition-colors">
+              <div className="flex items-center gap-2">
                 <Mail size={14} className="shrink-0" />
-                mtmblm@yildiz.edu.tr
-              </a>
-              <div className="flex items-center gap-2">
-                <Phone size={14} className="shrink-0" />
-                +90 (212) 383 45 90 (Bölüm Başkanlığı)
+                <EditableRegion
+                  blockPath="footer.contact.email"
+                  blockType="Link"
+                  defaultValue={{ href: "mailto:mtmblm@yildiz.edu.tr", label: "mtmblm@yildiz.edu.tr" }}
+                  scope="global"
+                  className="hover:text-white transition-colors"
+                />
               </div>
-              <div className="flex items-center gap-2">
-                <Phone size={14} className="shrink-0" />
-                +90 (212) 383 45 92 (Bölüm Öğrenci İşleri)
-              </div>
-              <div className="flex items-center gap-2">
-                <Phone size={14} className="shrink-0" />
-                +90 (212) 383 45 91 (Bölüm Sekreterliği)
-              </div>
+              <FooterPhones />
             </div>
           </div>
 
           <div>
             <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <Link size={14} className="text-secondary-500 -mt-0.5" />
-              Bağlantılar
+              <EditableRegion
+                blockPath="footer.links.title"
+                blockType="ShortText"
+                defaultValue="Bağlantılar"
+                scope="global"
+              />
             </h3>
-            <div className="text-neutral-400 text-xs font-light space-y-3">
-              <a href="https://www.yildiz.edu.tr" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">
-                YTÜ Ana Sayfa
-              </a>
-              <a href="https://kmf.yildiz.edu.tr" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">
-                Kimya-Metalurji Fakültesi
-              </a>
-              <a href="https://ois.yildiz.edu.tr" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">
-                Öğrenci İşleri
-              </a>
-              <a href="https://kutuphane.yildiz.edu.tr" target="_blank" rel="noopener noreferrer" className="block hover:text-white transition-colors">
-                Kütüphane
-              </a>
+            <div className="text-neutral-400 text-xs font-light">
+              <FooterLinks />
             </div>
           </div>
         </div>
@@ -68,9 +76,15 @@ export default function Footer() {
 
       <div className="bg-primary-700">
         <div className="max-w-7xl mx-auto px-6 py-4 text-center text-neutral-500 text-xs">
-          © {new Date().getFullYear()} Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü
+          © {new Date().getFullYear()}{" "}
+          <EditableRegion
+            blockPath="footer.copyright"
+            blockType="ShortText"
+            defaultValue="Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü"
+            scope="global"
+          />
         </div>
       </div>
-    </footer>   
+    </footer>
   );
 }
