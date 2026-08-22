@@ -1,3 +1,6 @@
+import { EditableRegion } from "inscribed";
+
+import SubHeader from "@/app/components/Header/SubHeader";
 import InformationSources from "./components/InformationSources";
 
 export const metadata = {
@@ -5,10 +8,26 @@ export const metadata = {
   description: "Bölümümüzün önerdiği e-kütüphane, veri tabanı ve akademik kaynak bağlantıları.",
 };
 
-export default function AcademicStaffPage() {
+export default function InformationSourcesPage() {
   return (
     <>
+      <SubHeader
+        title={
+          <EditableRegion
+            blockPath="page.title"
+            blockType="ShortText"
+            defaultValue="Bilgi Kaynakları"
+          />
+        }
+        subTitle={
+          <EditableRegion
+            blockPath="page.subtitle"
+            blockType="ShortText"
+            defaultValue="Eğitim ve araştırma süreçlerinizi destekleyen dijital kaynaklar"
+          />
+        }
+      />
       <InformationSources />
     </>
-  )
+  );
 }
