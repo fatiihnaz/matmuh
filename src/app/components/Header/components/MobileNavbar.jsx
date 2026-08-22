@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "framer-motion";
-import { Search, ChevronUp, LogIn, LogOut, ClipboardCheck } from "lucide-react";
-import { navigationItems } from "@/data/navigation";
+import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
+import { Search, ChevronUp, LogIn, LogOut, ExternalLink, ClipboardCheck } from "lucide-react";
+import { navigationItems, YTU_ANA_SITE } from "@/data/navigation";
 import { useAuth } from "@/lib/auth";
+import { useCmsRoute } from "inscribed";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -46,6 +47,7 @@ const staggerItem = {
 
 function AccordionSection({ item, onNavigate, pathname }) {
   const [isOpen, setIsOpen] = useState(false);
+  const reduce = useReducedMotion();
 
   const isActive = item.children
     ? pathname.startsWith(item.basePath)
@@ -72,7 +74,7 @@ function AccordionSection({ item, onNavigate, pathname }) {
 
       <AnimatePresence initial={false}>
         {isOpen && (
-          <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} transition={{ duration: 0.3, ease: [0.25, 0.1, 0.25, 1] }} className="overflow-hidden">
+          <motion.div initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} transition={{ duration: reduce ? 0 : 0.3, ease: [0.25, 0.1, 0.25, 1] }} className="overflow-hidden">
             <div className="relative pl-6 pb-2">
               <motion.div className="absolute left-0 top-0 bottom-2 w-px bg-white/10" initial={{ scaleY: 0 }}
                 animate={{ scaleY: 1 }} exit={{ scaleY: 0 }} transition={{ duration: 0.4, ease: "easeOut" }}
@@ -108,6 +110,18 @@ function AccordionSection({ item, onNavigate, pathname }) {
 export default function MobileNavbar({ isOpen, onClose }) {
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
+  const { locale, slug, localePath } = useCmsRoute();
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const { body } = document;
+    const previous = body.style.overflow;
+    body.style.overflow = "hidden";
+    return () => {
+      body.style.overflow = previous;
+    };
+  }, [isOpen]);
 
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
@@ -116,10 +130,11 @@ export default function MobileNavbar({ isOpen, onClose }) {
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
+    <MotionConfig reducedMotion="user">
     <AnimatePresence>
       {isOpen && (
         <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }}
-          animate={{ clipPath: "inset(0 0 0% 0)" }} exit={{ clipPath: "inset(0 0 100% 0)" }} transition={{ duration: 0.4, ease: [0.25, 0.1, 0.25, 1] }}
+          animate={{ clipPath: "inset(0 0 0% 0)" }} exit={{ clipPath: "inset(0 0 100% 0)" }} transition={{ duration: reduce ? 0 : 0.4, ease: [0.25, 0.1, 0.25, 1] }}
           className="absolute top-full left-0 right-0 h-[calc(100dvh-100%)] bg-primary-500 -mt-px flex flex-col lg:hidden"
         >
           <div className="flex-1 overflow-y-auto px-6 pt-2 pb-4">
@@ -140,7 +155,28 @@ export default function MobileNavbar({ isOpen, onClose }) {
               />
             </div>
 
-            <div className="block sm:hidden space-y-2">
+            <div className="block sm:hidden space-y-2.5">
+              <div className="-mx-6 border-t border-white/10" />
+
+              <div className="flex items-center justify-between gap-3 text-[11px]">
+                <div className="flex items-center gap-1.5 tracking-wide">
+                  <Link href={localePath(slug, "tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/40 hover:text-white transition-colors"}>
+                    TR
+                  </Link>
+                  <span className="text-white/25 font-light">/</span>
+                  <Link href={localePath(slug, "en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/40 hover:text-white transition-colors"}>
+                    EN
+                  </Link>
+                </div>
+
+                <a href={YTU_ANA_SITE} target="_blank" rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-neutral-500 hover:text-secondary-500 transition-colors"
+                >
+                  YTÜ Ana Site
+                  <ExternalLink size={11} />
+                </a>
+              </div>
+
               <div className="-mx-6 border-t border-white/10" />
 
               {isLoading ? (
@@ -195,5 +231,6 @@ export default function MobileNavbar({ isOpen, onClose }) {
         </motion.div>
       )}
     </AnimatePresence>
+    </MotionConfig>
   );
 }

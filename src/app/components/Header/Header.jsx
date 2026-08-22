@@ -3,41 +3,34 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Facebook, Instagram, Linkedin, Youtube, Search, Twitter, Menu, X } from "lucide-react";
+import { Mail, Search, Menu, X } from "lucide-react";
 import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
-import { navigationItems } from "@/data/navigation";
-import { useCmsRoute } from "inscribed";
+import { navigationItems, DEPARTMENT_EMAIL, YTU_ANA_SITE } from "@/data/navigation";
+import { useCmsBlock, useCmsRoute } from "inscribed";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { locale, slug, localePath } = useCmsRoute();
+  const { value: eposta } = useCmsBlock("footer.contact.email");
+  const epostaAdresi = eposta?.label || DEPARTMENT_EMAIL;
+  const epostaBagi = eposta?.href || `mailto:${DEPARTMENT_EMAIL}`;
 
   return (
     <header className="w-full sticky top-0 z-50">
-      <div className="bg-primary-600">
+      <div className="hidden sm:block bg-primary-600">
         <div className="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:text-white transition-colors">
-              <Facebook size={16} />
-            </a>
-            <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:text-white transition-colors">
-              <Instagram size={16} />
-            </a>
-            <a href="https://x.com" target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:text-white transition-colors">
-              <Twitter size={16} />
-            </a>
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:text-white transition-colors">
-              <Linkedin size={16} />
-            </a>
-            <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" className="text-neutral-300 hover:text-white transition-colors">
-              <Youtube size={16} />
-            </a>
-          </div>
+          <a
+            href={epostaBagi}
+            className="flex items-center gap-2 text-xs text-neutral-300 hover:text-white transition-colors"
+          >
+            <Mail size={14} className="shrink-0 text-secondary-500" />
+            {epostaAdresi}
+          </a>
 
           <div className="flex items-center gap-3 text-xs">
-            <a href="https://www.yildiz.edu.tr" target="_blank" rel="noopener noreferrer" className="text-secondary-500 hover:text-secondary-300 transition-colors">
+            <a href={YTU_ANA_SITE} target="_blank" rel="noopener noreferrer" className="text-secondary-500 hover:text-secondary-300 transition-colors">
               YTÜ Ana Site
             </a>
             <div className="w-px h-3 bg-neutral-600"></div>

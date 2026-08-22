@@ -1,6 +1,6 @@
 "use client";
 
-import { Phone } from "lucide-react";
+import { Phone, ExternalLink, Facebook, Instagram, Twitter, Linkedin, Youtube } from "lucide-react";
 import { EditableList } from "inscribed";
 
 import { safeHref, isExternalHref } from "@/lib/href";
@@ -63,6 +63,55 @@ export function FooterLinks() {
             className="block hover:text-white transition-colors"
           >
             {item.link?.label}
+          </a>
+        );
+      }}
+    </EditableList>
+  );
+}
+
+const SOCIAL_ICONS = {
+  facebook: Facebook,
+  instagram: Instagram,
+  x: Twitter,
+  linkedin: Linkedin,
+  youtube: Youtube,
+};
+
+export function FooterSocial() {
+  return (
+    <EditableList
+      blockPath="footer.social.items"
+      scope="global"
+      as="div"
+      className="flex items-center gap-4 shrink-0"
+      itemSchema={{
+        platform: { blockType: "ShortText", defaultValue: "" },
+        label: { blockType: "ShortText", defaultValue: "" },
+        link: { blockType: "Link", defaultValue: { href: "", label: "" } },
+      }}
+      defaultValue={[
+        { platform: "facebook", label: "YTÜ Facebook", link: { href: "https://www.facebook.com/YildizEdu", label: "Facebook" } },
+        { platform: "instagram", label: "YTÜ Instagram", link: { href: "https://www.instagram.com/yildizedu", label: "Instagram" } },
+        { platform: "x", label: "YTÜ X", link: { href: "https://x.com/YildizEdu", label: "X" } },
+        { platform: "linkedin", label: "YTÜ LinkedIn", link: { href: "https://www.linkedin.com/school/15100152", label: "LinkedIn" } },
+        { platform: "youtube", label: "YTÜ YouTube", link: { href: "https://www.youtube.com/channel/UC2qKn25cUwpgBK6O1tGPjkA", label: "YouTube" } },
+      ]}
+    >
+      {(item, index) => {
+        const Icon = SOCIAL_ICONS[item.platform] ?? ExternalLink;
+        const href = safeHref(item?.link?.href);
+        return (
+          <a
+            key={index}
+            href={href}
+            target={isExternalHref(href) ? "_blank" : undefined}
+            rel={isExternalHref(href) ? "noopener noreferrer" : undefined}
+            aria-label={item.label}
+            title={item.label}
+            className="text-neutral-500 hover:text-white transition-colors"
+          >
+            <Icon size={16} />
           </a>
         );
       }}

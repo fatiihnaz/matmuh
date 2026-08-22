@@ -20,7 +20,13 @@
 }
 
 html {
-  background-color: var(--color-primary-600);
+  background-color: var(--color-primary-500);
+}
+
+@media (min-width: 640px) {
+  html {
+    background-color: var(--color-primary-600);
+  }
 }
 
 a:focus-visible,
@@ -63,7 +69,7 @@ select option {
 }
 
 :root {
-  --header-h: 90px;
+  --header-h: 66px;
 }
 
 @media (min-width: 640px) {

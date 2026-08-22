@@ -1,7 +1,7 @@
 import { MapPin, Mail, Link } from "lucide-react";
 import { EditableRegion } from "inscribed";
 
-import { FooterLinks, FooterPhones } from "./FooterLists";
+import { FooterLinks, FooterPhones, FooterSocial } from "./FooterLists";
 
 export default function Footer() {
   return (
@@ -75,14 +75,18 @@ Davutpaşa Kampüsü
       </div>
 
       <div className="bg-primary-700">
-        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-neutral-500 text-xs">
-          © {new Date().getFullYear()}{" "}
-          <EditableRegion
-            blockPath="footer.copyright"
-            blockType="ShortText"
-            defaultValue="Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü"
-            scope="global"
-          />
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+          <div className="text-neutral-500 text-xs text-center sm:text-left">
+            © {new Date().getFullYear()}{" "}
+            <EditableRegion
+              blockPath="footer.copyright"
+              blockType="ShortText"
+              defaultValue="Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü"
+              scope="global"
+            />
+          </div>
+
+          <FooterSocial />
         </div>
       </div>
     </footer>
