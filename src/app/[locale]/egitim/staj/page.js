@@ -1,4 +1,5 @@
 import InternshipPage from "./components/InternshipPage";
+import { getStaff } from "@/app/lib/staff.js";
 
 export const metadata = {
   title: "Staj İşlemleri",
@@ -6,6 +7,6 @@ export const metadata = {
     "Matematik Mühendisliği Bölümü zorunlu staj esasları, süreç adımları, başvuru ve değerlendirme belgeleri.",
 };
 
-export default function Page() {
-  return <InternshipPage />;
+export default async function Page() {
+  return <InternshipPage initialStaff={await getStaff()} />;
 }
