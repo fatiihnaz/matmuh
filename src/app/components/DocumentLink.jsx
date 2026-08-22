@@ -45,7 +45,7 @@ export default function DocumentLink({ label, href, kind, term, size }) {
           {formatBytes(size)}
         </span>
       )}
-      <span className="shrink-0 text-[10px] font-semibold uppercase tracking-wider text-primary-500/40">
+      <span className="shrink-0 hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-primary-500/40">
         {kind}
       </span>
 
@@ -61,7 +61,8 @@ export default function DocumentLink({ label, href, kind, term, size }) {
         target="_blank"
         rel="noopener noreferrer"
         title="İndir"
-        className="shrink-0 text-primary-500/30 hover:text-secondary-500 transition-colors"
+        aria-label="İndir"
+        className="shrink-0 -m-2 p-2 text-primary-500/30 hover:text-secondary-500 transition-colors"
       >
         <Download className="size-3.5" />
       </a>
