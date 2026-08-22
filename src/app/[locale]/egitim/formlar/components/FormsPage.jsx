@@ -50,6 +50,7 @@ function StudentForms({ items }) {
       blockPath="forms.student"
       as="div"
       className={GRID}
+      style={{ display: "grid" }}
       itemSchema={{
         category: { blockType: "ShortText", defaultValue: "" },
         file: { blockType: "Link", defaultValue: { href: "", label: "" } },
@@ -80,6 +81,7 @@ function StaffForms({ items }) {
       blockPath="forms.staff"
       as="div"
       className={GRID}
+      style={{ display: "grid" }}
       itemSchema={{
         category: { blockType: "ShortText", defaultValue: "" },
         file: { blockType: "Link", defaultValue: { href: "", label: "" } },

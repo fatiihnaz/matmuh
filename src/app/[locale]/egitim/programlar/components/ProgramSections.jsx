@@ -99,6 +99,7 @@ export function ProgramList() {
           blockPath="programs.items"
           as="div"
           className="flex flex-col gap-3"
+          style={{ display: "flex" }}
           itemSchema={{
             title: { blockType: "ShortText", defaultValue: "" },
             duration: { blockType: "ShortText", defaultValue: "" },
@@ -195,6 +196,7 @@ export function FbeSection() {
             blockPath="fbe.items"
             as="div"
             className="flex flex-col gap-2"
+            style={{ display: "flex" }}
             itemSchema={{
               link: { blockType: "Link", defaultValue: { href: "", label: "" } },
             }}

@@ -114,6 +114,7 @@ export default function InformationSources() {
         blockPath="sources.items"
         as="div"
         className={GRID}
+        style={{ display: "grid" }}
         itemSchema={{
           category: { blockType: "ShortText", defaultValue: "" },
           link: { blockType: "Link", defaultValue: { href: "", label: "" } },

@@ -100,6 +100,7 @@ function CommissionList() {
         blockPath="commissions.items"
         as="div"
         className="grid grid-cols-1 md:grid-cols-2 gap-3 items-start"
+        style={{ display: "grid" }}
         itemSchema={{
           name: { blockType: "ShortText", defaultValue: "" },
           chair: { blockType: "ShortText", defaultValue: "" },
@@ -132,6 +133,7 @@ function CommissionDocuments() {
       blockPath="documents.items"
       as="div"
       className="flex flex-col gap-2"
+      style={{ display: "flex" }}
       itemSchema={{
         file: { blockType: "Link", defaultValue: { href: "", label: "" } },
         kind: { blockType: "ShortText", defaultValue: "pdf" },

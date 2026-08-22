@@ -11,6 +11,7 @@ export default function ResearchLinks() {
       blockPath="resources.items"
       as="div"
       className="grid grid-cols-1 md:grid-cols-2 gap-3"
+      style={{ display: "grid" }}
       itemSchema={{
         link: { blockType: "Link", defaultValue: { href: "", label: "" } },
         description: { blockType: "ShortText", defaultValue: "" },

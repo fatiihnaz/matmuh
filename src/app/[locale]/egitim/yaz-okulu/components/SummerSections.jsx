@@ -34,6 +34,7 @@ export function Universities() {
           blockPath="universities.items"
           as="div"
           className="flex flex-wrap gap-2"
+          style={{ display: "flex" }}
           itemSchema={{
             name: { blockType: "ShortText", defaultValue: "" },
           }}
@@ -74,6 +75,7 @@ export function ApprovalPaths() {
         blockPath="paths.items"
         as="div"
         className="grid grid-cols-1 lg:grid-cols-2 gap-3"
+        style={{ display: "grid" }}
         itemSchema={{
           label: { blockType: "ShortText", defaultValue: "" },
           summary: { blockType: "ShortText", defaultValue: "" },
@@ -149,6 +151,7 @@ export function Equivalence() {
               blockPath="equivalence.examples"
               as="div"
               className="flex flex-col gap-3"
+              style={{ display: "flex" }}
               itemSchema={{
                 context: { blockType: "ShortText", defaultValue: "" },
                 text: { blockType: "LongText", defaultValue: "" },
@@ -205,6 +208,7 @@ export function SummerDocuments() {
           blockPath="documents.items"
           as="div"
           className="grid grid-cols-1 xl:grid-cols-2 gap-2"
+          style={{ display: "grid" }}
           itemSchema={{
             file: { blockType: "Link", defaultValue: { href: "", label: "" } },
             kind: { blockType: "ShortText", defaultValue: "pdf" },

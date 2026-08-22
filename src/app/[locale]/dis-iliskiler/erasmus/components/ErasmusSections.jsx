@@ -64,6 +64,7 @@ export function Coordinators({ initialStaff = [] }) {
           blockPath="coordinators.items"
           as="div"
           className="grid grid-cols-1 lg:grid-cols-2 gap-5"
+          style={{ display: "grid" }}
           itemSchema={{
             role: { blockType: "ShortText", defaultValue: "" },
             members: { blockType: "LongText", defaultValue: "" },
@@ -180,6 +181,7 @@ export function Agreements() {
           blockPath="agreements.items"
           as="div"
           className="flex flex-col"
+          style={{ display: "flex" }}
           itemSchema={{
             institution: { blockType: "ShortText", defaultValue: "" },
             country: { blockType: "ShortText", defaultValue: "" },
@@ -220,6 +222,7 @@ export function Agreements() {
         blockPath="agreements.documents"
         as="div"
         className="flex flex-col gap-2"
+        style={{ display: "flex" }}
         itemSchema={{
           file: { blockType: "Link", defaultValue: { href: "", label: "" } },
           kind: { blockType: "ShortText", defaultValue: "pdf" },
@@ -316,6 +319,7 @@ export function ErasmusSidebarCards() {
           blockPath="links.items"
           as="nav"
           className="flex flex-col gap-0.5"
+          style={{ display: "flex" }}
           itemSchema={{
             link: { blockType: "Link", defaultValue: { href: "", label: "" } },
           }}

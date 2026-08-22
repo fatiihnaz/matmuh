@@ -53,6 +53,7 @@ export default function AdvisoryBoard() {
           blockPath="board.members"
           as="div"
           className="grid grid-cols-1 md:grid-cols-2 gap-2"
+          style={{ display: "grid" }}
           itemSchema={{
             name: { blockType: "ShortText", defaultValue: "" },
             rank: { blockType: "ShortText", defaultValue: "" },

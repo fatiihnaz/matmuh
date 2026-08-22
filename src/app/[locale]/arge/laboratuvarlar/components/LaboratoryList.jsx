@@ -63,6 +63,7 @@ export default function LaboratoryList() {
         blockPath="labs.items"
         as="div"
         className="flex flex-col gap-3"
+        style={{ display: "flex" }}
         itemSchema={{
           name: { blockType: "ShortText", defaultValue: "" },
           capacity: { blockType: "ShortText", defaultValue: "" },
