@@ -1,86 +1,173 @@
-import Link from "next/link";
-import { ExternalLink } from "lucide-react";
-import MainCard from "./MainCard";
-import { quickLinks } from "@/data/landing";
+"use client";
 
-function QuickLinkTile({ link }) {
+
+import { createElement } from "react";
+import Link from "next/link";
+import {
+  ExternalLink,
+  Monitor,
+  BookOpen,
+  CalendarDays,
+  Briefcase,
+  Calendar,
+  Scale,
+  KeyRound,
+  File,
+} from "lucide-react";
+import { EditableList, useCmsBlock } from "inscribed";
+
+import MainCard from "./MainCard";
+import { safeHref, isExternalHref } from "@/lib/href";
+
+const ICONS = {
+  monitor: Monitor,
+  calendar: Calendar,
+  "book-open": BookOpen,
+  "calendar-days": CalendarDays,
+  briefcase: Briefcase,
+  file: File,
+  scale: Scale,
+  "key-round": KeyRound,
+};
+
+function icon(key, className) {
+  return createElement(ICONS[key] ?? ExternalLink, { className });
+}
+
+function QuickLinkTile({ item }) {
+  const href = safeHref(item?.link?.href);
+  const external = isExternalHref(href);
   const className = "flex flex-col items-center gap-2 min-w-18 shrink-0 group";
   const content = (
     <>
       <div className="w-10 h-10 rounded-xl bg-secondary-500/8 hover:bg-secondary-600/10 flex items-center justify-center">
-        <link.icon className="w-4.5 h-4.5 text-secondary-500 group-hover:text-secondary-600" />
+        {icon(item?.icon, "w-4.5 h-4.5 text-secondary-500 group-hover:text-secondary-600")}
       </div>
       <span className="text-[9px] text-primary-500/50 text-center group-hover:text-primary-500 leading-tight">
-        {link.shortLabel}
+        {item?.shortLabel}
       </span>
     </>
   );
 
-  if (link.external) {
+  if (external) {
     return (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
         {content}
       </a>
     );
   }
 
   return (
-    <Link href={link.href} className={className}>
+    <Link href={href || "#"} className={className}>
       {content}
     </Link>
   );
 }
 
-function QuickLinkRow({ link }) {
-  const className = "flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors";
+function QuickLinkRow({ item }) {
+  const href = safeHref(item?.link?.href);
+  const external = isExternalHref(href);
+  const className =
+    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors";
   const content = (
     <>
-      <link.icon className="w-4 h-4 text-primary-500/60 shrink-0" />
-      <span className="flex-1">{link.label}</span>
-      {link.external && <ExternalLink className="w-3 h-3 text-primary-500/30 shrink-0" />}
+      {icon(item?.icon, "w-4 h-4 text-primary-500/60 shrink-0")}
+      <span className="flex-1">{item?.link?.label}</span>
+      {external && <ExternalLink className="w-3 h-3 text-primary-500/30 shrink-0" />}
     </>
   );
 
-  if (link.external) {
+  if (external) {
     return (
-      <a href={link.href} target="_blank" rel="noopener noreferrer" className={className}>
+      <a href={href} target="_blank" rel="noopener noreferrer" className={className}>
         {content}
       </a>
     );
   }
 
   return (
-    <Link href={link.href} className={className}>
+    <Link href={href || "#"} className={className}>
       {content}
     </Link>
   );
 }
 
-export default function QuickLinks({
-  items = quickLinks,
-  title = "Hızlı Erişim",
-}) {
+function MobileStrip({ items }) {
   return (
-    <>
-      <div className="lg:hidden bg-white rounded-xl shadow-sm p-4">
-        <div className="flex overflow-x-auto no-scrollbar pb-1">
-          <div className="flex gap-2 mx-auto">
-            {items.map((link) => (
-              <QuickLinkTile key={link.label} link={link} />
-            ))}
-          </div>
+    <div className="lg:hidden bg-white rounded-xl shadow-sm p-4">
+      <div className="flex overflow-x-auto no-scrollbar pb-1">
+        <div className="flex gap-2 mx-auto">
+          {items.map((item, index) => (
+            <QuickLinkTile key={index} item={item} />
+          ))}
         </div>
       </div>
+    </div>
+  );
+}
+
+function QuickLinksFull({ title }) {
+  const { value } = useCmsBlock("quicklinks.items");
+  const items = Array.isArray(value) ? value : [];
+
+  return (
+    <>
+      <MobileStrip items={items} />
+
+      <div className="hidden lg:block">
+        <MainCard title={title}>
+          <EditableList
+            blockPath="quicklinks.items"
+            scope="global"
+            as="nav"
+            className="space-y-1"
+            itemSchema={{
+              link: { blockType: "Link", defaultValue: { href: "", label: "" } },
+              shortLabel: { blockType: "ShortText", defaultValue: "" },
+              icon: { blockType: "ShortText", defaultValue: "" },
+            }}
+            defaultValue={[
+              { link: { href: "https://obs.yildiz.edu.tr/oibs/std/login.aspx", label: "Öğrenci Bilgi Sistemi (OBS)" }, shortLabel: "OBS", icon: "monitor" },
+              { link: { href: "https://ogi.yildiz.edu.tr/akademik-takvim", label: "Akademik Takvim" }, shortLabel: "Takvim", icon: "calendar" },
+              { link: { href: "/egitim/mufredat", label: "Müfredat" }, shortLabel: "Müfredat", icon: "book-open" },
+              { link: { href: "/egitim/ders-programi", label: "Ders Programı" }, shortLabel: "Program", icon: "calendar-days" },
+              { link: { href: "/egitim/staj", label: "Staj İşlemleri" }, shortLabel: "Staj", icon: "briefcase" },
+              { link: { href: "/egitim/formlar", label: "Formlar / Belgeler" }, shortLabel: "Formlar", icon: "file" },
+              { link: { href: "https://ogi.yildiz.edu.tr/iletisim/hizli-erisim/yonetmelik-ve-yonergeler", label: "Yönetmelik ve Yönergeler" }, shortLabel: "Mevzuat", icon: "scale" },
+              { link: { href: "https://teknikdestek.yildiz.edu.tr/kb/index.php", label: "OBS Şifresi ve Öğrenci E-postası" }, shortLabel: "OBS Şifre", icon: "key-round" },
+            ]}
+          >
+            {(item, index) => <QuickLinkRow key={index} item={item} />}
+          </EditableList>
+        </MainCard>
+      </div>
+    </>
+  );
+}
+
+function QuickLinksExternal({ title }) {
+  const { value } = useCmsBlock("quicklinks.items");
+  const items = (Array.isArray(value) ? value : []).filter((item) =>
+    isExternalHref(item?.link?.href),
+  );
+
+  return (
+    <>
+      <MobileStrip items={items} />
 
       <div className="hidden lg:block">
         <MainCard title={title}>
           <nav className="space-y-1">
-            {items.map((link) => (
-              <QuickLinkRow key={link.label} link={link} />
+            {items.map((item, index) => (
+              <QuickLinkRow key={index} item={item} />
             ))}
           </nav>
         </MainCard>
       </div>
     </>
   );
+}
+
+export default function QuickLinks({ external = false, title = "Hızlı Erişim" }) {
+  return external ? <QuickLinksExternal title={title} /> : <QuickLinksFull title={title} />;
 }

@@ -10,7 +10,6 @@ import GalleryGrid from "@/app/components/Announcements/GalleryGrid";
 import PageSection from "@/app/components/PageSection";
 import RecentAnnouncements from "@/app/components/Announcements/RecentAnnouncements";
 import QuickLinks from "@/app/components/QuickLinks";
-import { institutionalLinks } from "@/data/landing";
 import {
   getAdjacent,
   getAllSlugs,
@@ -59,7 +58,7 @@ export default async function AnnouncementDetailPage({ params }) {
   const sidebar = (
     <div className="flex flex-col gap-6">
       <RecentAnnouncements items={recent.filter((entry) => entry.id !== item.id).slice(0, 5)} />
-      <QuickLinks items={institutionalLinks} title="Kurumsal Sistemler" />
+      <QuickLinks external title="Kurumsal Sistemler" />
     </div>
   );
 

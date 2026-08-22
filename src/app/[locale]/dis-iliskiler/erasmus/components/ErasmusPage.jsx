@@ -7,7 +7,6 @@ import PageSection from "@/app/components/PageSection";
 import PersonRow from "@/app/components/PersonRow";
 import RelatedPages from "@/app/components/RelatedPages";
 import QuickLinks from "@/app/components/QuickLinks";
-import { institutionalLinks } from "@/data/landing";
 import DocumentLink from "@/app/components/DocumentLink";
 import {
   AGREEMENT_PERIOD,
@@ -55,7 +54,7 @@ function Sidebar() {
       </MainCard>
 
       <RelatedPages items={RELATED} />
-      <QuickLinks items={institutionalLinks} title="Kurumsal Sistemler" />
+      <QuickLinks external title="Kurumsal Sistemler" />
     </div>
   );
 }

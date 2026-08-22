@@ -5,7 +5,6 @@ import Panel from "@/app/components/Panel";
 import PageSection from "@/app/components/PageSection";
 import RelatedPages from "@/app/components/RelatedPages";
 import QuickLinks from "@/app/components/QuickLinks";
-import { institutionalLinks } from "@/data/landing";
 import DocumentLink from "@/app/components/DocumentLink";
 import {
   APPROVAL_PATHS,
@@ -27,7 +26,7 @@ function Sidebar() {
   return (
     <div className="flex flex-col gap-6">
       <RelatedPages items={RELATED} />
-      <QuickLinks items={institutionalLinks} title="Kurumsal Sistemler" />
+      <QuickLinks external title="Kurumsal Sistemler" />
     </div>
   );
 }
