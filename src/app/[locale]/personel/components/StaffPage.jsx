@@ -2,7 +2,7 @@
 
 import { useState, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 
 import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
@@ -68,14 +68,14 @@ function StaffContent({ initialStaff }) {
   return (
     <>
       <div
-        className="rounded-xl p-4 mb-6 flex flex-col lg:flex-row items-start lg:items-center gap-6"
+        className="rounded-xl p-4 mb-6 flex flex-col lg:flex-row items-stretch lg:items-center gap-4 lg:gap-6"
         style={{
           backgroundColor: "#FFFFFF",
           border: "1px solid rgba(0,0,0,0.06)",
           boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
         }}
       >
-        <div className="relative flex-1 w-full sm:max-w-xs">
+        <div className="relative w-full shrink-0 sm:max-w-xs lg:w-72">
           <Search size={14} strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(29,36,69,0.3)" }} />
           <input
             type="text"
@@ -92,15 +92,16 @@ function StaffContent({ initialStaff }) {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-medium mr-1" style={{ color: "rgba(29,36,69,0.4)" }}>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6 gap-y-3">
+        <div className="flex items-center gap-1.5">
+          <span className="shrink-0 text-xs font-medium mr-1" style={{ color: "rgba(29,36,69,0.4)" }}>
             Kategori:
           </span>
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => router.push(`/personel?type=${cat.id}`)}
-              className="px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
+              className="shrink-0 whitespace-nowrap px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
               style={{
                 backgroundColor: categoryParam === cat.id ? "rgba(173,151,111,0.12)" : "transparent",
                 color: categoryParam === cat.id ? "#AD976F" : "rgba(29,36,69,0.45)",
@@ -113,26 +114,39 @@ function StaffContent({ initialStaff }) {
         </div>
 
         {availableRanks.length > 0 && (
-          <div className="flex items-center gap-1.5 flex-wrap lg:border-l lg:pl-6 lg:border-black/5">
-            <span className="text-xs font-medium mr-1" style={{ color: "rgba(29,36,69,0.4)" }}>
-              Unvan:
-            </span>
-            {availableRanks.map((r) => (
-              <button
-                key={r}
-                onClick={() => setRankFilter(r)}
-                className="px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
-                style={{
-                  backgroundColor: rankFilter === r ? "rgba(29,36,69,0.08)" : "transparent",
-                  color: rankFilter === r ? "#1D2445" : "rgba(29,36,69,0.45)",
-                  borderColor: rankFilter === r ? "rgba(29,36,69,0.1)" : "transparent",
-                }}
-              >
-                {r}
-              </button>
-            ))}
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="shrink-0 text-xs font-medium" style={{ color: "rgba(29,36,69,0.4)" }}>
+            Unvan:
+          </span>
+          <div className="relative">
+            <select
+              value={rankFilter}
+              onChange={(e) => setRankFilter(e.target.value)}
+              aria-label="Unvana göre süz"
+              className="w-40 appearance-none rounded-md border py-1 pl-2.5 pr-7 text-xs font-medium outline-none transition-colors"
+              style={{
+                backgroundColor: rankFilter === "Tümü" ? "transparent" : "rgba(29,36,69,0.08)",
+                color: rankFilter === "Tümü" ? "rgba(29,36,69,0.45)" : "#1D2445",
+                borderColor: "rgba(0,0,0,0.08)",
+              }}
+            >
+              {availableRanks.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              size={13}
+              strokeWidth={1.5}
+              className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2"
+              style={{ color: "rgba(29,36,69,0.35)" }}
+            />
           </div>
+        </div>
         )}
+
+        </div>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-1">
