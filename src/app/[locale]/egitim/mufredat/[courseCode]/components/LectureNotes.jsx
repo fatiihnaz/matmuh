@@ -182,6 +182,7 @@ function UploadForm({ lectureId, onUploaded }) {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
   const [done, setDone] = useState(false);
+  const [dragOver, setDragOver] = useState(false);
 
   const reset = useCallback(() => {
     setTitle("");
@@ -275,10 +276,38 @@ function UploadForm({ lectureId, onUploaded }) {
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50 resize-none"
       />
 
-      <label className="flex items-center gap-3 rounded-lg border border-dashed border-primary-500/20 bg-white px-3 py-2.5 cursor-pointer hover:border-secondary-500/40 transition-colors">
-        <Paperclip size={14} strokeWidth={1.5} className="text-secondary-500 shrink-0" />
-        <span className="text-xs text-primary-500/60 truncate">
-          {file ? `${file.name} · ${formatSize(file.size) ?? ""}` : "Dosya seçin"}
+      <label
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          const dropped = e.dataTransfer.files?.[0];
+          if (dropped) setFile(dropped);
+        }}
+        className={`flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-5 text-center transition-colors ${
+          dragOver
+            ? "border-secondary-500 bg-secondary-500/6"
+            : file
+            ? "border-secondary-500/45 bg-secondary-500/3"
+            : "border-primary-500/15 bg-white hover:border-secondary-500/40"
+        }`}
+      >
+        <span
+          className={`flex size-10 items-center justify-center rounded-xl transition-colors ${
+            file ? "bg-secondary-500/15" : "bg-primary-500/5"
+          }`}
+        >
+          <Paperclip size={18} strokeWidth={1.5} className="text-secondary-500" />
+        </span>
+        <span className="max-w-full truncate text-[13px] font-medium text-primary-600">
+          {file ? file.name : dragOver ? "Bırakın" : "Dosyayı sürükleyin veya seçin"}
+        </span>
+        <span className="text-[11px] text-primary-500/40">
+          {file ? formatSize(file.size) : "PDF, DOCX, ZIP, PNG"}
         </span>
         <input
           ref={inputRef}
