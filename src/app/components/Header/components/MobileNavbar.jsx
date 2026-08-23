@@ -148,12 +148,12 @@ export default function MobileNavbar({ isOpen, onClose }) {
           <motion.div initial={{ opacity: 0, y: 20 }} className="shrink-0 px-6 pb-6 pt-3 space-y-2.5 border-t border-white/5"
             animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <div className="relative">
+            <form action="/duyurular" onSubmit={onClose} className="relative">
               <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
-              <input type="text" placeholder="Ara..."
+              <input type="search" name="q" placeholder="Duyurularda ara..." aria-label="Duyurularda ara"
                 className="w-full bg-white/5 text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-white/10 placeholder:text-neutral-500 focus:outline-none focus:border-primary-300 transition-colors"
               />
-            </div>
+            </form>
 
             <div className="block sm:hidden space-y-2.5">
               <div className="-mx-6 border-t border-white/10" />
