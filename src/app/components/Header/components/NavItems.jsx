@@ -73,20 +73,20 @@ function DropdownItem({ item, pathname }) {
   );
 }
 
-function SimpleDropdown({ children, pathname }) {
+function SimpleDropdown({ items, pathname }) {
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="visible" exit="exit" className="py-2 px-1 space-y-0.5">
-      {children.map((item) => (
+      {items.map((item) => (
         <DropdownItem key={item.href} item={item} pathname={pathname} />
       ))}
     </motion.div>
   );
 }
 
-function CategorizedDropdown({ children, pathname }) {
+function CategorizedDropdown({ items, pathname }) {
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="visible" exit="exit" className="flex py-2 px-1">
-      {children.map((group, groupIndex) => (
+      {items.map((group, groupIndex) => (
         <motion.div key={group.category} variants={staggerItem} className={`flex-1 px-2 ${ groupIndex > 0 ? "border-l border-black/5" : ""}`}>
           <div className="px-3 pt-1 pb-1.5">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-primary-500/35">
@@ -155,9 +155,9 @@ export default function NavItems({ item, children }) {
               <div className="h-0.75 bg-secondary-400" />
 
               {categorized ? (
-                <CategorizedDropdown children={item.children} pathname={pathname}/>
+                <CategorizedDropdown items={item.children} pathname={pathname}/>
               ) : (
-                <SimpleDropdown children={item.children} pathname={pathname}/>
+                <SimpleDropdown items={item.children} pathname={pathname}/>
               )}
             </div>
           </motion.div>
