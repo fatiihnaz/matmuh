@@ -5,32 +5,35 @@ import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
-import { LISANSUSTU_SCHEDULE, SCHEDULE_TERM } from "@/data/scheduleData";
 
 const LEVELS = [
   { id: "all", label: "Tümü" },
-  { id: "Yüksek Lisans", label: "Yüksek Lisans" },
-  { id: "Doktora", label: "Doktora" },
+  { id: "MASTERS", label: "Yüksek Lisans" },
+  { id: "DOCTORATE", label: "Doktora" },
 ];
 
-export default function LisansustuDersProgramiPage() {
+const isDoctorate = (entry) => entry.degreeLevels.includes("DOCTORATE");
+
+export default function LisansustuDersProgramiPage({ entries: all = [], term }) {
   const [level, setLevel] = useState("all");
 
-  const entries = useMemo(() => {
-    return LISANSUSTU_SCHEDULE.filter(
-      (e) => level === "all" || e.level === level
-    ).map((e) => ({
-      ...e,
-      type: e.level === "Doktora" ? "Seçmeli" : "Zorunlu",
-      note: e.level === "Doktora" ? "Doktora" : e.note,
-    }));
-  }, [level]);
+  const entries = useMemo(
+    () =>
+      all
+        .filter((entry) => level === "all" || entry.degreeLevels.includes(level))
+        .map((entry) => ({
+          ...entry,
+          type: isDoctorate(entry) ? "Seçmeli" : "Zorunlu",
+          note: isDoctorate(entry) ? "Doktora" : entry.note,
+        })),
+    [all, level],
+  );
 
   return (
     <>
       <SubHeader
         title="Ders Programı"
-        subTitle={`Lisansüstü · ${SCHEDULE_TERM}`}
+        subTitle={term ? `Lisansüstü · ${term}` : "Lisansüstü"}
       />
       <PageLayout>
         <div className="space-y-4">

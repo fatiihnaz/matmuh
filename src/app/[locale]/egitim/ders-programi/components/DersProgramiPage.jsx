@@ -1,29 +1,35 @@
 "use client";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { CalendarDays } from "lucide-react";
 import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
-import {
-  LISANS_CLASSES,
-  LISANS_SCHEDULE,
-  SCHEDULE_TERM,
-} from "@/data/scheduleData";
 
-export default function DersProgramiPage() {
-  const [activeClass, setActiveClass] = useState(LISANS_CLASSES[0].id);
-  const entries = LISANS_SCHEDULE[activeClass] || [];
+const CLASSES = [1, 2, 3, 4].map((id) => ({ id, label: `${id}. Sınıf` }));
+
+const classOf = (entry) => (entry.term ? Math.ceil(entry.term / 2) : null);
+
+export default function DersProgramiPage({ entries: all = [], term }) {
+  const [activeClass, setActiveClass] = useState(CLASSES[0].id);
+
+  const entries = useMemo(
+    () => all.filter((entry) => classOf(entry) === activeClass),
+    [all, activeClass],
+  );
 
   return (
     <>
-      <SubHeader title="Ders Programı" subTitle={`Lisans · ${SCHEDULE_TERM}`} />
+      <SubHeader
+        title="Ders Programı"
+        subTitle={term ? `Lisans · ${term}` : "Lisans"}
+      />
       <PageLayout>
         <div className="space-y-4">
           <div className="rounded-xl border border-primary-500/10 shadow-xs bg-white overflow-hidden">
             <div className="flex items-center justify-between gap-4 px-4 py-3 flex-wrap">
               <div className="flex items-center gap-1 overflow-x-auto no-scrollbar -mx-1 px-1 max-w-full">
-                {LISANS_CLASSES.map((cls) => (
+                {CLASSES.map((cls) => (
                   <button
                     key={cls.id}
                     onClick={() => setActiveClass(cls.id)}

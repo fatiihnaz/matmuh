@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Wifi, MapPin, User } from "lucide-react";
-import { DAYS, TIME_SLOTS } from "@/data/scheduleData";
+import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
 
 function EntryCard({ entry, fill, href }) {
   const isElective = entry.type === "Seçmeli";

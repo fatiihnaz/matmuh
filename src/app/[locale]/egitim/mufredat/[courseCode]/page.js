@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 
 import { getCourseByCode } from "@/data/curriculum";
+import { getCourseSections } from "@/data/schedule";
 
 import CourseInfo from "./components/CourseInfo";
 
@@ -20,9 +21,11 @@ export default async function CoursePage({ params }) {
   const course = await getCourseByCode(courseCode);
   if (!course) notFound();
 
+  const sections = await getCourseSections(course.code);
+
   return (
     <div className="container mx-auto">
-      <CourseInfo course={course} />
+      <CourseInfo course={course} sections={sections} />
     </div>
   );
 }

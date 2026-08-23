@@ -18,13 +18,25 @@ import {
   GraduationCap,
   Upload,
   ArrowRight,
+  Clock,
   ExternalLink,
   Info,
+  MapPin,
+  Wifi,
 } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
 import { fetchCourseStatistics } from "@/data/statistics";
 import { useAuth } from "@/lib/auth";
+
+const initials = (name) =>
+  String(name ?? "")
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((part) => part[0])
+    .join("")
+    .toLocaleUpperCase("tr") || "?";
 
 const LOW_GRADES = new Set(["DD", "FD", "FF", "F0"]);
 const isLowGrade = (grade) => LOW_GRADES.has(grade);
@@ -66,7 +78,7 @@ const sampleResources = [
   },
 ];
 
-export default function CourseInfo({ course }) {
+export default function CourseInfo({ course, sections = [] }) {
   const [activeTab, setActiveTab] = useState(0);
   const { isAuthenticated, isLoading: authLoading, signIn, getAccessToken } = useAuth();
 
@@ -279,10 +291,66 @@ export default function CourseInfo({ course }) {
     <div className="flex flex-col gap-5 lg:sticky lg:top-8 font-sans">
       <MainCard title="Şubeler & Program">
         <div className="space-y-6 pt-2">
-          <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-            <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
-            Bu ders için şube ve program bilgisi henüz girilmemiş.
-          </div>
+          {sections.map((section) => (
+            <div key={section.groupNo}>
+              <div className="flex items-center gap-3 mb-3">
+                <div
+                  className="size-11 rounded-full flex items-center justify-center font-semibold text-sm shrink-0"
+                  style={{
+                    backgroundColor: "var(--color-primary-500)",
+                    color: "var(--color-secondary-500, #AD976F)",
+                  }}
+                >
+                  {initials(section.instructor)}
+                </div>
+                <div className="min-w-0">
+                  <div className="text-sm font-semibold text-primary-500 leading-tight">
+                    {section.instructor}
+                  </div>
+                  <span className="text-xs text-primary-500/50">
+                    Grup {section.groupNo}
+                  </span>
+                </div>
+              </div>
+
+              <div className="space-y-2">
+                {section.schedule.map((slot, index) => (
+                  <div
+                    key={index}
+                    className="p-3 rounded-lg bg-primary-500/2 border border-primary-500/10"
+                  >
+                    <div className="flex justify-between items-center mb-1">
+                      <span className="text-xs font-bold text-primary-500">
+                        {slot.day}
+                      </span>
+                      {slot.online && (
+                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded uppercase tracking-wider">
+                          <Wifi size={9} strokeWidth={2} /> Online
+                        </span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-3 text-xs text-primary-500/50">
+                      <span className="flex items-center gap-1.5">
+                        <Clock size={12} /> {slot.time}
+                      </span>
+                      {!slot.online && slot.room !== "-" && (
+                        <span className="flex items-center gap-1.5">
+                          <MapPin size={12} /> {slot.room}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+
+          {sections.length === 0 && (
+            <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
+              <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
+              Bu ders bu dönem açılmamış veya program bilgisi girilmemiş.
+            </div>
+          )}
         </div>
       </MainCard>
 
