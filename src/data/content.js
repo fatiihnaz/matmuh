@@ -1,5 +1,5 @@
 import { cache } from "react";
-import { getCmsCollection } from "inscribed/server";
+import { getCmsCollection, getCmsCollectionItem } from "inscribed/server";
 
 import { cmsConfig } from "@/app/lib/cms-config.js";
 
@@ -15,7 +15,8 @@ export const HOME_CATEGORY_IDS = ["sinav", "mezuniyet", "kariyer"];
 
 export const PAGE_SIZE = 20;
 
-const WINDOW = { limit: 100, sort: "publishedAt:desc" };
+const SORT = "featured:desc,publishedAt:desc";
+const MAX_PAGE = 100;
 
 export function announcementHref(item) {
   return `/duyurular/${item.slug}`;
@@ -85,55 +86,60 @@ function toAnnouncement(item) {
   };
 }
 
-function compare(a, b) {
-  if (a.pinned !== b.pinned) return a.pinned ? -1 : 1;
-  if (a.publishedAt !== b.publishedAt) return a.publishedAt < b.publishedAt ? 1 : -1;
-  return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
-}
+const emptyPage = { items: [], total: 0 };
 
-const fetchCollection = cache(async (key) => {
-  const { items } = await getCmsCollection(cmsConfig, key, WINDOW).catch(() => ({ items: [] }));
-  return items.map(toAnnouncement).sort(compare);
+const queryPage = cache(async (key, category, q, limit, offset) => {
+  const filter = {};
+  if (category) filter.tags = category;
+  if (q) filter.q = q;
+
+  const page = await getCmsCollection(cmsConfig, key, {
+    ...(Object.keys(filter).length > 0 ? { filter } : {}),
+    sort: SORT,
+    limit: limit ?? MAX_PAGE,
+    offset,
+  }).catch(() => emptyPage);
+
+  return { items: (page.items ?? []).map(toAnnouncement), total: page.total ?? 0 };
 });
 
-const allAnnouncements = () => fetchCollection("announcements");
-const allNews = () => fetchCollection("news");
+const countOnly = cache(async (key, category) => {
+  const page = await getCmsCollection(cmsConfig, key, {
+    filter: { tags: category },
+    limit: 1,
+  }).catch(() => emptyPage);
+  return page.total ?? 0;
+});
 
-function matches(item, { category, q }) {
-  if (category && !item.categories.includes(category)) return false;
-  if (q) {
-    const needle = normalizeTr(q).trim();
-    if (needle) {
-      const hay = normalizeTr(`${item.title} ${item.summary ?? ""}`);
-      if (!needle.split(/\s+/).every((word) => hay.includes(word))) return false;
-    }
+const allOrdered = cache(async (key) => {
+  const out = [];
+  for (let offset = 0; ; offset += MAX_PAGE) {
+    const page = await queryPage(key, null, null, MAX_PAGE, offset);
+    out.push(...page.items);
+    if (out.length >= page.total || page.items.length === 0) break;
   }
-  return true;
-}
-
-export const getAnnouncements = cache(async ({ category, q, limit, offset = 0 } = {}) => {
-  const filtered = (await allAnnouncements()).filter((item) => matches(item, { category, q }));
-  return {
-    items: filtered.slice(offset, limit ? offset + limit : undefined),
-    total: filtered.length,
-  };
+  return out;
 });
 
-export const getNews = cache(async ({ limit, offset = 0 } = {}) => {
-  const items = await allNews();
-  return { items: items.slice(offset, limit ? offset + limit : undefined), total: items.length };
+export const getAnnouncements = cache(async ({ category, q, limit, offset = 0 } = {}) =>
+  queryPage("announcements", category ?? null, q || null, limit, offset),
+);
+
+export const getNews = cache(async ({ limit, offset = 0 } = {}) =>
+  queryPage("news", null, null, limit, offset),
+);
+
+const bySlug = cache(async (key, slug) => {
+  const item = await getCmsCollectionItem(cmsConfig, key, slug).catch(() => null);
+  return item ? toAnnouncement(item) : null;
 });
 
-export const getAnnouncementBySlug = cache(
-  async (slug) => (await allAnnouncements()).find((item) => item.slug === slug) ?? null,
-);
+export const getAnnouncementBySlug = cache(async (slug) => bySlug("announcements", slug));
 
-export const getNewsBySlug = cache(
-  async (slug) => (await allNews()).find((item) => item.slug === slug) ?? null,
-);
+export const getNewsBySlug = cache(async (slug) => bySlug("news", slug));
 
 export const getAdjacent = cache(async (slug) => {
-  const items = await allAnnouncements();
+  const items = await allOrdered("announcements");
   const index = items.findIndex((item) => item.slug === slug);
   if (index === -1) return { newer: null, older: null };
   const brief = (item) => (item ? { slug: item.slug, title: item.title } : null);
@@ -141,13 +147,19 @@ export const getAdjacent = cache(async (slug) => {
 });
 
 export const getCategoriesWithCounts = cache(async () => {
-  const items = await allAnnouncements();
-  return CONTENT_CATEGORIES.map((category) => ({
-    ...category,
-    count: items.filter((item) => item.categories.includes(category.id)).length,
-  })).filter((category) => category.count > 0);
+  const counts = await Promise.all(
+    CONTENT_CATEGORIES.map(async (category) => ({
+      ...category,
+      count: await countOnly("announcements", category.id),
+    })),
+  );
+  return counts.filter((category) => category.count > 0);
 });
 
-export const getAllSlugs = cache(async () => (await allAnnouncements()).map((item) => item.slug));
+export const getAllSlugs = cache(async () =>
+  (await allOrdered("announcements")).map((item) => item.slug),
+);
 
-export const getAllNewsSlugs = cache(async () => (await allNews()).map((item) => item.slug));
+export const getAllNewsSlugs = cache(async () =>
+  (await allOrdered("news")).map((item) => item.slug),
+);
