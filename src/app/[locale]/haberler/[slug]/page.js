@@ -10,15 +10,7 @@ import AttachmentList from "@/app/components/Announcements/AttachmentList";
 import GalleryGrid from "@/app/components/Announcements/GalleryGrid";
 import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
-import { getAllNewsSlugs, getNewsBySlug } from "@/data/content";
-
-export const dynamicParams = true;
-export const revalidate = 3600;
-
-export async function generateStaticParams() {
-  const slugs = await getAllNewsSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+import { getNewsBySlug } from "@/data/content";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

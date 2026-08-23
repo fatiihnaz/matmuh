@@ -12,20 +12,7 @@ import PageSection from "@/app/components/PageSection";
 import RecentAnnouncements from "@/app/components/Announcements/RecentAnnouncements";
 import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
-import {
-  getAdjacent,
-  getAllSlugs,
-  getAnnouncementBySlug,
-  getAnnouncements,
-} from "@/data/content";
-
-export const dynamicParams = true;
-export const revalidate = 3600;
-
-export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
-  return slugs.map((slug) => ({ slug }));
-}
+import { getAdjacent, getAnnouncementBySlug, getAnnouncements } from "@/data/content";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;

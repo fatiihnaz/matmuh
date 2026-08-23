@@ -1,13 +1,6 @@
 import { notFound } from "next/navigation";
-import { getAllCourseCodes, getCourseByCode } from "@/data/courses";
+import { getCourseByCode } from "@/data/courses";
 import CourseInfo from "./components/CourseInfo";
-
-export const dynamicParams = true;
-
-export async function generateStaticParams() {
-  const codes = await getAllCourseCodes();
-  return codes.map((courseCode) => ({ courseCode }));
-}
 
 export async function generateMetadata({ params }) {
   const { courseCode } = await params;
