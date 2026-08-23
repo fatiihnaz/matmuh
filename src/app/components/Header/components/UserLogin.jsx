@@ -2,9 +2,10 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { LogIn, ChevronDown, LogOut, ClipboardCheck } from "lucide-react";
+import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
+import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -16,6 +17,7 @@ const SLOT = "w-16 h-9";
 
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
+  const { canEdit, editing, setEditing } = useCmsEditing();
   const [open, setOpen] = useState(false);
   const ref = useRef(null);
 
@@ -126,6 +128,32 @@ export default function UserLogin() {
                     {role}
                   </span>
                 ))}
+              </div>
+            )}
+
+            {canEdit && (
+              <div className="p-1.5 border-t border-primary-500/8">
+                <button
+                  type="button"
+                  role="switch"
+                  aria-checked={editing}
+                  onClick={() => setEditing(!editing)}
+                  className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
+                >
+                  <PencilLine size={14} className="shrink-0 text-secondary-500" />
+                  <span className="flex-1 text-left">Düzenleme modu</span>
+                  <span
+                    className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
+                      editing ? "bg-secondary-500" : "bg-primary-500/15"
+                    }`}
+                  >
+                    <span
+                      className={`absolute top-0.5 size-3 rounded-full bg-white transition-all ${
+                        editing ? "left-3.5" : "left-0.5"
+                      }`}
+                    />
+                  </span>
+                </button>
               </div>
             )}
 
