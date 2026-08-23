@@ -43,9 +43,11 @@ const getElectiveGroups = cache(async () =>
   (await fetchAll("elective-groups")).map((item) => ({ ...item.data, slug: item.slug })),
 );
 
+const linksOffsite = (lecture) => !lecture.about && Boolean(lecture.bolognaLink);
+
 function courseRow(lecture) {
   const internal = `/egitim/mufredat/${lecture.code}`;
-  const offsite = !lecture.about && Boolean(lecture.bolognaLink);
+  const offsite = linksOffsite(lecture);
   return {
     isGroup: false,
     code: lecture.code,
@@ -110,7 +112,57 @@ export const getCurriculumSummary = cache(async () => {
   };
 });
 
-export const getLectureBySlug = cache(async (slug) => {
+const CATEGORY_LABEL = {
+  BASIC_SCIENCE: "Temel Bilim",
+  FOREIGN_LANGUAGE: "Yabancı Dil",
+  COMMON_REQUIRED: "Ortak Zorunlu",
+  CORE_PROFESSION: "Temel Meslek",
+  SPECIALIZATION: "Uzmanlık / Alan",
+  GENERAL_CULTURE: "Genel Kültür",
+};
+
+function lectureView(lecture) {
+  const midterm = lecture.midtermWeight;
+  return {
+    id: lecture.id,
+    code: lecture.code,
+    slug: lecture.slug,
+    title: (lecture.name ?? lecture.code).trim(),
+    content: lecture.about ?? null,
+    language: lecture.language ?? null,
+    ects: lecture.ects ?? null,
+    hours: hoursOf(lecture) ?? "-",
+    semester: lecture.term ?? null,
+    type: lecture.type === "REQUIRED" ? "Zorunlu" : "Seçmeli",
+    category: CATEGORY_LABEL[lecture.category] ?? null,
+    syllabus: (lecture.syllabus ?? []).map((row, index) => ({
+      week: row.week ?? index + 1,
+      topic: row.topic ?? "",
+    })),
+    assessment:
+      midterm == null
+        ? null
+        : { midterm: { weight: midterm }, final: { weight: lecture.finalWeight ?? 0 } },
+    noteCount: lecture.noteCount ?? 0,
+    bolognaLink: lecture.bolognaLink ?? null,
+    notesLink: lecture.notesLink ?? null,
+  };
+}
+
+const getLectureBySlug = cache(async (slug) => {
   const item = await getCmsCollectionItem(cmsConfig, "lectures", slug).catch(() => null);
   return item ? { ...item.data, slug: item.slug } : null;
+});
+
+export const getCourseCodes = cache(async () =>
+  (await getLectures())
+    .filter((lecture) => !linksOffsite(lecture))
+    .map((lecture) => lecture.code)
+    .sort((x, y) => x.localeCompare(y, "tr")),
+);
+
+export const getCourseByCode = cache(async (code) => {
+  if (!code) return null;
+  const lecture = await getLectureBySlug(String(code).toLowerCase());
+  return lecture ? lectureView(lecture) : null;
 });
