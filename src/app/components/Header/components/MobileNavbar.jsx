@@ -7,6 +7,7 @@ import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-
 import { Search, ChevronUp, LogIn, LogOut, ExternalLink, ClipboardCheck } from "lucide-react";
 import { navigationItems, YTU_ANA_SITE } from "@/data/navigation";
 import { useAuth } from "@/lib/auth";
+import SearchOverlay from "@/app/components/Search/SearchOverlay";
 import { useCmsRoute } from "inscribed";
 
 const ROLE_LABELS = {
@@ -112,6 +113,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
   const { locale, slug, localePath } = useCmsRoute();
   const reduce = useReducedMotion();
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -148,12 +150,18 @@ export default function MobileNavbar({ isOpen, onClose }) {
           <motion.div initial={{ opacity: 0, y: 20 }} className="shrink-0 px-6 pb-6 pt-3 space-y-2.5 border-t border-white/5"
             animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 20 }} transition={{ duration: 0.3, delay: 0.2 }}
           >
-            <form action="/duyurular" onSubmit={onClose} className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-neutral-500" />
-              <input type="search" name="q" placeholder="Duyurularda ara..." aria-label="Duyurularda ara"
-                className="w-full bg-white/5 text-white text-sm pl-10 pr-4 py-2.5 rounded-lg border border-white/10 placeholder:text-neutral-500 focus:outline-none focus:border-primary-300 transition-colors"
-              />
-            </form>
+            {!searchOpen && (
+              <motion.button
+                type="button"
+                layoutId="mm-arama-kutusu"
+                transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
+                onClick={() => setSearchOpen(true)}
+                className="relative flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-neutral-500 transition-colors hover:border-white/20"
+              >
+                <Search size={16} className="shrink-0" />
+                Ara...
+              </motion.button>
+            )}
 
             <div className="block sm:hidden space-y-2.5">
               <div className="-mx-6 border-t border-white/10" />
@@ -231,6 +239,8 @@ export default function MobileNavbar({ isOpen, onClose }) {
         </motion.div>
       )}
     </AnimatePresence>
+
+    <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} fullScreen layoutId="mm-arama-kutusu" />
     </MotionConfig>
   );
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { motion } from "framer-motion";
 import { Mail, Menu, X } from "lucide-react";
 import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
@@ -13,6 +14,7 @@ import { useCmsBlock, useCmsRoute } from "inscribed";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { locale, slug, localePath } = useCmsRoute();
   const { value: eposta } = useCmsBlock("footer.contact.email");
   const isHome = slug === "/";
@@ -57,16 +59,30 @@ export default function Header() {
             <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-8 sm:h-10 w-auto" priority />
           </Link>
 
-          <div className="flex items-center gap-2">
-            <nav aria-label="Ana menü" className="hidden lg:flex items-center gap-6">
-              {navigationItems.map((item) => (
-                <NavItems key={item.label} item={item}>
-                  {item.label.toLocaleUpperCase('tr-TR')}
-                </NavItems>
-              ))}
-            </nav>
+          <div className="flex flex-1 items-center justify-end gap-2">
+            {!searchOpen && (
+              <motion.nav
+                aria-label="Ana menü"
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+                className="hidden lg:flex items-center gap-6"
+              >
+                {navigationItems.map((item) => (
+                  <NavItems key={item.label} item={item}>
+                    {item.label.toLocaleUpperCase('tr-TR')}
+                  </NavItems>
+                ))}
+              </motion.nav>
+            )}
 
-            {!isHome && <NavSearch />}
+            {!isHome && (
+              <NavSearch
+                open={searchOpen}
+                onOpen={() => setSearchOpen(true)}
+                onClose={() => setSearchOpen(false)}
+              />
+            )}
 
             <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 

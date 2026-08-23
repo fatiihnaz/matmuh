@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect, useId, useRef, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 
 import SearchResults from "@/app/components/Search/SearchResults";
 import { MIN_CHARS, useSiteSearch } from "@/app/components/Search/useSiteSearch";
 
-export default function NavSearch() {
-  const [open, setOpen] = useState(false);
+export default function NavSearch({ open, onOpen, onClose }) {
   const [query, setQuery] = useState("");
+  const boxRef = useRef(null);
   const inputRef = useRef(null);
   const listId = useId();
 
@@ -18,98 +18,88 @@ export default function NavSearch() {
   useEffect(() => {
     if (!open) return undefined;
 
-    const { body } = document;
-    const previous = body.style.overflow;
-    body.style.overflow = "hidden";
     inputRef.current?.focus();
 
     function onKeyDown(event) {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") onClose();
     }
+    function onPointerDown(event) {
+      if (boxRef.current && !boxRef.current.contains(event.target)) onClose();
+    }
+
     document.addEventListener("keydown", onKeyDown);
-
+    document.addEventListener("mousedown", onPointerDown);
     return () => {
-      body.style.overflow = previous;
       document.removeEventListener("keydown", onKeyDown);
+      document.removeEventListener("mousedown", onPointerDown);
     };
-  }, [open]);
+  }, [open, onClose]);
 
-  const close = () => {
-    setOpen(false);
-    setQuery("");
-  };
-
-  return (
-    <>
+  if (!open) {
+    return (
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => {
+          setQuery("");
+          onOpen();
+        }}
         aria-label="Sitede ara"
         title="Sitede ara"
-        aria-expanded={open}
         className="hidden lg:block pl-2 text-neutral-400 hover:text-white transition-colors"
       >
         <Search size={14} />
       </button>
+    );
+  }
 
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.18 }}
-            className="fixed inset-0 top-[var(--header-h)] z-40 bg-primary-700/80 backdrop-blur-sm"
-            onClick={close}
-          >
-            <div
-              role="dialog"
-              aria-modal="true"
-              aria-label="Site araması"
-              onClick={(event) => event.stopPropagation()}
-              className="mx-auto w-full max-w-3xl px-4 pt-8"
-            >
-              <div className="flex items-center gap-2 rounded-xl border border-white/15 bg-white px-4 shadow-2xl shadow-primary-700/40">
-                <Search size={18} className="shrink-0 text-primary-500/35" />
-                <input
-                  ref={inputRef}
-                  type="search"
-                  value={query}
-                  onChange={(event) => setQuery(event.target.value)}
-                  placeholder="Duyuru, haber, ders veya personel ara..."
-                  role="combobox"
-                  aria-label="Sitede ara"
-                  aria-autocomplete="list"
-                  aria-expanded={hasResults}
-                  aria-controls={listId}
-                  autoComplete="off"
-                  className="w-full bg-transparent py-3 text-[15px] text-primary-600 outline-none placeholder:text-primary-500/35"
-                />
-                <button
-                  type="button"
-                  onClick={close}
-                  aria-label="Aramayı kapat"
-                  className="shrink-0 rounded-lg p-1.5 text-primary-500/35 transition-colors hover:bg-primary-500/6 hover:text-primary-500"
-                >
-                  <X size={18} />
-                </button>
-              </div>
+  return (
+    <div ref={boxRef} className="relative hidden lg:flex flex-1 items-center justify-end">
+      <motion.div
+        initial={{ opacity: 0, scaleX: 0.94 }}
+        animate={{ opacity: 1, scaleX: 1 }}
+        transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
+        style={{ originX: 1 }}
+        className="flex w-full max-w-md items-center gap-2 rounded-lg border border-white/15 bg-white/8 px-3 transition-colors duration-200 focus-within:border-secondary-500/60 focus-within:bg-white/12"
+      >
+        <input
+          ref={inputRef}
+          type="search"
+          value={query}
+          onChange={(event) => setQuery(event.target.value)}
+          placeholder="Ara..."
+          role="combobox"
+          aria-label="Sitede ara"
+          aria-autocomplete="list"
+          aria-expanded={hasResults}
+          aria-controls={listId}
+          autoComplete="off"
+          className="w-full bg-transparent py-2 text-sm text-white outline-none! placeholder:text-neutral-500"
+        />
+      </motion.div>
 
-              {hasResults && (
-                <div className="mt-2 max-h-[65svh] overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/30">
-                  <SearchResults id={listId} groups={groups} term={term} onNavigate={close} />
-                </div>
-              )}
+      <button
+        type="button"
+        onClick={onClose}
+        aria-label="Aramayı kapat"
+        title="Aramayı kapat"
+        className="pl-2 text-neutral-400 hover:text-white transition-colors"
+      >
+        <X size={14} />
+      </button>
 
-              {term.length >= MIN_CHARS && !hasResults && (
-                <p className="mt-3 text-center text-[13px] text-white/60">
-                  Sonuç bulunamadı.
-                </p>
-              )}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+      {hasResults && (
+        <div
+          className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] max-h-[70svh] overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/30"
+        >
+          <SearchResults id={listId} groups={groups} term={term} onNavigate={onClose} />
+        </div>
+      )}
+
+      {term.length >= MIN_CHARS && !hasResults && (
+        <div className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] rounded-xl border border-primary-500/10 bg-white px-4 py-3 text-center text-[13px] text-primary-500/45 shadow-2xl shadow-primary-700/30">
+          Sonuç bulunamadı.
+        </div>
+      )}
+    </div>
   );
 }
