@@ -1,3 +1,5 @@
+import Image from "next/image";
+
 export const AVATAR_COLORS = ["#1D2445", "#2a3158", "#33295a", "#1a3348", "#2d3a2e", "#3a2d2d", "#2a2d45"];
 
 export function getInitials(name) {
@@ -7,7 +9,17 @@ export function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export default function Avatar({ name, idx = 0, size = "size-9", textSize = "text-[11px]" }) {
+export default function Avatar({ name, photo, idx = 0, size = "size-9", textSize = "text-[11px]" }) {
+  const src = typeof photo === "string" ? photo : photo?.src;
+
+  if (src) {
+    return (
+      <span className={`relative shrink-0 overflow-hidden rounded-full ${size}`}>
+        <Image src={src} alt={photo?.alt || name} fill sizes="96px" className="object-cover" />
+      </span>
+    );
+  }
+
   return (
     <div
       className={`shrink-0 flex items-center justify-center rounded-full ${size}`}

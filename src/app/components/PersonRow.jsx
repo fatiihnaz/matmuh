@@ -39,7 +39,7 @@ export default function PersonRow({ id, idx = 0, staff = [] }) {
 
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
-      <Avatar name={name} idx={idx} />
+      <Avatar name={name} photo={person.photo} idx={idx} />
       <span className="min-w-0 flex-1">
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}
