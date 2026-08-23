@@ -5,6 +5,7 @@ import MainCard from "@/app/components/MainCard";
 import AnnouncementList from "@/app/components/Announcements/AnnouncementList";
 import CategoryChips from "@/app/components/Announcements/CategoryChips";
 import NewsList from "@/app/components/Announcements/NewsList";
+import NewRecordLink from "@/app/components/Announcements/NewRecordLink";
 import {
   CONTENT_CATEGORIES,
   HOME_CATEGORY_IDS,
@@ -41,6 +42,7 @@ export default async function LandingPage() {
             icon={Bell}
             buttonTitle="Tümünü Gör"
             href="/duyurular"
+            action={<NewRecordLink href="/duyurular/yeni" label="Yeni" />}
           >
             <div className="pb-3 mb-1 border-b border-primary-500/6">
               <CategoryChips categories={homeCategories} />
@@ -59,6 +61,7 @@ export default async function LandingPage() {
             icon={Newspaper}
             buttonTitle="Tümünü Gör"
             href="/haberler"
+            action={<NewRecordLink href="/haberler/yeni" label="Yeni" />}
           >
             <NewsList items={news} />
           </MainCard>

@@ -4,38 +4,31 @@ import { CollectionField } from "inscribed/collections";
 import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import Panel from "@/app/components/Panel";
+import PageSection from "@/app/components/PageSection";
 import AnnouncementMeta from "@/app/components/Announcements/AnnouncementMeta";
 import AttachmentList from "@/app/components/Announcements/AttachmentList";
-import AdjacentNav from "@/app/components/Announcements/AdjacentNav";
 import GalleryGrid from "@/app/components/Announcements/GalleryGrid";
-import PageSection from "@/app/components/PageSection";
-import RecentAnnouncements from "@/app/components/Announcements/RecentAnnouncements";
 import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
-import {
-  getAdjacent,
-  getAllSlugs,
-  getAnnouncementBySlug,
-  getAnnouncements,
-} from "@/data/content";
+import { getAllNewsSlugs, getNewsBySlug } from "@/data/content";
 
 export const dynamicParams = true;
 export const revalidate = 3600;
 
 export async function generateStaticParams() {
-  const slugs = await getAllSlugs();
+  const slugs = await getAllNewsSlugs();
   return slugs.map((slug) => ({ slug }));
 }
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
-  const item = await getAnnouncementBySlug(slug);
-  if (!item) return { title: "Duyuru bulunamadı | YTÜ Matematik Mühendisliği" };
+  const item = await getNewsBySlug(slug);
+  if (!item) return { title: "Haber bulunamadı | YTÜ Matematik Mühendisliği" };
 
   return {
     title: `${item.title} | YTÜ Matematik Mühendisliği`,
     description: item.summary ?? undefined,
-    alternates: { canonical: `/duyurular/${item.slug}` },
+    alternates: { canonical: `/haberler/${item.slug}` },
     openGraph: {
       type: "article",
       title: item.title,
@@ -46,29 +39,20 @@ export async function generateMetadata({ params }) {
   };
 }
 
-export default async function AnnouncementDetailPage({ params }) {
+export default async function NewsDetailPage({ params }) {
   const { slug } = await params;
-  const item = await getAnnouncementBySlug(slug);
+  const item = await getNewsBySlug(slug);
   if (!item) notFound();
-
-  const [{ older, newer }, { items: recent }] = await Promise.all([
-    getAdjacent(slug),
-    getAnnouncements({ limit: 6 }),
-  ]);
 
   const sidebar = (
     <div className="flex flex-col gap-6">
-      <RecentAnnouncements items={recent.filter((entry) => entry.id !== item.id).slice(0, 5)} />
       <QuickLinks external title="Kurumsal Sistemler" />
     </div>
   );
 
   return (
-    <CollectionItem collection="announcements" slug={slug} label={item.title}>
-      <SubHeader
-        title={<CollectionField name="title" />}
-        lastLabel={item.title}
-      />
+    <CollectionItem collection="news" slug={slug} label={item.title}>
+      <SubHeader title={<CollectionField name="title" />} lastLabel={item.title} />
       <PageLayout sidebar={sidebar}>
         <div className="flex flex-col gap-6">
           <Panel>
@@ -83,7 +67,7 @@ export default async function AnnouncementDetailPage({ params }) {
             </div>
             {!item.body && (
               <p className="text-[13px] text-primary-500/45">
-                Bu duyurunun ayrıntıları ekli belgede yer alıyor.
+                Bu haberin ayrıntıları ekli belgede yer alıyor.
               </p>
             )}
             {item.attachments.length > 0 && (
@@ -98,8 +82,6 @@ export default async function AnnouncementDetailPage({ params }) {
               <GalleryGrid images={item.gallery} title={item.title} />
             </PageSection>
           )}
-
-          <AdjacentNav older={older} newer={newer} />
         </div>
       </PageLayout>
     </CollectionItem>

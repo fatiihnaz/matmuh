@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 
-export default function MainCard({ title, icon: Icon, buttonTitle, href, children, dark }) {
+export default function MainCard({ title, icon: Icon, buttonTitle, href, action, children, dark }) {
     return (
         <div className={`rounded-xl border border-primary-500/10 shadow-xs w-full overflow-hidden ${dark ? "bg-primary-500" : "bg-white"}`}>
             <div className="p-6">
@@ -15,12 +15,15 @@ export default function MainCard({ title, icon: Icon, buttonTitle, href, childre
                         </h2>
                     </div>
 
-                    {buttonTitle && href && (
-                        <Link href={href} className="group text-xs text-secondary-500 hover:text-secondary-600 flex items-center gap-1 transition-colors">
-                            {buttonTitle}
-                            <ChevronRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5"/>
-                        </Link>
-                    )}
+                    <div className="flex items-center gap-2 shrink-0">
+                        {action}
+                        {buttonTitle && href && (
+                            <Link href={href} className="group text-xs text-secondary-500 hover:text-secondary-600 flex items-center gap-1 transition-colors">
+                                {buttonTitle}
+                                <ChevronRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5"/>
+                            </Link>
+                        )}
+                    </div>
                 </div>
 
                 <div className="space-y-1">

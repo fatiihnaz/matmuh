@@ -1,17 +1,36 @@
 import { cache } from "react";
-import {
-  CONTENT_CATEGORIES,
-  HOME_CATEGORY_IDS,
-  NEWS_CATEGORY_IDS,
-  contentRecords,
-} from "./contentData";
+import { getCmsCollection } from "inscribed/server";
 
-export { CONTENT_CATEGORIES, HOME_CATEGORY_IDS, NEWS_CATEGORY_IDS };
+import { cmsConfig } from "@/app/lib/cms-config.js";
+
+export const CONTENT_CATEGORIES = [
+  { id: "sinav", label: "Sınav & Program" },
+  { id: "mezuniyet", label: "Mezuniyet" },
+  { id: "staj", label: "Staj" },
+  { id: "kariyer", label: "Kariyer & Etkinlik" },
+  { id: "genel", label: "Genel" },
+];
+
+export const HOME_CATEGORY_IDS = ["sinav", "mezuniyet", "kariyer"];
 
 export const PAGE_SIZE = 20;
 
+const WINDOW = { limit: 100, sort: "publishedAt:desc" };
+
 export function announcementHref(item) {
   return `/duyurular/${item.slug}`;
+}
+
+export function newsHref(item) {
+  return `/haberler/${item.slug}`;
+}
+
+const FOLD = { İ: "i", I: "i", ı: "i", Ş: "s", ş: "s", Ğ: "g", ğ: "g", Ü: "u", ü: "u", Ö: "o", ö: "o", Ç: "c", ç: "c", Â: "a", â: "a", Î: "i", î: "i", Û: "u", û: "u" };
+
+export function normalizeTr(value) {
+  return String(value ?? "")
+    .replace(/[İIıŞşĞğÜüÖöÇçÂâÎîÛû]/g, (c) => FOLD[c])
+    .toLowerCase();
 }
 
 const ALLOWED_TAGS = new Set(["p", "br", "strong", "em", "u", "a", "ul", "ol", "li", "h3", "h4"]);
@@ -35,37 +54,31 @@ function sanitize(html) {
   });
 }
 
-const FOLD = { İ: "i", I: "i", ı: "i", Ş: "s", ş: "s", Ğ: "g", ğ: "g", Ü: "u", ü: "u", Ö: "o", ö: "o", Ç: "c", ç: "c", Â: "a", â: "a", Î: "i", î: "i", Û: "u", û: "u" };
-
-export function normalizeTr(value) {
-  return String(value ?? "")
-    .replace(/[İIıŞşĞğÜüÖöÇçÂâÎîÛû]/g, (c) => FOLD[c])
-    .toLowerCase();
-}
-
-function toAnnouncement(raw) {
+function toAnnouncement(item) {
+  const data = item.data ?? {};
   return {
-    id: raw.id,
-    slug: raw.slug,
-    title: raw.title,
-    summary: raw.summary ?? null,
-    body: sanitize(raw.body),
-    categories: raw.categories ?? [],
-    publishedAt: raw.publishedAt,
-    updatedAt: raw.updatedAt ?? null,
-    pinned: Boolean(raw.pinned),
-    attachments: (raw.attachments ?? []).map((a) => ({
-      label: a.label,
-      href: a.href,
-      kind: (a.kind ?? "").toLowerCase(),
+    id: item.id,
+    slug: item.slug,
+    title: data.title ?? "",
+    summary: data.summary ?? null,
+    body: sanitize(data.body),
+    categories: data.tags ?? [],
+    publishedAt: data.publishedAt ?? "",
+    updatedAt: item.updatedAt ?? null,
+    pinned: Boolean(data.featured),
+    coverImage: data.coverImage ?? null,
+    attachments: (data.attachments ?? []).map((a) => ({
+      label: a.name ?? "",
+      href: a.url ?? "",
+      kind: (a.type ?? "").toLowerCase(),
       size: a.size ?? 0,
     })),
-    gallery: (raw.gallery ?? []).map((g) => ({
-      src: g.src,
-      alt: g.alt ?? "",
+    gallery: (data.gallery ?? []).map((g) => ({
+      src: g.image?.src ?? "",
+      alt: g.image?.alt ?? "",
       caption: g.caption ?? null,
-      width: g.width ?? 1600,
-      height: g.height ?? 1067,
+      width: 1600,
+      height: 1067,
     })),
   };
 }
@@ -76,12 +89,16 @@ function compare(a, b) {
   return a.id < b.id ? -1 : a.id > b.id ? 1 : 0;
 }
 
-const allSorted = cache(() => contentRecords.map(toAnnouncement).sort(compare));
+const fetchCollection = cache(async (key) => {
+  const { items } = await getCmsCollection(cmsConfig, key, WINDOW).catch(() => ({ items: [] }));
+  return items.map(toAnnouncement).sort(compare);
+});
 
-function matches(item, { category, categoriesAny, excludeCategory, q }) {
+const allAnnouncements = () => fetchCollection("announcements");
+const allNews = () => fetchCollection("news");
+
+function matches(item, { category, q }) {
   if (category && !item.categories.includes(category)) return false;
-  if (categoriesAny && !item.categories.some((c) => categoriesAny.includes(c))) return false;
-  if (excludeCategory && item.categories.includes(excludeCategory)) return false;
   if (q) {
     const needle = normalizeTr(q).trim();
     if (needle) {
@@ -92,26 +109,29 @@ function matches(item, { category, categoriesAny, excludeCategory, q }) {
   return true;
 }
 
-export const getAnnouncements = cache(
-  async ({ category, categoriesAny, excludeCategory, q, limit, offset = 0 } = {}) => {
-    const filtered = allSorted().filter((item) =>
-      matches(item, { category, categoriesAny, excludeCategory, q }),
-    );
-    const items = filtered.slice(offset, limit ? offset + limit : undefined);
-    return { items, total: filtered.length };
-  },
+export const getAnnouncements = cache(async ({ category, q, limit, offset = 0 } = {}) => {
+  const filtered = (await allAnnouncements()).filter((item) => matches(item, { category, q }));
+  return {
+    items: filtered.slice(offset, limit ? offset + limit : undefined),
+    total: filtered.length,
+  };
+});
+
+export const getNews = cache(async ({ limit, offset = 0 } = {}) => {
+  const items = await allNews();
+  return { items: items.slice(offset, limit ? offset + limit : undefined), total: items.length };
+});
+
+export const getAnnouncementBySlug = cache(
+  async (slug) => (await allAnnouncements()).find((item) => item.slug === slug) ?? null,
 );
 
-export const getNews = cache(async ({ limit, offset = 0 } = {}) =>
-  getAnnouncements({ categoriesAny: NEWS_CATEGORY_IDS, excludeCategory: "sinav", limit, offset }),
-);
-
-export const getAnnouncementBySlug = cache(async (slug) =>
-  allSorted().find((item) => item.slug === slug) ?? null,
+export const getNewsBySlug = cache(
+  async (slug) => (await allNews()).find((item) => item.slug === slug) ?? null,
 );
 
 export const getAdjacent = cache(async (slug) => {
-  const items = allSorted();
+  const items = await allAnnouncements();
   const index = items.findIndex((item) => item.slug === slug);
   if (index === -1) return { newer: null, older: null };
   const brief = (item) => (item ? { slug: item.slug, title: item.title } : null);
@@ -119,11 +139,13 @@ export const getAdjacent = cache(async (slug) => {
 });
 
 export const getCategoriesWithCounts = cache(async () => {
-  const items = allSorted();
+  const items = await allAnnouncements();
   return CONTENT_CATEGORIES.map((category) => ({
     ...category,
     count: items.filter((item) => item.categories.includes(category.id)).length,
   })).filter((category) => category.count > 0);
 });
 
-export const getAllSlugs = cache(async () => allSorted().map((item) => item.slug));
+export const getAllSlugs = cache(async () => (await allAnnouncements()).map((item) => item.slug));
+
+export const getAllNewsSlugs = cache(async () => (await allNews()).map((item) => item.slug));

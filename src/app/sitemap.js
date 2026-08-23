@@ -1,5 +1,5 @@
 import { SITE_URL } from "./layout";
-import { getAllSlugs } from "@/data/content";
+import { getAllNewsSlugs, getAllSlugs } from "@/data/content";
 import { getAllCourseCodes } from "@/data/courses";
 
 const STATIC_ROUTES = [
@@ -24,7 +24,11 @@ const STATIC_ROUTES = [
 ];
 
 export default async function sitemap() {
-  const [slugs, courseCodes] = await Promise.all([getAllSlugs(), getAllCourseCodes()]);
+  const [slugs, newsSlugs, courseCodes] = await Promise.all([
+    getAllSlugs(),
+    getAllNewsSlugs(),
+    getAllCourseCodes(),
+  ]);
 
   const staticEntries = STATIC_ROUTES.map(({ path, priority, changeFrequency }) => ({
     url: `${SITE_URL}${path}`,
@@ -38,11 +42,17 @@ export default async function sitemap() {
     priority: 0.4,
   }));
 
+  const newsEntries = newsSlugs.map((slug) => ({
+    url: `${SITE_URL}/haberler/${slug}`,
+    changeFrequency: "never",
+    priority: 0.4,
+  }));
+
   const courseEntries = courseCodes.map((code) => ({
     url: `${SITE_URL}/egitim/mufredat/${code}`,
     changeFrequency: "yearly",
     priority: 0.3,
   }));
 
-  return [...staticEntries, ...announcementEntries, ...courseEntries];
+  return [...staticEntries, ...announcementEntries, ...newsEntries, ...courseEntries];
 }

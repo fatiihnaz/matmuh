@@ -18,6 +18,11 @@ import { useAuth } from "@/lib/auth";
 
 const EDIT_ROLES = ["ROLE_ADMIN", "ROLE_EDITOR"];
 
+export function useIsEditor() {
+  const { user } = useAuth();
+  return !!user?.authorities?.some((role) => EDIT_ROLES.includes(role));
+}
+
 export function AppCmsProvider(props) {
   const { user, getAccessToken, signOut } = useAuth();
 

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { announcementHref } from "@/data/content";
+import { newsHref } from "@/data/content";
 import { formatTrDate } from "@/lib/date";
 import NewsThumb from "./NewsThumb";
 
@@ -15,7 +15,7 @@ export default function NewsList({ items }) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
       {items.map((item) => (
-        <Link key={item.id} href={announcementHref(item)} className="group flex flex-col">
+        <Link key={item.id} href={newsHref(item)} className="group flex flex-col">
           <NewsThumb
             cover={item.gallery[0] ?? null}
             sizes="(min-width: 640px) 30vw, 100vw"

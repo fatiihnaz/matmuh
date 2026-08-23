@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { announcementHref } from "@/data/content";
+import { newsHref } from "@/data/content";
 import { formatTrDate } from "@/lib/date";
 import CategoryTags from "./CategoryTags";
 import NewsThumb from "./NewsThumb";
@@ -7,7 +7,7 @@ import NewsThumb from "./NewsThumb";
 export default function NewsCard({ item, priority = false }) {
   return (
     <Link
-      href={announcementHref(item)}
+      href={newsHref(item)}
       className="group flex flex-col rounded-xl bg-white border border-primary-500/10 shadow-xs overflow-hidden hover:border-secondary-500/30 transition-colors"
     >
       <NewsThumb
