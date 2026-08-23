@@ -14,47 +14,6 @@ import {
 import Link from "next/link";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import { SEMESTERS, ELECTIVE_GROUPS, COURSE_DETAILS } from "@/data/coursesData";
-import { bolognaCourseUrl } from "@/data/universityElectives";
-
-function getElectiveLabel(id = "") {
-  if (id.startsWith("USS")) return "Üniversite Sosyal Seçmeli";
-  if (id.startsWith("UMS")) return "Üniversite Mesleki Seçmeli";
-  const m = id.match(/MES(\d+)/);
-  if (m) return `Mesleki Seçmeli ${m[1]}`;
-  return id;
-}
-
-function buildRows(semester) {
-  return semester.courses.map((c) => {
-    if (c.isElectiveGroup) {
-      const group = ELECTIVE_GROUPS[c.electiveGroupId];
-      const options = group?.external
-        ? group.courses
-        : (group?.courseIds ?? []).map((id) => COURSE_DETAILS[id]).filter(Boolean);
-      return {
-        isGroup: true,
-        rawId: c.id,
-        groupId: c.electiveGroupId,
-        groupTitle: group?.title ?? getElectiveLabel(c.id),
-        external: Boolean(group?.external),
-        note: group?.note ?? null,
-        defaultHours: group?.defaultHours ?? null,
-        defaultEcts: group?.defaultEcts ?? null,
-        options: options ?? [],
-      };
-    }
-    const detail = COURSE_DETAILS[c.id];
-    return {
-      isGroup: false,
-      code: c.id,
-      name: detail?.title?.trim() ?? c.id,
-      hours: detail?.hours ?? "-",
-      ects: detail?.ects ?? "-",
-      status: detail?.type ?? "Zorunlu",
-    };
-  });
-}
 
 function sortRows(rows, col, dir) {
   if (!col) return rows;
@@ -134,7 +93,7 @@ function Colgroup() {
   );
 }
 
-export default function CurriculumPage() {
+export default function CurriculumPage({ semesters, summary }) {
   const [activeTab, setActiveTab] = useState(0);
   const [sortCol, setSortCol] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
@@ -142,10 +101,10 @@ export default function CurriculumPage() {
   const [direction, setDirection] = useState(1);
   const router = useRouter();
 
-  const semester = SEMESTERS[activeTab];
-  const rows = buildRows(semester);
+  const semester = semesters[activeTab];
+  const rows = semester?.rows ?? [];
   const sorted = sortRows(rows, sortCol, sortDir);
-  const totalEcts = semester.totalEcts;
+  const totalEcts = semester?.totalEcts ?? 0;
 
   function handleSort(col) {
     if (sortCol === col) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
@@ -170,9 +129,7 @@ export default function CurriculumPage() {
     setExpandedGroup(null);
   }
 
-  const panelKey = expandedGroup
-    ? `group-${expandedGroup.groupId}`
-    : `sem-${activeTab}`;
+  const panelKey = expandedGroup ? `group-${expandedGroup.code}` : `sem-${activeTab}`;
 
   return (
     <>
@@ -186,10 +143,10 @@ export default function CurriculumPage() {
           <div className="rounded-xl overflow-hidden border border-primary-500/10 shadow-xs bg-white">
             <div className="grid grid-cols-2 sm:grid-cols-4">
               {[
-                { val: "8", lbl: "Yarıyıl" },
-                { val: "240", lbl: "Toplam ECTS" },
-                { val: "48+", lbl: "Toplam Ders" },
-                { val: "4 Yıl", lbl: "Süre" },
+                { val: String(summary.termCount), lbl: "Yarıyıl" },
+                { val: String(summary.totalEcts), lbl: "Toplam ECTS" },
+                { val: String(summary.courseCount), lbl: "Toplam Ders" },
+                { val: `${summary.yearCount} Yıl`, lbl: "Süre" },
               ].map((s, i) => (
                 <div
                   key={s.lbl}
@@ -231,9 +188,9 @@ export default function CurriculumPage() {
               className="flex items-center gap-0 overflow-x-auto no-scrollbar px-1 pt-1"
               style={{ borderBottom: "1px solid rgba(29,36,69,0.06)" }}
             >
-              {SEMESTERS.map((sem, idx) => (
+              {semesters.map((sem, idx) => (
                 <button
-                  key={sem.semesterNumber}
+                  key={sem.number}
                   onClick={() => handleTabChange(idx)}
                   className="px-4 py-3 transition-all duration-200 whitespace-nowrap"
                   style={{
@@ -249,7 +206,7 @@ export default function CurriculumPage() {
                         : "2px solid transparent",
                   }}
                 >
-                  {sem.semesterNumber}. Yarıyıl
+                  {sem.number}. Yarıyıl
                 </button>
               ))}
             </div>
@@ -278,7 +235,7 @@ export default function CurriculumPage() {
                     color: "var(--color-primary-500)",
                   }}
                 >
-                  {expandedGroup ? expandedGroup.groupTitle : semester.name}
+                  {expandedGroup ? expandedGroup.groupTitle : (semester?.name ?? "")}
                 </span>
                 {!expandedGroup && (
                   <span
@@ -302,7 +259,7 @@ export default function CurriculumPage() {
               </span>
             </div>
 
-            {expandedGroup?.external && expandedGroup.note && (
+            {expandedGroup?.note && (
               <div
                 className="mx-6 mb-3 px-3 py-2 rounded-lg flex items-start gap-2"
                 style={{ backgroundColor: "rgba(173,151,111,0.07)" }}
@@ -370,7 +327,7 @@ export default function CurriculumPage() {
                   <table className="w-full table-fixed">
                     <Colgroup />
                     <tbody>
-                      {(expandedGroup ? buildElectiveRows(expandedGroup) : sorted).map(
+                      {(expandedGroup ? electiveRows(expandedGroup) : sorted).map(
                         (row, idx, arr) => {
                           if (row._empty) {
                             return (
@@ -394,7 +351,7 @@ export default function CurriculumPage() {
                           if (row.isGroup) {
                             return (
                               <tr
-                                key={`${row.rawId}-${idx}`}
+                                key={`${row.code}-${idx}`}
                                 className="transition-colors cursor-pointer hover:bg-[rgba(173,151,111,0.04)] group"
                                 style={rowStyle}
                                 onClick={() => openGroup(row)}
@@ -443,24 +400,24 @@ export default function CurriculumPage() {
                                 <td className="px-4 sm:px-6 py-3.5">
                                   <span
                                     style={{
-                                      fontFamily: row.defaultHours ? "'JetBrains Mono', monospace" : undefined,
+                                      fontFamily: row.hours === "-" ? undefined : "'JetBrains Mono', monospace",
                                       fontSize: "0.75rem",
-                                      color: row.defaultHours ? "rgba(29,36,69,0.45)" : "rgba(29,36,69,0.2)",
+                                      color: row.hours === "-" ? "rgba(29,36,69,0.2)" : "rgba(29,36,69,0.45)",
                                     }}
                                   >
-                                    {row.defaultHours ?? "-"}
+                                    {row.hours}
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
                                   <span
                                     style={{
-                                      fontFamily: row.defaultEcts ? "'JetBrains Mono', monospace" : undefined,
-                                      fontSize: row.defaultEcts ? "0.8125rem" : "0.75rem",
-                                      fontWeight: row.defaultEcts ? 600 : 400,
-                                      color: row.defaultEcts ? "var(--color-primary-500)" : "rgba(29,36,69,0.2)",
+                                      fontFamily: row.ects === "-" ? undefined : "'JetBrains Mono', monospace",
+                                      fontSize: row.ects === "-" ? "0.75rem" : "0.8125rem",
+                                      fontWeight: row.ects === "-" ? 400 : 600,
+                                      color: row.ects === "-" ? "rgba(29,36,69,0.2)" : "var(--color-primary-500)",
                                     }}
                                   >
-                                    {row.defaultEcts ?? "-"}
+                                    {row.ects}
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
@@ -478,8 +435,8 @@ export default function CurriculumPage() {
                             );
                           }
 
-                          const isExternal = Boolean(row.href);
-                          const target = row.href ?? `/egitim/mufredat/${row.code}`;
+                          const isExternal = Boolean(row.external);
+                          const target = row.href;
 
                           return (
                             <tr
@@ -638,20 +595,6 @@ export default function CurriculumPage() {
   );
 }
 
-function buildElectiveRows(expandedGroup) {
-  if (!expandedGroup.options.length) {
-    return [{ _empty: true }];
-  }
-  return expandedGroup.options.map((c) => {
-    const own = COURSE_DETAILS[c.code];
-    return {
-      isGroup: false,
-      code: c.code,
-      name: (own?.title ?? c.title)?.trim() ?? c.code,
-      hours: own?.hours ?? c.hours ?? expandedGroup.defaultHours ?? "-",
-      ects: own?.ects ?? c.ects ?? expandedGroup.defaultEcts ?? "-",
-      status: own?.type ?? c.type ?? "Seçmeli",
-      href: expandedGroup.external && !own ? bolognaCourseUrl(c.bolognaId) : null,
-    };
-  });
+function electiveRows(group) {
+  return group.options.length > 0 ? group.options : [{ _empty: true }];
 }
