@@ -499,12 +499,12 @@ export default function CourseInfo({ course, sections = [] }) {
                   {course.syllabus?.map((item) => (
                     <div
                       key={item.week}
-                      className="flex items-center gap-5 py-3.5 border-b border-primary-500/10 last:border-0"
+                      className="flex items-start gap-4 py-3.5 border-b border-primary-500/10 last:border-0"
                     >
-                      <div className="shrink-0 size-8 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-primary-500/5 border border-primary-500/10 text-primary-500/40">
+                      <span className="shrink-0 size-8 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-secondary-500/10 border border-secondary-500/20 text-secondary-600">
                         {item.week}
-                      </div>
-                      <span className="text-sm font-medium text-primary-500/60">
+                      </span>
+                      <span className="pt-1.5 text-sm font-medium text-primary-500 leading-relaxed">
                         {item.topic}
                       </span>
                     </div>
