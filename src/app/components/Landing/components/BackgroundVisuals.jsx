@@ -103,7 +103,7 @@ function CurveLayer({ curves, activeGraph, reducedMotion, className }) {
     <svg
       viewBox="0 0 1600 1000"
       preserveAspectRatio="xMidYMid slice"
-      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[118vw] h-[118vh] opacity-60 ${className}`}
+      className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[118vw] h-[118vh] opacity-25 sm:opacity-60 ${className}`}
     >
       <line
         x1="0"

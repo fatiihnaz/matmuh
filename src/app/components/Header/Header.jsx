@@ -3,10 +3,11 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Mail, Search, Menu, X } from "lucide-react";
+import { Mail, Menu, X } from "lucide-react";
 import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
+import NavSearch from "./components/NavSearch";
 import { navigationItems, DEPARTMENT_EMAIL, YTU_ANA_SITE } from "@/data/navigation";
 import { useCmsBlock, useCmsRoute } from "inscribed";
 
@@ -14,6 +15,7 @@ export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const { locale, slug, localePath } = useCmsRoute();
   const { value: eposta } = useCmsBlock("footer.contact.email");
+  const isHome = slug === "/";
   const epostaAdresi = eposta?.label || DEPARTMENT_EMAIL;
   const epostaBagi = eposta?.href || `mailto:${DEPARTMENT_EMAIL}`;
 
@@ -64,14 +66,7 @@ export default function Header() {
               ))}
             </nav>
 
-            <Link
-              href="/duyurular"
-              aria-label="Duyurularda ara"
-              title="Duyurularda ara"
-              className="hidden lg:block pl-2 text-neutral-400 hover:text-white transition-colors"
-            >
-              <Search size={14} />
-            </Link>
+            {!isHome && <NavSearch />}
 
             <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 

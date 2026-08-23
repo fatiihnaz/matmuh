@@ -64,11 +64,14 @@ function CountUp({ value, suffix, delay }) {
   );
 }
 
-export default function Landing() {
+const SHOW_STATS = false;
+
+export default function Landing({ highlights = [] }) {
   return (
     <div className="relative">
-      <Hero/>
+      <Hero highlights={highlights} />
 
+      {SHOW_STATS && (
       <div className="relative z-10 mx-auto max-w-7xl px-4 -mt-20 sm:-mt-12">
         <div className="bg-white rounded-xl border border-primary-500/10 shadow-xs shadow-black/10">
           <EditableList
@@ -116,6 +119,7 @@ export default function Landing() {
           </EditableList>
         </div>
       </div>
+      )}
     </div>
   );
 }

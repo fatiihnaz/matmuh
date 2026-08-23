@@ -112,34 +112,6 @@ select option {
     opacity: 0.35;
   }
 }
-
-@keyframes mm-cue {
-  0% {
-    transform: translateY(-100%);
-    opacity: 0;
-  }
-  35% {
-    opacity: 1;
-  }
-  100% {
-    transform: translateY(250%);
-    opacity: 0;
-  }
-}
-
-.mm-cue {
-  animation: mm-cue 2.4s ease-in-out infinite;
-}
-
-.mm-paused .mm-cue {
-  animation-play-state: paused;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .mm-cue {
-    animation: none;
-  }
-}
 .announcement-body > * + * {
   margin-top: 0.85rem;
 }

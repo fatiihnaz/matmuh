@@ -1,19 +1,20 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import { Search } from "lucide-react";
+import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import { EditableRegion } from "inscribed";
 import BackgroundVisuals from "./BackgroundVisuals";
 import { useHeroActive, useReducedMotion } from "./heroMotion";
+import HeroSearch from "./HeroSearch";
 
-export default function Hero() {
+export default function Hero({ highlights = [] }) {
   const containerRef = useRef(null);
   const rectRef = useRef(null);
   const staleRectRef = useRef(true);
   const pointerRef = useRef({ x: 0, y: 0 });
   const frameRef = useRef(0);
 
-  const [searchQuery, setSearchQuery] = useState("");
   const [isHovered, setIsHovered] = useState(false);
 
   const reducedMotion = useReducedMotion();
@@ -92,12 +93,12 @@ export default function Hero() {
         mouseX.set(0);
         mouseY.set(0);
       }}
-      className={`relative isolate w-full h-[calc(72svh-var(--header-h))] min-h-95 sm:h-[calc(76svh-var(--header-h))] sm:min-h-110 md:h-[calc(78svh-var(--header-h))] md:min-h-125 md:perspective-[1500px] flex items-center justify-center overflow-hidden bg-primary-500 pb-20 sm:pb-12 ${
+      className={`relative isolate overflow-hidden w-full min-h-[max(23.75rem,calc(72svh-var(--header-h)))] sm:h-[calc(76svh-var(--header-h))] sm:min-h-110 md:h-[calc(78svh-var(--header-h))] md:min-h-125 md:perspective-[1500px] flex flex-col items-center justify-center bg-primary-500 py-8 pb-20 sm:py-0 sm:pb-12 ${
         active ? "" : "mm-paused"
       }`}
     >
       <motion.div
-        className="absolute inset-0 origin-center pointer-events-none z-0 md:transform-3d"
+        className="absolute inset-0 overflow-hidden origin-center pointer-events-none z-0 md:transform-3d"
         style={{
           rotateX: planeRotateX,
           rotateY: planeRotateY,
@@ -106,8 +107,8 @@ export default function Hero() {
       >
         <BackgroundVisuals active={active} reducedMotion={reducedMotion} />
 
-        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-40 md:opacity-100">
-          <motion.div className="relative flex items-center justify-center h-[78%] aspect-[2.38] max-w-[96vw] drop-shadow-[0_0_18px_rgba(98,109,158,0.25)]">
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none opacity-90 md:opacity-100">
+          <motion.div className="relative flex items-center justify-center aspect-[2.38] w-[118svh] rotate-90 sm:w-auto sm:h-[78%] sm:max-w-[96vw] sm:rotate-0 drop-shadow-[0_0_18px_rgba(98,109,158,0.25)]">
             <svg
               viewBox="0 0 368.25 154.79"
               fill="none"
@@ -182,7 +183,7 @@ export default function Hero() {
             </svg>
 
             <motion.div
-              className="absolute w-[22%] max-w-100 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
+              className="absolute w-[46%] sm:w-[26%] max-w-120 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
               animate={{
                 filter: isHovered
                   ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 26px rgba(173,151,111,0.6))"
@@ -272,38 +273,51 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.8 }}
             className="hidden sm:block w-full sm:max-w-5xl mt-12 sm:mt-16 mb-8 mx-auto"
           >
-            <form action="/duyurular" className="relative group w-full">
-              <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 focus-within:shadow-xl w-full">
-                <input
-                  type="search"
-                  name="q"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Duyurularda aramak için yazınız..."
-                  aria-label="Duyurularda ara"
-                  className="w-full py-3 px-6 text-base text-slate-700 placeholder-slate-400 outline-none bg-transparent font-medium"
-                />
-                <button
-                  type="submit"
-                  aria-label="Ara"
-                  className="px-6 py-3 text-slate-400 hover:text-primary-500 transition-colors border-l border-slate-100 flex items-center justify-center"
-                >
-                  <Search size={22} />
-                </button>
-              </div>
-            </form>
+            <HeroSearch />
           </motion.div>
+
         </div>
       </motion.div>
 
-      <div
-        aria-hidden="true"
-        className="absolute bottom-24 sm:bottom-20 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
-      >
-        <div className="relative h-12 w-px overflow-hidden bg-secondary-500/25">
-          <div className="mm-cue absolute inset-x-0 top-0 h-5 bg-secondary-500" />
+      {highlights.length > 0 && (
+        <div className="relative z-30 mt-auto w-full px-4 pt-8 sm:absolute sm:inset-x-0 sm:bottom-10 sm:mt-0 sm:pt-0">
+          <div className="mx-auto w-full max-w-5xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.8, delay: 1 }}
+              className="grid gap-2 sm:grid-cols-2"
+            >
+              {highlights.map((item) => (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className="group flex min-w-0 items-center gap-3 rounded-xl border border-white/12 bg-primary-700/65 px-3.5 py-2 text-left backdrop-blur-md transition-colors hover:border-secondary-500/45 hover:bg-primary-700/80"
+                >
+                  <span className="min-w-0 flex-1">
+                    <span className="flex items-baseline gap-2 text-[10px] font-semibold uppercase tracking-widest text-secondary-400">
+                      {item.label}
+                      {item.date && (
+                        <span className="font-normal normal-case tracking-normal text-white/35">
+                          {item.date}
+                        </span>
+                      )}
+                    </span>
+                    <span className="block truncate text-[12.5px] text-white/85 group-hover:text-white">
+                      {item.title}
+                    </span>
+                  </span>
+                  <ChevronRight
+                    size={15}
+                    className="shrink-0 text-white/30 transition-colors group-hover:text-secondary-400"
+                  />
+                </Link>
+              ))}
+            </motion.div>
+          </div>
         </div>
-      </div>
+      )}
+
     </div>
   );
 }
