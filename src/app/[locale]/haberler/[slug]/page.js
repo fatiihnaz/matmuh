@@ -11,6 +11,7 @@ import GalleryGrid from "@/app/components/Announcements/GalleryGrid";
 import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
 import { getNewsBySlug } from "@/data/content";
+import { alternateLanguages } from "@/app/lib/hreflang.js";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -20,7 +21,10 @@ export async function generateMetadata({ params }) {
   return {
     title: `${item.title} | YTÜ Matematik Mühendisliği`,
     description: item.summary ?? undefined,
-    alternates: { canonical: `/haberler/${item.slug}` },
+    alternates: {
+      canonical: `/haberler/${item.slug}`,
+      languages: alternateLanguages(item, "/haberler"),
+    },
     openGraph: {
       type: "article",
       title: item.title,

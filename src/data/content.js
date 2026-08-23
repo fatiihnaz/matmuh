@@ -65,6 +65,8 @@ function toAnnouncement(item) {
     categories: data.tags ?? [],
     publishedAt: data.publishedAt ?? "",
     updatedAt: item.updatedAt ?? null,
+    locale: item.locale ?? null,
+    translations: item.translations ?? [],
     pinned: Boolean(data.featured),
     coverImage: data.coverImage ?? null,
     attachments: (data.attachments ?? []).map((a) => ({
