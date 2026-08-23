@@ -21,7 +21,7 @@ export function fullName(person) {
 export function useStaff(initial = []) {
   const { items, isLoading, error } = useCollection("staff", STAFF_WINDOW);
   const people = (items ?? []).map((item) => ({ ...item.data, slug: item.slug }));
-  const roster = isLoading && initial.length > 0 ? initial : people;
+  const roster = people.length > 0 ? people : initial;
   return { people: roster, isLoading, error };
 }
 
