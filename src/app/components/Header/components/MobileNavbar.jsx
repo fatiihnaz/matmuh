@@ -4,7 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Search, ChevronUp, LogIn, LogOut } from "lucide-react";
+import { Search, ChevronUp, LogIn, LogOut, ClipboardCheck } from "lucide-react";
 import { navigationItems } from "@/data/navigation";
 import { useAuth } from "@/lib/auth";
 
@@ -113,6 +113,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
     ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
     : "--";
   const roles = (user?.authorities ?? []).map((a) => ROLE_LABELS[a] ?? a);
+  const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
     <AnimatePresence>
@@ -164,6 +165,15 @@ export default function MobileNavbar({ isOpen, onClose }) {
                       <span className="text-xs text-neutral-400 truncate">{user?.email}</span>
                     </div>
                   </div>
+
+                  {isAdmin && (
+                    <Link href="/yonetim/ders-notlari" onClick={onClose}
+                      className="flex items-center justify-center gap-2 w-full text-secondary-500 text-sm py-2.5 rounded-lg bg-secondary-500/10 border border-secondary-500/30 hover:border-secondary-500/60 transition-colors"
+                    >
+                      <ClipboardCheck size={16} />
+                      Not Yönetimi
+                    </Link>
+                  )}
 
                   <button onClick={() => { onClose(); signOut(); }}
                     className="flex items-center justify-center gap-2 w-full text-red-400/80 hover:text-red-300 text-sm py-2.5 rounded-lg bg-red-100/5 border border-white/10 hover:border-red-200/30 transition-colors"

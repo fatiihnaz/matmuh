@@ -12,7 +12,6 @@ import {
   Sigma,
   Percent,
   Shield,
-  Eye,
   ChevronDown,
   Database,
   GraduationCap,
@@ -27,6 +26,8 @@ import {
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
 import { fetchCourseStatistics } from "@/data/statistics";
+
+import LectureNotes from "./LectureNotes";
 import { useAuth } from "@/lib/auth";
 
 const initials = (name) =>
@@ -47,36 +48,7 @@ const isFinalExam = (exam) =>
 const isMakeupExam = (exam) =>
   exam.type === "RESIT" || /bütünleme/i.test(exam.name);
 
-const sampleResources = [
-  {
-    id: 1,
-    title: "2025 Vize Soruları.pdf",
-    date: "14 Şub 2026",
-    type: "PDF",
-    size: "2.4 MB",
-  },
-  {
-    id: 2,
-    title: "Hafta 4 - Teorem İspatları.zip",
-    date: "10 Şub 2026",
-    type: "ZIP",
-    size: "8.1 MB",
-  },
-  {
-    id: 3,
-    title: "Cauchy-Riemann Örnekler.pdf",
-    date: "05 Şub 2026",
-    type: "PDF",
-    size: "1.8 MB",
-  },
-  {
-    id: 4,
-    title: "2024 Final Çözümleri.pdf",
-    date: "01 Şub 2026",
-    type: "PDF",
-    size: "4.2 MB",
-  },
-];
+
 
 export default function CourseInfo({ course, sections = [] }) {
   const [activeTab, setActiveTab] = useState(0);
@@ -557,76 +529,7 @@ export default function CourseInfo({ course, sections = [] }) {
                 transition={tabTransition}
                 className="w-full"
               >
-                <div className="rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
-                  <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
-                    <Shield
-                      size={20}
-                      strokeWidth={1.5}
-                      className="text-secondary-500"
-                    />
-                  </div>
-                  <div className="flex-1">
-                    <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
-                      Giriş Yapmanız Gerekmektedir
-                    </h4>
-                    <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
-                      Ders notlarını görüntülemek ve kaynak indirmek için{" "}
-                      <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded">
-                        @std.yildiz.edu.tr
-                      </span>{" "}
-                      hesabınızla giriş yapmalısınız.
-                    </p>
-                    <button
-                      onClick={onSignIn}
-                      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 shadow-md shadow-secondary-500/20"
-                    >
-                      <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
-                    </button>
-                  </div>
-                </div>
-                <div className="relative">
-                  <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-                    <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 backdrop-blur-sm shadow-xl">
-                      <Eye
-                        size={16}
-                        strokeWidth={2}
-                        className="text-secondary-500"
-                      />
-                      <span className="text-[13px] font-medium text-white">
-                        Önizleme - Giriş yapın
-                      </span>
-                    </div>
-                  </div>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 filter blur-[6px] opacity-40 select-none pointer-events-none">
-                    {sampleResources.map((res) => (
-                      <div
-                        key={res.id}
-                        className="rounded-xl p-4 border border-gray-100 bg-white shadow-xs flex items-start gap-4"
-                      >
-                        <div className="w-12 h-14 rounded-lg flex flex-col items-center justify-center bg-primary-500/5">
-                          <FileText
-                            size={20}
-                            className="text-primary-700"
-                            strokeWidth={1.5}
-                          />
-                        </div>
-                        <div className="flex-1 min-w-0 pt-0.5">
-                          <div className="text-sm font-semibold text-primary-700 truncate mb-1.5">
-                            {res.title}
-                          </div>
-                          <div className="flex items-center gap-3">
-                            <span className="text-[11px] text-gray-400 font-mono">
-                              {res.date}
-                            </span>
-                            <span className="text-[11px] font-bold text-secondary-500 bg-secondary-500/10 px-1.5 py-0.5 rounded">
-                              {res.type}
-                            </span>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <LectureNotes lectureId={course.id} onSignIn={onSignIn} />
               </motion.div>
             )}
 

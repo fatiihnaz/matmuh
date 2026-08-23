@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { LogIn, ChevronDown, LogOut } from "lucide-react";
+import Link from "next/link";
+import { LogIn, ChevronDown, LogOut, ClipboardCheck } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 
@@ -59,6 +60,7 @@ export default function UserLogin() {
     ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
     : "--";
   const roles = (user?.authorities ?? []).map((a) => ROLE_LABELS[a] ?? a);
+  const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
     <div ref={ref} className="relative">
@@ -120,6 +122,16 @@ export default function UserLogin() {
             )}
 
             <div className="p-1.5 border-t border-primary-500/8">
+              {isAdmin && (
+                <Link
+                  href="/yonetim/ders-notlari"
+                  onClick={() => setOpen(false)}
+                  className="flex items-center gap-2 w-full px-2 py-1.5 text-[11px] text-primary-600 hover:bg-primary-500/5 transition-colors rounded-lg"
+                >
+                  <ClipboardCheck size={13} className="text-primary-500/50 shrink-0" />
+                  <span>Not Yönetimi</span>
+                </Link>
+              )}
               <button
                 onClick={() => {
                   setOpen(false);

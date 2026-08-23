@@ -32,9 +32,12 @@ const labelMap = {
   endustriyel: "Endüstriyel İşbirlikleri",
   duyurular: "Duyurular",
   haberler: "Haberler",
+  yonetim: "Yönetim",
+  "ders-notlari": "Not Yönetimi",
 };
 
 const unclickablePaths = [
+  "yonetim",
   "bolum",
   "personel",
   "egitim",
