@@ -2,6 +2,8 @@ import { SITE_URL } from "./layout";
 import { getAllNewsSlugs, getAllSlugs } from "@/data/content";
 import { getAllCourseCodes } from "@/data/courses";
 
+export const dynamic = "force-dynamic";
+
 const STATIC_ROUTES = [
   { path: "/", priority: 1, changeFrequency: "daily" },
   { path: "/duyurular", priority: 0.9, changeFrequency: "daily" },
