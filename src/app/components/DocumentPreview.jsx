@@ -25,7 +25,12 @@ export default function DocumentPreview({ open, onClose, label, href, kind }) {
 
   return (
     <Modal open={open} onClose={onClose} label={label}>
-      <div className="flex flex-col h-full pt-14 pb-3 px-3 sm:px-6">
+      <div
+        onClick={(event) => {
+          if (event.target === event.currentTarget) onClose();
+        }}
+        className="flex flex-col h-full pt-14 pb-3 px-3 sm:px-6"
+      >
         <div className="relative flex-1 min-h-0 rounded-lg overflow-hidden bg-white">
           {isImage ? (
             <Image src={href} alt={label} fill sizes="95vw" className="object-contain" />

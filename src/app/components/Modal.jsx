@@ -10,7 +10,7 @@ const FOCUSABLE =
 
 const neverChanges = () => () => {};
 
-export default function Modal({ open, onClose, label, children }) {
+export default function Modal({ open, onClose, label, contentClassName = "", children }) {
   const mounted = useSyncExternalStore(neverChanges, () => true, () => false);
   const panelRef = useRef(null);
   const restoreRef = useRef(null);
@@ -78,7 +78,10 @@ export default function Modal({ open, onClose, label, children }) {
             aria-label={label}
             tabIndex={-1}
             onKeyDown={handleKeyDown}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              if (event.target === event.currentTarget) onClose();
+            }}
             className="relative w-full h-full outline-none"
           >
             <button
@@ -89,7 +92,14 @@ export default function Modal({ open, onClose, label, children }) {
             >
               <X className="size-5" />
             </button>
-            {children}
+            <div
+              onClick={(event) => {
+                if (event.target === event.currentTarget) onClose();
+              }}
+              className={`h-full ${contentClassName}`}
+            >
+              {children}
+            </div>
           </div>
         </motion.div>
       )}
