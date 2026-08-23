@@ -19,6 +19,7 @@ import {
   uploadLectureNote,
 } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
+import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
 
 const PLACEHOLDERS = [
   { id: 1, title: "Vize Soruları.pdf", meta: "PDF · 2.4 MB" },
@@ -88,6 +89,10 @@ function LoginPanel({ loading, onSignIn }) {
 }
 
 function NoteCard({ note, pending = false }) {
+  const [preview, setPreview] = useState(false);
+  const kind = String(note.extension ?? "").toLowerCase();
+  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
+
   return (
     <div
       className={`rounded-xl p-4 border bg-white shadow-xs flex items-start gap-4 transition-colors ${
@@ -96,12 +101,18 @@ function NoteCard({ note, pending = false }) {
           : "border-primary-500/10 hover:border-secondary-500/40"
       }`}
     >
-      <div className="w-12 h-14 rounded-lg flex flex-col items-center justify-center gap-1 bg-primary-500/5 shrink-0">
+      <button
+        type="button"
+        onClick={() => previewable && setPreview(true)}
+        disabled={!previewable}
+        aria-label={previewable ? `${note.title} dosyasını önizle` : undefined}
+        className="w-12 h-14 rounded-lg flex flex-col items-center justify-center gap-1 bg-primary-500/5 shrink-0 transition-colors enabled:hover:bg-secondary-500/15 disabled:cursor-default"
+      >
         <FileText size={18} className="text-primary-700" strokeWidth={1.5} />
         <span className="text-[8px] font-bold text-primary-500/50 tracking-wide">
           {note.extension}
         </span>
-      </div>
+      </button>
       <div className="flex-1 min-w-0 pt-0.5">
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="text-sm font-semibold text-primary-700 truncate">
@@ -132,8 +143,23 @@ function NoteCard({ note, pending = false }) {
               {note.uploadedBy}
             </span>
           )}
+          {note.viewCount > 0 && (
+            <span className="inline-flex items-center gap-1 text-[11px] text-primary-500/40 font-mono">
+              <Eye size={11} strokeWidth={1.5} /> {note.viewCount}
+            </span>
+          )}
         </div>
       </div>
+
+      {previewable && (
+        <DocumentPreview
+          open={preview}
+          onClose={() => setPreview(false)}
+          label={note.title}
+          href={note.href}
+          kind={kind}
+        />
+      )}
       {note.href && (
         <a
           href={note.href}
