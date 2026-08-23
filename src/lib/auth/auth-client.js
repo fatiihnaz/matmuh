@@ -29,9 +29,20 @@ const HINT_KEY = "matmuh:auth-hint";
 const CALLBACK_PARAM = "auth";
 const CALLBACK_VALUE = "callback";
 
+/**
+ * Dev-only escape hatch. The login redirect needs `http://localhost:3000` in the
+ * backend's `FRONTEND_ALLOWED_CALLBACKS`; until it is there, paste a real
+ * access_token cookie into NEXT_PUBLIC_DEV_ACCESS_TOKEN and the app behaves as
+ * that user. NODE_ENV folds this to "" in a production build, so it cannot ship.
+ */
+const DEV_TOKEN =
+  process.env.NODE_ENV !== "production"
+    ? (process.env.NEXT_PUBLIC_DEV_ACCESS_TOKEN ?? "")
+    : "";
+
 /** @type {string} */
-let accessToken = "";
-let expiresAt = 0;
+let accessToken = DEV_TOKEN;
+let expiresAt = DEV_TOKEN ? Number.MAX_SAFE_INTEGER : 0;
 /** @type {Promise<boolean> | null} */
 let inflight = null;
 
@@ -88,6 +99,8 @@ function decodeClaims(token) {
 }
 
 async function doRefresh() {
+  if (DEV_TOKEN) return true;
+
   const run = async () => {
     const had = accessToken !== "";
     let res;
