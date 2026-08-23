@@ -1,5 +1,7 @@
 import { notFound } from "next/navigation";
-import { getCourseByCode } from "@/data/courses";
+
+import { getCourseByCode } from "@/data/curriculum";
+
 import CourseInfo from "./components/CourseInfo";
 
 export async function generateMetadata({ params }) {

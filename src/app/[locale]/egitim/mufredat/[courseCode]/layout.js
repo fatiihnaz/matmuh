@@ -1,6 +1,7 @@
-import SubHeader from "@/app/components/Header/SubHeader";
-import { getCourseByCode } from "@/data/courses";
 import { notFound } from "next/navigation";
+
+import SubHeader from "@/app/components/Header/SubHeader";
+import { getCourseByCode } from "@/data/curriculum";
 
 export default async function CourseLayout({ params, children }) {
   const { courseCode } = await params;
@@ -20,7 +21,7 @@ export default async function CourseLayout({ params, children }) {
   return (
     <>
       <SubHeader
-        title={`${course.code} — ${course.title.trim()}`}
+        title={`${course.code} — ${course.title}`}
         subTitle={detailString}
       />
       {children}

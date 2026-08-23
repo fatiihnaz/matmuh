@@ -1,6 +1,6 @@
 import { SITE_URL } from "./layout";
 import { getAllNewsSlugs, getAllSlugs } from "@/data/content";
-import { getAllCourseCodes } from "@/data/courses";
+import { getCourseCodes } from "@/data/curriculum";
 
 export const dynamic = "force-dynamic";
 
@@ -29,7 +29,7 @@ export default async function sitemap() {
   const [slugs, newsSlugs, courseCodes] = await Promise.all([
     getAllSlugs(),
     getAllNewsSlugs(),
-    getAllCourseCodes(),
+    getCourseCodes(),
   ]);
 
   const staticEntries = STATIC_ROUTES.map(({ path, priority, changeFrequency }) => ({

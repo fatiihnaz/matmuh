@@ -1,9 +1,7 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
-  Clock,
-  MapPin,
   User,
   BarChart3,
   Lock,
@@ -20,12 +18,13 @@ import {
   GraduationCap,
   Upload,
   ArrowRight,
+  ExternalLink,
   Info,
 } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
-import { staffData } from "@/data/staff";
-import { getCourseStatistics } from "@/data/statistics";
+import { fetchCourseStatistics } from "@/data/statistics";
+import { useAuth } from "@/lib/auth";
 
 const LOW_GRADES = new Set(["DD", "FD", "FF", "F0"]);
 const isLowGrade = (grade) => LOW_GRADES.has(grade);
@@ -35,25 +34,6 @@ const isFinalExam = (exam) =>
   exam.type === "FINAL" || /final|yarıyıl sonu|yılsonu/i.test(exam.name);
 const isMakeupExam = (exam) =>
   exam.type === "RESIT" || /bütünleme/i.test(exam.name);
-
-const bgColors = [
-  "#1D2445",
-  "#2a3158",
-  "#33295a",
-  "#1a3348",
-  "#2d3a2e",
-  "#3a2d2d",
-  "#2a2d45",
-  "#1D2445",
-  "#2a3158",
-  "#33295a",
-  "#1a3348",
-  "#2d3a2e",
-  "#3a2d2d",
-  "#2a2d45",
-  "#1D2445",
-  "#2a3158",
-];
 
 const sampleResources = [
   {
@@ -88,17 +68,34 @@ const sampleResources = [
 
 export default function CourseInfo({ course }) {
   const [activeTab, setActiveTab] = useState(0);
+  const { isAuthenticated, isLoading: authLoading, signIn, getAccessToken } = useAuth();
 
-  const searchCode = String(
-    course?.code || course?.id || course?.courseCode || ""
-  ).toUpperCase();
+  const searchCode = course.code;
 
-  const courseData = useMemo(
-    () => getCourseStatistics(searchCode),
-    [searchCode]
-  );
+  const [terms, setTerms] = useState(null);
+  const [statsFailed, setStatsFailed] = useState(false);
 
-  const availableTerms = useMemo(() => courseData?.terms ?? [], [courseData]);
+  useEffect(() => {
+    if (!isAuthenticated || terms) return undefined;
+    let alive = true;
+    (async () => {
+      try {
+        const token = await getAccessToken();
+        if (!token || !alive) return;
+        const result = await fetchCourseStatistics(course.id, token);
+        if (alive) setTerms(result);
+      } catch {
+        if (alive) setStatsFailed(true);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [isAuthenticated, terms, course.id, getAccessToken]);
+
+  const onSignIn = useCallback(() => signIn(), [signIn]);
+
+  const availableTerms = useMemo(() => terms ?? [], [terms]);
 
   const [selectedTerm, setSelectedTerm] = useState("");
   const [selectedInstructor, setSelectedInstructor] = useState("");
@@ -177,16 +174,18 @@ export default function CourseInfo({ course }) {
 
   if (!course) return null;
 
-  const completedCount = course.syllabus?.filter((s) => s.done).length || 0;
-  const totalCount = course.syllabus?.length || 0;
-  const progressPercent =
-    totalCount > 0 ? (completedCount / totalCount) * 100 : 0;
+  const weekCount = course.syllabus?.length ?? 0;
 
   const tabs = [
     { label: "Genel", icon: GraduationCap, locked: false },
     { label: "Müfredat", icon: Library, locked: false },
-    { label: "Ders Notları", icon: NotebookPen, badge: "8", locked: true },
-    { label: "Geçmiş İstatistikler", icon: BarChart3, locked: false },
+    {
+      label: "Ders Notları",
+      icon: NotebookPen,
+      badge: course.noteCount > 0 ? String(course.noteCount) : null,
+      locked: !isAuthenticated,
+    },
+    { label: "Geçmiş İstatistikler", icon: BarChart3, locked: !isAuthenticated },
   ];
 
   const renderDistributionBars = (data) => {
@@ -280,105 +279,25 @@ export default function CourseInfo({ course }) {
     <div className="flex flex-col gap-5 lg:sticky lg:top-8 font-sans">
       <MainCard title="Şubeler & Program">
         <div className="space-y-6 pt-2">
-          {course.sections?.map((section, idx) => {
-            const staffMember = staffData.academics.find(
-              (s) => s.id === section.staffId
-            );
-            const instructorFullName = staffMember
-              ? `${staffMember.rank} ${staffMember.name}`
-              : "Öğretim Görevlisi";
-            const avatarColor = bgColors[idx % bgColors.length];
-
-            return (
-              <div key={idx} className="group">
-                <div className="flex items-center gap-3 mb-3">
-                  <div
-                    className="size-11 rounded-full flex items-center justify-center font-semibold text-sm shrink-0"
-                    style={{
-                      backgroundColor: avatarColor,
-                      color: "var(--color-secondary-500, #AD976F)",
-                    }}
-                  >
-                    {staffMember?.name
-                      .split(" ")
-                      .map((n) => n[0])
-                      .join("") || "AY"}
-                  </div>
-                  <div className="min-w-0">
-                    <div className="text-sm font-semibold text-primary-500 leading-tight">
-                      {instructorFullName}
-                    </div>
-                    <div className="flex items-center gap-2 mt-1">
-                      <span className="text-xs text-primary-500/50">
-                        Grup {section.groupNo}
-                      </span>
-                      {staffMember && (
-                        <a
-                          href={`https://avesis.yildiz.edu.tr/${staffMember.id}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center gap-1 text-xs text-primary-500/50 hover:text-secondary-500 transition-colors"
-                        >
-                          <User size={12} /> AVESİS
-                        </a>
-                      )}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  {!section.schedule?.length && (
-                    <div className="p-3 rounded-lg border border-dashed border-primary-500/15 text-xs text-primary-500/40 text-center">
-                      Bu şube için program bilgisi girilmemiş.
-                    </div>
-                  )}
-                  {section.schedule?.map((sched, sIdx) => (
-                    <div
-                      key={sIdx}
-                      className="p-3 rounded-lg bg-primary-500/2 border border-primary-500/10"
-                    >
-                      <div className="flex justify-between items-center mb-1">
-                        <span className="text-xs font-bold text-primary-500">
-                          {sched.day}
-                        </span>
-                        <span className="text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded uppercase tracking-wider">
-                          {sched.type}
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-3 text-xs text-primary-500/50">
-                        <span className="flex items-center gap-1.5">
-                          <Clock size={12} /> {sched.time}
-                        </span>
-                        <span className="flex items-center gap-1.5">
-                          <MapPin size={12} /> {sched.room}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            );
-          })}
-
-          {!course.sections?.length && (
-            <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-              <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
-              Bu ders için şube ve program bilgisi henüz girilmemiş.
-            </div>
-          )}
+          <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
+            <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
+            Bu ders için şube ve program bilgisi henüz girilmemiş.
+          </div>
         </div>
       </MainCard>
 
       <MainCard title="Ders Bilgileri">
         <div className="space-y-3 pt-2">
           {[
-            { label: "Kredi", value: course.hours },
-            { label: "ECTS", value: course.ects },
+            { label: "T+U+L", value: course.hours },
+            { label: "ECTS", value: course.ects ?? "-" },
             {
               label: "Yarıyıl",
               value: course.semester ? `${course.semester}. Yarıyıl` : "-",
             },
-            { label: "Dil", value: course.language },
+            { label: "Tür", value: course.type },
+            { label: "Kategori", value: course.category ?? "-" },
+            { label: "Dil", value: course.language ?? "-" },
           ].map((item, i) => (
             <div key={i} className="flex items-center justify-between text-xs">
               <span className="text-primary-500/40 font-medium">
@@ -458,9 +377,34 @@ export default function CourseInfo({ course }) {
                       Ders Hakkında
                     </h3>
                   </div>
-                  <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
-                    {course.content}
-                  </p>
+                  {course.content ? (
+                    <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
+                      {course.content}
+                    </p>
+                  ) : course.bolognaLink ? (
+                    <a
+                      href={course.bolognaLink}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="flex items-start gap-3 p-4 rounded-xl border border-primary-500/10 bg-primary-500/2 hover:border-secondary-500/40 transition-colors group"
+                    >
+                      <div className="shrink-0 size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-500">
+                        <ExternalLink size={14} strokeWidth={2} />
+                      </div>
+                      <span className="text-sm text-primary-500/60 leading-relaxed">
+                        Bu ders Matematik Mühendisliği bölümüne ait değil. İçerik,
+                        kazanım ve değerlendirme bilgileri{" "}
+                        <span className="font-semibold text-primary-500 group-hover:text-secondary-500 transition-colors">
+                          YTÜ Bologna kataloğunda
+                        </span>{" "}
+                        tutuluyor.
+                      </span>
+                    </a>
+                  ) : (
+                    <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
+                      Bu ders için içerik açıklaması girilmemiş.
+                    </p>
+                  )}
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
@@ -468,7 +412,7 @@ export default function CourseInfo({ course }) {
                       Eğitim Dili
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
-                      {course.language}
+                      {course.language ?? "-"}
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
@@ -507,43 +451,30 @@ export default function CourseInfo({ course }) {
                     </span>
                   </div>
                   <span className="text-xs font-medium text-primary-500/40">
-                    {completedCount} / {totalCount} tamamlandı
+                    {weekCount} hafta
                   </span>
                 </div>
-                <div className="mb-8 h-1.5 w-full bg-primary-500/5 rounded-full overflow-hidden">
-                  <motion.div
-                    className="h-full bg-secondary-500 rounded-full"
-                    initial={{ width: 0 }}
-                    animate={{ width: `${progressPercent}%` }}
-                    transition={{ duration: 0.8, ease: "easeOut" }}
-                  />
-                </div>
+                <div className="mb-8 h-px w-full bg-primary-500/10" />
                 <div className="flex flex-col">
-                  {course.syllabus?.map((item, idx) => (
+                  {course.syllabus?.map((item) => (
                     <div
-                      key={idx}
+                      key={item.week}
                       className="flex items-center gap-5 py-3.5 border-b border-primary-500/10 last:border-0"
                     >
-                      <div
-                        className={`shrink-0 size-8 rounded-full flex items-center justify-center font-mono text-xs font-bold transition-colors ${
-                          item.done
-                            ? "bg-secondary-500 text-white"
-                            : "bg-primary-500/5 border border-primary-500/10 text-primary-500/40"
-                        }`}
-                      >
-                        {idx + 1}
+                      <div className="shrink-0 size-8 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-primary-500/5 border border-primary-500/10 text-primary-500/40">
+                        {item.week}
                       </div>
-                      <span
-                        className={`text-sm transition-colors ${
-                          item.done
-                            ? "font-semibold text-primary-500"
-                            : "font-medium text-primary-500/40"
-                        }`}
-                      >
+                      <span className="text-sm font-medium text-primary-500/60">
                         {item.topic}
                       </span>
                     </div>
                   ))}
+                  {weekCount === 0 && (
+                    <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
+                      <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
+                      Bu ders için haftalık içerik girilmemiş.
+                    </div>
+                  )}
                 </div>
               </motion.div>
             )}
@@ -577,7 +508,10 @@ export default function CourseInfo({ course }) {
                       </span>{" "}
                       hesabınızla giriş yapmalısınız.
                     </p>
-                    <button className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 shadow-md shadow-secondary-500/20">
+                    <button
+                      onClick={onSignIn}
+                      className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 shadow-md shadow-secondary-500/20"
+                    >
                       <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
                     </button>
                   </div>
@@ -638,7 +572,20 @@ export default function CourseInfo({ course }) {
                 transition={tabTransition}
                 className="w-full space-y-8"
               >
-                {courseData && activeStats ? (
+                {!isAuthenticated ? (
+                  <LoginGate
+                    loading={authLoading}
+                    onSignIn={onSignIn}
+                    code={searchCode}
+                  />
+                ) : statsFailed ? (
+                  <EmptyStats
+                    code={searchCode}
+                    message="İstatistikler alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyip tekrar deneyin."
+                  />
+                ) : terms === null ? (
+                  <EmptyStats code={searchCode} message="İstatistikler yükleniyor…" />
+                ) : activeStats ? (
                   <>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
@@ -951,21 +898,10 @@ export default function CourseInfo({ course }) {
                     </div>
                   </>
                 ) : (
-                  <div className="flex flex-col items-center justify-center py-20 bg-primary-500/5 rounded-xl border border-primary-500/10 border-dashed">
-                    <Database
-                      size={48}
-                      strokeWidth={1}
-                      className="text-primary-500/20 mb-4"
-                    />
-                    <h3 className="text-lg font-bold text-primary-500 mb-2">
-                      İstatistik Verisi Bulunamadı
-                    </h3>
-                    <p className="text-sm text-primary-500/50 text-center max-w-sm mb-4">
-                      Sisteme aranan{" "}
-                      <strong>{searchCode || "Bilinmeyen Ders"}</strong> koduna
-                      ait güncel istatistik verisi henüz yüklenmemiş olabilir.
-                    </p>
-                  </div>
+                  <EmptyStats
+                    code={searchCode}
+                    message="Bu derse ait güncel istatistik verisi henüz yüklenmemiş olabilir."
+                  />
                 )}
               </motion.div>
             )}
@@ -973,5 +909,45 @@ export default function CourseInfo({ course }) {
         </div>
       </div>
     </PageLayout>
+  );
+}
+
+function EmptyStats({ code, message }) {
+  return (
+    <div className="flex flex-col items-center justify-center py-20 bg-primary-500/5 rounded-xl border border-primary-500/10 border-dashed">
+      <Database size={48} strokeWidth={1} className="text-primary-500/20 mb-4" />
+      <h3 className="text-lg font-bold text-primary-500 mb-2">{code}</h3>
+      <p className="text-sm text-primary-500/50 text-center max-w-sm">{message}</p>
+    </div>
+  );
+}
+
+function LoginGate({ loading, onSignIn, code }) {
+  return (
+    <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
+      <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
+        <Shield size={20} strokeWidth={1.5} className="text-secondary-500" />
+      </div>
+      <div className="flex-1">
+        <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
+          Giriş Yapmanız Gerekmektedir
+        </h4>
+        <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
+          {code} dersinin geçmiş dönem sınıf ortalamalarını, harf dağılımlarını ve
+          eğitmen bilgilerini görüntülemek için{" "}
+          <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded">
+            @std.yildiz.edu.tr
+          </span>{" "}
+          hesabınızla giriş yapmalısınız.
+        </p>
+        <button
+          onClick={onSignIn}
+          disabled={loading}
+          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 disabled:opacity-50 shadow-md shadow-secondary-500/20"
+        >
+          <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
+        </button>
+      </div>
+    </div>
   );
 }
