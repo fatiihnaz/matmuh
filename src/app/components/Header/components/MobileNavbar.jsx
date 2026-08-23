@@ -4,10 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
-import { Search, ChevronUp, LogIn, LogOut, ExternalLink, ClipboardCheck } from "lucide-react";
+import { Search, ChevronUp, LogIn, LogOut, ExternalLink, ClipboardCheck, PencilLine, FileText, CalendarDays } from "lucide-react";
 import { navigationItems, YTU_ANA_SITE } from "@/data/navigation";
 import { useAuth } from "@/lib/auth";
 import SearchOverlay from "@/app/components/Search/SearchOverlay";
+import ProfilePanel from "@/app/components/Profile/ProfilePanel";
+import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useCmsRoute } from "inscribed";
 
 const ROLE_LABELS = {
@@ -111,6 +113,8 @@ function AccordionSection({ item, onNavigate, pathname }) {
 export default function MobileNavbar({ isOpen, onClose }) {
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
+  const { canEdit, editing, setEditing } = useCmsEditing();
+  const [panel, setPanel] = useState(null);
   const { locale, slug, localePath } = useCmsRoute();
   const reduce = useReducedMotion();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -210,14 +214,71 @@ export default function MobileNavbar({ isOpen, onClose }) {
                     </div>
                   </div>
 
-                  {isAdmin && (
-                    <Link href="/yonetim/ders-notlari" onClick={onClose}
-                      className="flex items-center justify-center gap-2 w-full text-secondary-500 text-sm py-2.5 rounded-lg bg-secondary-500/10 border border-secondary-500/30 hover:border-secondary-500/60 transition-colors"
+                  <div className="-mx-6 border-t border-white/10" />
+
+                  {[
+                    { id: "notes", label: "Notlarım", icon: FileText },
+                    { id: "schedule", label: "Ders Programım", icon: CalendarDays },
+                  ].map(({ id, label, icon: Icon }) => (
+                    <button
+                      key={id}
+                      type="button"
+                      onClick={() => {
+                        onClose();
+                        setPanel(id);
+                      }}
+                      className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
                     >
-                      <ClipboardCheck size={16} />
-                      Not Yönetimi
-                    </Link>
+                      <Icon size={16} className="shrink-0 text-secondary-500" />
+                      <span className="flex-1 text-left">{label}</span>
+                    </button>
+                  ))}
+
+                  {(canEdit || isAdmin) && (
+                    <>
+                      <div className="-mx-6 border-t border-white/10" />
+                      <span className="block pt-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
+                        Yönetim
+                      </span>
+
+                      {isAdmin && (
+                        <Link
+                          href="/yonetim/ders-notlari"
+                          onClick={onClose}
+                          className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
+                        >
+                          <ClipboardCheck size={16} className="shrink-0 text-secondary-500" />
+                          <span className="flex-1 text-left">Not Yönetimi</span>
+                        </Link>
+                      )}
+
+                      {canEdit && (
+                        <button
+                          type="button"
+                          role="switch"
+                          aria-checked={editing}
+                          onClick={() => setEditing(!editing)}
+                          className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
+                        >
+                          <PencilLine size={16} className="shrink-0 text-secondary-500" />
+                          <span className="flex-1 text-left">Düzenleme modu</span>
+                          <span
+                            className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
+                              editing ? "bg-secondary-500" : "bg-white/15"
+                            }`}
+                          >
+                            <span
+                              className={`absolute top-0.5 size-3 rounded-full bg-white transition-all ${
+                                editing ? "left-3.5" : "left-0.5"
+                              }`}
+                            />
+                          </span>
+                        </button>
+                      )}
+                    </>
                   )}
+
+                  <div className="-mx-6 border-t border-white/10" />
 
                   <button onClick={() => { onClose(); signOut(); }}
                     className="flex items-center justify-center gap-2 w-full text-red-400/80 hover:text-red-300 text-sm py-2.5 rounded-lg bg-red-100/5 border border-white/10 hover:border-red-200/30 transition-colors"
@@ -239,6 +300,8 @@ export default function MobileNavbar({ isOpen, onClose }) {
         </motion.div>
       )}
     </AnimatePresence>
+
+    <ProfilePanel view={panel} onClose={() => setPanel(null)} />
 
     <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} fullScreen layoutId="mm-arama-kutusu" />
     </MotionConfig>

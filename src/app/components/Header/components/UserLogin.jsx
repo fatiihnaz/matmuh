@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine } from "lucide-react";
+import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine, FileText, CalendarDays } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
+import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -19,6 +20,7 @@ export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
   const { canEdit, editing, setEditing } = useCmsEditing();
   const [open, setOpen] = useState(false);
+  const [panel, setPanel] = useState(null);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -131,8 +133,42 @@ export default function UserLogin() {
               </div>
             )}
 
-            {canEdit && (
+            <div className="p-1.5 border-t border-primary-500/8">
+              {[
+                { id: "notes", label: "Notlarım", icon: FileText },
+                { id: "schedule", label: "Ders Programım", icon: CalendarDays },
+              ].map(({ id, label, icon: Icon }) => (
+                <button
+                  key={id}
+                  type="button"
+                  onClick={() => {
+                    setOpen(false);
+                    setPanel(id);
+                  }}
+                  className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
+                >
+                  <Icon size={14} className="shrink-0 text-secondary-500" />
+                  <span className="flex-1 text-left">{label}</span>
+                </button>
+              ))}
+            </div>
+
+            {(canEdit || isAdmin) && (
               <div className="p-1.5 border-t border-primary-500/8">
+                <span className="block px-2.5 pb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500/35">
+                  Yönetim
+                </span>
+                {isAdmin && (
+                  <Link
+                    href="/yonetim/ders-notlari"
+                    onClick={() => setOpen(false)}
+                    className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
+                  >
+                    <ClipboardCheck size={14} className="shrink-0 text-secondary-500" />
+                    <span className="flex-1 text-left">Not Yönetimi</span>
+                  </Link>
+                )}
+                {canEdit && (
                 <button
                   type="button"
                   role="switch"
@@ -154,20 +190,11 @@ export default function UserLogin() {
                     />
                   </span>
                 </button>
+                )}
               </div>
             )}
 
             <div className="p-1.5 border-t border-primary-500/8">
-              {isAdmin && (
-                <Link
-                  href="/yonetim/ders-notlari"
-                  onClick={() => setOpen(false)}
-                  className="flex items-center gap-2 w-full px-2 py-1.5 text-[11px] text-primary-600 hover:bg-primary-500/5 transition-colors rounded-lg"
-                >
-                  <ClipboardCheck size={13} className="text-primary-500/50 shrink-0" />
-                  <span>Not Yönetimi</span>
-                </Link>
-              )}
               <button
                 onClick={() => {
                   setOpen(false);
@@ -182,6 +209,8 @@ export default function UserLogin() {
           </motion.div>
         )}
       </AnimatePresence>
+
+      <ProfilePanel view={panel} onClose={() => setPanel(null)} />
     </div>
   );
 }
