@@ -42,6 +42,20 @@ const fullName = (user) =>
 
 const statusOf = (note) => note.status ?? "PENDING";
 
+const SEMESTERS = { FALL: "Güz", SPRING: "Bahar", SUMMER: "Yaz" };
+
+export function toOffering(offering) {
+  if (!offering) return null;
+  const term = [offering.academicYear, SEMESTERS[offering.semester] ?? offering.semester]
+    .filter(Boolean)
+    .join(" ");
+  return {
+    term: term || null,
+    group: offering.groupNumber ? `Grup ` : null,
+    instructor: offering.instructorName || null,
+  };
+}
+
 function toNote(note) {
   const file = note.file ?? {};
   return {
@@ -60,6 +74,7 @@ function toNote(note) {
     uploadedAt: formatDate(note.createdAt),
     uploadedBy: fullName(note.createdBy),
     viewCount: note.viewCount ?? 0,
+    offering: toOffering(note.offering),
   };
 }
 

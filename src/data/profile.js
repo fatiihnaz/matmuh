@@ -1,3 +1,5 @@
+import { toOffering } from "./lecture-notes";
+
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 const AY = [
@@ -55,6 +57,7 @@ export async function fetchMyNotes(token) {
     href: note.file?.fileUrl ?? null,
     extension: (note.file?.fileName?.split(".").pop() ?? "").toUpperCase(),
     viewCount: note.viewCount ?? 0,
+    offering: toOffering(note.offering),
   }));
 }
 

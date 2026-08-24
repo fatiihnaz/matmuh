@@ -74,6 +74,12 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
                   </>
                 )}
                 {formatDay(note.createdAt)}
+                {note.offering?.instructor && (
+                  <>
+                    <span aria-hidden>·</span>
+                    <span className="truncate">{note.offering.instructor}</span>
+                  </>
+                )}
                 {note.status === "APPROVED" && (
                   <>
                     <span aria-hidden>·</span>

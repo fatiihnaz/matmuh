@@ -136,6 +136,19 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
               </span>
             ))}
         </div>
+        {note.offering && (
+          <p className="mb-1.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-secondary-600">
+            {[note.offering.instructor, note.offering.term, note.offering.group]
+              .filter(Boolean)
+              .map((part, index) => (
+                <span key={part}>
+                  {index > 0 && <span className="mr-1.5 text-primary-500/25">·</span>}
+                  {part}
+                </span>
+              ))}
+          </p>
+        )}
+
         {note.description && (
           <p className="text-xs text-primary-500/50 leading-relaxed mb-1.5 line-clamp-2">
             {note.description}
