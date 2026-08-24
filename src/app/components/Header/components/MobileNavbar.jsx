@@ -129,7 +129,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
       {isOpen && (
         <motion.div initial={{ clipPath: "inset(0 0 100% 0)" }}
           animate={{ clipPath: "inset(0 0 0% 0)" }} exit={{ clipPath: "inset(0 0 100% 0)" }} transition={{ duration: reduce ? 0 : 0.4, ease: [0.25, 0.1, 0.25, 1] }}
-          className="absolute top-full left-0 right-0 h-[calc(100dvh-100%)] bg-primary-500 -mt-px flex flex-col lg:hidden"
+          className="absolute top-full left-0 right-0 h-[calc(100dvh-100%+1px)] bg-primary-500 -mt-px flex flex-col lg:hidden"
         >
           <div className="flex-1 overflow-y-auto overscroll-contain px-6 pt-2 pb-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, delay: 0.15 }}>
