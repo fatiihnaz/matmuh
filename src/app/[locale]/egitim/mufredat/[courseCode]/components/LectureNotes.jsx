@@ -23,7 +23,8 @@ import { useAuth } from "@/lib/auth";
 import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
-const MAX_FILE_BYTES = 9 * 1024 * 1024;
+const MAX_FILE_BYTES = 25 * 1024 * 1024;
+const ACCEPTED = ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md,.zip,.rar,.7z,.png,.jpg,.jpeg,.webp";
 
 const PLACEHOLDERS = [
   { id: 1, title: "Vize Soruları.pdf", meta: "PDF · 2.4 MB" },
@@ -206,7 +207,7 @@ function UploadForm({ lectureId, onUploaded }) {
   const chooseFile = useCallback((picked) => {
     if (!picked) return;
     if (picked.size > MAX_FILE_BYTES) {
-      setError("Dosya 9 MB sınırını aşıyor. Daha küçük bir sürüm yükleyin.");
+      setError("Dosya 25 MB sınırını aşıyor. Daha küçük bir sürüm yükleyin.");
       return;
     }
     setError(null);
@@ -358,11 +359,12 @@ function UploadForm({ lectureId, onUploaded }) {
           {file ? file.name : dragOver ? "Bırakın" : "Dosyayı sürükleyin veya seçin"}
         </span>
         <span className="text-[11px] text-primary-500/40">
-          {file ? formatSize(file.size) : "PDF, DOCX, ZIP, PNG · en fazla 9 MB"}
+          {file ? formatSize(file.size) : "PDF, Office, ZIP, görsel · en fazla 25 MB"}
         </span>
         <input
           ref={inputRef}
           type="file"
+          accept={ACCEPTED}
           onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
           className="hidden"
         />
