@@ -35,7 +35,7 @@ function Empty({ children }) {
   );
 }
 
-function NotesBody({ items, busyId, onRemove, onNavigate }) {
+function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }) {
   if (items.length === 0) return <Empty>Henüz not yüklemediniz.</Empty>;
 
   return (
@@ -84,14 +84,33 @@ function NotesBody({ items, busyId, onRemove, onNavigate }) {
               </span>
             </span>
 
-            <button
-              type="button"
-              onClick={() => onRemove(note)}
-              disabled={busyId === note.id}
-              className="shrink-0 rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
-            >
-              {busyId === note.id ? "…" : draft ? "İptal et" : "Kaldır"}
-            </button>
+            {confirmId === note.id ? (
+              <span className="flex shrink-0 items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => onRemove(note)}
+                  disabled={busyId === note.id}
+                  className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
+                >
+                  {busyId === note.id ? "…" : "Onayla"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => onConfirm(null)}
+                  className="rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-primary-500"
+                >
+                  Vazgeç
+                </button>
+              </span>
+            ) : (
+              <button
+                type="button"
+                onClick={() => (draft ? onRemove(note) : onConfirm(note.id))}
+                className="shrink-0 rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700"
+              >
+                {draft ? "İptal et" : "Kaldır"}
+              </button>
+            )}
           </li>
         );
       })}
@@ -193,12 +212,9 @@ export default function ProfilePanel({ view, onClose }) {
   const [state, setState] = useState({ view: null, status: "loading", items: [] });
   const [busyId, setBusyId] = useState(null);
   const [actionError, setActionError] = useState(null);
+  const [confirmId, setConfirmId] = useState(null);
 
   async function removeNote(note) {
-    if (note.status === "APPROVED" && !window.confirm(`"${note.title}" listeden kaldırılacak. Emin misiniz?`)) {
-      return;
-    }
-
     setBusyId(note.id);
     setActionError(null);
     try {
@@ -212,6 +228,7 @@ export default function ProfilePanel({ view, onClose }) {
       setActionError(err.message);
     } finally {
       setBusyId(null);
+      setConfirmId(null);
     }
   }
 
@@ -271,7 +288,9 @@ export default function ProfilePanel({ view, onClose }) {
             <Body
               items={state.items}
               busyId={busyId}
+              confirmId={confirmId}
               onRemove={removeNote}
+              onConfirm={setConfirmId}
               onNavigate={onClose}
             />
           )}

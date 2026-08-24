@@ -51,7 +51,7 @@ function Notice({ icon: Icon, title, children }) {
   );
 }
 
-function NoteRow({ note, busy, onApprove, onDelete }) {
+function NoteRow({ note, busy, confirming, onApprove, onDelete, onConfirm }) {
   return (
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">
@@ -95,6 +95,25 @@ function NoteRow({ note, busy, onApprove, onDelete }) {
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        {confirming ? (
+          <>
+            <span className="text-xs font-medium text-primary-500/60">Kaldırılsın mı?</span>
+            <button
+              onClick={() => onDelete(note)}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
+            >
+              <Trash2 size={13} strokeWidth={2} /> Kaldır
+            </button>
+            <button
+              onClick={() => onConfirm(null)}
+              className="rounded-lg px-3 py-2 text-xs font-medium text-primary-500/50 transition-colors hover:text-primary-500"
+            >
+              Vazgeç
+            </button>
+          </>
+        ) : (
+          <>
         {note.href && (
           <a
             href={note.href}
@@ -123,13 +142,15 @@ function NoteRow({ note, busy, onApprove, onDelete }) {
           )}
         </button>
         <button
-          onClick={() => onDelete(note)}
+          onClick={() => onConfirm(note.id)}
           disabled={busy}
-          aria-label="Notu sil"
+          aria-label="Notu kaldır"
           className="inline-flex items-center justify-center size-9 rounded-lg text-red-700/60 hover:bg-red-50 transition-colors disabled:opacity-40"
         >
           <Trash2 size={14} strokeWidth={2} />
         </button>
+          </>
+        )}
       </div>
     </div>
   );
@@ -146,6 +167,7 @@ export default function NoteAdminPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [busyId, setBusyId] = useState(null);
+  const [confirmId, setConfirmId] = useState(null);
 
   const load = useCallback(async () => {
     const token = await getAccessToken();
@@ -178,16 +200,14 @@ export default function NoteAdminPage() {
       setError(err.message);
     } finally {
       setBusyId(null);
+      setConfirmId(null);
     }
   }
 
   const onApprove = (note) =>
     act(note, (token) => setNoteStatus(note.id, note.approved ? "PENDING" : "APPROVED", token));
 
-  const onDelete = (note) => {
-    if (!window.confirm(`"${note.title}" listeden kaldırılacak. Emin misiniz?`)) return;
-    act(note, (token) => deleteNote(note.id, token));
-  };
+  const onDelete = (note) => act(note, (token) => deleteNote(note.id, token));
 
   let body;
   if (authLoading) {
@@ -285,6 +305,8 @@ export default function NoteAdminPage() {
                 busy={busyId === note.id}
                 onApprove={onApprove}
                 onDelete={onDelete}
+                confirming={confirmId === note.id}
+                onConfirm={setConfirmId}
               />
             ))
           )}
