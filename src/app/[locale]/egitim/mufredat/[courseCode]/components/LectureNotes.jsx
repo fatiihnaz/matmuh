@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 
 import {
+  deleteNote,
   fetchLectureNotes,
   fetchMyPendingNotes,
   formatSize,
@@ -87,7 +88,7 @@ function LoginPanel({ loading, onSignIn }) {
   );
 }
 
-function NoteCard({ note, pending = false }) {
+function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
   const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
@@ -157,15 +158,27 @@ function NoteCard({ note, pending = false }) {
           kind={kind}
         />
       )}
-      {note.href && (
-        <a
-          href={note.href}
-          download
-          className="relative z-10 shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-secondary-500 hover:text-white transition-colors"
-        >
-          <Download size={13} strokeWidth={2} /> İndir
-        </a>
-      )}
+      <div className="relative z-10 flex shrink-0 flex-col items-stretch gap-1.5">
+        {note.href && (
+          <a
+            href={note.href}
+            download
+            className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-secondary-500 hover:text-white transition-colors"
+          >
+            <Download size={13} strokeWidth={2} /> İndir
+          </a>
+        )}
+        {pending && (
+          <button
+            type="button"
+            onClick={() => onCancel(note)}
+            disabled={cancelling}
+            className="inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
+          >
+            {cancelling ? "…" : "İptal et"}
+          </button>
+        )}
+      </div>
     </div>
   );
 }
@@ -333,6 +346,7 @@ export default function LectureNotes({ lectureId, onSignIn }) {
   const { isAuthenticated, isLoading: authLoading, getAccessToken } = useAuth();
   const [notes, setNotes] = useState(null);
   const [pending, setPending] = useState([]);
+  const [cancellingId, setCancellingId] = useState(null);
   const [failed, setFailed] = useState(false);
   const [reloadKey, setReloadKey] = useState(0);
 
@@ -358,6 +372,19 @@ export default function LectureNotes({ lectureId, onSignIn }) {
     };
   }, [isAuthenticated, lectureId, getAccessToken, reloadKey]);
 
+  async function cancelNote(note) {
+    setCancellingId(note.id);
+    try {
+      const token = await getAccessToken();
+      await deleteNote(note.id, token);
+      setPending((current) => current.filter((item) => item.id !== note.id));
+    } catch {
+      setFailed(true);
+    } finally {
+      setCancellingId(null);
+    }
+  }
+
   if (!isAuthenticated) {
     return <LoginPanel loading={authLoading} onSignIn={onSignIn} />;
   }
@@ -376,7 +403,7 @@ export default function LectureNotes({ lectureId, onSignIn }) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {pending.map((note) => (
-              <NoteCard key={note.id} note={note} pending />
+              <NoteCard key={note.id} note={note} pending onCancel={cancelNote} cancelling={cancellingId === note.id} />
             ))}
           </div>
           <p className="text-[11px] text-primary-500/40 mt-2.5">
