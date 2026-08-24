@@ -3,27 +3,24 @@
 import Image from "next/image";
 import { Download, ExternalLink } from "lucide-react";
 import Modal from "./Modal";
+import OfficeDocument from "./OfficeDocument";
 
-const OFFICE_KINDS = ["doc", "docx", "xls", "xlsx", "ppt", "pptx"];
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
-// Office gorunutuleyicisi dosyayi Microsoft sunucusundan cektigi icin kimlik
-// dogrulamali /api adreslerimizde calismiyor; o turler onizlenebilir sayilmiyor.
-export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS]);
+// Tarayicida cozdugumuz turler. Eski .doc/.xls ve .ppt/.pptx disarida: onlar icin
+// olgun bir istemci tarafi cozucu yok, indirmede kaliyorlar.
+const OFFICE_KINDS = ["docx", "xlsx"];
+
+export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS, ...OFFICE_KINDS]);
 
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
-
-function officeEmbedSrc(href) {
-  return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(href)}`;
-}
 
 export default function DocumentPreview({ open, onClose, label, href, kind }) {
   if (!open) return null;
 
   const isImage = IMAGE_KINDS.includes(kind);
   const isOffice = OFFICE_KINDS.includes(kind);
-  const src = isOffice ? officeEmbedSrc(href) : href;
 
   return (
     <Modal open={open} onClose={onClose} label={label}>
@@ -36,8 +33,10 @@ export default function DocumentPreview({ open, onClose, label, href, kind }) {
         <div className="relative flex-1 min-h-0 rounded-lg overflow-hidden bg-white">
           {isImage ? (
             <Image src={href} alt={label} fill sizes="95vw" className="object-contain" />
+          ) : isOffice ? (
+            <OfficeDocument href={href} kind={kind} />
           ) : (
-            <iframe src={src} title={label} className="w-full h-full border-0" />
+            <iframe src={href} title={label} className="w-full h-full border-0" />
           )}
         </div>
 

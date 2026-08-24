@@ -204,3 +204,63 @@ select option {
 .announcement-body li::marker {
   color: var(--color-secondary-500);
 }
+
+/* docx-preview kendi stillerini author-origin <style> olarak enjekte ediyor.
+   preflight'i topluca geri almak (all: revert) onlari da siliyordu; burada
+   yalnizca preflight'in sifirladigi ozellikler geri veriliyor. Katmansiz
+   yazildi, yoksa utility'ler kazanir. */
+.mm-doc {
+  padding: 1.5rem;
+  color: #1a1a1a;
+}
+
+.mm-doc :where(p, h1, h2, h3, h4, h5, h6, blockquote, pre) {
+  margin: revert;
+  font-size: revert;
+  font-weight: revert;
+}
+
+.mm-doc :where(ul, ol) {
+  margin: revert;
+  padding: revert;
+  list-style: revert;
+}
+
+.mm-doc :where(table) {
+  border-collapse: revert;
+  border-spacing: revert;
+}
+
+.mm-doc :where(b, strong) {
+  font-weight: revert;
+}
+
+.mm-doc :where(i, em) {
+  font-style: revert;
+}
+
+.mm-doc :where(img, svg) {
+  display: revert;
+  max-width: revert;
+  height: revert;
+}
+
+.mm-sheet {
+  border-collapse: collapse;
+  font-size: 13px;
+  width: 100%;
+}
+
+.mm-sheet th,
+.mm-sheet td {
+  border: 1px solid rgba(29, 36, 69, 0.12);
+  padding: 6px 10px;
+  text-align: left;
+  vertical-align: top;
+  white-space: pre-wrap;
+}
+
+.mm-sheet th {
+  background: rgba(29, 36, 69, 0.04);
+  font-weight: 600;
+}
