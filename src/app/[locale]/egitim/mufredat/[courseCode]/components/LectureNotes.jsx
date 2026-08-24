@@ -195,6 +195,9 @@ function UploadForm({ lectureId, onUploaded }) {
   const [done, setDone] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
+  const missing =
+    [!title.trim() && "Başlık", !file && "dosya"].filter(Boolean).join(" ve ") || null;
+
   const reset = useCallback(() => {
     setTitle("");
     setDescription("");
@@ -323,7 +326,6 @@ function UploadForm({ lectureId, onUploaded }) {
         <input
           ref={inputRef}
           type="file"
-          required
           onChange={(e) => setFile(e.target.files?.[0] ?? null)}
           className="hidden"
         />
@@ -331,13 +333,19 @@ function UploadForm({ lectureId, onUploaded }) {
 
       {error && <p className="text-xs text-red-600">{error}</p>}
 
-      <button
-        type="submit"
-        disabled={busy || !file || !title.trim()}
-        className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold hover:bg-secondary-500/80 disabled:opacity-50 transition-colors"
-      >
-        <Upload size={14} strokeWidth={2} /> {busy ? "Yükleniyor…" : "Gönder"}
-      </button>
+      <div className="flex items-center gap-3">
+        <button
+          type="submit"
+          disabled={busy || !file || !title.trim()}
+          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold hover:bg-secondary-500/80 disabled:opacity-50 transition-colors"
+        >
+          <Upload size={14} strokeWidth={2} /> {busy ? "Yükleniyor…" : "Gönder"}
+        </button>
+
+        {!busy && missing && (
+          <span className="text-[11px] text-primary-500/45">{missing} girin</span>
+        )}
+      </div>
     </form>
   );
 }
