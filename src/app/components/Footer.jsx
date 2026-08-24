@@ -2,6 +2,7 @@ import { Mail } from "lucide-react";
 import { EditableRegion } from "inscribed";
 
 import { FooterLinks, FooterPhones, FooterSocial } from "./FooterLists";
+import CreditsLink from "./CreditsLink";
 
 export default function Footer() {
   return (
@@ -81,6 +82,8 @@ Davutpaşa Kampüsü
               defaultValue="Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü"
               scope="global"
             />
+            {" · "}
+            <CreditsLink />
           </div>
 
           <FooterSocial />

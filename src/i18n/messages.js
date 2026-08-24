@@ -77,6 +77,7 @@ export const messages = {
     "Ana menü": "Main menu",
     "Sayfa yolu": "Breadcrumb",
     "YTÜ Ana Site": "YTU Main Site",
+    "Emeği Geçenler": "Credits",
     "Paydaşlar": "Stakeholders",
     "Endüstriyel İşbirlikleri": "Industry Partnerships",
     "Lisansüstü Yönetmelikler": "Graduate Regulations",
