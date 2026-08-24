@@ -20,6 +20,7 @@ import {
 } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
 import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
+import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
 const PLACEHOLDERS = [
   { id: 1, title: "Vize Soruları.pdf", meta: "PDF · 2.4 MB" },
@@ -391,9 +392,21 @@ export default function LectureNotes({ lectureId, onSignIn }) {
           Ders notları alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyin.
         </p>
       ) : notes === null ? (
-        <p className="text-sm text-primary-500/40 py-12 text-center border border-dashed border-primary-500/20 rounded-xl">
-          Ders notları yükleniyor…
-        </p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {Array.from({ length: 4 }, (_, i) => (
+            <div
+              key={i}
+              className="flex items-start gap-4 rounded-xl border border-primary-500/10 bg-white p-4 shadow-xs"
+            >
+              <SkeletonBlock className="h-14 w-12 shrink-0" />
+              <div className="flex-1 space-y-2">
+                <SkeletonLine className="w-3/4" />
+                <SkeletonLine className="w-full" />
+                <SkeletonLine className="w-1/3" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : notes.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
           <FileText size={20} strokeWidth={1.5} className="text-primary-500/25" />

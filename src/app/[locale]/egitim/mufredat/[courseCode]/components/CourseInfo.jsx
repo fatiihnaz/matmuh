@@ -27,6 +27,7 @@ import {
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
 import { fetchCourseStatistics } from "@/data/statistics";
+import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
 import LectureNotes from "./LectureNotes";
 import { useAuth } from "@/lib/auth";
@@ -556,7 +557,7 @@ export default function CourseInfo({ course, sections = [] }) {
                     message="İstatistikler alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyip tekrar deneyin."
                   />
                 ) : terms === null ? (
-                  <EmptyStats code={searchCode} message="İstatistikler yükleniyor…" />
+                  <StatsSkeleton />
                 ) : activeStats ? (
                   <>
                     <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
@@ -902,6 +903,47 @@ const STATS_PREVIEW = [
   { grade: "CC", width: "31%", count: 9, makeup: "56%", makeupCount: 5 },
   { grade: "FF", width: "18%", count: 2, makeup: "34%", makeupCount: 3 },
 ];
+
+function StatsSkeleton() {
+  return (
+    <div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        {Array.from({ length: 3 }, (_, i) => (
+          <SkeletonBlock key={i} className="h-16 rounded-xl" />
+        ))}
+      </div>
+
+      <div className="mt-6 grid gap-6 lg:grid-cols-2">
+        {Array.from({ length: 2 }, (_, card) => (
+          <div
+            key={card}
+            className="rounded-xl border border-primary-500/10 bg-white p-6 shadow-xs"
+          >
+            <div className="mb-6 flex items-center gap-3">
+              <div className="h-5 w-1 rounded-full bg-secondary-500/40" />
+              <SkeletonLine className="w-44" />
+            </div>
+            <div className="space-y-3.5">
+              {Array.from({ length: 6 }, (_, row) => (
+                <div key={row} className="flex items-center gap-4">
+                  <SkeletonLine className="w-8" />
+                  <SkeletonBlock className="h-2 flex-1 rounded-full" />
+                  <SkeletonLine className="w-8" />
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
+        {Array.from({ length: 3 }, (_, i) => (
+          <SkeletonBlock key={i} className="h-32 rounded-xl" />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 function StatsPreview() {
   return (

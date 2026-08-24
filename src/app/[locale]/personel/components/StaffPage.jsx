@@ -6,6 +6,7 @@ import { Search, ChevronDown } from "lucide-react";
 
 import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
+import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 import { fullName, useStaff } from "@/app/components/PersonRow";
 
 const categories = [
@@ -17,6 +18,45 @@ const categories = [
 
 const academicRanks = ["Tümü", "Prof. Dr.", "Doç. Dr.", "Dr. Öğr. Üyesi"];
 const researchRanks = ["Tümü", "Arş. Gör.", "Öğr. Gör."];
+
+function StaffCardSkeleton() {
+  return (
+    <div className="flex flex-col items-center rounded-xl border border-primary-500/10 bg-white p-5 shadow-xs">
+      <SkeletonBlock className="mb-3 size-16 rounded-full" />
+      <SkeletonLine className="w-3/4" />
+      <SkeletonLine className="mt-2 w-1/2" />
+      <SkeletonLine className="mt-3 w-2/3" />
+    </div>
+  );
+}
+
+function StaffSkeleton() {
+  return (
+    <>
+      <div className="mb-6 flex flex-col items-stretch gap-4 rounded-xl border border-black/6 bg-white p-4 shadow-xs lg:flex-row lg:items-center lg:gap-6">
+        <SkeletonBlock className="h-9 w-full shrink-0 sm:max-w-xs lg:w-72" />
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: 4 }, (_, i) => (
+              <SkeletonBlock key={i} className="h-6 w-24" />
+            ))}
+          </div>
+          <SkeletonBlock className="h-6 w-40" />
+        </div>
+      </div>
+
+      <div className="mb-4 px-1">
+        <SkeletonLine className="w-32" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 8 }, (_, i) => (
+          <StaffCardSkeleton key={i} />
+        ))}
+      </div>
+    </>
+  );
+}
 
 function StaffContent({ initialStaff }) {
   const router = useRouter();
@@ -156,9 +196,11 @@ function StaffContent({ initialStaff }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filteredStaff.map((member, idx) => (
-          <StaffMember key={member.slug} member={member} idx={idx} />
-        ))}
+        {isLoading && filteredStaff.length === 0
+          ? Array.from({ length: 8 }, (_, i) => <StaffCardSkeleton key={i} />)
+          : filteredStaff.map((member, idx) => (
+              <StaffMember key={member.slug} member={member} idx={idx} />
+            ))}
       </div>
 
       {!isLoading && filteredStaff.length === 0 && (
@@ -173,7 +215,7 @@ function StaffContent({ initialStaff }) {
 export default function StaffPage({ initialStaff = [] }) {
   return (
     <PageLayout>
-      <Suspense fallback={<div className="py-20 text-center text-xs text-primary-500/40">Yükleniyor...</div>}>
+      <Suspense fallback={<StaffSkeleton />}>
         <StaffContent initialStaff={initialStaff} />
       </Suspense>
     </PageLayout>
