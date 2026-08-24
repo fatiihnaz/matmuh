@@ -7,7 +7,9 @@ import Modal from "./Modal";
 const OFFICE_KINDS = ["doc", "docx", "xls", "xlsx", "ppt", "pptx"];
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
-export const PREVIEWABLE_KINDS = new Set(["pdf", ...OFFICE_KINDS, ...IMAGE_KINDS]);
+// Office gorunutuleyicisi dosyayi Microsoft sunucusundan cektigi icin kimlik
+// dogrulamali /api adreslerimizde calismiyor; o turler onizlenebilir sayilmiyor.
+export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS]);
 
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";

@@ -6,6 +6,7 @@ import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine, FileText, Calen
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
+import { useWideViewport } from "@/app/lib/useWideViewport";
 import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 import NoteAdminDialog from "@/app/components/Profile/NoteAdminDialog";
@@ -20,7 +21,13 @@ const SLOT = "w-9 h-9 sm:w-16";
 
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
-  const { canEdit, editing, setEditing } = useCmsEditing();
+  const { canEdit: mayEdit, editing, setEditing } = useCmsEditing();
+  const wide = useWideViewport();
+  const canEdit = mayEdit && wide;
+
+  useEffect(() => {
+    if (!wide && editing) setEditing(false);
+  }, [wide, editing, setEditing]);
   const t = useT();
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState(null);
