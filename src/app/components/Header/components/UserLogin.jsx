@@ -15,7 +15,7 @@ const ROLE_LABELS = {
   ROLE_USER: "Öğrenci",
 };
 
-const SLOT = "w-16 h-9";
+const SLOT = "w-9 h-9 sm:w-16";
 
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
@@ -90,7 +90,7 @@ export default function UserLogin() {
         </span>
         <ChevronDown
           size={13}
-          className={`shrink-0 transition-all duration-200 ${
+          className={`hidden sm:block shrink-0 transition-all duration-200 ${
             open ? "rotate-180 text-secondary-500" : "text-neutral-400 group-hover:text-neutral-300"
           }`}
         />
@@ -104,7 +104,7 @@ export default function UserLogin() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.16, ease: [0.4, 0, 0.2, 1] }}
-            className="absolute right-0 top-full mt-2 w-[clamp(17rem,80vw,21rem)] origin-top-right rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-[clamp(15rem,88vw,21rem)] origin-top-right rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 overflow-hidden"
           >
             <div className="flex items-start gap-3 px-4 pt-4 pb-3">
               <span className="w-9 h-9 shrink-0 rounded-full border border-secondary-500/35 bg-secondary-500/10 text-secondary-600 flex items-center justify-center text-xs font-semibold tracking-tight">

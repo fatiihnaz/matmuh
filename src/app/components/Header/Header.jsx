@@ -101,9 +101,7 @@ export default function Header() {
 
             <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 
-            <div className="hidden sm:block">
-              <UserLogin />
-            </div>
+            <UserLogin />
 
             <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden text-neutral-400 hover:text-white transition-colors">
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}

@@ -4,21 +4,13 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 
 import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
-import { Search, ChevronUp, LogIn, LogOut, ExternalLink, ClipboardCheck, PencilLine, FileText, CalendarDays } from "lucide-react";
+import { Search, ChevronUp, ExternalLink } from "lucide-react";
 import { navigationItems, YTU_ANA_SITE } from "@/data/navigation";
-import { useAuth } from "@/lib/auth";
 import SearchOverlay from "@/app/components/Search/SearchOverlay";
-import ProfilePanel from "@/app/components/Profile/ProfilePanel";
-import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 import { useCmsRoute } from "inscribed";
 
-const ROLE_LABELS = {
-  ROLE_ADMIN: "Admin",
-  ROLE_EDITOR: "Editör",
-  ROLE_USER: "Öğrenci",
-};
 
 function hasCategories(children) {
   return children.length > 0 && children[0].category !== undefined;
@@ -115,10 +107,7 @@ function AccordionSection({ item, onNavigate }) {
 }
 
 export default function MobileNavbar({ isOpen, onClose }) {
-  const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
-  const { canEdit, editing, setEditing } = useCmsEditing();
   const t = useT();
-  const [panel, setPanel] = useState(null);
   const { locale, slug, localePath } = useCmsRoute();
   const reduce = useReducedMotion();
   const [searchOpen, setSearchOpen] = useState(false);
@@ -133,11 +122,6 @@ export default function MobileNavbar({ isOpen, onClose }) {
     };
   }, [isOpen]);
 
-  const initials = user?.name
-    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
-    : "--";
-  const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
-  const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
     <MotionConfig reducedMotion="user">
@@ -193,119 +177,12 @@ export default function MobileNavbar({ isOpen, onClose }) {
                 </a>
               </div>
 
-              <div className="-mx-6 border-t border-white/10" />
-
-              {isLoading ? (
-                <div className="flex items-center justify-center py-3">
-                  <div className="w-4 h-4 border-2 border-secondary-500 border-t-transparent rounded-full animate-spin" />
-                </div>
-              ) : isAuthenticated ? (
-                <div className="space-y-2.5">
-                  <div className="flex items-center gap-3 rounded-lg py-2">
-                    <div className="w-9 h-9 rounded-lg bg-secondary-500 text-primary-600 flex items-center justify-center text-sm font-semibold shrink-0">
-                      {initials}
-                    </div>
-                    <div className="flex flex-col min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm text-white font-light truncate">{user?.name}</span>
-                        {roles.map((role) => (
-                          <span key={role} className="text-[9px] text-secondary-500/80 bg-secondary-500/10 px-2 py-px rounded-md shrink-0">
-                            {role}
-                          </span>
-                        ))}
-                      </div>
-                      <span className="text-xs text-neutral-400 truncate">{user?.email}</span>
-                    </div>
-                  </div>
-
-                  <div className="-mx-6 border-t border-white/10" />
-
-                  {[
-                    { id: "notes", label: t("Notlarım"), icon: FileText },
-                    { id: "schedule", label: t("Ders Programım"), icon: CalendarDays },
-                  ].map(({ id, label, icon: Icon }) => (
-                    <button
-                      key={id}
-                      type="button"
-                      onClick={() => {
-                        onClose();
-                        setPanel(id);
-                      }}
-                      className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
-                    >
-                      <Icon size={16} className="shrink-0 text-secondary-500" />
-                      <span className="flex-1 text-left">{label}</span>
-                    </button>
-                  ))}
-
-                  {(canEdit || isAdmin) && (
-                    <>
-                      <div className="-mx-6 border-t border-white/10" />
-                      <span className="block pt-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
-                        {t("Yönetim")}
-                      </span>
-
-                      {isAdmin && (
-                        <Link
-                          href="/yonetim/ders-notlari"
-                          onClick={onClose}
-                          className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
-                        >
-                          <ClipboardCheck size={16} className="shrink-0 text-secondary-500" />
-                          <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
-                        </Link>
-                      )}
-
-                      {canEdit && (
-                        <button
-                          type="button"
-                          role="switch"
-                          aria-checked={editing}
-                          onClick={() => setEditing(!editing)}
-                          className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
-                        >
-                          <PencilLine size={16} className="shrink-0 text-secondary-500" />
-                          <span className="flex-1 text-left">{t("Düzenleme modu")}</span>
-                          <span
-                            className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
-                              editing ? "bg-secondary-500" : "bg-white/15"
-                            }`}
-                          >
-                            <span
-                              className={`absolute top-0.5 size-3 rounded-full bg-white transition-all ${
-                                editing ? "left-3.5" : "left-0.5"
-                              }`}
-                            />
-                          </span>
-                        </button>
-                      )}
-                    </>
-                  )}
-
-                  <div className="-mx-6 border-t border-white/10" />
-
-                  <button onClick={() => { onClose(); signOut(); }}
-                    className="flex items-center justify-center gap-2 w-full text-red-400/80 hover:text-red-300 text-sm py-2.5 rounded-lg bg-red-100/5 border border-white/10 hover:border-red-200/30 transition-colors"
-                  >
-                    <LogOut size={16} />
-                    {t("Çıkış Yap")}
-                  </button>
-                </div>
-              ) : (
-                <button onClick={() => signIn()}
-                  className="flex items-center justify-center gap-2 w-full bg-secondary-500/10 text-secondary-500 font-medium text-sm py-3 rounded-lg border border-secondary-500/30 hover:border-secondary-500/60 transition-colors"
-                >
-                  <LogIn size={16} />
-                  {t("Öğrenci Girişi")}
-                </button>
-              )}
             </div>
           </motion.div>
         </motion.div>
       )}
     </AnimatePresence>
 
-    <ProfilePanel view={panel} onClose={() => setPanel(null)} />
 
     <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} fullScreen layoutId="mm-arama-kutusu" />
     </MotionConfig>
