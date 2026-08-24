@@ -4,7 +4,6 @@ import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 
-import { useVisualViewport } from "@/app/lib/useVisualViewport";
 import SearchResults from "./SearchResults";
 import { MIN_CHARS, useSiteSearch } from "./useSiteSearch";
 
@@ -12,7 +11,6 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
   const listId = useId();
-  const viewport = useVisualViewport(open);
 
   const { term, groups, hasResults } = useSiteSearch(query);
 
@@ -49,7 +47,6 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
           onClick={close}
-          style={viewport ? { top: viewport.top, height: viewport.height, bottom: "auto" } : undefined}
           className={`fixed inset-0 z-70 bg-primary-700/85 backdrop-blur-sm ${
             fullScreen ? "" : "top-(--header-h)"
           }`}
@@ -93,7 +90,6 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
               <button
                 type="button"
                 onClick={close}
-          style={viewport ? { top: viewport.top, height: viewport.height, bottom: "auto" } : undefined}
                 aria-label="Aramayı kapat"
                 className="shrink-0 rounded-lg p-1.5 text-primary-500/35 transition-colors hover:bg-primary-500/6 hover:text-primary-500"
               >
