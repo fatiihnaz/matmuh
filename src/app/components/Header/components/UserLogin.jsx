@@ -81,7 +81,7 @@ export default function UserLogin() {
         aria-expanded={open}
         aria-haspopup="menu"
         title={name}
-        className={`${SLOT} group flex items-center justify-center gap-1.5 px-2 rounded-lg transition-colors ${
+        className={`${SLOT} group relative z-50 flex items-center justify-center gap-1.5 px-2 rounded-lg transition-colors ${
           open ? "bg-white/10" : "hover:bg-white/5"
         }`}
       >
@@ -105,12 +105,26 @@ export default function UserLogin() {
       <AnimatePresence>
         {open && (
           <motion.div
+            aria-hidden
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.16 }}
+            onClick={() => setOpen(false)}
+            className="fixed inset-0 z-40 bg-primary-700/55 backdrop-blur-[2px] sm:hidden"
+          />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {open && (
+          <motion.div
             role="menu"
             initial={{ opacity: 0, y: -6, scale: 0.97 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.16, ease: [0.4, 0, 0.2, 1] }}
-            className="fixed left-1/2 top-(--header-h) z-50 w-[min(20rem,92vw)] -translate-x-1/2 origin-top overflow-hidden rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 sm:absolute sm:left-auto sm:right-0 sm:top-full sm:mt-2 sm:w-[clamp(15rem,88vw,21rem)] sm:translate-x-0 sm:origin-top-right"
+            className="fixed right-2 top-(--header-h) z-50 w-[min(20rem,calc(100vw-1rem))] origin-top-right overflow-hidden rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 sm:absolute sm:right-0 sm:top-full sm:mt-2 sm:w-[clamp(15rem,88vw,21rem)]"
           >
             <div className="flex items-start gap-3 px-4 pt-4 pb-3">
               <span className="w-9 h-9 shrink-0 rounded-full border border-secondary-500/35 bg-secondary-500/10 text-secondary-600 flex items-center justify-center text-xs font-semibold tracking-tight">
