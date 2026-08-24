@@ -16,12 +16,11 @@ import {
 import { EditableRegion } from "inscribed";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
+import DepartmentFacts from "./DepartmentFacts";
 import {
-  AcademicStats,
   CareerProfile,
   EducationalGoals,
   InternshipSummary,
-  KeyMetrics,
   Milestones,
   MinorPrograms,
   MissionVision,
@@ -313,10 +312,10 @@ function NodeGraphCanvas() {
 }
 
 
-export default function DepartmentInfo() {
+export default function DepartmentInfo({ staff, curriculum }) {
   return (
     <PageLayout>
-      <KeyMetrics />
+      <DepartmentFacts staff={staff} curriculum={curriculum} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-7 flex flex-col gap-6">
@@ -397,7 +396,6 @@ export default function DepartmentInfo() {
           <Milestones />
           <InternshipSummary />
           <MinorPrograms />
-          <AcademicStats />
         </div>
       </div>
     </PageLayout>
