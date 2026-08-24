@@ -85,6 +85,7 @@ export function FooterSocial() {
       scope="global"
       as="div"
       className="flex items-center gap-4 shrink-0"
+      style={{ display: "flex" }}
       itemSchema={{
         platform: { blockType: "ShortText", defaultValue: "" },
         label: { blockType: "ShortText", defaultValue: "" },
