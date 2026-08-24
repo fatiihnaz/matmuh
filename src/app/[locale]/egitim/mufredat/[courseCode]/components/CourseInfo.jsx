@@ -951,7 +951,7 @@ function StatsPreview() {
       <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
         <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 shadow-xl">
           <Eye size={16} strokeWidth={2} className="text-secondary-500" />
-          <span className="text-[13px] font-medium text-white">Önizleme - Giriş yapın</span>
+          <span className="text-[13px] font-medium text-white">Önizleme</span>
         </div>
       </div>
 
