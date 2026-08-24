@@ -135,15 +135,15 @@ function StaffContent({ initialStaff }) {
         </div>
 
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6 gap-y-3">
-        <div className="flex items-center gap-1.5">
-          <span className="shrink-0 text-xs font-medium mr-1" style={{ color: "rgba(29,36,69,0.4)" }}>
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+          <span className="hidden shrink-0 text-xs font-medium mr-1 lg:inline" style={{ color: "rgba(29,36,69,0.4)" }}>
             Kategori:
           </span>
           {categories.map((cat) => (
             <button
               key={cat.id}
               onClick={() => router.push(href(`/personel?type=${cat.id}`))}
-              className="shrink-0 whitespace-nowrap px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
+              className="whitespace-nowrap px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
               style={{
                 backgroundColor: categoryParam === cat.id ? "rgba(173,151,111,0.12)" : "transparent",
                 color: categoryParam === cat.id ? "#AD976F" : "rgba(29,36,69,0.45)",
