@@ -10,7 +10,7 @@ const FOCUSABLE =
 
 const neverChanges = () => () => {};
 
-export default function Modal({ open, onClose, label, contentClassName = "", children }) {
+export default function Modal({ open, onClose, label, contentClassName = "", dismissible = true, children }) {
   const mounted = useSyncExternalStore(neverChanges, () => true, () => false);
   const panelRef = useRef(null);
   const restoreRef = useRef(null);
@@ -20,7 +20,7 @@ export default function Modal({ open, onClose, label, contentClassName = "", chi
     (event) => {
       if (event.key === "Escape") {
         event.stopPropagation();
-        onClose();
+        if (dismissible) onClose();
         return;
       }
       if (event.key !== "Tab") return;
@@ -37,7 +37,7 @@ export default function Modal({ open, onClose, label, contentClassName = "", chi
         first.focus();
       }
     },
-    [onClose],
+    [onClose, dismissible],
   );
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function Modal({ open, onClose, label, contentClassName = "", chi
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reducedMotion ? 0 : 0.18 }}
-          onClick={onClose}
+          onClick={dismissible ? onClose : undefined}
         >
           <div
             ref={panelRef}
@@ -94,7 +94,7 @@ export default function Modal({ open, onClose, label, contentClassName = "", chi
             </button>
             <div
               onClick={(event) => {
-                if (event.target === event.currentTarget) onClose();
+                if (dismissible && event.target === event.currentTarget) onClose();
               }}
               className={`h-full ${contentClassName}`}
             >
