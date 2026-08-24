@@ -41,7 +41,7 @@ export default function ScrollToTop() {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 8 }}
           transition={{ duration: reducedMotion ? 0 : 0.18, ease: [0.22, 1, 0.36, 1] }}
-          className="fixed right-4 bottom-4 z-50 flex size-10 items-center justify-center rounded-full border border-primary-500/10 bg-white/90 text-primary-500/60 shadow-sm backdrop-blur-sm transition-colors hover:border-secondary-500/40 hover:text-secondary-600 sm:right-6 sm:bottom-6"
+          className="fixed right-4 bottom-4 z-40 flex size-10 items-center justify-center rounded-full border border-primary-500/10 bg-white/90 text-primary-500/60 shadow-sm backdrop-blur-sm transition-colors hover:border-secondary-500/40 hover:text-secondary-600 sm:right-6 sm:bottom-6"
         >
           <ArrowUp size={16} strokeWidth={2} />
         </motion.button>
