@@ -13,6 +13,11 @@ const nextConfig = {
         hostname: "mtm.yildiz.edu.tr",
         pathname: "/media/**",
       },
+      {
+        protocol: "https",
+        hostname: "matmuh.yusufacmaci.com",
+        pathname: "/**",
+      },
     ],
   },
 };

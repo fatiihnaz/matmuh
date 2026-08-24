@@ -135,10 +135,52 @@ select option {
   text-underline-offset: 2px;
 }
 
+.announcement-body h2,
 .announcement-body h3,
 .announcement-body h4 {
   font-weight: 600;
   color: var(--color-primary-700);
+}
+
+.announcement-body h2 {
+  font-size: 1.05rem;
+}
+
+.announcement-body blockquote {
+  border-left: 3px solid var(--color-secondary-500);
+  padding: 0.25rem 0 0.25rem 0.85rem;
+  font-style: italic;
+  color: var(--color-primary-700);
+}
+
+.announcement-body code {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.875em;
+  background-color: rgba(29, 36, 69, 0.07);
+  padding: 0.15rem 0.35rem;
+  border-radius: 0.25rem;
+  color: var(--color-primary-700);
+}
+
+.announcement-body pre {
+  background-color: var(--color-primary-700);
+  color: #f4f5f7;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  overflow-x: auto;
+}
+
+.announcement-body pre code {
+  background-color: transparent;
+  padding: 0;
+  border-radius: 0;
+  color: inherit;
+  font-size: 0.875em;
+}
+
+.announcement-body hr {
+  border: 0;
+  border-top: 1px solid rgba(29, 36, 69, 0.12);
 }
 
 .announcement-body ul,
