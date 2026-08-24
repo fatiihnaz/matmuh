@@ -5,6 +5,7 @@ import { CmsPage, getCmsRoute } from "@/app/lib/cms.jsx";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
+import ScrollToTop from "./components/ScrollToTop";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -66,6 +67,7 @@ export default async function RootLayout({ children }) {
                 {children}
               </main>
               <Footer />
+              <ScrollToTop />
             </div>
           </CmsPage>
         </body>
