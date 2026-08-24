@@ -36,14 +36,65 @@ function Empty({ children }) {
   );
 }
 
+const NOTE_FILTERS = [
+  { id: "all", label: "Tümü" },
+  { id: "APPROVED", label: "Yayında" },
+  { id: "PENDING", label: "Bekleyen" },
+  { id: "REJECTED", label: "Reddedilen" },
+];
+
 function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }) {
   const { href } = useLocaleNav();
+  const [query, setQuery] = useState("");
+  const [status, setStatus] = useState("all");
+
   if (items.length === 0) return <Empty>Henüz not yüklemediniz.</Empty>;
 
+  const needle = query.toLocaleLowerCase("tr");
+  const shown = items.filter(
+    (note) =>
+      (status === "all" || note.status === status) &&
+      (needle === "" ||
+        `${note.title} ${note.lectureCode ?? ""}`.toLocaleLowerCase("tr").includes(needle)),
+  );
+
   return (
-    <ul className="divide-y divide-primary-500/6">
-      {items.map((note) => {
-        const status = NOTE_STATUS[note.status] ?? NOTE_STATUS.PENDING;
+    <>
+      {items.length > 3 && (
+        <div className="sticky top-0 z-10 space-y-2 border-b border-primary-500/6 bg-white/95 px-4 py-2.5 backdrop-blur-sm">
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Not veya ders kodu ara…"
+            aria-label="Notlarımda ara"
+            className="w-full rounded-lg border border-primary-500/10 bg-primary-500/2 px-3 py-1.5 text-[13px] text-primary-600 outline-none! focus:border-secondary-500/50"
+          />
+          <div className="flex flex-wrap gap-1.5">
+            {NOTE_FILTERS.map((filter) => (
+              <button
+                key={filter.id}
+                type="button"
+                onClick={() => setStatus(filter.id)}
+                className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition-colors ${
+                  status === filter.id
+                    ? "bg-secondary-500/12 text-secondary-600"
+                    : "text-primary-500/45 hover:text-primary-500"
+                }`}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {shown.length === 0 ? (
+        <Empty>Bu koşullara uyan not yok.</Empty>
+      ) : (
+        <ul className="divide-y divide-primary-500/6">
+        {shown.map((note) => {
+        const badge = NOTE_STATUS[note.status] ?? NOTE_STATUS.PENDING;
         const draft = note.status !== "APPROVED";
         return (
           <li key={note.id} className="flex items-start gap-3 px-4 py-3">
@@ -56,8 +107,8 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
             <span className="min-w-0 flex-1">
               <span className="flex flex-wrap items-center gap-2">
                 <span className="text-[13px] font-medium text-primary-600">{note.title}</span>
-                <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${status.tone}`}>
-                  {status.label}
+                <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${badge.tone}`}>
+                  {badge.label}
                 </span>
               </span>
               <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-primary-500/45">
@@ -122,7 +173,9 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
           </li>
         );
       })}
-    </ul>
+        </ul>
+      )}
+    </>
   );
 }
 
