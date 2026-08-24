@@ -15,6 +15,7 @@ export default function HeroSearch() {
   const [query, setQuery] = useState("");
   const [dismissed, setDismissed] = useState("");
   const boxRef = useRef(null);
+  const panelRef = useRef(null);
   const listId = useId();
 
   const [rect, setRect] = useState(null);
@@ -27,7 +28,9 @@ export default function HeroSearch() {
 
   useEffect(() => {
     function onPointerDown(event) {
-      if (boxRef.current && !boxRef.current.contains(event.target)) setDismissed(term);
+      const inside =
+        boxRef.current?.contains(event.target) || panelRef.current?.contains(event.target);
+      if (!inside) setDismissed(term);
     }
     document.addEventListener("mousedown", onPointerDown);
     return () => document.removeEventListener("mousedown", onPointerDown);
@@ -89,6 +92,7 @@ export default function HeroSearch() {
         rect &&
         createPortal(
           <motion.div
+            ref={panelRef}
             style={{ left: rect.left, top: rect.bottom, width: rect.width, originY: 0 }}
             initial={{ opacity: 0, scaleY: 0.94 }}
             animate={{ opacity: 1, scaleY: 1 }}
