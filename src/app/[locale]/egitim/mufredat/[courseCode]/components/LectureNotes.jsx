@@ -92,6 +92,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
   const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
+  const rejected = note.status === "REJECTED";
 
   return (
     <div
@@ -121,11 +122,16 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
           <span className="text-sm font-semibold text-primary-700 truncate">
             {note.title}
           </span>
-          {pending && (
-            <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-500/15 px-1.5 py-0.5 rounded shrink-0">
-              <Clock3 size={9} strokeWidth={2.5} /> Onay bekliyor
-            </span>
-          )}
+          {pending &&
+            (rejected ? (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 bg-red-500/12 px-1.5 py-0.5 rounded shrink-0">
+                <X size={9} strokeWidth={2.5} /> Reddedildi
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-500/15 px-1.5 py-0.5 rounded shrink-0">
+                <Clock3 size={9} strokeWidth={2.5} /> Onay bekliyor
+              </span>
+            ))}
         </div>
         {note.description && (
           <p className="text-xs text-primary-500/50 leading-relaxed mb-1.5 line-clamp-2">
@@ -175,7 +181,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             disabled={cancelling}
             className="inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
           >
-            {cancelling ? "…" : "İptal et"}
+            {cancelling ? "…" : rejected ? "Kaldır" : "İptal et"}
           </button>
         )}
       </div>
@@ -406,7 +412,7 @@ export default function LectureNotes({ lectureId, onSignIn }) {
           <div className="flex items-center gap-2 mb-3">
             <div className="w-1 h-4 bg-amber-500 rounded-full" />
             <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-              Yüklediğiniz, onay bekleyen notlar
+              Yüklediğiniz, henüz yayımlanmamış notlar
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -415,7 +421,7 @@ export default function LectureNotes({ lectureId, onSignIn }) {
             ))}
           </div>
           <p className="text-[11px] text-primary-500/40 mt-2.5">
-            Bu notlar yalnızca size görünür; yönetici onayladıktan sonra herkese açılır.
+            Bu notlar yalnızca size görünür. Onaylananlar aşağıdaki listeye geçer.
           </p>
         </div>
       )}
