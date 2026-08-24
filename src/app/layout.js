@@ -53,7 +53,7 @@ export default async function RootLayout({ children }) {
   return (
     <html lang={locale ?? "tr"} className={`${inter.variable} ${jbMono.variable}`}>
       <Providers>
-        <body className="font-sans antialiased bg-background">
+        <body className="font-sans antialiased bg-background" suppressHydrationWarning>
           <CmsPage>
             <div className="flex flex-col min-h-svh">
               <a
