@@ -60,9 +60,9 @@ export function FooterLinks() {
             key={index}
             href={href}
             {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-            className="block hover:text-white transition-colors"
+            className="block hover:text-white transition-colors min-h-[1.25rem]"
           >
-            {item.link?.label}
+            {item.link?.label || "\u00A0"}
           </a>
         );
       }}

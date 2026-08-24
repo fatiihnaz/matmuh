@@ -57,7 +57,7 @@ export default function Header() {
 
       <div className="w-full h-0.5" style={{ background: "linear-gradient(to right, var(--color-primary-500) 0%, var(--color-secondary-500) 30%, var(--color-secondary-500) 70%, var(--color-primary-500) 100%)" }} />
 
-      <div className="bg-primary-500">
+      <div className="relative z-20 bg-primary-500">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
           <Link href={href("/")} className="shrink-0 py-2">
             <Image

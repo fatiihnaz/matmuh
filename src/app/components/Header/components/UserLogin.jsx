@@ -75,7 +75,7 @@ export default function UserLogin() {
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
-    <div ref={ref} className="relative">
+    <div ref={ref} className="relative z-30">
       <button
         onClick={() => setOpen((prev) => !prev)}
         aria-expanded={open}
@@ -110,7 +110,7 @@ export default function UserLogin() {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: -6, scale: 0.97 }}
             transition={{ duration: 0.16, ease: [0.4, 0, 0.2, 1] }}
-            className="absolute right-0 top-full mt-2 w-[clamp(15rem,88vw,21rem)] origin-top-right rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 overflow-hidden"
+            className="absolute right-0 top-full mt-2 w-[clamp(15rem,88vw,21rem)] origin-top-right rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 overflow-hidden z-50"
           >
             <div className="flex items-start gap-3 px-4 pt-4 pb-3">
               <span className="w-9 h-9 shrink-0 rounded-full border border-secondary-500/35 bg-secondary-500/10 text-secondary-600 flex items-center justify-center text-xs font-semibold tracking-tight">
