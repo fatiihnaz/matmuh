@@ -58,7 +58,7 @@ function sanitize(html) {
 function toAnnouncement(item) {
   const data = item.data ?? {};
   return {
-    id: item.id,
+    id: item.id ?? item.slug,
     slug: item.slug,
     title: data.title ?? "",
     summary: data.summary ?? null,
@@ -76,13 +76,15 @@ function toAnnouncement(item) {
       kind: (a.type ?? "").toLowerCase(),
       size: a.size ?? 0,
     })),
-    gallery: (data.gallery ?? []).map((g) => ({
-      src: g.image?.src ?? "",
-      alt: g.image?.alt ?? "",
-      caption: g.caption ?? null,
-      width: 1600,
-      height: 1067,
-    })),
+    gallery: (data.gallery ?? [])
+      .filter((g) => g.image?.src)
+      .map((g) => ({
+        src: g.image.src,
+        alt: g.image.alt ?? "",
+        caption: g.caption ?? null,
+        width: 1600,
+        height: 1067,
+      })),
   };
 }
 
