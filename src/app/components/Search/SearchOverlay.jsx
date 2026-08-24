@@ -4,6 +4,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 
+import { useKeyboardInset } from "@/app/lib/useKeyboardInset";
 import SearchResults from "./SearchResults";
 import { MIN_CHARS, useSiteSearch } from "./useSiteSearch";
 
@@ -11,6 +12,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
   const listId = useId();
+  const keyboardInset = useKeyboardInset(open);
 
   const { term, groups, hasResults } = useSiteSearch(query);
 
@@ -99,7 +101,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
 
             {hasResults && (
               <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/30 sm:flex-none sm:max-h-[65svh]"
-                style={{ marginTop: 8 }}>
+                style={{ marginTop: 8, marginBottom: keyboardInset || undefined }}>
                 <SearchResults id={listId} groups={groups} term={term} onNavigate={close} />
               </div>
             )}
