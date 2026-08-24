@@ -11,11 +11,13 @@ import NavItems from "./components/NavItems";
 import NavSearch from "./components/NavSearch";
 import { navigationItems, DEPARTMENT_EMAIL, YTU_ANA_SITE } from "@/data/navigation";
 import { useCmsBlock, useCmsRoute } from "inscribed";
+import { useT } from "@/i18n/useT";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { locale, slug, localePath } = useCmsRoute();
+  const t = useT();
   const { value: eposta } = useCmsBlock("footer.contact.email");
   const isHome = slug === "/";
   const epostaAdresi = eposta?.label || DEPARTMENT_EMAIL;
@@ -56,13 +58,24 @@ export default function Header() {
       <div className="bg-primary-500">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
           <Link href="/" className="shrink-0 py-2">
-            <Image src="/main-logo.svg" alt="YTÜ Matematik Mühendisliği Bölümü" width={400} height={54} className="h-8 sm:h-10 w-auto" priority />
+            <Image
+              src={locale === "en" ? "/main-logo-en.svg" : "/main-logo.svg"}
+              alt={
+                locale === "en"
+                  ? "YTU Department of Mathematical Engineering"
+                  : "YTÜ Matematik Mühendisliği Bölümü"
+              }
+              width={400}
+              height={54}
+              className="h-8 sm:h-10 w-auto"
+              priority
+            />
           </Link>
 
           <div className="flex flex-1 items-center justify-end gap-2">
             {!searchOpen && (
               <motion.nav
-                aria-label="Ana menü"
+                aria-label={t("Ana menü")}
                 initial={{ opacity: 0, x: 8 }}
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.2, ease: [0.22, 1, 0.36, 1] }}
@@ -70,7 +83,7 @@ export default function Header() {
               >
                 {navigationItems.map((item) => (
                   <NavItems key={item.label} item={item}>
-                    {item.label.toLocaleUpperCase('tr-TR')}
+                    {t(item.label).toLocaleUpperCase(locale === "en" ? "en-US" : "tr-TR")}
                   </NavItems>
                 ))}
               </motion.nav>

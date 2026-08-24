@@ -6,6 +6,7 @@ import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine, FileText, Calen
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
+import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 
 const ROLE_LABELS = {
@@ -19,6 +20,7 @@ const SLOT = "w-16 h-9";
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
   const { canEdit, editing, setEditing } = useCmsEditing();
+  const t = useT();
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState(null);
   const ref = useRef(null);
@@ -53,7 +55,7 @@ export default function UserLogin() {
         className="h-9 px-3.5 flex items-center gap-2 border border-secondary-500 text-secondary-500 rounded-lg hover:bg-secondary-500 hover:text-primary-500 transition-colors font-medium text-xs"
       >
         <LogIn size={14} className="shrink-0" />
-        <span>Giriş</span>
+        <span>{t("Giriş")}</span>
       </button>
     );
   }
@@ -63,7 +65,7 @@ export default function UserLogin() {
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
     : "--";
-  const roles = (user?.authorities ?? []).map((a) => ROLE_LABELS[a] ?? a);
+  const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
@@ -135,8 +137,8 @@ export default function UserLogin() {
 
             <div className="p-1.5 border-t border-primary-500/8">
               {[
-                { id: "notes", label: "Notlarım", icon: FileText },
-                { id: "schedule", label: "Ders Programım", icon: CalendarDays },
+                { id: "notes", label: t("Notlarım"), icon: FileText },
+                { id: "schedule", label: t("Ders Programım"), icon: CalendarDays },
               ].map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
@@ -165,7 +167,7 @@ export default function UserLogin() {
                     className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                   >
                     <ClipboardCheck size={14} className="shrink-0 text-secondary-500" />
-                    <span className="flex-1 text-left">Not Yönetimi</span>
+                    <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
                   </Link>
                 )}
                 {canEdit && (
@@ -177,7 +179,7 @@ export default function UserLogin() {
                   className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                 >
                   <PencilLine size={14} className="shrink-0 text-secondary-500" />
-                  <span className="flex-1 text-left">Düzenleme modu</span>
+                  <span className="flex-1 text-left">{t("Düzenleme modu")}</span>
                   <span
                     className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
                       editing ? "bg-secondary-500" : "bg-primary-500/15"
@@ -203,7 +205,7 @@ export default function UserLogin() {
                 className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-red-700/75 hover:bg-red-50 transition-colors rounded-lg"
               >
                 <LogOut size={14} className="text-red-700/50 shrink-0" />
-                <span>Çıkış Yap</span>
+                <span>{t("Çıkış Yap")}</span>
               </button>
             </div>
           </motion.div>

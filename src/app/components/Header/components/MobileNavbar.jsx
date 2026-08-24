@@ -10,6 +10,7 @@ import { useAuth } from "@/lib/auth";
 import SearchOverlay from "@/app/components/Search/SearchOverlay";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
+import { useT } from "@/i18n/useT";
 import { useCmsRoute } from "inscribed";
 
 const ROLE_LABELS = {
@@ -49,6 +50,7 @@ const staggerItem = {
 };
 
 function AccordionSection({ item, onNavigate, pathname }) {
+  const t = useT();
   const [isOpen, setIsOpen] = useState(false);
   const reduce = useReducedMotion();
 
@@ -59,7 +61,7 @@ function AccordionSection({ item, onNavigate, pathname }) {
   if (!item.children) {
     return (
       <Link href={item.href} onClick={onNavigate} className={`block font-medium text-base py-4 ${isActive ? "text-secondary-500" : "text-white"}`}>
-        {item.label}
+        {t(item.label)}
       </Link>
     );
   }
@@ -69,7 +71,7 @@ function AccordionSection({ item, onNavigate, pathname }) {
   return (
     <>
       <button onClick={() => setIsOpen(!isOpen)} className="w-full flex items-center justify-between py-4">
-        <span className={isActive ? "text-secondary-500 font-medium" : "text-white/80 font-light"}>{item.label}</span>
+        <span className={isActive ? "text-secondary-500 font-medium" : "text-white/80 font-light"}>{t(item.label)}</span>
         <motion.span animate={{ rotate: isOpen ? 0 : 180 }} transition={{ duration: 0.25, ease: "easeInOut" }}>
           <ChevronUp size={18} className="text-neutral-500" />
         </motion.span>
@@ -88,7 +90,7 @@ function AccordionSection({ item, onNavigate, pathname }) {
                   child.type === "category" ? (
                     <motion.div key={child.label} variants={staggerItem} className="pt-2 pb-1">
                       <span className="text-secondary-500 text-[11px] font-semibold uppercase tracking-wider">
-                        {child.label}
+                        {t(child.label)}
                       </span>
                     </motion.div>
                   ) : (
@@ -96,7 +98,7 @@ function AccordionSection({ item, onNavigate, pathname }) {
                       <Link href={child.href} onClick={onNavigate}
                         className={`block text-sm py-1.5 transition-colors ${pathname === child.href ? "text-white font-medium" : "text-neutral-400 font-light hover:text-white"}`}
                       >
-                        {child.label}
+                        {t(child.label)}
                       </Link>
                     </motion.div>
                   )
@@ -114,6 +116,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
   const pathname = usePathname();
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
   const { canEdit, editing, setEditing } = useCmsEditing();
+  const t = useT();
   const [panel, setPanel] = useState(null);
   const { locale, slug, localePath } = useCmsRoute();
   const reduce = useReducedMotion();
@@ -132,7 +135,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
   const initials = user?.name
     ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
     : "--";
-  const roles = (user?.authorities ?? []).map((a) => ROLE_LABELS[a] ?? a);
+  const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
@@ -163,7 +166,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                 className="relative flex w-full items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-left text-sm text-neutral-500 transition-colors hover:border-white/20"
               >
                 <Search size={16} className="shrink-0" />
-                Ara...
+                {t("Ara...")}
               </motion.button>
             )}
 
@@ -217,8 +220,8 @@ export default function MobileNavbar({ isOpen, onClose }) {
                   <div className="-mx-6 border-t border-white/10" />
 
                   {[
-                    { id: "notes", label: "Notlarım", icon: FileText },
-                    { id: "schedule", label: "Ders Programım", icon: CalendarDays },
+                    { id: "notes", label: t("Notlarım"), icon: FileText },
+                    { id: "schedule", label: t("Ders Programım"), icon: CalendarDays },
                   ].map(({ id, label, icon: Icon }) => (
                     <button
                       key={id}
@@ -238,7 +241,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                     <>
                       <div className="-mx-6 border-t border-white/10" />
                       <span className="block pt-1 text-[10px] font-semibold uppercase tracking-widest text-neutral-500">
-                        Yönetim
+                        {t("Yönetim")}
                       </span>
 
                       {isAdmin && (
@@ -248,7 +251,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                           className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
                         >
                           <ClipboardCheck size={16} className="shrink-0 text-secondary-500" />
-                          <span className="flex-1 text-left">Not Yönetimi</span>
+                          <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
                         </Link>
                       )}
 
@@ -261,7 +264,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                           className="flex items-center gap-3 w-full py-2.5 text-sm text-neutral-300 hover:text-white transition-colors"
                         >
                           <PencilLine size={16} className="shrink-0 text-secondary-500" />
-                          <span className="flex-1 text-left">Düzenleme modu</span>
+                          <span className="flex-1 text-left">{t("Düzenleme modu")}</span>
                           <span
                             className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
                               editing ? "bg-secondary-500" : "bg-white/15"
@@ -284,7 +287,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                     className="flex items-center justify-center gap-2 w-full text-red-400/80 hover:text-red-300 text-sm py-2.5 rounded-lg bg-red-100/5 border border-white/10 hover:border-red-200/30 transition-colors"
                   >
                     <LogOut size={16} />
-                    Çıkış Yap
+                    {t("Çıkış Yap")}
                   </button>
                 </div>
               ) : (
@@ -292,7 +295,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                   className="flex items-center justify-center gap-2 w-full bg-secondary-500/10 text-secondary-500 font-medium text-sm py-3 rounded-lg border border-secondary-500/30 hover:border-secondary-500/60 transition-colors"
                 >
                   <LogIn size={16} />
-                  Öğrenci Girişi
+                  {t("Öğrenci Girişi")}
                 </button>
               )}
             </div>

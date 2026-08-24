@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useT } from "@/i18n/useT";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
@@ -29,6 +30,7 @@ const staggerItem = {
 };
 
 function DropdownItem({ item, pathname }) {
+  const t = useT();
   const Icon = item.icon;
   const isActive = !item.external && pathname === item.href;
   const className = `flex items-center gap-3 px-3 py-2.5 rounded-lg group transition-colors duration-200 ${isActive ? "bg-primary-500/5" : "hover:bg-primary-500/3"}`;
@@ -42,12 +44,12 @@ function DropdownItem({ item, pathname }) {
       )}
       <div className="flex flex-col">
         <span className={`flex items-center gap-1.5 text-xs transition-colors duration-200 text-primary-500 ${isActive? "font-medium" : "font-normal group-hover:text-primary-500"}`}>
-          {item.label}
+          {t(item.label)}
           {item.external && <ExternalLink size={10} strokeWidth={1.5} className="text-primary-500/35" />}
         </span>
         {item.description && (
           <span className="text-[10px] text-primary-500/40 font-normal leading-tight mt-0.5">
-            {item.description}
+            {t(item.description)}
           </span>
         )}
       </div>
@@ -84,13 +86,14 @@ function SimpleDropdown({ items, pathname }) {
 }
 
 function CategorizedDropdown({ items, pathname }) {
+  const t = useT();
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="visible" exit="exit" className="flex py-2 px-1">
       {items.map((group, groupIndex) => (
         <motion.div key={group.category} variants={staggerItem} className={`flex-1 px-2 ${ groupIndex > 0 ? "border-l border-black/5" : ""}`}>
           <div className="px-3 pt-1 pb-1.5">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-primary-500/35">
-              {group.category}
+              {t(group.category)}
             </span>
           </div>
           <div className="space-y-0.5">
