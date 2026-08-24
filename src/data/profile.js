@@ -73,3 +73,55 @@ export async function fetchMySchedule(token, range = currentWeek()) {
     kind: item.kind,
   }));
 }
+
+function minutesOf(hhmm) {
+  const [h, m] = (hhmm ?? "").split(":").map(Number);
+  return Number.isFinite(h) && Number.isFinite(m) ? h * 60 + m : null;
+}
+
+function toBlocks(entries) {
+  const blocks = [];
+
+  for (const entry of entries) {
+    const start = minutesOf(entry.startTime);
+    const end = minutesOf(entry.endTime);
+    const open = blocks.at(-1);
+
+    if (open && start !== null && open.end !== null && start < open.end) {
+      open.entries.push(entry);
+      open.overlapStart = Math.max(open.overlapStart, start);
+      open.overlapEnd = open.overlapEnd === null ? end : Math.min(open.overlapEnd, end ?? open.overlapEnd);
+      if (end !== null) open.end = Math.max(open.end, end);
+    } else {
+      blocks.push({ entries: [entry], end, overlapStart: start, overlapEnd: end });
+    }
+  }
+
+  return blocks.map(({ entries: grouped, overlapStart, overlapEnd }) => ({
+    entries: grouped,
+    conflict: grouped.length > 1,
+    overlap:
+      grouped.length > 1 && overlapStart !== null && overlapEnd !== null && overlapStart < overlapEnd
+        ? `${formatClock(overlapStart)} – ${formatClock(overlapEnd)}`
+        : null,
+  }));
+}
+
+function formatClock(total) {
+  return `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
+}
+
+export function scheduleDays(items) {
+  const days = new Map();
+  for (const item of items) {
+    if (!days.has(item.date)) days.set(item.date, []);
+    days.get(item.date).push(item);
+  }
+
+  return [...days.keys()]
+    .sort()
+    .map((date) => ({
+      date,
+      blocks: toBlocks([...days.get(date)].sort((a, b) => a.startTime.localeCompare(b.startTime))),
+    }));
+}
