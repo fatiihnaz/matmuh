@@ -4,10 +4,13 @@ import { useEffect, useId, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { Search, X } from "lucide-react";
 
+import { useT } from "@/i18n/useT";
+
 import SearchResults from "@/app/components/Search/SearchResults";
 import { MIN_CHARS, useSiteSearch } from "@/app/components/Search/useSiteSearch";
 
 export default function NavSearch({ open, onOpen, onClose }) {
+  const t = useT();
   const [query, setQuery] = useState("");
   const boxRef = useRef(null);
   const inputRef = useRef(null);
@@ -80,7 +83,7 @@ export default function NavSearch({ open, onOpen, onClose }) {
       <button
         type="button"
         onClick={onClose}
-        aria-label="Aramayı kapat"
+        aria-label={t("Aramayı kapat")}
         title="Aramayı kapat"
         className="pl-2 text-neutral-400 hover:text-white transition-colors"
       >

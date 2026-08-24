@@ -158,7 +158,7 @@ export default function UserLogin() {
             {(canEdit || isAdmin) && (
               <div className="p-1.5 border-t border-primary-500/8">
                 <span className="block px-2.5 pb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500/35">
-                  Yönetim
+                  {t("Yönetim")}
                 </span>
                 {isAdmin && (
                   <Link

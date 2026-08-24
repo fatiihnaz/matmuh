@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
 import { Search, ChevronUp, LogIn, LogOut, ExternalLink, ClipboardCheck, PencilLine, FileText, CalendarDays } from "lucide-react";
 import { navigationItems, YTU_ANA_SITE } from "@/data/navigation";
@@ -11,6 +11,7 @@ import SearchOverlay from "@/app/components/Search/SearchOverlay";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useT } from "@/i18n/useT";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 import { useCmsRoute } from "inscribed";
 
 const ROLE_LABELS = {
@@ -49,18 +50,19 @@ const staggerItem = {
   exit: { opacity: 0, x: -8, transition: { duration: 0.12 } },
 };
 
-function AccordionSection({ item, onNavigate, pathname }) {
+function AccordionSection({ item, onNavigate }) {
+  const { href, path } = useLocaleNav();
   const t = useT();
   const [isOpen, setIsOpen] = useState(false);
   const reduce = useReducedMotion();
 
   const isActive = item.children
-    ? pathname.startsWith(item.basePath)
-    : pathname === item.href;
+    ? path.startsWith(item.basePath)
+    : path === item.href;
 
   if (!item.children) {
     return (
-      <Link href={item.href} onClick={onNavigate} className={`block font-medium text-base py-4 ${isActive ? "text-secondary-500" : "text-white"}`}>
+      <Link href={href(item.href)} onClick={onNavigate} className={`block font-medium text-base py-4 ${isActive ? "text-secondary-500" : "text-white"}`}>
         {t(item.label)}
       </Link>
     );
@@ -95,8 +97,8 @@ function AccordionSection({ item, onNavigate, pathname }) {
                     </motion.div>
                   ) : (
                     <motion.div key={child.href || i} variants={staggerItem}>
-                      <Link href={child.href} onClick={onNavigate}
-                        className={`block text-sm py-1.5 transition-colors ${pathname === child.href ? "text-white font-medium" : "text-neutral-400 font-light hover:text-white"}`}
+                      <Link href={href(child.href)} onClick={onNavigate}
+                        className={`block text-sm py-1.5 transition-colors ${path === child.href ? "text-white font-medium" : "text-neutral-400 font-light hover:text-white"}`}
                       >
                         {t(child.label)}
                       </Link>
@@ -113,7 +115,6 @@ function AccordionSection({ item, onNavigate, pathname }) {
 }
 
 export default function MobileNavbar({ isOpen, onClose }) {
-  const pathname = usePathname();
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
   const { canEdit, editing, setEditing } = useCmsEditing();
   const t = useT();
@@ -149,7 +150,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
           <div className="flex-1 overflow-y-auto px-6 pt-2 pb-4">
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, delay: 0.15 }}>
               {navigationItems.map((item) => (
-                <AccordionSection key={item.label} item={item} onNavigate={onClose} pathname={pathname} />
+                <AccordionSection key={item.label} item={item} onNavigate={onClose} />
               ))}
             </motion.div>
           </div>
@@ -187,7 +188,7 @@ export default function MobileNavbar({ isOpen, onClose }) {
                 <a href={YTU_ANA_SITE} target="_blank" rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 text-neutral-500 hover:text-secondary-500 transition-colors"
                 >
-                  YTÜ Ana Site
+                  {t("YTÜ Ana Site")}
                   <ExternalLink size={11} />
                 </a>
               </div>

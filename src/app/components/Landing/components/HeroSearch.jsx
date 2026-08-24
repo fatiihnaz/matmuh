@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useLayoutEffect, useRef, useState, useSyncExternalStore } from "react";
 import { createPortal } from "react-dom";
+import { motion, useReducedMotion } from "framer-motion";
 import { Search } from "lucide-react";
 
 import SearchResults from "@/app/components/Search/SearchResults";
@@ -20,6 +21,7 @@ export default function HeroSearch() {
 
   const { term, groups, hasResults } = useSiteSearch(query);
   const open = hasResults && dismissed !== term;
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
     function onPointerDown(event) {
@@ -49,7 +51,11 @@ export default function HeroSearch() {
   return (
     <div ref={boxRef} className="relative w-full">
       <form action="/duyurular" className="relative w-full">
-        <div className="relative flex items-center bg-white/95 backdrop-blur-md rounded-xl shadow-lg border border-white/20 overflow-hidden transition-all duration-300 focus-within:shadow-xl w-full">
+        <div
+          className={`relative flex items-center bg-white/95 backdrop-blur-md shadow-lg border border-white/20 overflow-hidden transition-all duration-200 focus-within:shadow-xl w-full ${
+            open ? "rounded-t-xl rounded-b-none" : "rounded-xl"
+          }`}
+        >
           <input
             type="search"
             name="q"
@@ -80,9 +86,12 @@ export default function HeroSearch() {
         mounted &&
         rect &&
         createPortal(
-          <div
-            style={{ left: rect.left, top: rect.bottom + 8, width: rect.width }}
-            className="fixed z-60 max-h-[70svh] overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/25"
+          <motion.div
+            style={{ left: rect.left, top: rect.bottom, width: rect.width, originY: 0 }}
+            initial={{ opacity: 0, scaleY: 0.94 }}
+            animate={{ opacity: 1, scaleY: 1 }}
+            transition={{ duration: reducedMotion ? 0 : 0.16, ease: [0.22, 1, 0.36, 1] }}
+            className="fixed z-60 max-h-[70svh] overflow-y-auto overscroll-contain rounded-b-xl border border-t-0 border-white/20 bg-white shadow-lg shadow-primary-700/20"
           >
             <SearchResults
               id={listId}
@@ -90,7 +99,7 @@ export default function HeroSearch() {
               term={term}
               onNavigate={() => setDismissed(term)}
             />
-          </div>,
+          </motion.div>,
           document.body,
         )}
     </div>

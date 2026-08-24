@@ -12,12 +12,14 @@ import NavSearch from "./components/NavSearch";
 import { navigationItems, DEPARTMENT_EMAIL, YTU_ANA_SITE } from "@/data/navigation";
 import { useCmsBlock, useCmsRoute } from "inscribed";
 import { useT } from "@/i18n/useT";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
   const { locale, slug, localePath } = useCmsRoute();
   const t = useT();
+  const { href } = useLocaleNav();
   const { value: eposta } = useCmsBlock("footer.contact.email");
   const isHome = slug === "/";
   const epostaAdresi = eposta?.label || DEPARTMENT_EMAIL;
@@ -37,7 +39,7 @@ export default function Header() {
 
           <div className="flex items-center gap-3 text-xs">
             <a href={YTU_ANA_SITE} target="_blank" rel="noopener noreferrer" className="text-secondary-500 hover:text-secondary-300 transition-colors">
-              YTÜ Ana Site
+              {t("YTÜ Ana Site")}
             </a>
             <div className="w-px h-3 bg-neutral-600"></div>
             <div className="flex items-center gap-1.5 text-[11px] tracking-wide">
@@ -57,7 +59,7 @@ export default function Header() {
 
       <div className="bg-primary-500">
         <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
-          <Link href="/" className="shrink-0 py-2">
+          <Link href={href("/")} className="shrink-0 py-2">
             <Image
               src={locale === "en" ? "/main-logo-en.svg" : "/main-logo.svg"}
               alt={
@@ -65,7 +67,7 @@ export default function Header() {
                   ? "YTU Department of Mathematical Engineering"
                   : "YTÜ Matematik Mühendisliği Bölümü"
               }
-              width={400}
+              width={locale === "en" ? 414 : 397}
               height={54}
               className="h-8 sm:h-10 w-auto"
               priority
