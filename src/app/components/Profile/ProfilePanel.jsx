@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, FileText, Info, MapPin, TriangleAlert, Wifi } from "lucide-react";
+import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi } from "lucide-react";
 
 import Modal from "@/app/components/Modal";
 import { deleteNote } from "@/data/lecture-notes";
@@ -72,6 +72,15 @@ function NotesBody({ items, busyId, onRemove, onNavigate }) {
                   </>
                 )}
                 {formatDay(note.createdAt)}
+                {note.status === "APPROVED" && (
+                  <>
+                    <span aria-hidden>·</span>
+                    <span className="inline-flex items-center gap-1">
+                      <Eye size={11} strokeWidth={1.5} />
+                      {note.viewCount} görüntülenme
+                    </span>
+                  </>
+                )}
               </span>
             </span>
 
@@ -236,12 +245,17 @@ export default function ProfilePanel({ view, onClose }) {
       open
       onClose={onClose}
       label={label}
-      contentClassName="flex items-start justify-center px-3 pt-16 pb-6 sm:px-6"
+      contentClassName="flex items-center justify-center px-3 py-14 sm:px-6 sm:py-16"
     >
-      <div className="flex max-h-full w-full max-w-2xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
-        <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-4 py-3">
+      <div className="flex h-full max-h-144 w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+        <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
           <Icon size={16} strokeWidth={1.5} className="text-secondary-500" />
           <h2 className="text-sm font-semibold text-primary-600">{label}</h2>
+          {status === "ready" && state.items.length > 0 && (
+            <span className="ml-auto text-[11px] text-primary-500/35">
+              {state.items.length} kayıt
+            </span>
+          )}
         </div>
 
         {actionError && (

@@ -54,6 +54,7 @@ export async function fetchMyNotes(token) {
     lectureName: note.lecture?.name ?? null,
     href: note.file?.fileUrl ?? null,
     extension: (note.file?.fileName?.split(".").pop() ?? "").toUpperCase(),
+    viewCount: note.viewCount ?? 0,
   }));
 }
 
