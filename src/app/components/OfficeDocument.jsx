@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 
+import { useAuth } from "@/lib/auth";
+
 const STATUS = {
   loading: "Belge açılıyor…",
   error: "Bu belge tarayıcıda açılamadı. İndirip görüntüleyebilirsiniz.",
@@ -37,6 +39,7 @@ async function renderXlsx(buffer, node) {
 }
 
 export default function OfficeDocument({ href, kind }) {
+  const { getAccessToken } = useAuth();
   const hostRef = useRef(null);
   const [status, setStatus] = useState("loading");
 
@@ -49,7 +52,11 @@ export default function OfficeDocument({ href, kind }) {
 
     (async () => {
       try {
-        const response = await fetch(href, { credentials: "include" });
+        const token = await getAccessToken();
+        const response = await fetch(href, {
+          credentials: "include",
+          headers: token ? { Authorization: `Bearer ${token}` } : undefined,
+        });
         if (!response.ok) throw new Error(String(response.status));
         const buffer = await response.arrayBuffer();
         if (!alive) return;
@@ -66,7 +73,7 @@ export default function OfficeDocument({ href, kind }) {
     return () => {
       alive = false;
     };
-  }, [href, kind]);
+  }, [href, kind, getAccessToken]);
 
   return (
     <div className="relative h-full w-full overflow-auto bg-white">
