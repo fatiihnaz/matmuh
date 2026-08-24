@@ -267,6 +267,8 @@ export function InternshipSummary() {
           defaultValue="Staj Sistemi"
         />
       }
+      buttonTitle="Staj Sayfası"
+      href="/egitim/staj"
     >
       <div className="flex flex-col gap-3 pt-2">
         <div className="announcement-body text-[13px] text-primary-500/60 leading-relaxed">
