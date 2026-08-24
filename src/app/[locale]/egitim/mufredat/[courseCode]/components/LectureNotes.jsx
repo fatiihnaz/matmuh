@@ -95,24 +95,27 @@ function NoteCard({ note, pending = false }) {
 
   return (
     <div
-      className={`rounded-xl p-4 border bg-white shadow-xs flex items-start gap-4 transition-colors ${
+      className={`group relative rounded-xl p-4 border bg-white shadow-xs flex items-start gap-4 transition-colors ${
         pending
           ? "border-amber-500/30 bg-amber-50/40"
           : "border-primary-500/10 hover:border-secondary-500/40"
       }`}
     >
-      <button
-        type="button"
-        onClick={() => previewable && setPreview(true)}
-        disabled={!previewable}
-        aria-label={previewable ? `${note.title} dosyasını önizle` : undefined}
-        className="w-12 h-14 rounded-lg flex flex-col items-center justify-center gap-1 bg-primary-500/5 shrink-0 transition-colors enabled:hover:bg-secondary-500/15 disabled:cursor-default"
-      >
+      {previewable && (
+        <button
+          type="button"
+          onClick={() => setPreview(true)}
+          aria-label={`${note.title} dosyasını önizle`}
+          className="absolute inset-0 z-0 cursor-pointer rounded-xl outline-offset-2"
+        />
+      )}
+
+      <span className="w-12 h-14 rounded-lg flex flex-col items-center justify-center gap-1 bg-primary-500/5 shrink-0 transition-colors group-hover:bg-secondary-500/15">
         <FileText size={18} className="text-primary-700" strokeWidth={1.5} />
         <span className="text-[8px] font-bold text-primary-500/50 tracking-wide">
           {note.extension}
         </span>
-      </button>
+      </span>
       <div className="flex-1 min-w-0 pt-0.5">
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="text-sm font-semibold text-primary-700 truncate">
@@ -143,11 +146,6 @@ function NoteCard({ note, pending = false }) {
               {note.uploadedBy}
             </span>
           )}
-          {note.viewCount > 0 && (
-            <span className="inline-flex items-center gap-1 text-[11px] text-primary-500/40 font-mono">
-              <Eye size={11} strokeWidth={1.5} /> {note.viewCount}
-            </span>
-          )}
         </div>
       </div>
 
@@ -163,7 +161,8 @@ function NoteCard({ note, pending = false }) {
       {note.href && (
         <a
           href={note.href}
-          className="shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-secondary-500 hover:text-white transition-colors"
+          download
+          className="relative z-10 shrink-0 inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-secondary-500 hover:text-white transition-colors"
         >
           <Download size={13} strokeWidth={2} /> İndir
         </a>
