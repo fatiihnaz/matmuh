@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 import {
   Award,
@@ -136,21 +136,28 @@ const graphLinks = [
 ];
 
 
+let mobileQuery;
+
+function mediaQuery() {
+  return (mobileQuery ??= window.matchMedia("(max-width: 767px)"));
+}
+
+function subscribeToWidth(onChange) {
+  const query = mediaQuery();
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+const neverChanges = () => () => {};
+
 function NodeGraphCanvas() {
   const [hoveredNode, setHoveredNode] = useState(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-    const handleMediaChange = (e) => setIsMobile(e.matches);
-
-    setIsMobile(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handleMediaChange);
-
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
-  }, []);
+  const isMounted = useSyncExternalStore(neverChanges, () => true, () => false);
+  const isMobile = useSyncExternalStore(
+    subscribeToWidth,
+    () => mediaQuery().matches,
+    () => false,
+  );
 
   if (!isMounted) return <div className="w-full h-full bg-primary-500" />;
 
