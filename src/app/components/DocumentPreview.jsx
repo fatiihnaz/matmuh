@@ -13,6 +13,22 @@ const OFFICE_KINDS = ["docx", "xlsx"];
 
 export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS, ...OFFICE_KINDS]);
 
+// Office turleri baytlari okuyarak cizildigi icin CORS'a tabi. Dis kokendeki
+// belgeler (kalite.yildiz.edu.tr, eski alan adi) izin basligi gondermiyor, yani
+// tarayicida acilamazlar. PDF ve gorseller etkilenmiyor: onlari iframe/img
+// dogrudan gosteriyor, bayt okumak gerekmiyor.
+export function canPreview(href, kind) {
+  if (!href || !PREVIEWABLE_KINDS.has(kind)) return false;
+  if (!OFFICE_KINDS.includes(kind)) return true;
+  if (href.startsWith("/")) return true;
+  if (typeof window === "undefined") return false;
+  try {
+    return new URL(href, window.location.origin).origin === window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 

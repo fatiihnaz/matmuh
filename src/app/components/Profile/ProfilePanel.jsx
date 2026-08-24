@@ -5,7 +5,7 @@ import Link from "next/link";
 import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi } from "lucide-react";
 
 import Modal from "@/app/components/Modal";
-import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
+import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -40,7 +40,7 @@ function Empty({ children }) {
 function NoteThumb({ note }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
+  const previewable = canPreview(note.href, kind);
 
   const face = (
     <>

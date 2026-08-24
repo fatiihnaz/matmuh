@@ -3,14 +3,14 @@
 import { useState } from "react";
 import { Download, Eye, FileText } from "lucide-react";
 import { formatBytes } from "@/lib/format";
-import DocumentPreview, { PREVIEWABLE_KINDS } from "./DocumentPreview";
+import DocumentPreview, { canPreview } from "./DocumentPreview";
 
 const ROW =
   "group flex items-center gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5 hover:border-secondary-500/30 hover:bg-secondary-500/4 transition-colors";
 
 export default function DocumentLink({ label, href, kind, term, size }) {
   const [open, setOpen] = useState(false);
-  const previewable = PREVIEWABLE_KINDS.has(kind);
+  const previewable = canPreview(href, kind);
 
   const handleClick = (event) => {
     if (!previewable) return;

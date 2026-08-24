@@ -18,7 +18,7 @@ import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import { deleteNote, fetchAllNotes, noteTypeLabel, setNoteStatus } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
-import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
+import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 
 const FILTERS = [
   { id: "pending", label: "Onay Bekleyen", status: "PENDING" },
@@ -57,7 +57,7 @@ function Notice({ icon: Icon, title, children }) {
 function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
+  const previewable = canPreview(note.href, kind);
   return (
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">

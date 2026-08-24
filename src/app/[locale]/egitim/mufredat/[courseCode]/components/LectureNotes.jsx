@@ -22,7 +22,7 @@ import {
   uploadLectureNote,
 } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
-import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
+import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
@@ -96,7 +96,7 @@ function LoginPanel({ loading, onSignIn }) {
 function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
+  const previewable = canPreview(note.href, kind);
   const rejected = note.status === "REJECTED";
 
   return (
