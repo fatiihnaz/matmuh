@@ -42,6 +42,10 @@ export const metadata = {
   },
 };
 
+export const viewport = {
+  interactiveWidget: "resizes-content",
+};
+
 export default async function RootLayout({ children }) {
   // Above the [locale] segment, so the provider survives language switches; the
   // active locale comes from the same x-pathname header <CmsPage> reads.
