@@ -249,9 +249,28 @@ function UploadForm({ lectureId, onUploaded }) {
             setDone(false);
             setOpen(true);
           }}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold hover:bg-secondary-500/80 transition-colors"
+          onDragOver={(e) => {
+            e.preventDefault();
+            setDragOver(true);
+          }}
+          onDragLeave={() => setDragOver(false)}
+          onDrop={(e) => {
+            e.preventDefault();
+            setDragOver(false);
+            const dropped = e.dataTransfer.files?.[0];
+            if (!dropped) return;
+            setFile(dropped);
+            setDone(false);
+            setOpen(true);
+          }}
+          className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
+            dragOver
+              ? "bg-secondary-500/20 text-secondary-600 ring-2 ring-secondary-500 ring-dashed"
+              : "bg-secondary-500 text-primary-500 hover:bg-secondary-500/80"
+          }`}
         >
-          <Upload size={14} strokeWidth={2} /> Not Yükle
+          <Upload size={14} strokeWidth={2} />
+          {dragOver ? "Dosyayı bırakın" : "Not Yükle"}
         </button>
       </div>
     );
