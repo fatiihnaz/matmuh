@@ -10,6 +10,7 @@ import {
 import { CmsProvider } from "inscribed";
 
 import { useAuth } from "@/lib/auth";
+import { useWideViewport } from "./useWideViewport";
 
 /**
  * @file Plugs our auth layer into inscribed's consumer-auth seams.
@@ -71,12 +72,14 @@ export function useCmsEditing() {
 
 export function useIsEditor() {
   const { canEdit, editing } = useCmsEditing();
-  return canEdit && editing;
+  const wide = useWideViewport();
+  return canEdit && editing && wide;
 }
 
 export function AppCmsProvider(props) {
   const { user, getAccessToken, signOut } = useAuth();
   const editing = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const wide = useWideViewport();
 
   const canEdit =
     DEV_FORCE_ADMIN || !!user?.authorities?.some((role) => EDIT_ROLES.includes(role));
@@ -102,7 +105,7 @@ export function AppCmsProvider(props) {
     <EditingContext.Provider value={editingValue}>
       <CmsProvider
         {...props}
-        isAdmin={canEdit && editing}
+        isAdmin={canEdit && editing && wide}
         getAccessToken={getAccessToken}
         userInfo={userInfo}
         onSignOut={onSignOut}

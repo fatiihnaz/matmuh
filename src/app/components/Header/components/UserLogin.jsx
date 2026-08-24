@@ -25,9 +25,6 @@ export default function UserLogin() {
   const wide = useWideViewport();
   const canEdit = mayEdit && wide;
 
-  useEffect(() => {
-    if (!wide && editing) setEditing(false);
-  }, [wide, editing, setEditing]);
   const t = useT();
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState(null);
