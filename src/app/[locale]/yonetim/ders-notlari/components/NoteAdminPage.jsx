@@ -10,6 +10,7 @@ import {
   Search,
   ShieldAlert,
   Trash2,
+  X,
 } from "lucide-react";
 
 import PageLayout from "@/app/components/PageLayout";
@@ -51,7 +52,7 @@ function Notice({ icon: Icon, title, children }) {
   );
 }
 
-function NoteRow({ note, busy, confirming, onApprove, onDelete, onConfirm }) {
+function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
   return (
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">
@@ -122,25 +123,33 @@ function NoteRow({ note, busy, confirming, onApprove, onDelete, onConfirm }) {
             <Download size={13} strokeWidth={2} /> İndir
           </a>
         )}
-        <button
-          onClick={() => onApprove(note)}
-          disabled={busy}
-          className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-40 ${
-            note.approved
-              ? "bg-primary-500/5 text-primary-500 hover:bg-primary-500/10"
-              : "bg-secondary-500 text-primary-500 hover:bg-secondary-500/80"
-          }`}
-        >
-          {note.approved ? (
-            <>
-              <RotateCcw size={13} strokeWidth={2} /> Onayı Kaldır
-            </>
-          ) : (
-            <>
-              <Check size={13} strokeWidth={2} /> Onayla
-            </>
-          )}
-        </button>
+        {note.status === "APPROVED" ? (
+          <button
+            onClick={() => onSetStatus(note, "PENDING")}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-primary-500/10 transition-colors disabled:opacity-40"
+          >
+            <RotateCcw size={13} strokeWidth={2} /> Onayı Kaldır
+          </button>
+        ) : (
+          <button
+            onClick={() => onSetStatus(note, "APPROVED")}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold hover:bg-secondary-500/80 transition-colors disabled:opacity-40"
+          >
+            <Check size={13} strokeWidth={2} /> Onayla
+          </button>
+        )}
+
+        {note.status !== "REJECTED" && (
+          <button
+            onClick={() => onSetStatus(note, "REJECTED")}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-red-700/70 hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-40"
+          >
+            <X size={13} strokeWidth={2} /> Reddet
+          </button>
+        )}
         <button
           onClick={() => onConfirm(note.id)}
           disabled={busy}
@@ -204,8 +213,7 @@ export default function NoteAdminPage() {
     }
   }
 
-  const onApprove = (note) =>
-    act(note, (token) => setNoteStatus(note.id, note.approved ? "PENDING" : "APPROVED", token));
+  const onSetStatus = (note, status) => act(note, (token) => setNoteStatus(note.id, status, token));
 
   const onDelete = (note) => act(note, (token) => deleteNote(note.id, token));
 
@@ -303,7 +311,7 @@ export default function NoteAdminPage() {
                 key={note.id}
                 note={note}
                 busy={busyId === note.id}
-                onApprove={onApprove}
+                onSetStatus={onSetStatus}
                 onDelete={onDelete}
                 confirming={confirmId === note.id}
                 onConfirm={setConfirmId}
