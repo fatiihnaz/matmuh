@@ -27,7 +27,7 @@ const extensionOf = (fileName) => {
 
 // Mutlak adres üretiliyor; yolu koruyup kendi kaynağımıza çevirince HttpOnly
 // access_token çerezi isteğe katılıyor ve indirme dev'de de çalışıyor.
-function sameOrigin(fileUrl) {
+export function sameOrigin(fileUrl) {
   if (!fileUrl) return null;
   try {
     const { pathname, search } = new URL(fileUrl);

@@ -1,4 +1,4 @@
-import { toOffering } from "./lecture-notes";
+import { sameOrigin, toOffering } from "./lecture-notes";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 
@@ -54,7 +54,7 @@ export async function fetchMyNotes(token) {
     createdAt: note.createdAt,
     lectureCode: note.lecture?.code ?? null,
     lectureName: note.lecture?.name ?? null,
-    href: note.file?.fileUrl ?? null,
+    href: sameOrigin(note.file?.fileUrl) ?? null,
     extension: (note.file?.fileName?.split(".").pop() ?? "").toUpperCase(),
     viewCount: note.viewCount ?? 0,
     offering: toOffering(note.offering),

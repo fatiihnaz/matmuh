@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi } from "lucide-react";
 
 import Modal from "@/app/components/Modal";
+import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -33,6 +34,49 @@ function Empty({ children }) {
       <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
       {children}
     </div>
+  );
+}
+
+function NoteThumb({ note }) {
+  const [preview, setPreview] = useState(false);
+  const kind = String(note.extension ?? "").toLowerCase();
+  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
+
+  const face = (
+    <>
+      <FileText size={15} strokeWidth={1.5} className="text-primary-700" />
+      <span className="text-[7px] font-bold tracking-wide text-primary-500/50">
+        {note.extension}
+      </span>
+    </>
+  );
+
+  if (!previewable) {
+    return (
+      <span className="mt-0.5 flex size-9 shrink-0 flex-col items-center justify-center rounded-lg bg-primary-500/5">
+        {face}
+      </span>
+    );
+  }
+
+  return (
+    <>
+      <button
+        type="button"
+        onClick={() => setPreview(true)}
+        aria-label={`${note.title} dosyasını önizle`}
+        className="mt-0.5 flex size-9 shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg bg-primary-500/5 transition-colors hover:bg-secondary-500/15"
+      >
+        {face}
+      </button>
+      <DocumentPreview
+        open={preview}
+        onClose={() => setPreview(false)}
+        label={note.title}
+        href={note.href}
+        kind={kind}
+      />
+    </>
   );
 }
 
@@ -98,12 +142,7 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
         const draft = note.status !== "APPROVED";
         return (
           <li key={note.id} className="flex items-start gap-3 px-4 py-3">
-            <span className="mt-0.5 flex size-9 shrink-0 flex-col items-center justify-center rounded-lg bg-primary-500/5">
-              <FileText size={15} strokeWidth={1.5} className="text-primary-700" />
-              <span className="text-[7px] font-bold tracking-wide text-primary-500/50">
-                {note.extension}
-              </span>
-            </span>
+            <NoteThumb note={note} />
             <span className="min-w-0 flex-1">
               <span className="flex flex-wrap items-center gap-2">
                 <span className="text-[13px] font-medium text-primary-600">{note.title}</span>
