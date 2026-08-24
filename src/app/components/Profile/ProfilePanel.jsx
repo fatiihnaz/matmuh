@@ -7,6 +7,7 @@ import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi } from "
 import Modal from "@/app/components/Modal";
 import { deleteNote } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 import {
   NOTE_STATUS,
   fetchMyNotes,
@@ -36,6 +37,7 @@ function Empty({ children }) {
 }
 
 function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }) {
+  const { href } = useLocaleNav();
   if (items.length === 0) return <Empty>Henüz not yüklemediniz.</Empty>;
 
   return (
@@ -62,7 +64,7 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
                 {note.lectureCode && (
                   <>
                     <Link
-                      href={`/egitim/mufredat/${note.lectureCode}`}
+                      href={href(`/egitim/mufredat/${note.lectureCode}`)}
                       onClick={onNavigate}
                       className="font-mono font-semibold text-secondary-500 hover:underline"
                     >

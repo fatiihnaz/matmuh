@@ -3,8 +3,10 @@
 import Link from "next/link";
 
 import { hrefForHit } from "./useSiteSearch";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 export default function SearchResults({ groups, term, onNavigate, id }) {
+  const { href } = useLocaleNav();
   return (
     <div id={id} className="overflow-hidden text-left">
       {groups.map((group) => (
@@ -20,7 +22,7 @@ export default function SearchResults({ groups, term, onNavigate, id }) {
           {group.items.map((hit) => (
             <Link
               key={`${hit.type}-${hit.id}`}
-              href={hrefForHit(hit)}
+              href={href(hrefForHit(hit))}
               onClick={onNavigate}
               className="block px-4 py-2 transition-colors hover:bg-primary-500/4"
             >
@@ -38,7 +40,7 @@ export default function SearchResults({ groups, term, onNavigate, id }) {
       ))}
 
       <Link
-        href={`/duyurular?q=${encodeURIComponent(term)}`}
+        href={href(`/duyurular?q=${encodeURIComponent(term)}`)}
         onClick={onNavigate}
         className="block bg-primary-500/3 px-4 py-2.5 text-center text-[11px] font-medium text-secondary-600 transition-colors hover:bg-primary-500/6"
       >

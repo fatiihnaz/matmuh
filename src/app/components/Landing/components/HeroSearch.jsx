@@ -7,6 +7,7 @@ import { Search } from "lucide-react";
 
 import SearchResults from "@/app/components/Search/SearchResults";
 import { useSiteSearch } from "@/app/components/Search/useSiteSearch";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 const neverChanges = () => () => {};
 
@@ -22,6 +23,7 @@ export default function HeroSearch() {
   const { term, groups, hasResults } = useSiteSearch(query);
   const open = hasResults && dismissed !== term;
   const reducedMotion = useReducedMotion();
+  const { href } = useLocaleNav();
 
   useEffect(() => {
     function onPointerDown(event) {
@@ -50,7 +52,7 @@ export default function HeroSearch() {
 
   return (
     <div ref={boxRef} className="relative w-full">
-      <form action="/duyurular" className="relative w-full">
+      <form action={href("/duyurular")} className="relative w-full">
         <div
           className={`relative flex items-center bg-white/95 backdrop-blur-md shadow-lg border border-white/20 overflow-hidden transition-all duration-200 focus-within:shadow-xl w-full ${
             open ? "rounded-t-xl rounded-b-none" : "rounded-xl"

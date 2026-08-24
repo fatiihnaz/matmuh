@@ -8,6 +8,7 @@ import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 import { fullName, useStaff } from "@/app/components/PersonRow";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 const categories = [
   { id: "yonetim", group: "MANAGEMENT", label: "Yönetim" },
@@ -61,6 +62,7 @@ function StaffSkeleton() {
 function StaffContent({ initialStaff }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { href } = useLocaleNav();
   const categoryParam = searchParams.get("type") || "akademik";
 
   const [rankFilter, setRankFilter] = useState("Tümü");
@@ -140,7 +142,7 @@ function StaffContent({ initialStaff }) {
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => router.push(`/personel?type=${cat.id}`)}
+              onClick={() => router.push(href(`/personel?type=${cat.id}`))}
               className="shrink-0 whitespace-nowrap px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
               style={{
                 backgroundColor: categoryParam === cat.id ? "rgba(173,151,111,0.12)" : "transparent",

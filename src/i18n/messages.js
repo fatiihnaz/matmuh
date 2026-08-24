@@ -85,6 +85,7 @@ export const messages = {
     "Kapat": "Close",
 
     "Öğrenci Girişi": "Student Login",
+    "Giriş": "Sign In",
     "Çıkış Yap": "Sign Out",
     "Notlarım": "My Notes",
     "Ders Programım": "My Timetable",
