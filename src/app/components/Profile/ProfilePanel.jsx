@@ -367,9 +367,9 @@ export default function ProfilePanel({ view, onClose }) {
       open
       onClose={onClose}
       label={label}
-      contentClassName="flex items-center justify-center px-3 py-14 sm:px-6 sm:py-16"
+      contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
     >
-      <div className="flex h-full max-h-144 w-full max-w-3xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-full sm:max-h-144 sm:max-w-3xl">
         <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
           <Icon size={16} strokeWidth={1.5} className="text-secondary-500" />
           <h2 className="text-sm font-semibold text-primary-600">{label}</h2>
