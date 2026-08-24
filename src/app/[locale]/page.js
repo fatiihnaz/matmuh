@@ -48,7 +48,7 @@ export default async function LandingPage() {
       <Landing highlights={highlights} />
 
       <PageLayout sidebar={<QuickLinks />} sidebarFirst overlapSidebar>
-        <div className="space-y-8">
+        <div className="space-y-6">
           <MainCard
             title={
               <EditableRegion

@@ -4,8 +4,8 @@ import { ChevronRight } from "lucide-react";
 export default function MainCard({ title, buttonTitle, href, action, children, dark }) {
     return (
         <div className={`rounded-xl border border-primary-500/10 shadow-xs w-full overflow-hidden ${dark ? "bg-primary-500" : "bg-white"}`}>
-            <div className="p-6">
-                <div className="flex justify-between items-center mb-6">
+            <div className="p-5 sm:p-6">
+                <div className="flex justify-between items-center mb-5">
                     <div className="flex items-center gap-3">
                         <div className="w-1 h-5 bg-secondary-500 rounded-full" />
 

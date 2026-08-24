@@ -325,7 +325,7 @@ export default function DepartmentInfo() {
               />
             }
           >
-            <div className="flex flex-col -mx-6 -mb-6">
+            <div className="flex flex-col -mx-5 -mb-5 sm:-mx-6 sm:-mb-6">
               <div className="relative bg-primary-500 h-85 w-full group border-y border-primary-500/10">
                 <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/20 pointer-events-none z-10" />
                 <div className="absolute inset-0 z-0">
