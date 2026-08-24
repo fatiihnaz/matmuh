@@ -14,14 +14,30 @@ import {
 
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import { deleteNote, fetchAllNotes, setNoteApproval } from "@/data/lecture-notes";
+import { deleteNote, fetchAllNotes, setNoteStatus } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
 
 const FILTERS = [
-  { id: "pending", label: "Onay Bekleyen", approved: false },
-  { id: "approved", label: "Onaylı", approved: true },
-  { id: "all", label: "Tümü", approved: undefined },
+  { id: "pending", label: "Onay Bekleyen", status: "PENDING" },
+  { id: "approved", label: "Onaylı", status: "APPROVED" },
+  { id: "rejected", label: "Reddedilen", status: "REJECTED" },
+  { id: "all", label: "Tümü", status: undefined },
 ];
+
+const BADGES = {
+  APPROVED: {
+    label: "Onaylı",
+    style: { color: "var(--color-secondary-600)", backgroundColor: "rgba(173,151,111,0.14)" },
+  },
+  PENDING: {
+    label: "Bekliyor",
+    style: { color: "#b45309", backgroundColor: "rgba(180,83,9,0.1)" },
+  },
+  REJECTED: {
+    label: "Reddedildi",
+    style: { color: "#b91c1c", backgroundColor: "rgba(185,28,28,0.1)" },
+  },
+};
 
 const PAGE_SIZE = 20;
 
@@ -50,13 +66,9 @@ function NoteRow({ note, busy, onApprove, onDelete }) {
           </span>
           <span
             className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-            style={
-              note.approved
-                ? { color: "var(--color-secondary-600)", backgroundColor: "rgba(173,151,111,0.14)" }
-                : { color: "#b45309", backgroundColor: "rgba(180,83,9,0.1)" }
-            }
+            style={BADGES[note.status].style}
           >
-            {note.approved ? "Onaylı" : "Bekliyor"}
+            {BADGES[note.status].label}
           </span>
         </div>
 
@@ -138,8 +150,8 @@ export default function NoteAdminPage() {
   const load = useCallback(async () => {
     const token = await getAccessToken();
     if (!token) throw new Error("Oturumunuz sona ermiş, sayfayı yenileyin.");
-    const approved = FILTERS.find((f) => f.id === filter)?.approved;
-    return fetchAllNotes(token, { approved, search: query, page, size: PAGE_SIZE });
+    const status = FILTERS.find((f) => f.id === filter)?.status;
+    return fetchAllNotes(token, { status, search: query, page, size: PAGE_SIZE });
   }, [getAccessToken, filter, query, page]);
 
   useEffect(() => {
@@ -170,10 +182,10 @@ export default function NoteAdminPage() {
   }
 
   const onApprove = (note) =>
-    act(note, (token) => setNoteApproval(note.id, !note.approved, token));
+    act(note, (token) => setNoteStatus(note.id, note.approved ? "PENDING" : "APPROVED", token));
 
   const onDelete = (note) => {
-    if (!window.confirm(`"${note.title}" silinecek. Emin misiniz?`)) return;
+    if (!window.confirm(`"${note.title}" listeden kaldırılacak. Emin misiniz?`)) return;
     act(note, (token) => deleteNote(note.id, token));
   };
 

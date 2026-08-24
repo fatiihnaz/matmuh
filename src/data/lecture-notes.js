@@ -40,13 +40,14 @@ function sameOrigin(fileUrl) {
 const fullName = (user) =>
   [user?.firstName, user?.lastName].filter(Boolean).join(" ") || null;
 
-const isApproved = (note) => Boolean(note.approved ?? note.isApproved);
+const statusOf = (note) => note.status ?? "PENDING";
 
 function toNote(note) {
   const file = note.file ?? {};
   return {
     id: note.id,
-    approved: isApproved(note),
+    status: statusOf(note),
+    approved: statusOf(note) === "APPROVED",
     lectureCode: note.lecture?.code ?? null,
     lectureName: note.lecture?.name ?? null,
     lectureSlug: note.lecture?.slug ?? null,
@@ -98,7 +99,6 @@ export async function uploadLectureNote(lectureId, token, { title, description, 
 export async function fetchMyPendingNotes(lectureId, token) {
   const params = new URLSearchParams({
     lectureId,
-    approved: "false",
     size: "50",
     sort: "createdAt,desc",
   });
@@ -107,12 +107,14 @@ export async function fetchMyPendingNotes(lectureId, token) {
   });
   if (!res.ok) throw new Error(`my-notes ${res.status}`);
   const body = await res.json();
-  return (body?.data?.content ?? []).map(toNote);
+  return (body?.data?.content ?? [])
+    .map(toNote)
+    .filter((note) => note.status !== "APPROVED");
 }
 
-export async function fetchAllNotes(token, { approved, search, page = 0, size = 20 } = {}) {
+export async function fetchAllNotes(token, { status, search, page = 0, size = 20 } = {}) {
   const params = new URLSearchParams({ page: String(page), size: String(size), sort: "createdAt,desc" });
-  if (approved !== undefined && approved !== null) params.set("approved", String(approved));
+  if (status) params.set("status", status);
   if (search) params.set("search", search);
 
   const res = await fetch(`${API}/lecture-notes?${params}`, {
@@ -129,11 +131,11 @@ export async function fetchAllNotes(token, { approved, search, page = 0, size = 
   };
 }
 
-export async function setNoteApproval(id, approved, token) {
+export async function setNoteStatus(id, status, token) {
   const res = await fetch(`${API}/lecture-notes/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ approved }),
+    body: JSON.stringify({ status }),
   });
   if (!res.ok) {
     const body = await res.json().catch(() => null);
