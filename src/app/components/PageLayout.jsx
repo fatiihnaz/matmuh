@@ -1,4 +1,9 @@
-export default function PageLayout({ children, sidebar, sidebarFirst = false }) {
+export default function PageLayout({
+  children,
+  sidebar,
+  sidebarFirst = false,
+  overlapSidebar = false,
+}) {
   return (
     <div className="w-full flex-1 py-8">
       <div className="max-w-7xl mx-auto px-4 w-full">
@@ -8,9 +13,9 @@ export default function PageLayout({ children, sidebar, sidebarFirst = false }) 
               {children}
             </div>
             <aside
-              className={`w-full lg:w-68 shrink-0 lg:sticky lg:top-28 lg:order-1 ${
+              className={`w-full lg:w-68 shrink-0 lg:sticky lg:top-28 lg:order-1 lg:mt-0 ${
                 sidebarFirst ? "order-1" : ""
-              }`}
+              } ${overlapSidebar ? "relative z-30 -mt-20 lg:mt-0" : ""}`}
             >
               {sidebar}
             </aside>

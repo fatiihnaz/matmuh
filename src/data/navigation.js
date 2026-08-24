@@ -2,7 +2,8 @@ import {
   Info, Users, GraduationCap, Shield, BookUser, Microscope, Briefcase,
   CalendarDays, BookOpen, Scale, Library, Archive, FlaskConical, FolderOpen, Globe, ClipboardList, Sun, FileStack,
 } from "lucide-react";
-
+export const YTU_ANA_SITE = "https://www.yildiz.edu.tr";
+export const DEPARTMENT_EMAIL = "mtmblm@yildiz.edu.tr";
 export const navigationItems = [
   { label: "Anasayfa", href: "/" },
   {

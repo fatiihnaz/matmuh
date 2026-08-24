@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useRef, useCallback } from "react";
+import { useT } from "@/i18n/useT";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, ExternalLink } from "lucide-react";
 
@@ -28,9 +30,11 @@ const staggerItem = {
   exit: { opacity: 0, y: 4, transition: { duration: 0.1 } },
 };
 
-function DropdownItem({ item, pathname }) {
+function DropdownItem({ item }) {
+  const { href, path } = useLocaleNav();
+  const t = useT();
   const Icon = item.icon;
-  const isActive = !item.external && pathname === item.href;
+  const isActive = !item.external && path === item.href;
   const className = `flex items-center gap-3 px-3 py-2.5 rounded-lg group transition-colors duration-200 ${isActive ? "bg-primary-500/5" : "hover:bg-primary-500/3"}`;
 
   const content = (
@@ -42,12 +46,12 @@ function DropdownItem({ item, pathname }) {
       )}
       <div className="flex flex-col">
         <span className={`flex items-center gap-1.5 text-xs transition-colors duration-200 text-primary-500 ${isActive? "font-medium" : "font-normal group-hover:text-primary-500"}`}>
-          {item.label}
+          {t(item.label)}
           {item.external && <ExternalLink size={10} strokeWidth={1.5} className="text-primary-500/35" />}
         </span>
         {item.description && (
           <span className="text-[10px] text-primary-500/40 font-normal leading-tight mt-0.5">
-            {item.description}
+            {t(item.description)}
           </span>
         )}
       </div>
@@ -66,36 +70,37 @@ function DropdownItem({ item, pathname }) {
 
   return (
     <motion.div variants={staggerItem}>
-      <Link href={item.href} className={className}>
+      <Link href={href(item.href)} className={className}>
         {content}
       </Link>
     </motion.div>
   );
 }
 
-function SimpleDropdown({ children, pathname }) {
+function SimpleDropdown({ items }) {
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="visible" exit="exit" className="py-2 px-1 space-y-0.5">
-      {children.map((item) => (
-        <DropdownItem key={item.href} item={item} pathname={pathname} />
+      {items.map((item) => (
+        <DropdownItem key={item.href} item={item} />
       ))}
     </motion.div>
   );
 }
 
-function CategorizedDropdown({ children, pathname }) {
+function CategorizedDropdown({ items }) {
+  const t = useT();
   return (
     <motion.div variants={staggerContainer} initial="hidden" animate="visible" exit="exit" className="flex py-2 px-1">
-      {children.map((group, groupIndex) => (
+      {items.map((group, groupIndex) => (
         <motion.div key={group.category} variants={staggerItem} className={`flex-1 px-2 ${ groupIndex > 0 ? "border-l border-black/5" : ""}`}>
           <div className="px-3 pt-1 pb-1.5">
             <span className="text-[10px] font-semibold uppercase tracking-wider text-primary-500/35">
-              {group.category}
+              {t(group.category)}
             </span>
           </div>
           <div className="space-y-0.5">
             {group.items.map((item) => (
-              <DropdownItem key={item.href} item={item} pathname={pathname} />
+              <DropdownItem key={item.href} item={item} />
             ))}
           </div>
         </motion.div>
@@ -105,11 +110,11 @@ function CategorizedDropdown({ children, pathname }) {
 }
 
 export default function NavItems({ item, children }) {
+  const { href, path } = useLocaleNav();
   const [isOpen, setIsOpen] = useState(false);
-  const pathname = usePathname();
   const timeoutRef = useRef(null);
 
-  const isActive = item.basePath ? pathname.startsWith(item.basePath) : pathname === item.href;
+  const isActive = item.basePath ? path.startsWith(item.basePath) : path === item.href;
 
   const openDropdown = useCallback(() => {
     if (timeoutRef.current) clearTimeout(timeoutRef.current);
@@ -122,7 +127,7 @@ export default function NavItems({ item, children }) {
 
   if (!item.children) {
     return (
-      <Link href={item.href} className={`hidden xl:block text-xs tracking-wide transition-colors ${isActive ? "text-secondary-500 font-semibold" : "text-white/80 font-light hover:text-secondary-500"}`}>
+      <Link href={href(item.href)} className={`hidden xl:block text-xs tracking-wide transition-colors ${isActive ? "text-secondary-500 font-semibold" : "text-white/80 font-light hover:text-secondary-500"}`}>
         {children}
       </Link>
     );
@@ -138,7 +143,7 @@ export default function NavItems({ item, children }) {
 
   return (
     <div className="relative" onMouseEnter={openDropdown} onMouseLeave={closeDropdown}>
-      <Link href={getPrimaryHref()} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
+      <Link href={href(getPrimaryHref())} className={`flex items-center gap-0.5 text-xs tracking-wide ${isActive ? "font-semibold" : "font-light"} transition-colors ${isActive || isOpen ? "text-secondary-500" : "text-white/80 font-light hover:text-secondary-500"}`}>
         {children}
         <motion.span animate={{ rotate: isOpen ? 180 : 0 }} transition={{ duration: 0.25, ease: "easeInOut" }}>
           <ChevronDown size={12} strokeWidth={1.5} className="text-white/60" />
@@ -155,9 +160,9 @@ export default function NavItems({ item, children }) {
               <div className="h-0.75 bg-secondary-400" />
 
               {categorized ? (
-                <CategorizedDropdown children={item.children} pathname={pathname}/>
+                <CategorizedDropdown items={item.children} />
               ) : (
-                <SimpleDropdown children={item.children} pathname={pathname}/>
+                <SimpleDropdown items={item.children} />
               )}
             </div>
           </motion.div>

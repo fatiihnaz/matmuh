@@ -1,4 +1,4 @@
-import { AlertTriangle, Briefcase, BookOpen, FileStack } from "lucide-react";
+import { TriangleAlert, Briefcase, BookOpen, FileStack } from "lucide-react";
 import { EditableRegion } from "inscribed";
 
 import PageLayout from "@/app/components/PageLayout";
@@ -49,7 +49,7 @@ export default function SummerSchoolPage() {
       <PageLayout sidebar={<Sidebar />}>
         <div className="flex flex-col gap-8">
           <div className="flex gap-4 p-5 rounded-xl border border-secondary-500/25 bg-secondary-500/6">
-            <AlertTriangle className="size-5 shrink-0 text-secondary-600" />
+            <TriangleAlert className="size-5 shrink-0 text-secondary-600" />
             <div className="flex flex-col gap-1">
               <EditableRegion
                 blockPath="warning.title"

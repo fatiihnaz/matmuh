@@ -7,7 +7,7 @@ import AnnouncementList from "@/app/components/Announcements/AnnouncementList";
 import AnnouncementFilters from "@/app/components/Announcements/AnnouncementFilters";
 import CategoryChips from "@/app/components/Announcements/CategoryChips";
 import Pagination from "@/app/components/Announcements/Pagination";
-import NewRecordLink from "@/app/components/Announcements/NewRecordLink";
+import NewRecordDialog from "@/app/components/Announcements/NewRecordDialog";
 import { PAGE_SIZE, getAnnouncements, getCategoriesWithCounts } from "@/data/content";
 
 export const metadata = {
@@ -52,7 +52,7 @@ export default async function AnnouncementsPage({ searchParams }) {
             <span className="text-xs text-primary-500/40">
               {total} duyuru{q ? ` · "${q}" için sonuçlar` : ""}
             </span>
-            <NewRecordLink href="/duyurular/yeni" label="Yeni duyuru" />
+            <NewRecordDialog collection="announcements" page="/duyurular/yeni" label="Yeni duyuru" title="Yeni Duyuru" submitLabel="Yayımla" />
           </div>
 
           <Panel padding="p-2">

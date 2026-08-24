@@ -1,7 +1,7 @@
-import { MapPin, Mail, Link } from "lucide-react";
+import { Mail } from "lucide-react";
 import { EditableRegion } from "inscribed";
 
-import { FooterLinks, FooterPhones } from "./FooterLists";
+import { FooterLinks, FooterPhones, FooterSocial } from "./FooterLists";
 
 export default function Footer() {
   return (
@@ -9,8 +9,7 @@ export default function Footer() {
       <div className="bg-primary-600">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-10 flex flex-col md:flex-row md:justify-between gap-10">
           <div>
-            <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
-              <MapPin size={14} className="text-secondary-500 -mt-0.5" />
+            <h3 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <EditableRegion
                 blockPath="footer.address.title"
                 blockType="ShortText"
@@ -33,8 +32,7 @@ Davutpaşa Kampüsü
           </div>
 
           <div>
-            <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
-              <Mail size={14} className="text-secondary-500 -mt-0.5" />
+            <h3 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <EditableRegion
                 blockPath="footer.contact.title"
                 blockType="ShortText"
@@ -58,8 +56,7 @@ Davutpaşa Kampüsü
           </div>
 
           <div>
-            <h3 className="flex items-center gap-2 text-white font-semibold text-xs uppercase tracking-wide mb-4">
-              <Link size={14} className="text-secondary-500 -mt-0.5" />
+            <h3 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <EditableRegion
                 blockPath="footer.links.title"
                 blockType="ShortText"
@@ -75,14 +72,18 @@ Davutpaşa Kampüsü
       </div>
 
       <div className="bg-primary-700">
-        <div className="max-w-7xl mx-auto px-6 py-4 text-center text-neutral-500 text-xs">
-          © {new Date().getFullYear()}{" "}
-          <EditableRegion
-            blockPath="footer.copyright"
-            blockType="ShortText"
-            defaultValue="Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü"
-            scope="global"
-          />
+        <div className="max-w-7xl mx-auto px-6 py-4 flex flex-col-reverse sm:flex-row items-center justify-between gap-4">
+          <div className="text-neutral-500 text-xs text-center sm:text-left">
+            © {new Date().getFullYear()}{" "}
+            <EditableRegion
+              blockPath="footer.copyright"
+              blockType="ShortText"
+              defaultValue="Yıldız Teknik Üniversitesi · Matematik Mühendisliği Bölümü"
+              scope="global"
+            />
+          </div>
+
+          <FooterSocial />
         </div>
       </div>
     </footer>

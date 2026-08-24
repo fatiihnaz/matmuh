@@ -1,6 +1,8 @@
 import { EditableRegion } from "inscribed";
 
 import SubHeader from "@/app/components/Header/SubHeader";
+import { getStaffCounts } from "@/app/lib/staff.js";
+import { getCurriculumSummary } from "@/data/curriculum";
 import DepartmentInfo from "./components/DepartmentInfo";
 
 export const metadata = {
@@ -9,7 +11,9 @@ export const metadata = {
     "Matematik Mühendisliği Bölümü tarihçesi, misyon ve vizyonu, çalışma alanları ve program bilgileri.",
 };
 
-export default function Page() {
+export default async function Page() {
+  const [staff, curriculum] = await Promise.all([getStaffCounts(), getCurriculumSummary()]);
+
   return (
     <>
       <SubHeader
@@ -28,7 +32,7 @@ export default function Page() {
           />
         }
       />
-      <DepartmentInfo />
+      <DepartmentInfo staff={staff} curriculum={curriculum} />
     </>
   );
 }

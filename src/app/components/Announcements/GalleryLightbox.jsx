@@ -47,60 +47,63 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
     "absolute top-1/2 -translate-y-1/2 p-3 rounded-full text-white/60 hover:text-white hover:bg-white/10 transition-colors";
 
   return (
-    <Modal open={open} onClose={onClose} label={title ? `${title} - fotoğraf galerisi` : "Fotoğraf galerisi"}>
-      <div className="flex flex-col h-full py-14 px-4 sm:px-16">
-        <div
-          className="relative flex-1 min-h-0 touch-pan-y"
-          onTouchStart={onTouchStart}
-          onTouchEnd={onTouchEnd}
-        >
-          <Image
-            src={image.src}
-            alt={image.alt}
-            fill
-            sizes="90vw"
-            priority
-            className="object-contain"
-            draggable={false}
-          />
-        </div>
+    <Modal
+      open={open}
+      onClose={onClose}
+      label={title ? `${title} - fotoğraf galerisi` : "Fotoğraf galerisi"}
+      contentClassName="flex flex-col py-14 px-4 sm:px-16"
+    >
+      <div
+        className="relative flex-1 min-h-0 touch-pan-y"
+        onTouchStart={onTouchStart}
+        onTouchEnd={onTouchEnd}
+      >
+        <Image
+          src={image.src}
+          alt={image.alt}
+          fill
+          sizes="90vw"
+          priority
+          className="object-contain"
+          draggable={false}
+        />
+      </div>
 
-        <div className="shrink-0 pt-4 text-center">
-          {image.caption && <p className="text-[13px] text-white/70">{image.caption}</p>}
+      <div className="shrink-0 pt-4 text-center">
+        {image.caption && <p className="text-[13px] text-white/70">{image.caption}</p>}
 
-          <p className="mt-1 text-[11px] font-mono text-white/40">
-            {index + 1} / {images.length}
-          </p>
+        <p className="mt-1 text-[11px] font-mono text-white/40">
+          {index + 1} / {images.length}
+        </p>
 
-          {images.length > 1 && images.length <= 12 && (
-            <div className="mt-2 flex items-center justify-center gap-1.5">
-              {images.map((img, i) => (
-                <button
-                  key={img.src}
-                  type="button"
-                  onClick={() => onIndexChange(i)}
-                  aria-label={`${i + 1}. fotoğrafa git`}
-                  aria-current={i === index}
-                  className={`size-1.5 rounded-full transition-colors ${
-                    i === index ? "bg-white" : "bg-white/30 hover:bg-white/50"
-                  }`}
-                />
-              ))}
-            </div>
-          )}
-        </div>
-
-        {images.length > 1 && (
-          <>
-            <button type="button" onClick={() => step(-1)} aria-label="Önceki fotoğraf" className={`${arrow} left-1 sm:left-4`}>
-              <ChevronLeft className="size-6" />
-            </button>
-            <button type="button" onClick={() => step(1)} aria-label="Sonraki fotoğraf" className={`${arrow} right-1 sm:right-4`}>
-              <ChevronRight className="size-6" />
-            </button>
-          </>
+        {images.length > 1 && images.length <= 12 && (
+          <div className="mt-2 flex items-center justify-center gap-1.5">
+            {images.map((img, i) => (
+              <button
+                key={img.src}
+                type="button"
+                onClick={() => onIndexChange(i)}
+                aria-label={`${i + 1}. fotoğrafa git`}
+                aria-current={i === index}
+                className={`size-1.5 rounded-full transition-colors ${
+                  i === index ? "bg-white" : "bg-white/30 hover:bg-white/50"
+                }`}
+              />
+            ))}
+          </div>
         )}
       </div>
+
+      {images.length > 1 && (
+        <>
+          <button type="button" onClick={() => step(-1)} aria-label="Önceki fotoğraf" className={`${arrow} left-1 sm:left-4`}>
+            <ChevronLeft className="size-6" />
+          </button>
+          <button type="button" onClick={() => step(1)} aria-label="Sonraki fotoğraf" className={`${arrow} right-1 sm:right-4`}>
+            <ChevronRight className="size-6" />
+          </button>
+        </>
+      )}
     </Modal>
   );
 }

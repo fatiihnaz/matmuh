@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
-import { usePathname } from "next/navigation";
+
+import { useT } from "@/i18n/useT";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 const labelMap = {
   "": "Anasayfa",
@@ -60,21 +62,22 @@ function formatSegmentLabel(seg) {
 }
 
 export default function Breadcrumb({ lastLabel }) {
-  const pathname = usePathname();
-  const segments = pathname.split("/").filter(Boolean);
+  const { href, path } = useLocaleNav();
+  const t = useT();
+  const segments = path.split("/").filter(Boolean);
 
   const crumbs = [
-    { label: "Anasayfa", href: "/" },
+    { label: t("Anasayfa"), href: href("/") },
     ...segments.map((seg, i) => ({
       label:
-        lastLabel && i === segments.length - 1 ? lastLabel : formatSegmentLabel(seg),
-      href: "/" + segments.slice(0, i + 1).join("/"),
+        lastLabel && i === segments.length - 1 ? lastLabel : t(formatSegmentLabel(seg)),
+      href: href("/" + segments.slice(0, i + 1).join("/")),
       isClickable: !unclickablePaths.includes(seg),
     })),
   ];
 
   return (
-    <nav aria-label="Sayfa yolu" className="flex items-center gap-2 text-xs min-w-0">
+    <nav aria-label={t("Sayfa yolu")} className="flex items-center gap-2 text-xs min-w-0">
       {crumbs.map((crumb, i) => {
         const isLast = i === crumbs.length - 1;
         return (

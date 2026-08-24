@@ -4,10 +4,10 @@ import StarMark from "@/app/components/StarMark";
 export default function NewsThumb({ cover, sizes, priority = false, className = "" }) {
   if (!cover) {
     return (
-      <div className={`aspect-4/3 p-2 ${className}`}>
-        <div className="h-full w-full rounded-lg border border-dashed border-primary-500/15 bg-primary-500/2 flex items-center justify-center">
-          <StarMark className="w-1/5 text-primary-500/12" />
-        </div>
+      <div
+        className={`relative aspect-4/3 overflow-hidden bg-primary-500/3 border border-dashed border-primary-500/15 flex items-center justify-center ${className}`}
+      >
+        <StarMark className="w-1/4 max-w-8 text-primary-500/15" />
       </div>
     );
   }
@@ -25,3 +25,4 @@ export default function NewsThumb({ cover, sizes, priority = false, className = 
     </div>
   );
 }
+

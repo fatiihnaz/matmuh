@@ -2,11 +2,13 @@
 
 import { useState, useMemo, Suspense } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Search } from "lucide-react";
+import { Search, ChevronDown } from "lucide-react";
 
 import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
+import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 import { fullName, useStaff } from "@/app/components/PersonRow";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 const categories = [
   { id: "yonetim", group: "MANAGEMENT", label: "Yönetim" },
@@ -18,9 +20,49 @@ const categories = [
 const academicRanks = ["Tümü", "Prof. Dr.", "Doç. Dr.", "Dr. Öğr. Üyesi"];
 const researchRanks = ["Tümü", "Arş. Gör.", "Öğr. Gör."];
 
+function StaffCardSkeleton() {
+  return (
+    <div className="flex flex-col items-center rounded-xl border border-primary-500/10 bg-white p-5 shadow-xs">
+      <SkeletonBlock className="mb-3 size-16 rounded-full" />
+      <SkeletonLine className="w-3/4" />
+      <SkeletonLine className="mt-2 w-1/2" />
+      <SkeletonLine className="mt-3 w-2/3" />
+    </div>
+  );
+}
+
+function StaffSkeleton() {
+  return (
+    <>
+      <div className="mb-6 flex flex-col items-stretch gap-4 rounded-xl border border-black/6 bg-white p-4 shadow-xs lg:flex-row lg:items-center lg:gap-6">
+        <SkeletonBlock className="h-9 w-full shrink-0 sm:max-w-xs lg:w-72" />
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6 gap-y-3">
+          <div className="flex items-center gap-1.5">
+            {Array.from({ length: 4 }, (_, i) => (
+              <SkeletonBlock key={i} className="h-6 w-24" />
+            ))}
+          </div>
+          <SkeletonBlock className="h-6 w-40" />
+        </div>
+      </div>
+
+      <div className="mb-4 px-1">
+        <SkeletonLine className="w-32" />
+      </div>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        {Array.from({ length: 8 }, (_, i) => (
+          <StaffCardSkeleton key={i} />
+        ))}
+      </div>
+    </>
+  );
+}
+
 function StaffContent({ initialStaff }) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const { href } = useLocaleNav();
   const categoryParam = searchParams.get("type") || "akademik";
 
   const [rankFilter, setRankFilter] = useState("Tümü");
@@ -68,14 +110,14 @@ function StaffContent({ initialStaff }) {
   return (
     <>
       <div
-        className="rounded-xl p-4 mb-6 flex flex-col lg:flex-row items-start lg:items-center gap-6"
+        className="rounded-xl p-4 mb-6 flex flex-col lg:flex-row items-stretch lg:items-center gap-4 lg:gap-6"
         style={{
           backgroundColor: "#FFFFFF",
           border: "1px solid rgba(0,0,0,0.06)",
           boxShadow: "0 1px 3px rgba(0,0,0,0.04)",
         }}
       >
-        <div className="relative flex-1 w-full sm:max-w-xs">
+        <div className="relative w-full shrink-0 sm:max-w-xs lg:w-72">
           <Search size={14} strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(29,36,69,0.3)" }} />
           <input
             type="text"
@@ -92,15 +134,16 @@ function StaffContent({ initialStaff }) {
           />
         </div>
 
-        <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-xs font-medium mr-1" style={{ color: "rgba(29,36,69,0.4)" }}>
+        <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6 gap-y-3">
+        <div className="flex min-w-0 flex-wrap items-center gap-1.5">
+          <span className="hidden shrink-0 text-xs font-medium mr-1 lg:inline" style={{ color: "rgba(29,36,69,0.4)" }}>
             Kategori:
           </span>
           {categories.map((cat) => (
             <button
               key={cat.id}
-              onClick={() => router.push(`/personel?type=${cat.id}`)}
-              className="px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
+              onClick={() => router.push(href(`/personel?type=${cat.id}`))}
+              className="whitespace-nowrap px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
               style={{
                 backgroundColor: categoryParam === cat.id ? "rgba(173,151,111,0.12)" : "transparent",
                 color: categoryParam === cat.id ? "#AD976F" : "rgba(29,36,69,0.45)",
@@ -113,26 +156,39 @@ function StaffContent({ initialStaff }) {
         </div>
 
         {availableRanks.length > 0 && (
-          <div className="flex items-center gap-1.5 flex-wrap lg:border-l lg:pl-6 lg:border-black/5">
-            <span className="text-xs font-medium mr-1" style={{ color: "rgba(29,36,69,0.4)" }}>
-              Unvan:
-            </span>
-            {availableRanks.map((r) => (
-              <button
-                key={r}
-                onClick={() => setRankFilter(r)}
-                className="px-2.5 py-1 rounded-md transition-all duration-200 text-xs font-medium border"
-                style={{
-                  backgroundColor: rankFilter === r ? "rgba(29,36,69,0.08)" : "transparent",
-                  color: rankFilter === r ? "#1D2445" : "rgba(29,36,69,0.45)",
-                  borderColor: rankFilter === r ? "rgba(29,36,69,0.1)" : "transparent",
-                }}
-              >
-                {r}
-              </button>
-            ))}
+        <div className="flex shrink-0 items-center gap-2">
+          <span className="shrink-0 text-xs font-medium" style={{ color: "rgba(29,36,69,0.4)" }}>
+            Unvan:
+          </span>
+          <div className="relative">
+            <select
+              value={rankFilter}
+              onChange={(e) => setRankFilter(e.target.value)}
+              aria-label="Unvana göre süz"
+              className="w-40 appearance-none rounded-md border py-1 pl-2.5 pr-7 text-xs font-medium outline-none transition-colors"
+              style={{
+                backgroundColor: rankFilter === "Tümü" ? "transparent" : "rgba(29,36,69,0.08)",
+                color: rankFilter === "Tümü" ? "rgba(29,36,69,0.45)" : "#1D2445",
+                borderColor: "rgba(0,0,0,0.08)",
+              }}
+            >
+              {availableRanks.map((r) => (
+                <option key={r} value={r}>
+                  {r}
+                </option>
+              ))}
+            </select>
+            <ChevronDown
+              size={13}
+              strokeWidth={1.5}
+              className="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2"
+              style={{ color: "rgba(29,36,69,0.35)" }}
+            />
           </div>
+        </div>
         )}
+
+        </div>
       </div>
 
       <div className="mb-4 flex items-center justify-between px-1">
@@ -142,13 +198,15 @@ function StaffContent({ initialStaff }) {
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
-        {filteredStaff.map((member, idx) => (
-          <StaffMember key={member.slug} member={member} idx={idx} />
-        ))}
+        {isLoading && filteredStaff.length === 0
+          ? Array.from({ length: 8 }, (_, i) => <StaffCardSkeleton key={i} />)
+          : filteredStaff.map((member, idx) => (
+              <StaffMember key={member.slug} member={member} idx={idx} />
+            ))}
       </div>
 
       {!isLoading && filteredStaff.length === 0 && (
-        <div className="text-center py-20 text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-2xl">
+        <div className="text-center py-20 text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-xl">
           {error ? "Personel listesi yüklenemedi." : "Kriterlere uygun personel bulunamadı."}
         </div>
       )}
@@ -159,7 +217,7 @@ function StaffContent({ initialStaff }) {
 export default function StaffPage({ initialStaff = [] }) {
   return (
     <PageLayout>
-      <Suspense fallback={<div className="py-20 text-center text-xs text-primary-500/40">Yükleniyor...</div>}>
+      <Suspense fallback={<StaffSkeleton />}>
         <StaffContent initialStaff={initialStaff} />
       </Suspense>
     </PageLayout>

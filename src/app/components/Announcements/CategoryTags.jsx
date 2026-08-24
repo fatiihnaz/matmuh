@@ -1,4 +1,4 @@
-import { CONTENT_CATEGORIES } from "@/data/content";
+import { CONTENT_CATEGORIES } from "@/data/content-shape";
 
 export default function CategoryTags({ ids = [] }) {
   return ids.map((id) => {

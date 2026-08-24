@@ -1,0 +1,50 @@
+"use client";
+
+import { useEffect, useState } from "react";
+
+const API = process.env.NEXT_PUBLIC_API_URL || "/api";
+
+export const MIN_CHARS = 3;
+
+const HREF = {
+  ANNOUNCEMENT: (hit) => `/duyurular/${hit.slug}`,
+  NEWS: (hit) => `/haberler/${hit.slug}`,
+  LECTURE: (hit) => `/egitim/mufredat/${hit.slug}`,
+  ELECTIVE_GROUP: () => "/egitim/mufredat",
+  STAFF: () => "/personel",
+};
+
+export const hrefForHit = (hit) => (HREF[hit.type] ?? (() => "/duyurular"))(hit);
+
+export function useSiteSearch(query, { perGroup = 3 } = {}) {
+  const [result, setResult] = useState({ term: "", groups: [] });
+  const term = query.trim();
+
+  useEffect(() => {
+    if (term.length < MIN_CHARS) return undefined;
+
+    const controller = new AbortController();
+    const timer = setTimeout(async () => {
+      try {
+        const res = await fetch(
+          `${API}/search?q=${encodeURIComponent(term)}&limit=${perGroup}`,
+          { signal: controller.signal },
+        );
+        if (!res.ok) return;
+        const body = await res.json();
+        setResult({ term, groups: body?.data?.groups ?? [] });
+      } catch {
+        /* iptal edilen istek ya da ağ hatası: öneri gösterme */
+      }
+    }, 250);
+
+    return () => {
+      clearTimeout(timer);
+      controller.abort();
+    };
+  }, [term, perGroup]);
+
+  const groups = result.term === term ? result.groups.filter((g) => g.items?.length > 0) : [];
+
+  return { term, groups, hasResults: groups.length > 0 };
+}

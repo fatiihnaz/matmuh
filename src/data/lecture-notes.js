@@ -40,13 +40,28 @@ function sameOrigin(fileUrl) {
 const fullName = (user) =>
   [user?.firstName, user?.lastName].filter(Boolean).join(" ") || null;
 
-const isApproved = (note) => Boolean(note.approved ?? note.isApproved);
+const statusOf = (note) => note.status ?? "PENDING";
+
+const SEMESTERS = { FALL: "Güz", SPRING: "Bahar", SUMMER: "Yaz" };
+
+export function toOffering(offering) {
+  if (!offering) return null;
+  const term = [offering.academicYear, SEMESTERS[offering.semester] ?? offering.semester]
+    .filter(Boolean)
+    .join(" ");
+  return {
+    term: term || null,
+    group: offering.groupNumber ? `Grup ${offering.groupNumber}` : null,
+    instructor: offering.instructorName || null,
+  };
+}
 
 function toNote(note) {
   const file = note.file ?? {};
   return {
     id: note.id,
-    approved: isApproved(note),
+    status: statusOf(note),
+    approved: statusOf(note) === "APPROVED",
     lectureCode: note.lecture?.code ?? null,
     lectureName: note.lecture?.name ?? null,
     lectureSlug: note.lecture?.slug ?? null,
@@ -59,6 +74,8 @@ function toNote(note) {
     uploadedAt: formatDate(note.createdAt),
     uploadedBy: fullName(note.createdBy),
     viewCount: note.viewCount ?? 0,
+    offering: toOffering(note.offering),
+    type: note.type ?? "OTHER",
   };
 }
 
@@ -72,11 +89,11 @@ export async function fetchLectureNotes(lectureId, token) {
   return (Array.isArray(rows) ? rows : []).map(toNote);
 }
 
-export async function uploadLectureNote(lectureId, token, { title, description, file }) {
+export async function uploadLectureNote(lectureId, token, { title, description, file, type }) {
   const form = new FormData();
   form.append(
     "data",
-    new Blob([JSON.stringify({ title, description: description || null })], {
+    new Blob([JSON.stringify({ title, description: description || null, type })], {
       type: "application/json",
     }),
   );
@@ -98,7 +115,6 @@ export async function uploadLectureNote(lectureId, token, { title, description, 
 export async function fetchMyPendingNotes(lectureId, token) {
   const params = new URLSearchParams({
     lectureId,
-    approved: "false",
     size: "50",
     sort: "createdAt,desc",
   });
@@ -107,12 +123,14 @@ export async function fetchMyPendingNotes(lectureId, token) {
   });
   if (!res.ok) throw new Error(`my-notes ${res.status}`);
   const body = await res.json();
-  return (body?.data?.content ?? []).map(toNote);
+  return (body?.data?.content ?? [])
+    .map(toNote)
+    .filter((note) => note.status !== "APPROVED");
 }
 
-export async function fetchAllNotes(token, { approved, search, page = 0, size = 20 } = {}) {
+export async function fetchAllNotes(token, { status, search, page = 0, size = 20 } = {}) {
   const params = new URLSearchParams({ page: String(page), size: String(size), sort: "createdAt,desc" });
-  if (approved !== undefined && approved !== null) params.set("approved", String(approved));
+  if (status) params.set("status", status);
   if (search) params.set("search", search);
 
   const res = await fetch(`${API}/lecture-notes?${params}`, {
@@ -129,11 +147,11 @@ export async function fetchAllNotes(token, { approved, search, page = 0, size = 
   };
 }
 
-export async function setNoteApproval(id, approved, token) {
+export async function setNoteStatus(id, status, token) {
   const res = await fetch(`${API}/lecture-notes/${id}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ approved }),
+    body: JSON.stringify({ status }),
   });
   if (!res.ok) {
     const body = await res.json().catch(() => null);
@@ -151,3 +169,25 @@ export async function deleteNote(id, token) {
     throw new Error(body?.message || `Silinemedi (${res.status})`);
   }
 }
+
+export const NOTE_TYPES = [
+  { id: "LECTURE_NOTE", label: "Ders Notu" },
+  { id: "SUMMARY", label: "Özet" },
+  { id: "PAST_EXAM", label: "Çıkmış Soru" },
+  { id: "SAMPLE_QUESTION", label: "Örnek Soru" },
+  { id: "SOLUTION", label: "Çözüm" },
+  { id: "HOMEWORK", label: "Ödev" },
+  { id: "PROJECT", label: "Proje" },
+  { id: "LAB_REPORT", label: "Lab Raporu" },
+  { id: "PRESENTATION", label: "Sunum" },
+  { id: "CHEAT_SHEET", label: "Kopya Kâğıdı" },
+  { id: "FORMULA_SHEET", label: "Formül Sayfası" },
+  { id: "BOOK", label: "Kitap" },
+  { id: "ARTICLE", label: "Makale" },
+  { id: "VIDEO_LINK", label: "Video Bağlantısı" },
+  { id: "SYLLABUS", label: "İzlence" },
+  { id: "OTHER", label: "Diğer" },
+];
+
+export const noteTypeLabel = (id) =>
+  NOTE_TYPES.find((type) => type.id === id)?.label ?? null;

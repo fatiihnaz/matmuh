@@ -21,7 +21,7 @@ export function fullName(person) {
 export function useStaff(initial = []) {
   const { items, isLoading, error } = useCollection("staff", STAFF_WINDOW);
   const people = (items ?? []).map((item) => ({ ...item.data, slug: item.slug }));
-  const roster = isLoading && initial.length > 0 ? initial : people;
+  const roster = people.length > 0 ? people : initial;
   return { people: roster, isLoading, error };
 }
 
@@ -39,7 +39,7 @@ export default function PersonRow({ id, idx = 0, staff = [] }) {
 
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
-      <Avatar name={name} idx={idx} />
+      <Avatar name={name} photo={person.photo} idx={idx} />
       <span className="min-w-0 flex-1">
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}

@@ -4,24 +4,43 @@ import Link from "next/link";
 import {
   Check,
   Download,
+  Eye,
   FileText,
   Lock,
   RotateCcw,
   Search,
   ShieldAlert,
   Trash2,
+  X,
 } from "lucide-react";
 
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import { deleteNote, fetchAllNotes, setNoteApproval } from "@/data/lecture-notes";
+import { deleteNote, fetchAllNotes, noteTypeLabel, setNoteStatus } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
+import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
 
 const FILTERS = [
-  { id: "pending", label: "Onay Bekleyen", approved: false },
-  { id: "approved", label: "Onaylı", approved: true },
-  { id: "all", label: "Tümü", approved: undefined },
+  { id: "pending", label: "Onay Bekleyen", status: "PENDING" },
+  { id: "approved", label: "Onaylı", status: "APPROVED" },
+  { id: "rejected", label: "Reddedilen", status: "REJECTED" },
+  { id: "all", label: "Tümü", status: undefined },
 ];
+
+const BADGES = {
+  APPROVED: {
+    label: "Onaylı",
+    style: { color: "var(--color-secondary-600)", backgroundColor: "rgba(173,151,111,0.14)" },
+  },
+  PENDING: {
+    label: "Bekliyor",
+    style: { color: "#b45309", backgroundColor: "rgba(180,83,9,0.1)" },
+  },
+  REJECTED: {
+    label: "Reddedildi",
+    style: { color: "#b91c1c", backgroundColor: "rgba(185,28,28,0.1)" },
+  },
+};
 
 const PAGE_SIZE = 20;
 
@@ -35,7 +54,10 @@ function Notice({ icon: Icon, title, children }) {
   );
 }
 
-function NoteRow({ note, busy, onApprove, onDelete }) {
+function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
+  const [preview, setPreview] = useState(false);
+  const kind = String(note.extension ?? "").toLowerCase();
+  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
   return (
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">
@@ -50,14 +72,15 @@ function NoteRow({ note, busy, onApprove, onDelete }) {
           </span>
           <span
             className="text-[10px] font-bold px-1.5 py-0.5 rounded"
-            style={
-              note.approved
-                ? { color: "var(--color-secondary-600)", backgroundColor: "rgba(173,151,111,0.14)" }
-                : { color: "#b45309", backgroundColor: "rgba(180,83,9,0.1)" }
-            }
+            style={BADGES[note.status].style}
           >
-            {note.approved ? "Onaylı" : "Bekliyor"}
+            {BADGES[note.status].label}
           </span>
+          {note.type !== "OTHER" && noteTypeLabel(note.type) && (
+            <span className="rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+              {noteTypeLabel(note.type)}
+            </span>
+          )}
         </div>
 
         {note.description && (
@@ -83,47 +106,95 @@ function NoteRow({ note, busy, onApprove, onDelete }) {
       </div>
 
       <div className="flex items-center gap-2 shrink-0">
+        {confirming ? (
+          <>
+            <span className="text-xs font-medium text-primary-500/60">Kaldırılsın mı?</span>
+            <button
+              onClick={() => onDelete(note)}
+              disabled={busy}
+              className="inline-flex items-center gap-1.5 rounded-lg bg-red-600 px-3 py-2 text-xs font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
+            >
+              <Trash2 size={13} strokeWidth={2} /> Kaldır
+            </button>
+            <button
+              onClick={() => onConfirm(null)}
+              className="rounded-lg px-3 py-2 text-xs font-medium text-primary-500/50 transition-colors hover:text-primary-500"
+            >
+              Vazgeç
+            </button>
+          </>
+        ) : (
+          <>
+        {previewable && (
+          <button
+            onClick={() => setPreview(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-primary-500/10 transition-colors"
+          >
+            <Eye size={13} strokeWidth={2} /> Önizle
+          </button>
+        )}
         {note.href && (
           <a
             href={note.href}
+            download
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-primary-500/10 transition-colors"
           >
             <Download size={13} strokeWidth={2} /> İndir
           </a>
         )}
+        {note.status === "APPROVED" ? (
+          <button
+            onClick={() => onSetStatus(note, "PENDING")}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-primary-500/10 transition-colors disabled:opacity-40"
+          >
+            <RotateCcw size={13} strokeWidth={2} /> Onayı Kaldır
+          </button>
+        ) : (
+          <button
+            onClick={() => onSetStatus(note, "APPROVED")}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold hover:bg-secondary-500/80 transition-colors disabled:opacity-40"
+          >
+            <Check size={13} strokeWidth={2} /> Onayla
+          </button>
+        )}
+
+        {note.status !== "REJECTED" && (
+          <button
+            onClick={() => onSetStatus(note, "REJECTED")}
+            disabled={busy}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold text-red-700/70 hover:bg-red-50 hover:text-red-700 transition-colors disabled:opacity-40"
+          >
+            <X size={13} strokeWidth={2} /> Reddet
+          </button>
+        )}
         <button
-          onClick={() => onApprove(note)}
+          onClick={() => onConfirm(note.id)}
           disabled={busy}
-          className={`inline-flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs font-semibold transition-colors disabled:opacity-40 ${
-            note.approved
-              ? "bg-primary-500/5 text-primary-500 hover:bg-primary-500/10"
-              : "bg-secondary-500 text-primary-500 hover:bg-secondary-500/80"
-          }`}
-        >
-          {note.approved ? (
-            <>
-              <RotateCcw size={13} strokeWidth={2} /> Onayı Kaldır
-            </>
-          ) : (
-            <>
-              <Check size={13} strokeWidth={2} /> Onayla
-            </>
-          )}
-        </button>
-        <button
-          onClick={() => onDelete(note)}
-          disabled={busy}
-          aria-label="Notu sil"
+          aria-label="Notu kaldır"
           className="inline-flex items-center justify-center size-9 rounded-lg text-red-700/60 hover:bg-red-50 transition-colors disabled:opacity-40"
         >
           <Trash2 size={14} strokeWidth={2} />
         </button>
+          </>
+        )}
       </div>
+
+      {previewable && (
+        <DocumentPreview
+          open={preview}
+          onClose={() => setPreview(false)}
+          label={note.title}
+          href={note.href}
+          kind={kind}
+        />
+      )}
     </div>
   );
 }
 
-export default function NoteAdminPage() {
+export function NoteAdminBody() {
   const { user, isAuthenticated, isLoading: authLoading, signIn, getAccessToken } = useAuth();
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
@@ -134,12 +205,13 @@ export default function NoteAdminPage() {
   const [result, setResult] = useState(null);
   const [error, setError] = useState(null);
   const [busyId, setBusyId] = useState(null);
+  const [confirmId, setConfirmId] = useState(null);
 
   const load = useCallback(async () => {
     const token = await getAccessToken();
     if (!token) throw new Error("Oturumunuz sona ermiş, sayfayı yenileyin.");
-    const approved = FILTERS.find((f) => f.id === filter)?.approved;
-    return fetchAllNotes(token, { approved, search: query, page, size: PAGE_SIZE });
+    const status = FILTERS.find((f) => f.id === filter)?.status;
+    return fetchAllNotes(token, { status, search: query, page, size: PAGE_SIZE });
   }, [getAccessToken, filter, query, page]);
 
   useEffect(() => {
@@ -166,16 +238,13 @@ export default function NoteAdminPage() {
       setError(err.message);
     } finally {
       setBusyId(null);
+      setConfirmId(null);
     }
   }
 
-  const onApprove = (note) =>
-    act(note, (token) => setNoteApproval(note.id, !note.approved, token));
+  const onSetStatus = (note, status) => act(note, (token) => setNoteStatus(note.id, status, token));
 
-  const onDelete = (note) => {
-    if (!window.confirm(`"${note.title}" silinecek. Emin misiniz?`)) return;
-    act(note, (token) => deleteNote(note.id, token));
-  };
+  const onDelete = (note) => act(note, (token) => deleteNote(note.id, token));
 
   let body;
   if (authLoading) {
@@ -271,8 +340,10 @@ export default function NoteAdminPage() {
                 key={note.id}
                 note={note}
                 busy={busyId === note.id}
-                onApprove={onApprove}
+                onSetStatus={onSetStatus}
                 onDelete={onDelete}
+                confirming={confirmId === note.id}
+                onConfirm={setConfirmId}
               />
             ))
           )}
@@ -305,13 +376,19 @@ export default function NoteAdminPage() {
     );
   }
 
+  return body;
+}
+
+export default function NoteAdminPage() {
   return (
     <>
       <SubHeader
         title="Not Yönetimi"
         subTitle="Yüklenen ders notlarını inceleyin, onaylayın veya kaldırın"
       />
-      <PageLayout>{body}</PageLayout>
+      <PageLayout>
+        <NoteAdminBody />
+      </PageLayout>
     </>
   );
 }

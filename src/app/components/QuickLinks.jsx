@@ -37,13 +37,13 @@ function icon(key, className) {
 function QuickLinkTile({ item }) {
   const href = safeHref(item?.link?.href);
   const external = isExternalHref(href);
-  const className = "flex flex-col items-center gap-2 min-w-18 shrink-0 group";
+  const className = "flex flex-col items-center gap-1.5 w-16 shrink-0 group";
   const content = (
     <>
-      <div className="w-10 h-10 rounded-xl bg-secondary-500/8 hover:bg-secondary-600/10 flex items-center justify-center">
-        {icon(item?.icon, "w-4.5 h-4.5 text-secondary-500 group-hover:text-secondary-600")}
+      <div className="w-9 h-9 rounded-lg bg-secondary-500/8 hover:bg-secondary-600/10 flex items-center justify-center">
+        {icon(item?.icon, "w-4 h-4 text-secondary-500 group-hover:text-secondary-600")}
       </div>
-      <span className="text-[9px] text-primary-500/50 text-center group-hover:text-primary-500 leading-tight">
+      <span className="text-[10px] text-primary-500/55 text-center group-hover:text-primary-500 leading-tight">
         {item?.shortLabel}
       </span>
     </>
@@ -94,9 +94,9 @@ function QuickLinkRow({ item }) {
 
 function MobileStrip({ items }) {
   return (
-    <div className="lg:hidden bg-white rounded-xl shadow-sm p-4">
+    <div className="lg:hidden bg-white rounded-xl shadow-sm p-3">
       <div className="flex overflow-x-auto no-scrollbar pb-1">
-        <div className="flex gap-2 mx-auto">
+        <div className="flex gap-1 mx-auto">
           {items.map((item, index) => (
             <QuickLinkTile key={index} item={item} />
           ))}

@@ -15,6 +15,7 @@ export default function StaffMember({ member, idx }) {
       <div className="flex flex-col items-center text-center">
         <Avatar
           name={name}
+          photo={member.photo}
           idx={idx}
           size="mb-3 h-16 w-16 transition-transform duration-300 group-hover:scale-105"
           textSize="font-sans text-base tracking-wider"

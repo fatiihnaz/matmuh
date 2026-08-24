@@ -2,7 +2,7 @@ import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import NewsCard from "@/app/components/Announcements/NewsCard";
 import Pagination from "@/app/components/Announcements/Pagination";
-import NewRecordLink from "@/app/components/Announcements/NewRecordLink";
+import NewRecordDialog from "@/app/components/Announcements/NewRecordDialog";
 import { getNews } from "@/data/content";
 
 const PER_PAGE = 12;
@@ -31,7 +31,7 @@ export default async function NewsPage({ searchParams }) {
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between gap-3 px-1">
             <span className="text-xs text-primary-500/40">{total} haber</span>
-            <NewRecordLink href="/haberler/yeni" label="Yeni haber" />
+            <NewRecordDialog collection="news" page="/haberler/yeni" label="Yeni haber" title="Yeni Haber" submitLabel="Yayımla" />
           </div>
 
           {items.length ? (

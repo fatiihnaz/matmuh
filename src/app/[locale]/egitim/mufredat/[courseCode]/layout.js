@@ -21,7 +21,7 @@ export default async function CourseLayout({ params, children }) {
   return (
     <>
       <SubHeader
-        title={`${course.code} — ${course.title}`}
+        title={`${course.code} · ${course.title}`}
         subTitle={detailString}
       />
       {children}

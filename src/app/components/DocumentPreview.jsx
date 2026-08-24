@@ -1,13 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { ExternalLink } from "lucide-react";
+import { Download, ExternalLink } from "lucide-react";
 import Modal from "./Modal";
 
 const OFFICE_KINDS = ["doc", "docx", "xls", "xlsx", "ppt", "pptx"];
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
-export const PREVIEWABLE_KINDS = new Set(["pdf", ...OFFICE_KINDS, ...IMAGE_KINDS]);
+// Office gorunutuleyicisi dosyayi Microsoft sunucusundan cektigi icin kimlik
+// dogrulamali /api adreslerimizde calismiyor; o turler onizlenebilir sayilmiyor.
+export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS]);
+
+const ACTION =
+  "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
 function officeEmbedSrc(href) {
   return `https://view.officeapps.live.com/op/embed.aspx?src=${encodeURIComponent(href)}`;
@@ -22,23 +27,31 @@ export default function DocumentPreview({ open, onClose, label, href, kind }) {
 
   return (
     <Modal open={open} onClose={onClose} label={label}>
-      <div className="flex flex-col h-full py-14 px-3 sm:px-10">
+      <div
+        onClick={(event) => {
+          if (event.target === event.currentTarget) onClose();
+        }}
+        className="flex flex-col h-full pt-14 pb-3 px-3 sm:px-6"
+      >
         <div className="relative flex-1 min-h-0 rounded-lg overflow-hidden bg-white">
           {isImage ? (
-            <Image src={href} alt={label} fill sizes="90vw" className="object-contain" />
+            <Image src={href} alt={label} fill sizes="95vw" className="object-contain" />
           ) : (
             <iframe src={src} title={label} className="w-full h-full border-0" />
           )}
         </div>
 
-        <div className="shrink-0 flex items-center justify-center gap-4 pt-3 min-w-0">
-          <span className="min-w-0 text-[11px] text-white/45 truncate">{label}</span>
-          <a
-            href={href}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-1.5 shrink-0 text-[11px] text-white/60 hover:text-white transition-colors"
-          >
+        <div className="shrink-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 pt-3">
+          <span className="w-full sm:w-auto sm:flex-1 min-w-0 truncate text-center sm:text-left text-[11px] text-white/45">
+            {label}
+          </span>
+
+          <a href={href} download className={ACTION}>
+            <Download className="size-3.5" />
+            İndir
+          </a>
+
+          <a href={href} target="_blank" rel="noopener noreferrer" className={ACTION}>
             Yeni sekmede aç
             <ExternalLink className="size-3" />
           </a>

@@ -2,14 +2,9 @@ import { cache } from "react";
 import { getCmsCollection, getCmsCollectionItem } from "inscribed/server";
 
 import { cmsConfig } from "@/app/lib/cms-config.js";
+import { CONTENT_CATEGORIES, announcementFromData } from "./content-shape";
 
-export const CONTENT_CATEGORIES = [
-  { id: "sinav", label: "Sınav & Program" },
-  { id: "mezuniyet", label: "Mezuniyet" },
-  { id: "staj", label: "Staj" },
-  { id: "kariyer", label: "Kariyer & Etkinlik" },
-  { id: "genel", label: "Genel" },
-];
+export { CONTENT_CATEGORIES };
 
 export const HOME_CATEGORY_IDS = ["sinav", "mezuniyet", "kariyer"];
 
@@ -34,55 +29,14 @@ export function normalizeTr(value) {
     .toLowerCase();
 }
 
-const ALLOWED_TAGS = new Set(["p", "br", "strong", "em", "u", "a", "ul", "ol", "li", "h3", "h4"]);
-
-function sanitize(html) {
-  if (!html) return "";
-  return html.replace(/<[^>]*>/g, (tag) => {
-    const parsed = /^<(\/?)\s*([a-zA-Z0-9]+)/.exec(tag);
-    if (!parsed) return "";
-    const [, closing, rawName] = parsed;
-    const name = rawName.toLowerCase();
-    if (!ALLOWED_TAGS.has(name)) return "";
-    if (closing) return `</${name}>`;
-    if (name === "br") return "<br />";
-    if (name !== "a") return `<${name}>`;
-
-    const href = /href\s*=\s*"([^"]*)"/i.exec(tag)?.[1] ?? "";
-    if (!/^(https?:\/\/|\/|mailto:)/i.test(href)) return "<a>";
-    const external = /^https?:\/\//i.test(href);
-    return `<a href="${href}"${external ? ' target="_blank" rel="noopener noreferrer"' : ""}>`;
-  });
-}
-
 function toAnnouncement(item) {
-  const data = item.data ?? {};
   return {
-    id: item.id,
+    ...announcementFromData(item.data ?? {}),
+    id: item.id ?? item.slug,
     slug: item.slug,
-    title: data.title ?? "",
-    summary: data.summary ?? null,
-    body: sanitize(data.body),
-    categories: data.tags ?? [],
-    publishedAt: data.publishedAt ?? "",
     updatedAt: item.updatedAt ?? null,
     locale: item.locale ?? null,
     translations: item.translations ?? [],
-    pinned: Boolean(data.featured),
-    coverImage: data.coverImage ?? null,
-    attachments: (data.attachments ?? []).map((a) => ({
-      label: a.name ?? "",
-      href: a.url ?? "",
-      kind: (a.type ?? "").toLowerCase(),
-      size: a.size ?? 0,
-    })),
-    gallery: (data.gallery ?? []).map((g) => ({
-      src: g.image?.src ?? "",
-      alt: g.image?.alt ?? "",
-      caption: g.caption ?? null,
-      width: 1600,
-      height: 1067,
-    })),
   };
 }
 

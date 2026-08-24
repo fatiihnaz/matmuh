@@ -11,14 +11,14 @@ export default function AnnouncementItem({ item, variant = "compact" }) {
   return (
     <Link
       href={announcementHref(item)}
-      className="group flex items-start gap-4 py-3 px-2 rounded-lg hover:bg-gray-50 transition-colors"
+      className="group flex items-start gap-3.5 py-2.5 px-2 rounded-lg hover:bg-gray-50 transition-colors"
     >
       <time
         dateTime={item.publishedAt}
-        className="flex flex-col py-2 items-center justify-center w-14 shrink-0 bg-primary-500/3 border border-primary-500/6 rounded-lg"
+        className="flex flex-col py-1.5 items-center justify-center w-13 shrink-0 bg-primary-500/3 border border-primary-500/6 rounded-lg"
       >
-        <span className="text-xl font-bold text-primary-700 leading-tight">{day}</span>
-        <span className="text-xs font-medium text-secondary-500 uppercase">{month}</span>
+        <span className="text-lg font-bold text-primary-700 leading-tight">{day}</span>
+        <span className="text-[11px] font-medium text-secondary-500 uppercase">{month}</span>
       </time>
 
       <div className="min-w-0 flex-1 py-0.5">

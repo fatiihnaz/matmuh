@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useSyncExternalStore } from "react";
 import { motion } from "framer-motion";
 import {
   Award,
@@ -16,12 +16,12 @@ import {
 import { EditableRegion } from "inscribed";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
+import DepartmentFacts from "./DepartmentFacts";
+import FrequentQuestions from "./FrequentQuestions";
 import {
-  AcademicStats,
   CareerProfile,
   EducationalGoals,
   InternshipSummary,
-  KeyMetrics,
   Milestones,
   MinorPrograms,
   MissionVision,
@@ -136,21 +136,28 @@ const graphLinks = [
 ];
 
 
+let mobileQuery;
+
+function mediaQuery() {
+  return (mobileQuery ??= window.matchMedia("(max-width: 767px)"));
+}
+
+function subscribeToWidth(onChange) {
+  const query = mediaQuery();
+  query.addEventListener("change", onChange);
+  return () => query.removeEventListener("change", onChange);
+}
+
+const neverChanges = () => () => {};
+
 function NodeGraphCanvas() {
   const [hoveredNode, setHoveredNode] = useState(null);
-  const [isMounted, setIsMounted] = useState(false);
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    setIsMounted(true);
-    const mediaQuery = window.matchMedia("(max-width: 767px)");
-    const handleMediaChange = (e) => setIsMobile(e.matches);
-
-    setIsMobile(mediaQuery.matches);
-    mediaQuery.addEventListener("change", handleMediaChange);
-
-    return () => mediaQuery.removeEventListener("change", handleMediaChange);
-  }, []);
+  const isMounted = useSyncExternalStore(neverChanges, () => true, () => false);
+  const isMobile = useSyncExternalStore(
+    subscribeToWidth,
+    () => mediaQuery().matches,
+    () => false,
+  );
 
   if (!isMounted) return <div className="w-full h-full bg-primary-500" />;
 
@@ -306,10 +313,10 @@ function NodeGraphCanvas() {
 }
 
 
-export default function DepartmentInfo() {
+export default function DepartmentInfo({ staff, curriculum }) {
   return (
     <PageLayout>
-      <KeyMetrics />
+      <DepartmentFacts staff={staff} curriculum={curriculum} />
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         <div className="lg:col-span-7 flex flex-col gap-6">
@@ -325,7 +332,7 @@ export default function DepartmentInfo() {
               />
             }
           >
-            <div className="flex flex-col -mx-6 -mb-6">
+            <div className="flex flex-col -mx-5 -mb-5 sm:-mx-6 sm:-mb-6">
               <div className="relative bg-primary-500 h-85 w-full group border-y border-primary-500/10">
                 <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/20 pointer-events-none z-10" />
                 <div className="absolute inset-0 z-0">
@@ -390,7 +397,7 @@ export default function DepartmentInfo() {
           <Milestones />
           <InternshipSummary />
           <MinorPrograms />
-          <AcademicStats />
+          <FrequentQuestions />
         </div>
       </div>
     </PageLayout>

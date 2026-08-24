@@ -10,7 +10,7 @@ const FOCUSABLE =
 
 const neverChanges = () => () => {};
 
-export default function Modal({ open, onClose, label, children }) {
+export default function Modal({ open, onClose, label, contentClassName = "", dismissible = true, children }) {
   const mounted = useSyncExternalStore(neverChanges, () => true, () => false);
   const panelRef = useRef(null);
   const restoreRef = useRef(null);
@@ -20,7 +20,7 @@ export default function Modal({ open, onClose, label, children }) {
     (event) => {
       if (event.key === "Escape") {
         event.stopPropagation();
-        onClose();
+        if (dismissible) onClose();
         return;
       }
       if (event.key !== "Tab") return;
@@ -37,7 +37,7 @@ export default function Modal({ open, onClose, label, children }) {
         first.focus();
       }
     },
-    [onClose],
+    [onClose, dismissible],
   );
 
   useEffect(() => {
@@ -69,7 +69,7 @@ export default function Modal({ open, onClose, label, children }) {
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reducedMotion ? 0 : 0.18 }}
-          onClick={onClose}
+          onClick={dismissible ? onClose : undefined}
         >
           <div
             ref={panelRef}
@@ -78,7 +78,10 @@ export default function Modal({ open, onClose, label, children }) {
             aria-label={label}
             tabIndex={-1}
             onKeyDown={handleKeyDown}
-            onClick={(event) => event.stopPropagation()}
+            onClick={(event) => {
+              event.stopPropagation();
+              if (event.target === event.currentTarget) onClose();
+            }}
             className="relative w-full h-full outline-none"
           >
             <button
@@ -89,7 +92,14 @@ export default function Modal({ open, onClose, label, children }) {
             >
               <X className="size-5" />
             </button>
-            {children}
+            <div
+              onClick={(event) => {
+                if (dismissible && event.target === event.currentTarget) onClose();
+              }}
+              className={`h-full ${contentClassName}`}
+            >
+              {children}
+            </div>
           </div>
         </motion.div>
       )}

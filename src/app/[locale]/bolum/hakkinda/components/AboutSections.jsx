@@ -12,39 +12,6 @@ function lines(text) {
     .filter(Boolean);
 }
 
-export function KeyMetrics() {
-  return (
-    <EditableList
-      blockPath="metrics.items"
-      as="div"
-      className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 lg:gap-6 mb-8"
-      style={{ display: "grid" }}
-      itemSchema={{
-        value: { blockType: "ShortText", defaultValue: "" },
-        label: { blockType: "ShortText", defaultValue: "" },
-        sub: { blockType: "ShortText", defaultValue: "" },
-      }}
-      defaultValue={[
-        { value: "240", label: "AKTS", sub: "Lisans Programı" },
-        { value: "8", label: "Yarıyıl", sub: "Dört Yıllık Eğitim" },
-        { value: "2", label: "Lisans Programı", sub: "%100 ve %30 İngilizce" },
-        { value: "26", label: "Akademisyen", sub: "Bölüme Özgü Kadro" },
-      ]}
-    >
-      {(item, index) => (
-        <div
-          key={index}
-          className="flex flex-col rounded-xl p-6 bg-white border border-primary-500/10 shadow-xs shadow-black/10 transition-all duration-200 hover:-translate-y-1 hover:border-primary-500/20 hover:shadow-sm"
-        >
-          <div className="font-mono font-semibold text-2xl text-primary-500">{item.value}</div>
-          <div className="text-secondary-500 text-sm mt-1 font-medium">{item.label}</div>
-          <div className="text-xs text-primary-500/40 mt-0.5">{item.sub}</div>
-        </div>
-      )}
-    </EditableList>
-  );
-}
-
 export function MissionVision() {
   return (
     <MainCard
@@ -300,6 +267,8 @@ export function InternshipSummary() {
           defaultValue="Staj Sistemi"
         />
       }
+      buttonTitle="Staj Sayfası"
+      href="/egitim/staj"
     >
       <div className="flex flex-col gap-3 pt-2">
         <div className="announcement-body text-[13px] text-primary-500/60 leading-relaxed">
@@ -412,54 +381,3 @@ function MinorLink() {
   );
 }
 
-export function AcademicStats() {
-  const { value } = useCmsBlock("stats.items");
-  const total = Array.isArray(value) ? value.length : 0;
-  const lastRowFrom = total - (total % 2 || 2);
-
-  return (
-    <MainCard
-      title={
-        <EditableRegion
-          blockPath="stats.title"
-          blockType="ShortText"
-          defaultValue="Sayılarla Bölüm"
-        />
-      }
-      dark
-    >
-      <EditableList
-        blockPath="stats.items"
-        as="div"
-        className="grid grid-cols-2 gap-4 w-full pt-2"
-        style={{ display: "grid" }}
-        itemSchema={{
-          value: { blockType: "ShortText", defaultValue: "" },
-          label: { blockType: "ShortText", defaultValue: "" },
-        }}
-        defaultValue={[
-          { value: "14", label: "Profesör" },
-          { value: "10", label: "Doçent" },
-          { value: "2", label: "Dr. Öğr. Üyesi" },
-          { value: "2", label: "Lisansüstü Program" },
-          { value: "40", label: "İş Günü Zorunlu Staj" },
-          { value: "2", label: "Türkiye'de Program Sayısı" },
-        ]}
-      >
-        {(item, index) => (
-          <div
-            key={index}
-            className={`flex flex-col py-2 ${index < lastRowFrom ? "border-b border-white/5" : ""}`}
-          >
-            <div className="font-mono text-secondary-500 font-semibold text-xl leading-none">
-              {item.value}
-            </div>
-            <div className="text-white/40 text-[11px] mt-1.5 tracking-wide font-medium">
-              {item.label}
-            </div>
-          </div>
-        )}
-      </EditableList>
-    </MainCard>
-  );
-}

@@ -13,25 +13,34 @@ export default function NewsList({ items }) {
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
+    <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
       {items.map((item) => (
-        <Link key={item.id} href={newsHref(item)} className="group flex flex-col">
+        <Link key={item.id} href={newsHref(item)} className="group flex gap-3 sm:flex-col sm:gap-0">
           <NewsThumb
             cover={item.gallery[0] ?? null}
-            sizes="(min-width: 640px) 30vw, 100vw"
-            className="mb-3 rounded-lg"
+            sizes="(min-width: 640px) 30vw, 112px"
+            className="w-28 shrink-0 rounded-lg sm:mb-3 sm:w-auto"
           />
-          <time dateTime={item.publishedAt} className="text-xs text-secondary-500 font-medium mb-1">
-            {formatTrDate(item.publishedAt)}
-          </time>
-          <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-500 transition-colors mb-1 line-clamp-2">
-            {item.title}
-          </h3>
-          {item.summary && (
-            <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">{item.summary}</p>
-          )}
+          <div className="min-w-0">
+            <time
+              dateTime={item.publishedAt}
+              className="block text-xs text-secondary-500 font-medium mb-1"
+            >
+              {formatTrDate(item.publishedAt)}
+            </time>
+            <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-500 transition-colors mb-1 line-clamp-2">
+              {item.title}
+            </h3>
+            {item.summary && (
+              <p className="text-xs text-gray-500 leading-relaxed line-clamp-2 sm:line-clamp-3">
+                {item.summary}
+              </p>
+            )}
+          </div>
         </Link>
       ))}
     </div>
   );
 }
+
+
