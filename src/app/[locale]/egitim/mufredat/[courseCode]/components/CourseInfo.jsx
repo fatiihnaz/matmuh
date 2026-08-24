@@ -5,6 +5,7 @@ import {
   User,
   BarChart3,
   Lock,
+  Eye,
   Library,
   NotebookPen,
   Calendar,
@@ -893,8 +894,98 @@ function EmptyStats({ code, message }) {
   );
 }
 
+const STATS_PREVIEW = [
+  { grade: "AA", width: "38%", count: 12, makeup: "22%", makeupCount: 2 },
+  { grade: "BA", width: "62%", count: 19, makeup: "44%", makeupCount: 4 },
+  { grade: "BB", width: "88%", count: 27, makeup: "70%", makeupCount: 6 },
+  { grade: "CB", width: "54%", count: 17, makeup: "88%", makeupCount: 8 },
+  { grade: "CC", width: "31%", count: 9, makeup: "56%", makeupCount: 5 },
+  { grade: "FF", width: "18%", count: 2, makeup: "34%", makeupCount: 3 },
+];
+
+function StatsPreview() {
+  return (
+    <div className="relative mt-6">
+      <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+        <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 shadow-xl">
+          <Eye size={16} strokeWidth={2} className="text-secondary-500" />
+          <span className="text-[13px] font-medium text-white">Önizleme - Giriş yapın</span>
+        </div>
+      </div>
+
+      <div
+        aria-hidden="true"
+        className="blur-xs opacity-45 select-none pointer-events-none"
+      >
+        <div className="grid gap-6 lg:grid-cols-2">
+          {["HARF ARALIKLARI DAĞILIMI", "BÜTÜNLEME DAĞILIMI"].map((title, card) => (
+            <div
+              key={title}
+              className="rounded-xl border border-primary-500/10 bg-white p-6 shadow-xs"
+            >
+              <div className="mb-6 flex items-center gap-3">
+                <div className="h-5 w-1 rounded-full bg-secondary-500" />
+                <span className="text-xs font-semibold uppercase tracking-widest text-primary-700">
+                  {title}
+                </span>
+              </div>
+              <div className="space-y-3.5">
+                {STATS_PREVIEW.map((row) => (
+                  <div key={row.grade} className="flex items-center gap-4 font-mono">
+                    <div className="w-8 text-sm font-bold tracking-tight text-primary-500">
+                      {row.grade}
+                    </div>
+                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-primary-500/6">
+                      <div
+                        className={`h-full rounded-full ${
+                          row.grade === "FF" ? "bg-primary-500/20" : "bg-primary-500"
+                        }`}
+                        style={{ width: card === 0 ? row.width : row.makeup }}
+                      />
+                    </div>
+                    <div className="w-8 text-right text-xs text-primary-500/55">
+                      {card === 0 ? row.count : row.makeupCount}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
+          {[
+            { label: "Sınıf Ortalaması", val: "64.8", sub: "Sınıf Düzeyi: Orta" },
+            { label: "Standart Sapma", val: "12.4", sub: "σ dağılımı" },
+            { label: "Dersi Alan", val: "86", sub: "Geçme: %92.1" },
+          ].map((stat) => (
+            <div
+              key={stat.label}
+              className="flex min-h-32 flex-col justify-between rounded-xl border border-primary-500/10 bg-white p-5 shadow-xs"
+            >
+              <div className="flex items-center gap-2">
+                <div className="size-8 rounded-lg bg-secondary-500/10" />
+                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/40">
+                  {stat.label}
+                </span>
+              </div>
+              <div className="mt-auto">
+                <div className="font-mono text-3xl font-bold tracking-tighter text-primary-500">
+                  {stat.val}
+                </div>
+                <div className="text-xs text-primary-500/40">{stat.sub}</div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function LoginGate({ loading, onSignIn, code }) {
   return (
+    <>
     <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
       <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
         <Shield size={20} strokeWidth={1.5} className="text-secondary-500" />
@@ -920,5 +1011,8 @@ function LoginGate({ loading, onSignIn, code }) {
         </button>
       </div>
     </div>
+
+    <StatsPreview />
+    </>
   );
 }
