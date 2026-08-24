@@ -204,7 +204,7 @@ function StaffContent({ initialStaff }) {
       </div>
 
       {!isLoading && filteredStaff.length === 0 && (
-        <div className="text-center py-20 text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-2xl">
+        <div className="text-center py-20 text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-xl">
           {error ? "Personel listesi yüklenemedi." : "Kriterlere uygun personel bulunamadı."}
         </div>
       )}
