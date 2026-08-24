@@ -23,6 +23,8 @@ import { useAuth } from "@/lib/auth";
 import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
+const MAX_FILE_BYTES = 9 * 1024 * 1024;
+
 const PLACEHOLDERS = [
   { id: 1, title: "Vize Soruları.pdf", meta: "PDF · 2.4 MB" },
   { id: 2, title: "Hafta 4 - Teorem İspatları.zip", meta: "ZIP · 8.1 MB" },
@@ -201,6 +203,16 @@ function UploadForm({ lectureId, onUploaded }) {
   const [done, setDone] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
+  const chooseFile = useCallback((picked) => {
+    if (!picked) return;
+    if (picked.size > MAX_FILE_BYTES) {
+      setError("Dosya 9 MB sınırını aşıyor. Daha küçük bir sürüm yükleyin.");
+      return;
+    }
+    setError(null);
+    setFile(picked);
+  }, []);
+
   const missing =
     [!title.trim() && "Başlık", !file && "dosya"].filter(Boolean).join(" ve ") || null;
 
@@ -259,7 +271,7 @@ function UploadForm({ lectureId, onUploaded }) {
             setDragOver(false);
             const dropped = e.dataTransfer.files?.[0];
             if (!dropped) return;
-            setFile(dropped);
+            chooseFile(dropped);
             setDone(false);
             setOpen(true);
           }}
@@ -325,7 +337,7 @@ function UploadForm({ lectureId, onUploaded }) {
           e.preventDefault();
           setDragOver(false);
           const dropped = e.dataTransfer.files?.[0];
-          if (dropped) setFile(dropped);
+          chooseFile(dropped);
         }}
         className={`flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed px-4 py-5 text-center transition-colors ${
           dragOver
@@ -346,12 +358,12 @@ function UploadForm({ lectureId, onUploaded }) {
           {file ? file.name : dragOver ? "Bırakın" : "Dosyayı sürükleyin veya seçin"}
         </span>
         <span className="text-[11px] text-primary-500/40">
-          {file ? formatSize(file.size) : "PDF, DOCX, ZIP, PNG"}
+          {file ? formatSize(file.size) : "PDF, DOCX, ZIP, PNG · en fazla 9 MB"}
         </span>
         <input
           ref={inputRef}
           type="file"
-          onChange={(e) => setFile(e.target.files?.[0] ?? null)}
+          onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
           className="hidden"
         />
       </label>
