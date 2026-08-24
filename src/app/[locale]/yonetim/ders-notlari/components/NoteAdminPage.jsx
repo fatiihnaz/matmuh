@@ -4,6 +4,7 @@ import Link from "next/link";
 import {
   Check,
   Download,
+  Eye,
   FileText,
   Lock,
   RotateCcw,
@@ -17,6 +18,7 @@ import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import { deleteNote, fetchAllNotes, noteTypeLabel, setNoteStatus } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
+import DocumentPreview, { PREVIEWABLE_KINDS } from "@/app/components/DocumentPreview";
 
 const FILTERS = [
   { id: "pending", label: "Onay Bekleyen", status: "PENDING" },
@@ -53,6 +55,9 @@ function Notice({ icon: Icon, title, children }) {
 }
 
 function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
+  const [preview, setPreview] = useState(false);
+  const kind = String(note.extension ?? "").toLowerCase();
+  const previewable = Boolean(note.href) && PREVIEWABLE_KINDS.has(kind);
   return (
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">
@@ -120,9 +125,18 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
           </>
         ) : (
           <>
+        {previewable && (
+          <button
+            onClick={() => setPreview(true)}
+            className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-primary-500/10 transition-colors"
+          >
+            <Eye size={13} strokeWidth={2} /> Önizle
+          </button>
+        )}
         {note.href && (
           <a
             href={note.href}
+            download
             className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-primary-500/10 transition-colors"
           >
             <Download size={13} strokeWidth={2} /> İndir
@@ -166,6 +180,16 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
           </>
         )}
       </div>
+
+      {previewable && (
+        <DocumentPreview
+          open={preview}
+          onClose={() => setPreview(false)}
+          label={note.title}
+          href={note.href}
+          kind={kind}
+        />
+      )}
     </div>
   );
 }
