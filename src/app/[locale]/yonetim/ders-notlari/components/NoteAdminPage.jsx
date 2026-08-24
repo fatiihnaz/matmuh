@@ -15,7 +15,7 @@ import {
 
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
-import { deleteNote, fetchAllNotes, setNoteStatus } from "@/data/lecture-notes";
+import { deleteNote, fetchAllNotes, noteTypeLabel, setNoteStatus } from "@/data/lecture-notes";
 import { useAuth } from "@/lib/auth";
 
 const FILTERS = [
@@ -71,6 +71,11 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
           >
             {BADGES[note.status].label}
           </span>
+          {note.type !== "OTHER" && noteTypeLabel(note.type) && (
+            <span className="rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+              {noteTypeLabel(note.type)}
+            </span>
+          )}
         </div>
 
         {note.description && (

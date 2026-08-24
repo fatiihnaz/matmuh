@@ -15,6 +15,8 @@ import {
 import {
   deleteNote,
   fetchLectureNotes,
+  NOTE_TYPES,
+  noteTypeLabel,
   fetchMyPendingNotes,
   formatSize,
   uploadLectureNote,
@@ -125,6 +127,11 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
           <span className="text-sm font-semibold text-primary-700 truncate">
             {note.title}
           </span>
+          {noteTypeLabel(note.type) && note.type !== "OTHER" && (
+            <span className="shrink-0 rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+              {noteTypeLabel(note.type)}
+            </span>
+          )}
           {pending &&
             (rejected ? (
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 bg-red-500/12 px-1.5 py-0.5 rounded shrink-0">
@@ -211,6 +218,7 @@ function UploadForm({ lectureId, onUploaded }) {
   const [open, setOpen] = useState(false);
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
+  const [type, setType] = useState("LECTURE_NOTE");
   const [file, setFile] = useState(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState(null);
@@ -246,7 +254,7 @@ function UploadForm({ lectureId, onUploaded }) {
     try {
       const token = await getAccessToken();
       if (!token) throw new Error("Oturumunuz sona ermiş, sayfayı yenileyin.");
-      await uploadLectureNote(lectureId, token, { title: title.trim(), description, file });
+      await uploadLectureNote(lectureId, token, { title: title.trim(), description, file, type });
       reset();
       setOpen(false);
       setDone(true);
@@ -340,6 +348,21 @@ function UploadForm({ lectureId, onUploaded }) {
         maxLength={500}
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50 resize-none"
       />
+
+      <label className="flex items-center gap-2 text-xs text-primary-500/50">
+        Tür
+        <select
+          value={type}
+          onChange={(e) => setType(e.target.value)}
+          className="flex-1 rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50"
+        >
+          {NOTE_TYPES.map((option) => (
+            <option key={option.id} value={option.id}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </label>
 
       <label
         onDragOver={(e) => {

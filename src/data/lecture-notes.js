@@ -51,7 +51,7 @@ export function toOffering(offering) {
     .join(" ");
   return {
     term: term || null,
-    group: offering.groupNumber ? `Grup ` : null,
+    group: offering.groupNumber ? `Grup ${offering.groupNumber}` : null,
     instructor: offering.instructorName || null,
   };
 }
@@ -75,6 +75,7 @@ function toNote(note) {
     uploadedBy: fullName(note.createdBy),
     viewCount: note.viewCount ?? 0,
     offering: toOffering(note.offering),
+    type: note.type ?? "OTHER",
   };
 }
 
@@ -88,11 +89,11 @@ export async function fetchLectureNotes(lectureId, token) {
   return (Array.isArray(rows) ? rows : []).map(toNote);
 }
 
-export async function uploadLectureNote(lectureId, token, { title, description, file }) {
+export async function uploadLectureNote(lectureId, token, { title, description, file, type }) {
   const form = new FormData();
   form.append(
     "data",
-    new Blob([JSON.stringify({ title, description: description || null })], {
+    new Blob([JSON.stringify({ title, description: description || null, type })], {
       type: "application/json",
     }),
   );
@@ -168,3 +169,25 @@ export async function deleteNote(id, token) {
     throw new Error(body?.message || `Silinemedi (${res.status})`);
   }
 }
+
+export const NOTE_TYPES = [
+  { id: "LECTURE_NOTE", label: "Ders Notu" },
+  { id: "SUMMARY", label: "Özet" },
+  { id: "PAST_EXAM", label: "Çıkmış Soru" },
+  { id: "SAMPLE_QUESTION", label: "Örnek Soru" },
+  { id: "SOLUTION", label: "Çözüm" },
+  { id: "HOMEWORK", label: "Ödev" },
+  { id: "PROJECT", label: "Proje" },
+  { id: "LAB_REPORT", label: "Lab Raporu" },
+  { id: "PRESENTATION", label: "Sunum" },
+  { id: "CHEAT_SHEET", label: "Kopya Kâğıdı" },
+  { id: "FORMULA_SHEET", label: "Formül Sayfası" },
+  { id: "BOOK", label: "Kitap" },
+  { id: "ARTICLE", label: "Makale" },
+  { id: "VIDEO_LINK", label: "Video Bağlantısı" },
+  { id: "SYLLABUS", label: "İzlence" },
+  { id: "OTHER", label: "Diğer" },
+];
+
+export const noteTypeLabel = (id) =>
+  NOTE_TYPES.find((type) => type.id === id)?.label ?? null;
