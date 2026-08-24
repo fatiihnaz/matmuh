@@ -17,6 +17,7 @@ import { EditableRegion } from "inscribed";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
 import DepartmentFacts from "./DepartmentFacts";
+import FrequentQuestions from "./FrequentQuestions";
 import {
   CareerProfile,
   EducationalGoals,
@@ -396,6 +397,7 @@ export default function DepartmentInfo({ staff, curriculum }) {
           <Milestones />
           <InternshipSummary />
           <MinorPrograms />
+          <FrequentQuestions />
         </div>
       </div>
     </PageLayout>
