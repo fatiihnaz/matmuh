@@ -170,7 +170,7 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
   );
 }
 
-export default function NoteAdminPage() {
+export function NoteAdminBody() {
   const { user, isAuthenticated, isLoading: authLoading, signIn, getAccessToken } = useAuth();
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
@@ -352,13 +352,19 @@ export default function NoteAdminPage() {
     );
   }
 
+  return body;
+}
+
+export default function NoteAdminPage() {
   return (
     <>
       <SubHeader
         title="Not Yönetimi"
         subTitle="Yüklenen ders notlarını inceleyin, onaylayın veya kaldırın"
       />
-      <PageLayout>{body}</PageLayout>
+      <PageLayout>
+        <NoteAdminBody />
+      </PageLayout>
     </>
   );
 }

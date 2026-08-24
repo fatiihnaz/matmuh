@@ -8,6 +8,7 @@ import { useAuth } from "@/lib/auth";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
+import NoteAdminDialog from "@/app/components/Profile/NoteAdminDialog";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -23,6 +24,7 @@ export default function UserLogin() {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState(null);
+  const [noteAdmin, setNoteAdmin] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -161,14 +163,17 @@ export default function UserLogin() {
                   {t("Yönetim")}
                 </span>
                 {isAdmin && (
-                  <Link
-                    href="/yonetim/ders-notlari"
-                    onClick={() => setOpen(false)}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setOpen(false);
+                      setNoteAdmin(true);
+                    }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                   >
                     <ClipboardCheck size={14} className="shrink-0 text-secondary-500" />
                     <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
-                  </Link>
+                  </button>
                 )}
                 {canEdit && (
                 <button
@@ -213,6 +218,7 @@ export default function UserLogin() {
       </AnimatePresence>
 
       <ProfilePanel view={panel} onClose={() => setPanel(null)} />
+      <NoteAdminDialog open={noteAdmin} onClose={() => setNoteAdmin(false)} />
     </div>
   );
 }
