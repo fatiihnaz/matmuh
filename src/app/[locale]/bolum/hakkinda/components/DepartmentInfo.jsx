@@ -6,7 +6,6 @@ import {
   Target,
   Lightbulb,
   TrendingUp,
-  Globe,
   BookOpen,
   Cpu,
   BarChart3,
@@ -34,16 +33,16 @@ const workingAreas = [
     icon: BarChart3,
     size: "lg",
     cx: 50,
-    cy: 35,
+    cy: 39,
   },
-  { id: "yapay", label: "Yapay Zeka", icon: Cpu, size: "lg", cx: 30, cy: 45 },
+  { id: "yapay", label: "Yapay Zeka", icon: Cpu, size: "lg", cx: 30, cy: 52 },
   {
     id: "opt",
     label: "Optimizasyon",
     icon: Target,
     size: "lg",
     cx: 70,
-    cy: 45,
+    cy: 52,
   },
   {
     id: "fin",
@@ -51,7 +50,7 @@ const workingAreas = [
     icon: TrendingUp,
     size: "md",
     cx: 20,
-    cy: 65,
+    cy: 80,
   },
   {
     id: "krip",
@@ -59,7 +58,7 @@ const workingAreas = [
     icon: Shield,
     size: "md",
     cx: 50,
-    cy: 60,
+    cy: 73,
   },
   {
     id: "stok",
@@ -83,7 +82,7 @@ const workingAreas = [
     icon: Award,
     size: "md",
     cx: 80,
-    cy: 65,
+    cy: 80,
   },
   {
     id: "ist",
@@ -91,7 +90,7 @@ const workingAreas = [
     icon: BarChart3,
     size: "md",
     cx: 85,
-    cy: 35,
+    cy: 39,
   },
   {
     id: "fonk",
@@ -99,23 +98,7 @@ const workingAreas = [
     icon: Atom,
     size: "sm",
     cx: 15,
-    cy: 35,
-  },
-  {
-    id: "ters",
-    label: "Ters Problemler",
-    icon: Globe,
-    size: "sm",
-    cx: 50,
-    cy: 80,
-  },
-  {
-    id: "mfiz",
-    label: "Matematiksel Fizik",
-    icon: Atom,
-    size: "sm",
-    cx: 85,
-    cy: 80,
+    cy: 39,
   },
 ];
 
@@ -128,8 +111,6 @@ const graphLinks = [
   { source: "yapay", target: "stok" },
   { source: "opt", target: "num" },
   { source: "opt", target: "dif" },
-  { source: "dif", target: "ters" },
-  { source: "dif", target: "mfiz" },
   { source: "fonk", target: "stok" },
   { source: "fonk", target: "fin" },
   { source: "ist", target: "dif" },
@@ -333,19 +314,10 @@ export default function DepartmentInfo({ staff, curriculum }) {
             }
           >
             <div className="flex flex-col -mx-5 -mb-5 sm:-mx-6 sm:-mb-6">
-              <div className="relative bg-primary-500 h-85 w-full group border-y border-primary-500/10">
+              <div className="relative bg-primary-500 h-85 w-full border-y border-primary-500/10">
                 <div className="absolute inset-0 bg-linear-to-b from-black/10 via-transparent to-black/20 pointer-events-none z-10" />
                 <div className="absolute inset-0 z-0">
                   <NodeGraphCanvas />
-                </div>
-                <div className="absolute bottom-4 right-6 z-20 opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                  <EditableRegion
-                    blockPath="areas.caption"
-                    blockType="ShortText"
-                    defaultValue="Grafik alanlar arası akademik bağları temsil eder"
-                    as="p"
-                    className="text-[10px] text-white/30 uppercase font-bold tracking-widest bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-md border border-white/5"
-                  />
                 </div>
               </div>
 
