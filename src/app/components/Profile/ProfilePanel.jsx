@@ -7,7 +7,8 @@ import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi, X } fro
 import Modal from "@/app/components/Modal";
 import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
-import { fetchMyEnrollments, unenroll } from "@/data/enrollments";
+import { fetchMyEnrollments, fetchMyWeeklyEntries, unenroll } from "@/data/enrollments";
+import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 import {
@@ -297,24 +298,31 @@ function EnrolledCourses({ onChanged }) {
       <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/40">
         Kayıtlı dersler
       </p>
-      <ul className="flex flex-wrap gap-1.5">
+      {/* Ders kodu tek basina tanitici degil — kayitli oldugu dersi kodundan
+          hatirlamasi beklenemez. Ad da yaziliyor, kod ayirt edici olarak kaliyor. */}
+      <ul className="space-y-0.5">
         {rows.map((row) => (
           <li
             key={row.id}
-            className="flex items-center gap-1.5 rounded-lg bg-primary-500/5 py-1 pl-2.5 pr-1"
+            className="flex items-center gap-2 rounded-lg py-1 pl-2 pr-1 hover:bg-primary-500/3"
           >
-            <span className="text-[11px] text-primary-600">
-              <span className="font-mono font-semibold text-secondary-600">{row.lectureCode}</span>
+            <span className="min-w-0 flex-1 text-[12px] text-primary-600">
+              <span className="font-mono text-[11px] font-semibold text-secondary-600">
+                {row.lectureCode}
+              </span>
+              {row.lectureName && <span className="ml-1.5">{row.lectureName}</span>}
               {row.groupNumber != null && (
-                <span className="text-primary-500/45"> · Gr.{row.groupNumber}</span>
+                <span className="ml-1.5 text-[11px] text-primary-500/40">
+                  Gr.{row.groupNumber}
+                </span>
               )}
             </span>
             <button
               type="button"
               onClick={() => void remove(row.offeringId)}
               disabled={busy === row.offeringId}
-              aria-label={`${row.lectureCode} dersini programdan kaldır`}
-              className="rounded p-0.5 text-primary-500/30 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
+              aria-label={`${row.lectureName || row.lectureCode} dersini programdan kaldır`}
+              className="shrink-0 rounded p-0.5 text-primary-500/30 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
             >
               <X size={12} strokeWidth={2} />
             </button>
@@ -325,19 +333,91 @@ function EnrolledCourses({ onChanged }) {
   );
 }
 
+// Izgara ile liste ayni soruya cevap vermiyor: izgara "haftam nasil sekilleniyor,
+// sali ogleden sonra bos muyum" sorusunu bos hucrelerle yanitliyor; tarihli liste
+// ise "bu hafta ne var" — tatil, sinav ve o haftaya ozel degisiklikler orada.
+// Varsayilan izgara, cunku cogunlukla sekle bakiliyor.
+function WeekGrid() {
+  const { getAccessToken } = useAuth();
+  const [entries, setEntries] = useState(null);
+
+  useEffect(() => {
+    let alive = true;
+    (async () => {
+      try {
+        const rows = await fetchMyWeeklyEntries(await getAccessToken());
+        if (alive) setEntries(rows);
+      } catch {
+        if (alive) setEntries([]);
+      }
+    })();
+    return () => {
+      alive = false;
+    };
+  }, [getAccessToken]);
+
+  if (entries === null) return <Skeleton rows={3} />;
+  if (entries.length === 0) {
+    return <Empty>Haftalık programınızda ders görünmüyor.</Empty>;
+  }
+
+  return (
+    <div className="px-2 py-2">
+      <WeeklySchedule
+        entries={entries}
+        courseHref={null}
+        clash
+        // Baska bolumden ya da fakulteden alinan gruplar bizim veritabanimizda yok
+        // ve tutulmuyor. Programi eksik gosterip tam saymak, ogrencinin derse
+        // gitmemesine yol acabilir; eksikligi acikca soyluyoruz.
+        note="Yalnızca buradan eklediğiniz gruplar görünür. Başka bölümden aldığınız dersler bu programda yer almaz."
+      />
+    </div>
+  );
+}
+
+const SCHEDULE_TABS = [
+  { id: "week", label: "Hafta" },
+  { id: "dated", label: "Bu hafta" },
+];
+
 function ScheduleBody({ items, onChanged }) {
+  const [tab, setTab] = useState("week");
+
+  return (
+    <>
+      <EnrolledCourses onChanged={onChanged} />
+
+      <div className="flex gap-1.5 border-b border-primary-500/6 px-4 py-2">
+        {SCHEDULE_TABS.map((entry) => (
+          <button
+            key={entry.id}
+            type="button"
+            onClick={() => setTab(entry.id)}
+            aria-pressed={tab === entry.id}
+            className={`rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors ${
+              tab === entry.id
+                ? "bg-secondary-500/12 text-secondary-600"
+                : "text-primary-500/45 hover:text-primary-500"
+            }`}
+          >
+            {entry.label}
+          </button>
+        ))}
+      </div>
+
+      {tab === "week" ? <WeekGrid /> : <DatedSchedule items={items} />}
+    </>
+  );
+}
+
+function DatedSchedule({ items }) {
   if (items.length === 0) {
-    return (
-      <>
-        <EnrolledCourses onChanged={onChanged} />
-        <Empty>Bu hafta için ders kaydınız görünmüyor.</Empty>
-      </>
-    );
+    return <Empty>Bu hafta için ders kaydınız görünmüyor.</Empty>;
   }
 
   return (
     <div className="divide-y divide-primary-500/6">
-      <EnrolledCourses onChanged={onChanged} />
       {scheduleDays(items).map(({ date, blocks }) => (
         <div key={date} className="px-4 py-3">
           <div className="mb-2 flex items-baseline gap-2">
@@ -444,7 +524,10 @@ export default function ProfilePanel({ view, onClose }) {
       label={label}
       contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
     >
-      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-full sm:max-h-144 sm:max-w-3xl">
+      {/* Genis ekranda `max-w-3xl` (768px) izgaranin 826px'lik taban genisliginin
+          altinda kaliyordu, son gun kesiliyordu. Telefonda kompakt kart aynen
+          kaliyor; buyume yalnizca yer olan ekranlarda. */}
+      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-full sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
         <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
           <Icon size={16} strokeWidth={1.5} className="text-secondary-500" />
           <h2 className="text-sm font-semibold text-primary-600">{label}</h2>
