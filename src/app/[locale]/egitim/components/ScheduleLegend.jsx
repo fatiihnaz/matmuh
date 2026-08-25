@@ -40,7 +40,7 @@ export default function ScheduleLegend({ items = [], showOnline = false }) {
           style={{ fontSize: "0.6875rem", color: "var(--color-secondary-600)" }}
         >
           <Wifi size={11} strokeWidth={2} />
-          Online / Uzaktan
+          Çevrimiçi
         </span>
       )}
     </div>

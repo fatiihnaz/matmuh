@@ -30,11 +30,7 @@ const rangeOf = (entry) =>
 function metaOf(entry) {
   return [
     entry.instructor && entry.instructor !== "-" ? entry.instructor : null,
-    entry.online
-      ? "Çevrimiçi"
-      : entry.room && entry.room !== "-"
-        ? entry.room
-        : null,
+    !entry.online && entry.room && entry.room !== "-" ? entry.room : null,
   ].filter(Boolean);
 }
 
@@ -94,6 +90,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
     `${entry.code} ${entry.name}`,
     `${entry.group}. grup`,
     entry.cont ? "devam eden oturum" : null,
+    entry.online ? "çevrimiçi" : null,
     ...meta,
   ]
     .filter(Boolean)
@@ -128,6 +125,14 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
           >
             {entry.name}
           </span>
+          {entry.online && (
+            <Wifi
+              size={9}
+              strokeWidth={2.25}
+              aria-hidden
+              className="shrink-0 self-center text-secondary-600"
+            />
+          )}
           {entry.english && (
             <span className="shrink-0 font-mono text-[8.5px] font-semibold tracking-wide text-secondary-600">
               EN
@@ -196,7 +201,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
             {entry.online ? (
               <span className="flex items-center gap-1 text-secondary-600">
                 <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
-                Çevrimiçi / Uzaktan
+                Çevrimiçi
               </span>
             ) : (
               entry.room &&

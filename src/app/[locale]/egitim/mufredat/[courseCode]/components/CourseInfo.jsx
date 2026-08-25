@@ -89,7 +89,7 @@ function SectionRow({ section, defaultOpen }) {
                 <span className="text-xs font-bold text-primary-500">{slot.day}</span>
                 {slot.online && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
-                    <Wifi size={9} strokeWidth={2} /> Online
+                    <Wifi size={9} strokeWidth={2} /> Çevrimiçi
                   </span>
                 )}
               </div>
