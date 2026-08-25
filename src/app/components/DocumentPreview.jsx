@@ -92,12 +92,22 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
             {label}
           </span>
 
+          {/* Donusturulmus PDF de orijinal de sunucuda duruyor. Ek satirindan
+              dogrudan indirmeye tiklayan orijinali alir; burada ikisi de acikca
+              sunuluyor, cunku okumak icin PDF, doldurmak icin orijinal gerekiyor. */}
           <a href={href} download={label} className={ACTION}>
             <Download className="size-3.5" />
-            İndir
+            {previewHref ? `Orijinali indir${kind ? ` (${kind.toUpperCase()})` : ""}` : "İndir"}
           </a>
 
-          <a href={href} target="_blank" rel="noopener noreferrer" className={ACTION}>
+          {previewHref && (
+            <a href={previewHref} download={`${label}.pdf`} className={ACTION}>
+              <Download className="size-3.5" />
+              PDF indir
+            </a>
+          )}
+
+          <a href={source} target="_blank" rel="noopener noreferrer" className={ACTION}>
             Yeni sekmede aç
             <ExternalLink className="size-3" />
           </a>
