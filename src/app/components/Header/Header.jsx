@@ -59,7 +59,7 @@ export default function Header() {
 
       <div className="relative z-20 bg-primary-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between">
-          <Link href={href("/")} className="min-w-0 shrink py-2">
+          <Link href={href("/")} className="shrink-0 py-2">
             <Image
               src={locale === "en" ? "/main-logo-en.svg" : "/main-logo.svg"}
               alt={
@@ -69,7 +69,7 @@ export default function Header() {
               }
               width={locale === "en" ? 414 : 397}
               height={54}
-              className="h-auto w-auto max-h-8 max-w-full sm:max-h-10"
+              className="h-8 sm:h-10 w-auto"
               priority
             />
           </Link>
