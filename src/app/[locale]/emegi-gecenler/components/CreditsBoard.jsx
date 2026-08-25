@@ -28,9 +28,6 @@ const CELLS = [
   },
 ];
 
-// Arkaplan sonunda footer'in `bg-primary-600` tonuna geciyor: duzlem asagi dogru
-// sonumlenirken bolum de footer'a baglaniyor, arada sert bir renk siniri kalmiyor.
-// Katman degil arkaplan oldugu icin kartlari karartmiyor.
 export default function CreditsBoard() {
   return (
     <section className="relative isolate flex min-h-[calc(100svh-var(--header-h))] w-full flex-col items-center overflow-hidden bg-linear-to-b from-primary-500 from-82% to-primary-600 px-4 py-16">
@@ -58,13 +55,6 @@ export default function CreditsBoard() {
         />
       </div>
 
-      {/* Duzlem yalniz kartlari sariyor. Boylece eksenlerin merkezi izgaranin
-          merkeziyle ayni yere dusuyor ve baslik hicbir ekran boyunda kartlarla
-          cakisamiyor — bolumun ortasina cizilen bir eksende ikisi kaciniimaz
-          sekilde birbirine giriyordu. */}
-      {/* Bosluk dolgu degil kenar bosluğu: `CartesianField` `inset-0` ile bu kutuyu
-          kapliyor, dolgu kullanilsa eksenler dolgu dahil ortalanir ve izgaradan
-          yarim dolgu kadar yukarida kalirdi. */}
       <div className="relative flex w-full flex-1 items-center justify-center mt-10 lg:mt-14">
         <CartesianField />
 

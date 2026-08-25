@@ -1,8 +1,5 @@
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 
-// Kayit uclari kullaniciya ozel, hepsi tarayicidan cagriliyor. Sunucu tarafinda
-// cagirmayin: token istekle birlikte gelmiyor ve sayfa herkes icin ayni onbellege
-// duserdi.
 async function request(path, { method = "GET", token, body } = {}) {
   const res = await fetch(`${API}${path}`, {
     method,
@@ -23,7 +20,9 @@ async function request(path, { method = "GET", token, body } = {}) {
 }
 
 export async function fetchMyEnrollments(token, academicYear) {
-  const query = academicYear ? `?academicYear=${encodeURIComponent(academicYear)}` : "";
+  const query = academicYear
+    ? `?academicYear=${encodeURIComponent(academicYear)}`
+    : "";
   const body = await request(`/enrollments/me${query}`, { token });
   return (body?.data ?? []).map((row) => ({
     id: row.id,
@@ -37,13 +36,6 @@ export async function fetchMyEnrollments(token, academicYear) {
   }));
 }
 
-// Ogrencinin kendi haftalik izgarasi. `/calendar/weekly` herkese acik ve zaten
-// `WeeklySchedule`'in bekledigi alanlari tasiyor; kayitli offering kimlikleriyle
-// suzup izgara sekline ceviriyoruz. Ayri bir uca gerek yok.
-//
-// `type` (Zorunlu/Secmeli) burada yok: onu bilmek ders katalogunu da cekmek demek,
-// oysa kisinin kendi programinda ders zaten secilmis durumda. Izgara eksik `type`'i
-// zorunlu rengiyle ciziyor.
 export async function fetchMyWeeklyEntries(token) {
   const enrolled = await fetchMyEnrollments(token);
   if (enrolled.length === 0) return [];
@@ -61,7 +53,7 @@ export async function fetchMyWeeklyEntries(token) {
 
 const DAY_KEYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
 const FIRST_HOUR = 9;
-const SLOT_COUNT = 12; // schedule-grid.js ile ayni: 09:00-20:50
+const SLOT_COUNT = 12;
 
 const minutesOf = (time) => {
   const [h, m] = String(time ?? "").split(":");
@@ -93,7 +85,11 @@ function toGridEntry(slot) {
 }
 
 export function enroll(offeringId, token) {
-  return request("/enrollments", { method: "POST", token, body: { lectureOfferingId: offeringId } });
+  return request("/enrollments", {
+    method: "POST",
+    token,
+    body: { lectureOfferingId: offeringId },
+  });
 }
 
 export function unenroll(offeringId, token) {

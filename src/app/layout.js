@@ -52,14 +52,20 @@ export default async function RootLayout({ children }) {
   const { locale } = await getCmsRoute();
 
   return (
-    <html lang={locale ?? "tr"} className={`${inter.variable} ${jbMono.variable}`}>
+    <html
+      lang={locale ?? "tr"}
+      className={`${inter.variable} ${jbMono.variable}`}
+    >
       <Providers>
-        <body className="font-sans antialiased bg-background" suppressHydrationWarning>
+        <body
+          className="font-sans antialiased bg-background"
+          suppressHydrationWarning
+        >
           <CmsPage>
             <div className="flex flex-col min-h-svh">
               <a
                 href="#icerik"
-                className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-[100] focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-500 focus:shadow-lg"
+                className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-500 focus:shadow-lg"
               >
                 İçeriğe atla
               </a>

@@ -25,8 +25,6 @@ export function useMediaQuery(media) {
   );
 }
 
-// Duzenleme cekmecesi dar ekranda kullanilamiyor; orada acik kalmasi editorun
-// gormedigi bir alani kaydetmesine yol aciyor.
 export function useWideViewport() {
   return useMediaQuery("(min-width: 1024px)");
 }

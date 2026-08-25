@@ -8,11 +8,6 @@ const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
 export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS]);
 
-// Ofis belgeleri tarayicida cozulmuyor: backend Gotenberg ile yuklemede PDF'e
-// ceviriyor ve `previewUrl` donuyor, biz onu gosteriyoruz. Istemci tarafi cozucu
-// (docx-preview / read-excel-file) kaldirildi — dosya ucu 302 ile imzali S3
-// adresine yonlendigi ve orada CORS kurali olmadigi icin bayt okuyan hicbir cozum
-// bu mimaride calisamiyordu.
 export function canPreview(href, kind, previewHref = null) {
   if (previewHref) return true;
   return Boolean(href) && PREVIEWABLE_KINDS.has(kind);
@@ -21,8 +16,6 @@ export function canPreview(href, kind, previewHref = null) {
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
-// iOS Safari gomulu PDF'in yalnizca ilk sayfasini ciziyor ve kaydirmiyor. Dar
-// ekranda iframe yerine cihazin kendi goruntuleyicisine yolluyoruz.
 function PdfBody({ href, label }) {
   const inline = useMediaQuery("(min-width: 768px)");
 
@@ -63,8 +56,6 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
       >
         <div className="relative flex-1 min-h-0 rounded-lg overflow-hidden bg-white">
           {isImage ? (
-            // `next/image` burada calismaz: istegi `/_next/image` uzerinden Next
-            // sunucusu yapar ve onun ne kullanicinin cerezi ne token'i vardir.
             // eslint-disable-next-line @next/next/no-img-element
             <img src={source} alt={label} className="h-full w-full object-contain" />
           ) : (
@@ -77,8 +68,6 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
             {label}
           </span>
 
-          {/* Donusturulmus PDF de orijinal de sunucuda duruyor: okumak icin PDF,
-              doldurmak icin orijinal gerekiyor. */}
           <a href={href} download={label} className={ACTION}>
             <Download className="size-3.5" />
             {previewHref ? `Orijinali indir${kind ? ` (${kind.toUpperCase()})` : ""}` : "İndir"}

@@ -5,10 +5,6 @@ import { DAY_KEYS, DAYS, FIRST_HOUR, TIME_SLOTS } from "./schedule-grid.js";
 
 const SEMESTER_LABEL = { FALL: "Güz", SPRING: "Bahar", SUMMER: "Yaz" };
 
-// Donem bilerek gomulu degil. Parametresiz cagrildiginda backend bugunun tarihini
-// kapsayan donemi kendisi cozuyor (`CalendarManager.resolveTerm`), yani yeni donem
-// girildigi anda site onu gosteriyor. Sabit bir donem hem yeni kayitlari gizler hem
-// de sayfa basliginda yanlis yariyili yazardi.
 
 const minutes = (time) => {
   const [h, m] = String(time ?? "").split(":");
@@ -112,8 +108,6 @@ export const getCourseSections = cache(async (code) => {
     }
     sections.get(entry.group).schedule.push({
       day: DAYS[entry.day],
-      // Cakisma kontrolu icin ham degerler de tasiniyor: gosterim metnini geri
-      // ayristirmak yerine gun indeksi ve dakika araligi dogrudan kullaniliyor.
       dayIndex: entry.day,
       startMin: (FIRST_HOUR + entry.slot) * 60,
       endMin: (FIRST_HOUR + entry.slot + entry.span) * 60,

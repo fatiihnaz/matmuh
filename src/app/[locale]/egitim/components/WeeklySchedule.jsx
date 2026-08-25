@@ -137,15 +137,6 @@ function EntryCard({ entry, fill, href }) {
   );
 }
 
-// Ayni saatte birden fazla ders varsa tam kartlari alt alta yigmak hucreyi
-// okunmaz hale getiriyordu — dordu birden sigmiyor, hicbiri okunmuyordu. Hepsi tek
-// kutuda toplaniyor ve her ders tek satira iniyor: ad, sonra grup / hoca / derslik.
-//
-// Bunu "cakisma" diye adlandirmiyoruz: genel programda ayni saatte iki ders olmasi
-// normal, paralel acilmis gruplardir. Cakisma ancak bir ogrencinin *kendi* programi
-// icin anlamli, o da profil panelinde ayrica isaretleniyor. Grup numarasi burada
-// gorunuyor cunku ayni saatteki satirlar cogu zaman ayni dersin farkli gruplari ve
-// ayirt edici olan tek sey o.
 function ParallelRow({ entry, href }) {
   const isElective = entry.type === "Seçmeli";
   const accent = isElective ? "var(--color-secondary-500)" : "var(--color-primary-500)";
@@ -216,19 +207,10 @@ function ParallelRow({ entry, href }) {
   );
 }
 
-// Hucre yuksekligi `minmax(74px, auto)`: kaydirma koysak minicik bir kutuda kac
-// tane oldugu belirsiz bir liste olur, kaldirsak satir icerige gore buyuyup o
-// gundeki butun hucreleri gerer. Ikisi de kotu. Onun yerine dilim sayisi kadarini
-// yerinde gosterip gerisini yer olan bir yuzeye tasiyoruz — havuz derslerinde ayni
-// saatte on grup gorulebiliyor.
-// `clash`: ogrencinin kendi programinda ayni saatte iki ders **cakismadir**, genel
-// programda ise paralel gruplardir. Ayni bilesen iki baglamda calisiyor, tonu ve
-// sozu baglamdan geliyor.
 function ParallelCell({ items, span, courseHref, clash = false }) {
   const [open, setOpen] = useState(false);
 
   const fits = Math.min(items.length, Math.max(1, Math.min(span, 3)));
-  // Tek kayit gizlemek icin dugme koymak sacma; o durumda hepsini gosteriyoruz.
   const shown = items.length - fits === 1 ? items.length : fits;
   const hidden = items.length - shown;
 
@@ -373,9 +355,6 @@ export default function WeeklySchedule({ entries = [], courseHref, note = null, 
         </span>
       </div>
 
-      {/* `no-scrollbar` kaldirildi: dar kapta izgara kayiyordu ama gostergesi
-          gizli oldugu icin son sutun kesik gorunuyor, kaydirilabildigi
-          anlasilmiyordu. Sigan genislikte cubuk zaten cikmiyor. */}
       <div className="overflow-x-auto">
         <div style={{ minWidth: 820 }}>
           <div
@@ -568,9 +547,6 @@ export default function WeeklySchedule({ entries = [], courseHref, note = null, 
         </div>
       )}
 
-      {/* Yabanci dil ve sosyal secmeliler bolumun programina girmiyor; ogrenci
-          onlari gormeyince programi eksik saniyor. Yoklugu acikca soylemek, sessiz
-          birakmaktan iyi. */}
       {note && (
         <div className="px-4 py-2.5 text-center border-t border-primary-500/6">
           <span style={{ fontSize: "0.6875rem", color: "rgba(29,36,69,0.45)" }}>{note}</span>

@@ -2,13 +2,6 @@
 
 import { useEffect, useState } from "react";
 
-// Klavye acilinca duzen viewport'u kucuklmedigi icin tam ekran bir katmanin alti
-// klavyenin arkasinda kaliyor. Chrome bunu `interactiveWidget` ile kendi cozuyor;
-// iOS Safari ve Firefox desteklemedigi icin ortulen yuksekligi burada oluyoruz.
-//
-// Yalnizca `resize` olayina baglaniyoruz, mount aninda olcmuyoruz: paylasimli
-// layout gecisi ucusttayken bir olcum yayinlamak framer'in projeksiyonunu
-// bozuyor ve katman iceriden yayiliyor.
 const THRESHOLD = 120;
 
 export function useKeyboardInset(active) {

@@ -264,8 +264,6 @@ function ScheduleEntry({ entry, conflict }) {
   );
 }
 
-// Kayitli dersler listesi haftalik gorunumun ustunde ayri duruyor: takvim satirlari
-// tarihli oluşumlar, birini kaldirmak dersin tamamini birakmak demek olurdu.
 function EnrolledCourses({ onChanged }) {
   const { getAccessToken } = useAuth();
   const [rows, setRows] = useState(null);
@@ -298,8 +296,6 @@ function EnrolledCourses({ onChanged }) {
       <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/40">
         Kayıtlı dersler
       </p>
-      {/* Ders kodu tek basina tanitici degil — kayitli oldugu dersi kodundan
-          hatirlamasi beklenemez. Ad da yaziliyor, kod ayirt edici olarak kaliyor. */}
       <ul className="space-y-0.5">
         {rows.map((row) => (
           <li
@@ -333,10 +329,6 @@ function EnrolledCourses({ onChanged }) {
   );
 }
 
-// Izgara ile liste ayni soruya cevap vermiyor: izgara "haftam nasil sekilleniyor,
-// sali ogleden sonra bos muyum" sorusunu bos hucrelerle yanitliyor; tarihli liste
-// ise "bu hafta ne var" — tatil, sinav ve o haftaya ozel degisiklikler orada.
-// Varsayilan izgara, cunku cogunlukla sekle bakiliyor.
 function WeekGrid() {
   const { getAccessToken } = useAuth();
   const [entries, setEntries] = useState(null);
@@ -367,9 +359,6 @@ function WeekGrid() {
         entries={entries}
         courseHref={null}
         clash
-        // Baska bolumden ya da fakulteden alinan gruplar bizim veritabanimizda yok
-        // ve tutulmuyor. Programi eksik gosterip tam saymak, ogrencinin derse
-        // gitmemesine yol acabilir; eksikligi acikca soyluyoruz.
         note="Yalnızca buradan eklediğiniz gruplar görünür. Başka bölümden aldığınız dersler bu programda yer almaz."
       />
     </div>
@@ -470,8 +459,6 @@ export default function ProfilePanel({ view, onClose }) {
   const [busyId, setBusyId] = useState(null);
   const [actionError, setActionError] = useState(null);
   const [confirmId, setConfirmId] = useState(null);
-  // Kayit kaldirilinca haftalik liste bayat kalir; sayaci artirmak yuklemeyi
-  // yeniden tetikliyor.
   const [reloadKey, setReloadKey] = useState(0);
 
   async function removeNote(note) {
@@ -524,9 +511,6 @@ export default function ProfilePanel({ view, onClose }) {
       label={label}
       contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
     >
-      {/* Genis ekranda `max-w-3xl` (768px) izgaranin 826px'lik taban genisliginin
-          altinda kaliyordu, son gun kesiliyordu. Telefonda kompakt kart aynen
-          kaliyor; buyume yalnizca yer olan ekranlarda. */}
       <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-full sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
         <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
           <Icon size={16} strokeWidth={1.5} className="text-secondary-500" />

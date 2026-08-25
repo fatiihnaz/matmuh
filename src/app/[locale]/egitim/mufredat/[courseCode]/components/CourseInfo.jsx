@@ -34,9 +34,6 @@ import LectureNotes from "./LectureNotes";
 import SectionEnroll from "./SectionEnroll";
 import { useAuth } from "@/lib/auth";
 
-// Bir dersin 16 grubu olabiliyor; hepsini acik listelemek kenar cubugunu
-// okunmaz hale getiriyordu. Kapaliyken ilk dersin gunu ve saati basligda
-// gorunuyor, boylece acmadan da taranabiliyor.
 function SectionRow({ section, defaultOpen }) {
   const [open, setOpen] = useState(defaultOpen);
   const first = section.schedule[0];
@@ -487,8 +484,6 @@ export default function CourseInfo({ course, sections = [] }) {
                   )}
                 </div>
 
-                {/* Bu ikisi CMS semasinda vardi ama hicbir yere ulasmiyordu:
-                    editor doldurup sitede hicbir sey gormuyordu. */}
                 {(course.gradingPolicy || course.resources) && (
                   <div className="flex flex-col gap-6">
                     {course.gradingPolicy && (

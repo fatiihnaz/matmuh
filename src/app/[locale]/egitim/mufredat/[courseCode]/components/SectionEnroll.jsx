@@ -14,8 +14,6 @@ const minutes = (time) => {
   return Number(h) * 60 + Number(m ?? 0);
 };
 
-// Ogrencinin kayitli oldugu gruplarin haftalik saatleri. `/calendar/weekly` herkese
-// acik, o yuzden kimlik bilgisi gerekmiyor; kayitli offering kimlikleriyle suzuyoruz.
 async function fetchEnrolledSlots(offeringIds) {
   if (offeringIds.size === 0) return [];
   const res = await fetch(`${API}/calendar/weekly`).catch(() => null);
@@ -36,8 +34,6 @@ async function fetchEnrolledSlots(offeringIds) {
 const clock = (total) =>
   `${String(Math.floor(total / 60)).padStart(2, "0")}:${String(total % 60).padStart(2, "0")}`;
 
-// Iki aralik kesisiyorsa cakisma var. Bitisik saatler (11:00 biten ve 11:00
-// baslayan) cakisma sayilmiyor - backend'in slot kontrolundeki tanimla ayni.
 function findClash(schedule, enrolledSlots, ownOfferingId) {
   for (const own of schedule) {
     for (const other of enrolledSlots) {
@@ -100,8 +96,6 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
   const onAdd = () => {
     if (!clash) {
       const found = findClash(schedule, enrolledSlots, offeringId);
-      // Cakismayi engellemiyoruz, yalnizca bir kez soruyoruz: ogrenci iki grubu
-      // karsilastirmak icin bilerek ikisini de ekleyebilir.
       if (found) {
         setClash(found);
         return;

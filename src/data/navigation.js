@@ -4,8 +4,6 @@ import {
 } from "lucide-react";
 export const YTU_ANA_SITE = "https://www.yildiz.edu.tr";
 
-// Yabanci dil ve sosyal secmeliler bolumun programina girmiyor; ogrenci onlari
-// buradan buluyor.
 export const BOLOGNA_CATALOG = "https://bologna.yildiz.edu.tr";
 export const DEPARTMENT_EMAIL = "mtmblm@yildiz.edu.tr";
 export const navigationItems = [

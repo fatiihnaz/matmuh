@@ -3,10 +3,6 @@ const TICKS = [-3, -2, -1, 1, 2, 3];
 const UNIT = 56;
 const MAJOR = UNIT * 4;
 
-// Cizgiyi karonun ortasina cizip karoyu merkeze oturtuyoruz. `repeating-linear-
-// gradient` elemanin sol ustunden basladigi icin izgaranin eksene gore hizasi
-// bolumun boyutuna gore kayiyordu; boyle bir izgara cizgisi her zaman tam
-// orijinden geciyor ve tikler kesisim noktalarina denk geliyor.
 const rule = (direction, color, width) =>
   `linear-gradient(${direction}, transparent calc(50% - ${width}), ${color} calc(50% - ${width}) calc(50% + ${width}), transparent calc(50% + ${width}))`;
 
@@ -15,9 +11,6 @@ const MAJOR_COLOR = "rgba(98,109,158,0.6)";
 
 const FADE = "radial-gradient(ellipse 82% 78% at 50% 50%, #000 38%, transparent 100%)";
 
-// Dikey sonum ayri bir katmanda. Iki maskeyi tek elemanda birlestirmek
-// `mask-composite` isterdi; Safari'nin sozdizimi farkli oldugu icin ic ice iki
-// eleman kullaniyoruz — maskeler carpiliyor, ek ozellik gerekmiyor.
 const EDGE =
   "linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%)";
 

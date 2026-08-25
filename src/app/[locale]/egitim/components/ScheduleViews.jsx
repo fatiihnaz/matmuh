@@ -7,10 +7,6 @@ import { CalendarRange, List, MapPin, User, Wifi } from "lucide-react";
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
 import WeeklySchedule from "./WeeklySchedule";
 
-// Izgara 5 sutun x en az 150px, yani 750 pikselden dar ekranda yatay kayiyor.
-// Telefonda gun bazli liste hem kaymiyor hem her satiri tek bakista okutuyor.
-// Masaustunde ise izgara ustun: bos hucreler "sali ogleden sonra bosum" bilgisini
-// tasiyor, listede o bilgi hic yok. Ikisi de kalsin, secim kullanicinin.
 const VIEWS = [
   { id: "grid", label: "Izgara", icon: CalendarRange },
   { id: "list", label: "Liste", icon: List },
@@ -135,8 +131,6 @@ export default function ScheduleViews({ entries = [], courseHref, note = null, l
 
   return (
     <div className="flex flex-col gap-3">
-      {/* Sekmeler efsaneyle ayni satirda: ikisi de programin ust seridi, ayri
-          satirlara bolmek bos bir sira ekliyordu. Dar ekranda sariyor. */}
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         {legend ? <div className="min-w-0">{legend}</div> : <span />}
         <div className="flex shrink-0 gap-1.5">
