@@ -11,7 +11,7 @@ export default function StaffMember({ member, idx }) {
   const isRoomNumber = office && (office.includes("-") || /^\d+$/.test(office));
 
   return (
-    <div className="group cursor-pointer rounded-xl p-5 bg-white border border-primary-500/10 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary-500/20 hover:shadow-sm">
+    <div className="group rounded-xl p-5 bg-white border border-primary-500/10 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary-500/20 hover:shadow-sm">
       <div className="flex flex-col items-center text-center">
         <Avatar
           name={name}
