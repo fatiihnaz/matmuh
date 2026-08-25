@@ -6,6 +6,7 @@ import { ChevronDown, ArrowRight } from "lucide-react";
 import { EditableList, EditableRegion } from "inscribed";
 
 import MainCard from "@/app/components/MainCard";
+import Collapse from "@/app/components/Collapse";
 
 function Question({ item }) {
   const [open, setOpen] = useState(false);
@@ -29,12 +30,13 @@ function Question({ item }) {
         />
       </button>
 
-      {open && (
+      <Collapse open={open}>
         <div className="pb-3.5 pr-8">
           <p className="text-[13px] leading-relaxed text-primary-500/65">{item?.answer}</p>
           {href && (
             <Link
               href={href}
+              tabIndex={open ? undefined : -1}
               className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-secondary-500 transition-colors hover:text-secondary-600"
             >
               {item?.link?.label || "Detaylı bilgi"}
@@ -42,7 +44,7 @@ function Question({ item }) {
             </Link>
           )}
         </div>
-      )}
+      </Collapse>
     </div>
   );
 }
