@@ -3,8 +3,9 @@ import { useMemo, useState } from "react";
 import { CalendarDays } from "lucide-react";
 import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
-import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
+import ScheduleViews from "@/app/[locale]/egitim/components/ScheduleViews";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
+import { BOLOGNA_CATALOG } from "@/data/navigation";
 
 const CLASSES = [1, 2, 3, 4].map((id) => ({ id, label: `${id}. Sınıf` }));
 
@@ -60,17 +61,33 @@ export default function DersProgramiPage({ entries: all = [], term }) {
             </div>
           </div>
 
-          <ScheduleLegend
-            items={[
-              { color: "rgba(29,36,69,0.15)", label: "Zorunlu" },
-              { color: "rgba(173,151,111,0.4)", label: "Seçmeli" },
-            ]}
-            showOnline
-          />
-
-          <WeeklySchedule
+          <ScheduleViews
             entries={entries}
             courseHref={(code) => `/egitim/mufredat/${code}`}
+            legend={
+              <ScheduleLegend
+                items={[
+                  { color: "rgba(29,36,69,0.15)", label: "Zorunlu" },
+                  { color: "rgba(173,151,111,0.4)", label: "Seçmeli" },
+                ]}
+                showOnline
+              />
+            }
+            note={
+              <>
+                Yabancı dil ve sosyal seçmeli dersleri üniversite havuzundan
+                seçilir, bu programda listelenmez.{" "}
+                <a
+                  href={BOLOGNA_CATALOG}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="font-medium text-secondary-600 hover:underline"
+                >
+                  Bologna kataloğunda
+                </a>{" "}
+                yer alıyorlar.
+              </>
+            }
           />
         </div>
       </PageLayout>
