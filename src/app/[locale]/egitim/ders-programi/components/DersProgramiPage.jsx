@@ -5,7 +5,6 @@ import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import ScheduleViews from "@/app/[locale]/egitim/components/ScheduleViews";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
-import { BOLOGNA_CATALOG } from "@/data/navigation";
 
 const CLASSES = [1, 2, 3, 4].map((id) => ({ id, label: `${id}. Sınıf` }));
 
@@ -39,9 +38,7 @@ export default function DersProgramiPage({ entries: all = [], term }) {
                       fontSize: "0.8125rem",
                       fontWeight: activeClass === cls.id ? 600 : 450,
                       color:
-                        activeClass === cls.id
-                          ? "#fff"
-                          : "rgba(29,36,69,0.5)",
+                        activeClass === cls.id ? "#fff" : "rgba(29,36,69,0.5)",
                       backgroundColor:
                         activeClass === cls.id
                           ? "var(--color-primary-500)"
@@ -73,21 +70,7 @@ export default function DersProgramiPage({ entries: all = [], term }) {
                 showOnline
               />
             }
-            note={
-              <>
-                Yabancı dil ve sosyal seçmeli dersleri üniversite havuzundan
-                seçilir, bu programda listelenmez.{" "}
-                <a
-                  href={BOLOGNA_CATALOG}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="font-medium text-secondary-600 hover:underline"
-                >
-                  Bologna kataloğunda
-                </a>{" "}
-                yer alıyorlar.
-              </>
-            }
+            note="Üniversite havuzundan seçilen yabancı dil ve sosyal seçmeli dersleri bu programda yer almaz."
           />
         </div>
       </PageLayout>

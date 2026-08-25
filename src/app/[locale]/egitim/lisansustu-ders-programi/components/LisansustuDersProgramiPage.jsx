@@ -24,7 +24,7 @@ export default function LisansustuDersProgramiPage({ entries: all = [], term }) 
         .map((entry) => ({
           ...entry,
           type: isDoctorate(entry) ? "Seçmeli" : "Zorunlu",
-          note: isDoctorate(entry) ? "Doktora" : entry.note,
+          badge: isDoctorate(entry) ? "Doktora" : "Yüksek Lisans",
         })),
     [all, level],
   );

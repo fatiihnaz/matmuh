@@ -1,3 +1,10 @@
+import {
+  DAY_KEYS,
+  FIRST_HOUR,
+  TIME_SLOTS,
+  coalesceEntries,
+} from "./schedule-grid.js";
+
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 
 async function request(path, { method = "GET", token, body } = {}) {
@@ -45,15 +52,15 @@ export async function fetchMyWeeklyEntries(token) {
   if (!res?.ok) return [];
   const body = await res.json().catch(() => null);
 
-  return (body?.data ?? [])
-    .filter((slot) => ids.has(slot.offeringId))
-    .map(toGridEntry)
-    .filter(Boolean);
+  return coalesceEntries(
+    (body?.data ?? [])
+      .filter((slot) => ids.has(slot.offeringId))
+      .map(toGridEntry)
+      .filter(Boolean),
+  );
 }
 
-const DAY_KEYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
-const FIRST_HOUR = 9;
-const SLOT_COUNT = 12;
+const SLOT_COUNT = TIME_SLOTS.length;
 
 const minutesOf = (time) => {
   const [h, m] = String(time ?? "").split(":");
@@ -71,6 +78,7 @@ function toGridEntry(slot) {
 
   return {
     id: slot.id,
+    offeringId: slot.offeringId ?? null,
     day,
     slot: index,
     span: Math.max(1, Math.ceil((end - start) / 60)),
@@ -80,7 +88,7 @@ function toGridEntry(slot) {
     instructor: slot.staffName || "-",
     room: slot.classroom || "-",
     online: Boolean(slot.online),
-    note: slot.groupNumber > 1 ? `Gr.${slot.groupNumber}` : null,
+    english: slot.language === "ENGLISH",
   };
 }
 

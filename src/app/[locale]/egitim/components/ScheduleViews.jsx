@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
 import { CalendarRange, List, MapPin, User, Wifi } from "lucide-react";
 
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
+import { colorOf, courseColors, tintOf } from "@/data/schedule-colors";
 import WeeklySchedule from "./WeeklySchedule";
 
 const VIEWS = [
@@ -18,25 +19,42 @@ const rangeOf = (entry) => {
   return `${start} – ${end}`;
 };
 
-function ListRow({ entry, courseHref }) {
+function ListRow({ entry, accent, courseHref }) {
   const isElective = entry.type === "Seçmeli";
-  const accent = isElective ? "var(--color-secondary-500)" : "var(--color-primary-500)";
   const href = courseHref?.(entry.code) || null;
 
   const body = (
-    <div className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-colors hover:bg-primary-500/3">
+    <div
+      className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-[filter] hover:brightness-95"
+      style={{
+        backgroundColor: tintOf(isElective),
+        borderLeft: `2.5px solid ${accent}`,
+      }}
+    >
       <span className="w-22 shrink-0 font-mono text-[11px] leading-snug text-primary-500/45">
         {rangeOf(entry)}
       </span>
 
       <span className="min-w-0 flex-1">
         <span className="flex flex-wrap items-baseline gap-x-1.5">
-          <span className="font-mono text-[11px] font-semibold" style={{ color: accent }}>
+          <span
+            className="font-mono text-[11px] font-semibold"
+            style={{ color: accent }}
+          >
             {entry.code}
           </span>
-          <span className="text-[13px] font-medium text-primary-600">{entry.name}</span>
+          <span className="text-[13px] font-medium text-primary-600">
+            {entry.name}
+          </span>
           {entry.group != null && (
-            <span className="font-mono text-[10px] text-primary-500/40">Gr.{entry.group}</span>
+            <span className="font-mono text-[10px] text-primary-500/40">
+              Gr.{entry.group}
+            </span>
+          )}
+          {entry.english && (
+            <span className="font-mono text-[9.5px] font-semibold tracking-wide text-secondary-600">
+              EN
+            </span>
           )}
         </span>
 
@@ -79,6 +97,7 @@ function ListRow({ entry, courseHref }) {
 }
 
 function ScheduleList({ entries, courseHref, note }) {
+  const palette = useMemo(() => courseColors(entries), [entries]);
   const days = DAYS.map((label, index) => ({
     label,
     items: entries
@@ -89,7 +108,9 @@ function ScheduleList({ entries, courseHref, note }) {
   if (days.length === 0) {
     return (
       <div className="rounded-xl border border-primary-500/8 bg-white py-12 text-center">
-        <span className="text-[13px] text-primary-500/30">Bu dönem için ders bulunamadı.</span>
+        <span className="text-[13px] text-primary-500/30">
+          Bu dönem için ders bulunamadı.
+        </span>
       </div>
     );
   }
@@ -104,11 +125,12 @@ function ScheduleList({ entries, courseHref, note }) {
                 {day.label}
               </span>
             </div>
-            <ul className="divide-y divide-primary-500/4 p-1">
+            <ul className="flex flex-col gap-1 p-1">
               {day.items.map((entry) => (
                 <ListRow
                   key={`${entry.code}-${entry.group}-${entry.slot}`}
                   entry={entry}
+                  accent={colorOf(palette, entry.code)}
                   courseHref={courseHref}
                 />
               ))}
@@ -126,7 +148,12 @@ function ScheduleList({ entries, courseHref, note }) {
   );
 }
 
-export default function ScheduleViews({ entries = [], courseHref, note = null, legend = null }) {
+export default function ScheduleViews({
+  entries = [],
+  courseHref,
+  note = null,
+  legend = null,
+}) {
   const [view, setView] = useState("grid");
 
   return (
