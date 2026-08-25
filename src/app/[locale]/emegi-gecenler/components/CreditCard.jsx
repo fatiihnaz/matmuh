@@ -5,43 +5,57 @@ import { Github, Linkedin, Globe, Mail } from "lucide-react";
 import Avatar from "@/app/components/Avatar";
 import { safeHref, isExternalHref } from "@/lib/href";
 
-const ICONS = { github: Github, linkedin: Linkedin, site: Globe, mail: Mail };
+export const LINK_FIELDS = [
+  { key: "github", Icon: Github, label: "GitHub" },
+  { key: "linkedin", Icon: Linkedin, label: "LinkedIn" },
+  { key: "site", Icon: Globe, label: "Site" },
+  { key: "mail", Icon: Mail, label: "E-posta" },
+];
 
-export default function CreditCard({ person, idx }) {
-  const links = (person?.links ?? []).filter((link) => link?.link?.href);
+export default function CreditCard({ person, idx, coord, markClassName = "" }) {
+  const links = LINK_FIELDS.map((field) => ({
+    ...field,
+    href: safeHref(person?.[field.key]?.href),
+  })).filter((link) => link.href);
 
   return (
-    <div className="flex w-full max-w-72 flex-col items-center gap-3 rounded-xl border border-white/10 bg-primary-700/55 px-5 py-6 text-center backdrop-blur-md transition-colors hover:border-secondary-500/40">
+    <div className="group relative flex w-full max-w-80 flex-col items-center gap-4 rounded-xl border border-white/8 bg-primary-700/30 px-6 py-8 text-center backdrop-blur-[2px] transition-colors duration-300 hover:border-secondary-500/45 hover:bg-primary-700/50">
+      <span
+        aria-hidden
+        className={`absolute right-3.5 top-3.5 flex items-center gap-1 font-mono text-[10px] tracking-widest text-secondary-500/35 transition-colors duration-300 group-hover:text-secondary-500/70 ${markClassName}`}
+      >
+        <span className="size-1 rounded-full bg-secondary-500/60" />
+        {coord}
+      </span>
+
       <Avatar
         name={person?.name || "?"}
         photo={person?.photo}
         idx={idx}
-        size="size-20"
-        textSize="text-lg"
+        size="size-28"
+        textSize="text-2xl"
       />
 
       <div className="min-w-0">
-        <p className="text-sm font-semibold text-white">{person?.name}</p>
+        <p className="text-base font-semibold text-white">{person?.name}</p>
         {person?.role && (
-          <p className="mt-0.5 text-[11px] tracking-wide text-secondary-500">{person.role}</p>
+          <p className="mt-1 text-xs tracking-wide text-secondary-500">{person.role}</p>
         )}
       </div>
 
       {links.length > 0 && (
-        <div className="flex items-center gap-1.5">
-          {links.map((link, index) => {
-            const Icon = ICONS[link.icon] ?? Globe;
-            const href = safeHref(link.link.href);
+        <div className="flex items-center gap-2">
+          {links.map(({ key, Icon, label, href }) => {
             const external = isExternalHref(href);
             return (
               <a
-                key={index}
+                key={key}
                 href={href}
-                aria-label={link.link.label || link.icon}
+                aria-label={`${person?.name ?? ""} ${label}`}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-                className="flex size-8 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-secondary-500"
+                className="flex size-9 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-secondary-500"
               >
-                <Icon size={15} strokeWidth={1.5} />
+                <Icon size={16} strokeWidth={1.5} />
               </a>
             );
           })}

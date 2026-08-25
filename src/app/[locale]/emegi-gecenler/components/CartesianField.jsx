@@ -1,37 +1,65 @@
-const QUADRANTS = [
-  { id: 1, label: "( +, + )", x: "right", y: "top" },
-  { id: 2, label: "( −, + )", x: "left", y: "top" },
-  { id: 3, label: "( −, − )", x: "left", y: "bottom" },
-  { id: 4, label: "( +, − )", x: "right", y: "bottom" },
-];
-
 const TICKS = [-3, -2, -1, 1, 2, 3];
+
+const UNIT = 56;
+const MAJOR = UNIT * 4;
+
+// Cizgiyi karonun ortasina cizip karoyu merkeze oturtuyoruz. `repeating-linear-
+// gradient` elemanin sol ustunden basladigi icin izgaranin eksene gore hizasi
+// bolumun boyutuna gore kayiyordu; boyle bir izgara cizgisi her zaman tam
+// orijinden geciyor ve tikler kesisim noktalarina denk geliyor.
+const rule = (direction, color, width) =>
+  `linear-gradient(${direction}, transparent calc(50% - ${width}), ${color} calc(50% - ${width}) calc(50% + ${width}), transparent calc(50% + ${width}))`;
+
+const MINOR = "rgba(98,109,158,0.34)";
+const MAJOR_COLOR = "rgba(98,109,158,0.6)";
+
+const FADE = "radial-gradient(ellipse 78% 72% at 50% 50%, #000 42%, transparent 100%)";
 
 export default function CartesianField() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
-        className="absolute inset-0 opacity-[0.28]"
+        className="absolute inset-0"
         style={{
-          backgroundImage:
-            "repeating-linear-gradient(to right, rgba(98,109,158,0.5) 0 1px, transparent 1px 56px)," +
-            "repeating-linear-gradient(to bottom, rgba(98,109,158,0.5) 0 1px, transparent 1px 56px)",
+          backgroundImage: `${rule("to right", MINOR, "0.5px")}, ${rule("to bottom", MINOR, "0.5px")}`,
+          backgroundSize: `${UNIT}px ${UNIT}px`,
           backgroundPosition: "center",
+          maskImage: FADE,
+          WebkitMaskImage: FADE,
         }}
       />
 
-      <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-secondary-500/45" />
-      <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-secondary-500/45" />
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage: `${rule("to right", MAJOR_COLOR, "0.5px")}, ${rule("to bottom", MAJOR_COLOR, "0.5px")}`,
+          backgroundSize: `${MAJOR}px ${MAJOR}px`,
+          backgroundPosition: "center",
+          maskImage: FADE,
+          WebkitMaskImage: FADE,
+        }}
+      />
+
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(circle 22rem at 50% 50%, rgba(194,176,140,0.055), transparent 70%)",
+        }}
+      />
+
+      <div className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-linear-to-r from-transparent via-secondary-500/45 to-transparent" />
+      <div className="absolute inset-y-0 left-1/2 w-px -translate-x-1/2 bg-linear-to-b from-transparent via-secondary-500/45 to-transparent" />
 
       {TICKS.map((n) => (
         <div key={`x${n}`}>
           <span
             className="absolute top-1/2 h-2 w-px -translate-y-1/2 bg-secondary-500/45"
-            style={{ left: `calc(50% + ${n * 56}px)` }}
+            style={{ left: `calc(50% + ${n * UNIT}px)` }}
           />
           <span
             className="absolute left-1/2 h-px w-2 -translate-x-1/2 bg-secondary-500/45"
-            style={{ top: `calc(50% + ${n * 56}px)` }}
+            style={{ top: `calc(50% + ${n * UNIT}px)` }}
           />
         </div>
       ))}
@@ -47,19 +75,6 @@ export default function CartesianField() {
       <span className="absolute left-1/2 top-4 ml-3 font-mono text-[11px] text-secondary-500/50 sm:top-8">
         y
       </span>
-
-      {QUADRANTS.map((q) => (
-        <span
-          key={q.id}
-          className="absolute hidden font-mono text-[11px] tracking-widest text-secondary-500/30 lg:block"
-          style={{
-            [q.x]: "3.5rem",
-            [q.y]: "3.5rem",
-          }}
-        >
-          {q.label}
-        </span>
-      ))}
     </div>
   );
 }
