@@ -15,7 +15,6 @@ export default function DocumentLink({ label, href, kind, term, size }) {
   const handleClick = (event) => {
     if (!previewable) return;
     if (event.metaKey || event.ctrlKey || event.shiftKey) return;
-    if (kind === "pdf" && !window.matchMedia("(min-width: 768px)").matches) return;
     event.preventDefault();
     setOpen(true);
   };

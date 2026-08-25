@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Download, ExternalLink } from "lucide-react";
+import { Download, ExternalLink, FileText } from "lucide-react";
 import Modal from "./Modal";
 import OfficeDocument from "./OfficeDocument";
+import { useAuthedFile } from "@/app/lib/useAuthedFile";
+import { useMediaQuery } from "@/app/lib/useWideViewport";
 
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
@@ -34,6 +36,49 @@ export function canPreview(href, kind, previewHref = null) {
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
+function Notice({ children }) {
+  return (
+    <div className="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
+      <FileText size={26} strokeWidth={1.25} className="text-primary-500/25" />
+      <p className="text-[13px] text-primary-500/55">{children}</p>
+    </div>
+  );
+}
+
+// iOS Safari gomulu PDF'in yalnizca ilk sayfasini ciziyor ve kaydirmiyor. Dar
+// ekranda iframe yerine cihazin kendi goruntuleyicisine yolluyoruz.
+function PdfBody({ href, label }) {
+  const { url, status } = useAuthedFile(href, true);
+  const inline = useMediaQuery("(min-width: 768px)");
+
+  if (status === "loading" || status === "idle") return <Notice>Belge açılıyor…</Notice>;
+  if (status === "error" || !url) {
+    return <Notice>Bu belge açılamadı. İndirip görüntüleyebilirsiniz.</Notice>;
+  }
+
+  if (!inline) {
+    return (
+      <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+        <FileText size={30} strokeWidth={1.25} className="text-primary-500/25" />
+        <p className="text-[13px] text-primary-500/55">
+          Belge telefonda kendi görüntüleyicisinde daha iyi açılıyor.
+        </p>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1.5 rounded-lg bg-secondary-500 px-4 py-2 text-[13px] font-medium text-primary-500 transition-opacity hover:opacity-90"
+        >
+          Belgeyi aç
+          <ExternalLink className="size-3.5" />
+        </a>
+      </div>
+    );
+  }
+
+  return <iframe src={url} title={label} className="h-full w-full border-0" />;
+}
+
 export default function DocumentPreview({ open, onClose, label, href, kind, previewHref = null }) {
   if (!open) return null;
 
@@ -54,7 +99,7 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
           ) : isOffice ? (
             <OfficeDocument href={href} kind={kind} />
           ) : (
-            <iframe src={previewHref ?? href} title={label} className="w-full h-full border-0" />
+            <PdfBody href={previewHref ?? href} label={label} />
           )}
         </div>
 
