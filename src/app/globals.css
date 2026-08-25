@@ -4,19 +4,19 @@
   --font-sans: var(--font-inter);
   --font-mono: var(--font-jb-mono);
 
-  --color-background: #F4F5F7;
+  --color-background: #f4f5f7;
 
-  --color-primary-300: #626D9E;
-  --color-primary-400: #3D4775;
-  --color-primary-500: #1D2445;
-  --color-primary-600: #151C38;
-  --color-primary-700: #0D112B;
+  --color-primary-300: #626d9e;
+  --color-primary-400: #3d4775;
+  --color-primary-500: #1d2445;
+  --color-primary-600: #151c38;
+  --color-primary-700: #0d112b;
 
-  --color-secondary-300: #D4C5A9;
-  --color-secondary-400: #C2B08C;
-  --color-secondary-500: #AD976F;
-  --color-secondary-600: #8E7B5A;
-  --color-secondary-700: #6F5F45;
+  --color-secondary-300: #d4c5a9;
+  --color-secondary-400: #c2b08c;
+  --color-secondary-500: #ad976f;
+  --color-secondary-600: #8e7b5a;
+  --color-secondary-700: #6f5f45;
 }
 
 html {
@@ -46,15 +46,24 @@ summary:focus-visible,
   }
 }
 
-select {
+select:not(.inscribed-field) {
   -webkit-appearance: none;
   -moz-appearance: none;
   appearance: none;
   font-family: inherit !important;
 }
 
-select option {
+select:not(.inscribed-field) option {
   font-family: sans-serif !important;
+}
+
+select.inscribed-field {
+  color-scheme: dark;
+}
+
+select.inscribed-field option {
+  background-color: Canvas;
+  color: CanvasText;
 }
 
 .no-scrollbar {
@@ -204,4 +213,3 @@ select option {
 .announcement-body li::marker {
   color: var(--color-secondary-500);
 }
-
