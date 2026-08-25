@@ -46,9 +46,7 @@ summary:focus-visible,
   }
 }
 
-button:not(:disabled),
-label:has(> input[type="checkbox"]:not(:disabled)),
-label:has(> input[type="radio"]:not(:disabled)) {
+button:not(:disabled) {
   cursor: pointer;
 }
 
