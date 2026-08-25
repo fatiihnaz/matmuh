@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi } from "lucide-react";
+import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi, X } from "lucide-react";
 
 import Modal from "@/app/components/Modal";
 import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
+import { fetchMyEnrollments, unenroll } from "@/data/enrollments";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 import {
@@ -262,11 +263,81 @@ function ScheduleEntry({ entry, conflict }) {
   );
 }
 
-function ScheduleBody({ items }) {
-  if (items.length === 0) return <Empty>Bu hafta için ders kaydınız görünmüyor.</Empty>;
+// Kayitli dersler listesi haftalik gorunumun ustunde ayri duruyor: takvim satirlari
+// tarihli oluşumlar, birini kaldirmak dersin tamamini birakmak demek olurdu.
+function EnrolledCourses({ onChanged }) {
+  const { getAccessToken } = useAuth();
+  const [rows, setRows] = useState(null);
+  const [busy, setBusy] = useState(null);
+
+  const load = useCallback(async () => {
+    const token = await getAccessToken();
+    setRows(await fetchMyEnrollments(token));
+  }, [getAccessToken]);
+
+  useEffect(() => {
+    void load().catch(() => setRows([]));
+  }, [load]);
+
+  if (!rows || rows.length === 0) return null;
+
+  const remove = async (offeringId) => {
+    setBusy(offeringId);
+    try {
+      await unenroll(offeringId, await getAccessToken());
+      await load();
+      onChanged?.();
+    } finally {
+      setBusy(null);
+    }
+  };
+
+  return (
+    <div className="border-b border-primary-500/8 px-4 py-3">
+      <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/40">
+        Kayıtlı dersler
+      </p>
+      <ul className="flex flex-wrap gap-1.5">
+        {rows.map((row) => (
+          <li
+            key={row.id}
+            className="flex items-center gap-1.5 rounded-lg bg-primary-500/5 py-1 pl-2.5 pr-1"
+          >
+            <span className="text-[11px] text-primary-600">
+              <span className="font-mono font-semibold text-secondary-600">{row.lectureCode}</span>
+              {row.groupNumber != null && (
+                <span className="text-primary-500/45"> · Gr.{row.groupNumber}</span>
+              )}
+            </span>
+            <button
+              type="button"
+              onClick={() => void remove(row.offeringId)}
+              disabled={busy === row.offeringId}
+              aria-label={`${row.lectureCode} dersini programdan kaldır`}
+              className="rounded p-0.5 text-primary-500/30 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
+            >
+              <X size={12} strokeWidth={2} />
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+
+function ScheduleBody({ items, onChanged }) {
+  if (items.length === 0) {
+    return (
+      <>
+        <EnrolledCourses onChanged={onChanged} />
+        <Empty>Bu hafta için ders kaydınız görünmüyor.</Empty>
+      </>
+    );
+  }
 
   return (
     <div className="divide-y divide-primary-500/6">
+      <EnrolledCourses onChanged={onChanged} />
       {scheduleDays(items).map(({ date, blocks }) => (
         <div key={date} className="px-4 py-3">
           <div className="mb-2 flex items-baseline gap-2">
@@ -319,6 +390,9 @@ export default function ProfilePanel({ view, onClose }) {
   const [busyId, setBusyId] = useState(null);
   const [actionError, setActionError] = useState(null);
   const [confirmId, setConfirmId] = useState(null);
+  // Kayit kaldirilinca haftalik liste bayat kalir; sayaci artirmak yuklemeyi
+  // yeniden tetikliyor.
+  const [reloadKey, setReloadKey] = useState(0);
 
   async function removeNote(note) {
     setBusyId(note.id);
@@ -356,7 +430,7 @@ export default function ProfilePanel({ view, onClose }) {
     return () => {
       alive = false;
     };
-  }, [view, getAccessToken]);
+  }, [view, getAccessToken, reloadKey]);
 
   if (!view) return null;
 
@@ -398,6 +472,7 @@ export default function ProfilePanel({ view, onClose }) {
               onRemove={removeNote}
               onConfirm={setConfirmId}
               onNavigate={onClose}
+              onChanged={() => setReloadKey((n) => n + 1)}
             />
           )}
         </div>
