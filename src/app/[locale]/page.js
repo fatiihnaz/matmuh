@@ -26,7 +26,9 @@ export default async function LandingPage() {
     getNews({ limit: 3 }),
   ]);
 
-  const homeCategories = CONTENT_CATEGORIES.filter((c) => HOME_CATEGORY_IDS.includes(c.id));
+  const homeCategories = CONTENT_CATEGORIES.filter((c) =>
+    HOME_CATEGORY_IDS.includes(c.id),
+  );
 
   const highlights = [
     announcements[0] && {
@@ -60,7 +62,16 @@ export default async function LandingPage() {
             icon={Bell}
             buttonTitle="Tümünü Gör"
             href="/duyurular"
-            action={<NewRecordDialog collection="announcements" page="/duyurular/yeni" label="Yeni" title="Yeni Duyuru" submitLabel="Yayımla" />}
+            prefetch={false}
+            action={
+              <NewRecordDialog
+                collection="announcements"
+                page="/duyurular/yeni"
+                label="Yeni"
+                title="Yeni Duyuru"
+                submitLabel="Yayımla"
+              />
+            }
           >
             <div className="pb-3 mb-1 border-b border-primary-500/6">
               <CategoryChips categories={homeCategories} />
@@ -79,7 +90,16 @@ export default async function LandingPage() {
             icon={Newspaper}
             buttonTitle="Tümünü Gör"
             href="/haberler"
-            action={<NewRecordDialog collection="news" page="/haberler/yeni" label="Yeni" title="Yeni Haber" submitLabel="Yayımla" />}
+            prefetch={false}
+            action={
+              <NewRecordDialog
+                collection="news"
+                page="/haberler/yeni"
+                label="Yeni"
+                title="Yeni Haber"
+                submitLabel="Yayımla"
+              />
+            }
           >
             <NewsList items={news} />
           </MainCard>

@@ -6,7 +6,7 @@ import { formatTrDate } from "@/lib/date";
 export default function RecentAnnouncements({ items }) {
   if (!items.length) return null;
   return (
-    <MainCard title="Son Duyurular" buttonTitle="Tümü" href="/duyurular">
+    <MainCard title="Son Duyurular" buttonTitle="Tümü" href="/duyurular" prefetch={false}>
       <nav aria-label="Son duyurular" className="flex flex-col divide-y divide-primary-500/6">
         {items.map((item) => (
           <Link
