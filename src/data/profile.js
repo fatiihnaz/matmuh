@@ -55,7 +55,7 @@ export async function fetchMyNotes(token) {
     lectureCode: note.lecture?.code ?? null,
     lectureName: note.lecture?.name ?? null,
     href: sameOrigin(note.file?.fileUrl) ?? null,
-    previewHref: sameOrigin(note.previewUrl ?? note.file?.previewUrl) ?? null,
+    previewHref: sameOrigin(note.previewUrl) ?? null,
     extension: (note.file?.fileName?.split(".").pop() ?? "").toUpperCase(),
     viewCount: note.viewCount ?? 0,
     offering: toOffering(note.offering),

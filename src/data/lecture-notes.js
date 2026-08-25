@@ -68,7 +68,7 @@ function toNote(note) {
     title: note.title || file.fileName || "Adsız not",
     description: note.description || null,
     href: sameOrigin(file.fileUrl),
-    previewHref: sameOrigin(note.previewUrl ?? file.previewUrl) ?? null,
+    previewHref: sameOrigin(note.previewUrl) ?? null,
     fileName: file.fileName ?? null,
     extension: extensionOf(file.fileName),
     size: formatSize(file.fileSize),
