@@ -41,6 +41,9 @@ export default function CreditCard({ person, idx, coord, markClassName = "" }) {
         {person?.role && (
           <p className="mt-1 text-xs tracking-wide text-secondary-500">{person.role}</p>
         )}
+        {person?.about && (
+          <p className="mt-2.5 text-[12px] leading-relaxed text-neutral-400">{person.about}</p>
+        )}
       </div>
 
       {links.length > 0 && (

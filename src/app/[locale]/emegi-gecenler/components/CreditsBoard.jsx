@@ -73,6 +73,7 @@ export default function CreditsBoard() {
           itemSchema={{
             name: { blockType: "ShortText", defaultValue: "" },
             role: { blockType: "ShortText", defaultValue: "" },
+            about: { blockType: "LongText", defaultValue: "" },
             photo: { blockType: "Image", defaultValue: null },
             github: { blockType: "Link", defaultValue: { href: "", label: "" } },
             linkedin: { blockType: "Link", defaultValue: { href: "", label: "" } },
