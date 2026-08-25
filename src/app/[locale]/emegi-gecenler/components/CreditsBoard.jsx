@@ -59,7 +59,10 @@ export default function CreditsBoard() {
           merkeziyle ayni yere dusuyor ve baslik hicbir ekran boyunda kartlarla
           cakisamiyor — bolumun ortasina cizilen bir eksende ikisi kaciniimaz
           sekilde birbirine giriyordu. */}
-      <div className="relative flex w-full flex-1 items-center justify-center pt-10 lg:pt-14">
+      {/* Bosluk dolgu degil kenar bosluğu: `CartesianField` `inset-0` ile bu kutuyu
+          kapliyor, dolgu kullanilsa eksenler dolgu dahil ortalanir ve izgaradan
+          yarim dolgu kadar yukarida kalirdi. */}
+      <div className="relative flex w-full flex-1 items-center justify-center mt-10 lg:mt-14">
         <CartesianField />
 
         <EditableList
