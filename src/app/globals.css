@@ -46,6 +46,12 @@ summary:focus-visible,
   }
 }
 
+button:not(:disabled),
+label:has(> input[type="checkbox"]:not(:disabled)),
+label:has(> input[type="radio"]:not(:disabled)) {
+  cursor: pointer;
+}
+
 select:not(.inscribed-field) {
   -webkit-appearance: none;
   -moz-appearance: none;
