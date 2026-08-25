@@ -41,16 +41,16 @@ function DropdownItem({ item }) {
     <>
       {Icon && (
         <div className={`shrink-0 w-8 h-8 rounded-lg flex items-center justify-center transition-colors duration-200 ${isActive ? "bg-primary-500/10" : "bg-primary-500/4 group-hover:bg-primary-500/7"}`}>
-          <Icon size={14} strokeWidth={1.5} className={`transition-colors duration-200 ${isActive ? "text-primary-500" : "text-primary-500/45 group-hover:text-primary-500/70"}`}/>
+          <Icon size={14} strokeWidth={1.5} className={`transition-colors duration-200 ${isActive ? "text-primary-500" : "text-primary-500/70 group-hover:text-primary-500/70"}`}/>
         </div>
       )}
       <div className="flex flex-col">
         <span className={`flex items-center gap-1.5 text-xs transition-colors duration-200 text-primary-500 ${isActive? "font-medium" : "font-normal group-hover:text-primary-500"}`}>
           {t(item.label)}
-          {item.external && <ExternalLink size={10} strokeWidth={1.5} className="text-primary-500/35" />}
+          {item.external && <ExternalLink size={10} strokeWidth={1.5} className="text-primary-500/70" />}
         </span>
         {item.description && (
-          <span className="text-[10px] text-primary-500/40 font-normal leading-tight mt-0.5">
+          <span className="text-[10px] text-primary-500/70 font-normal leading-tight mt-0.5">
             {t(item.description)}
           </span>
         )}
@@ -94,7 +94,7 @@ function CategorizedDropdown({ items }) {
       {items.map((group, groupIndex) => (
         <motion.div key={group.category} variants={staggerItem} className={`flex-1 px-2 ${ groupIndex > 0 ? "border-l border-black/5" : ""}`}>
           <div className="px-3 pt-1 pb-1.5">
-            <span className="text-[10px] font-semibold uppercase tracking-wider text-primary-500/35">
+            <span className="text-[10px] font-semibold uppercase tracking-wider text-primary-500/70">
               {t(group.category)}
             </span>
           </div>

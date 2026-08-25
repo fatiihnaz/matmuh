@@ -29,7 +29,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-secondary-500/10 px-3 py-1.5 text-[12px] font-medium text-secondary-600 transition-colors hover:bg-secondary-500/15"
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-secondary-500/10 px-3 py-1.5 text-[12px] font-medium text-secondary-700 transition-colors hover:bg-secondary-500/15"
       >
         <Plus className="size-3.5" />
         {label}
@@ -47,7 +47,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
             <h2 className="flex-1 text-sm font-semibold text-primary-600">{title}</h2>
             <Link
               href={href(page)}
-              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-secondary-600"
+              className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/70 transition-colors hover:text-secondary-700"
             >
               Sayfada aç
               <ExternalLink className="size-3" />
@@ -55,7 +55,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-primary-500/5 hover:text-primary-500"
+              className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/70 transition-colors hover:bg-primary-500/5 hover:text-primary-500"
             >
               Vazgeç
             </button>
@@ -80,12 +80,12 @@ function Composer({ collection, submitLabel, onCreated }) {
   const meta = collections.find((entry) => entry.collectionKey === collection);
 
   if (isLoading) {
-    return <p className="p-5 text-[12px] text-primary-500/45">Yükleniyor…</p>;
+    return <p className="p-5 text-[12px] text-primary-500/70">Yükleniyor…</p>;
   }
 
   if (!meta?.schema || !meta.canCreate) {
     return (
-      <p className="p-5 text-[13px] text-primary-500/60">
+      <p className="p-5 text-[13px] text-primary-500/70">
         Bu koleksiyonda kayıt oluşturma yetkiniz yok.
       </p>
     );
@@ -125,8 +125,8 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
             onClick={() => setPane(entry.id)}
             className={`rounded-md px-3 py-1.5 text-[12px] font-medium transition-colors ${
               pane === entry.id
-                ? "bg-secondary-500/10 text-secondary-600"
-                : "text-primary-500/45 hover:bg-primary-500/5"
+                ? "bg-secondary-500/10 text-secondary-700"
+                : "text-primary-500/70 hover:bg-primary-500/5"
             }`}
           >
             {entry.label}
@@ -172,7 +172,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
                 deleteDraft();
               }}
               disabled={isPending}
-              className="rounded-md px-3 py-1.5 text-[12px] font-medium text-primary-500/45 transition-colors hover:bg-primary-500/5 hover:text-primary-500 disabled:opacity-40"
+              className="rounded-md px-3 py-1.5 text-[12px] font-medium text-primary-500/70 transition-colors hover:bg-primary-500/5 hover:text-primary-500 disabled:opacity-40"
             >
               Taslağı temizle
             </button>
@@ -181,7 +181,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
             type="button"
             onClick={() => submit(onCreated)}
             disabled={isPending}
-            className="rounded-md bg-secondary-500/10 px-4 py-1.5 text-[12px] font-medium text-secondary-600 transition-colors hover:bg-secondary-500/15 disabled:opacity-40"
+            className="rounded-md bg-secondary-500/10 px-4 py-1.5 text-[12px] font-medium text-secondary-700 transition-colors hover:bg-secondary-500/15 disabled:opacity-40"
           >
             {isPending ? "Kaydediliyor…" : submitLabel}
           </button>

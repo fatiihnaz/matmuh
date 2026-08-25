@@ -99,7 +99,7 @@ export default function NavSearch({ open, onOpen, onClose }) {
       )}
 
       {term.length >= MIN_CHARS && !hasResults && (
-        <div className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] rounded-xl border border-primary-500/10 bg-white px-4 py-3 text-center text-[13px] text-primary-500/45 shadow-2xl shadow-primary-700/30">
+        <div className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] rounded-xl border border-primary-500/10 bg-white px-4 py-3 text-center text-[13px] text-primary-500/70 shadow-2xl shadow-primary-700/30">
           Sonuç bulunamadı.
         </div>
       )}

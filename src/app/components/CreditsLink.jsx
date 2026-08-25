@@ -12,7 +12,7 @@ export default function CreditsLink() {
   return (
     <Link
       href={href("/emegi-gecenler")}
-      className="text-neutral-500 underline-offset-2 transition-colors hover:text-secondary-500 hover:underline"
+      className="text-neutral-500 underline-offset-2 transition-colors hover:text-secondary-700 hover:underline"
     >
       {t("Emeği Geçenler")}
     </Link>

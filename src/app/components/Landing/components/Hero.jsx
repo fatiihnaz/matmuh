@@ -309,7 +309,7 @@ export default function Hero({ highlights = [] }) {
                   </span>
                   <ChevronRight
                     size={15}
-                    className="shrink-0 text-white/30 transition-colors group-hover:text-secondary-400"
+                    className="shrink-0 text-white/60 transition-colors group-hover:text-secondary-400"
                   />
                 </Link>
               ))}

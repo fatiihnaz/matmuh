@@ -17,7 +17,7 @@ export default function MainCard({ title, buttonTitle, href, action, children, d
                     <div className="flex items-center gap-2 shrink-0">
                         {action}
                         {buttonTitle && href && (
-                            <Link href={href} className="group text-xs text-secondary-500 hover:text-secondary-600 flex items-center gap-1 transition-colors">
+                            <Link href={href} className="group text-xs text-secondary-700 hover:text-secondary-700 flex items-center gap-1 transition-colors">
                                 {buttonTitle}
                                 <ChevronRight size={12} className="transition-transform duration-200 group-hover:translate-x-0.5"/>
                             </Link>

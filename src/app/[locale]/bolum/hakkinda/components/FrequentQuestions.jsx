@@ -24,7 +24,7 @@ function Question({ item }) {
         <ChevronDown
           size={15}
           strokeWidth={2}
-          className={`shrink-0 text-primary-500/35 transition-transform duration-200 ${
+          className={`shrink-0 text-primary-500/70 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -32,12 +32,12 @@ function Question({ item }) {
 
       <Collapse open={open}>
         <div className="pb-3.5 pr-8">
-          <p className="text-[13px] leading-relaxed text-primary-500/65">{item?.answer}</p>
+          <p className="text-[13px] leading-relaxed text-primary-500/70">{item?.answer}</p>
           {href && (
             <Link
               href={href}
               tabIndex={open ? undefined : -1}
-              className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-secondary-500 transition-colors hover:text-secondary-600"
+              className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-secondary-700 transition-colors hover:text-secondary-700"
             >
               {item?.link?.label || "Detaylı bilgi"}
               <ArrowRight size={13} strokeWidth={2} />

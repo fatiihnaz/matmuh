@@ -30,7 +30,7 @@ export default async function NewsPage({ searchParams }) {
       <PageLayout>
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between gap-3 px-1">
-            <span className="text-xs text-primary-500/40">{total} haber</span>
+            <span className="text-xs text-primary-500/70">{total} haber</span>
             <NewRecordDialog collection="news" page="/haberler/yeni" label="Yeni haber" title="Yeni Haber" submitLabel="Yayımla" />
           </div>
 
@@ -41,7 +41,7 @@ export default async function NewsPage({ searchParams }) {
               ))}
             </div>
           ) : (
-            <div className="py-16 text-center text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-xl">
+            <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
               Henüz haber yayımlanmadı.
             </div>
           )}

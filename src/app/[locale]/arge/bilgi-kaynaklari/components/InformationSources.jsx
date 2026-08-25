@@ -54,7 +54,7 @@ function CategoryHeading({ label, count }) {
         <h3 className="text-[13px] font-bold uppercase tracking-[0.15em] text-primary-800">
           {label}
         </h3>
-        <span className="flex items-center justify-center px-2 py-0.5 rounded-xl bg-primary-500/5 text-[10px] font-bold text-primary-500/50">
+        <span className="flex items-center justify-center px-2 py-0.5 rounded-xl bg-primary-500/5 text-[10px] font-bold text-primary-500/70">
           {count}
         </span>
       </div>
@@ -80,19 +80,19 @@ function SourceCard({ item, index }) {
       <div className="absolute inset-0 bg-linear-to-br from-secondary-500/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
       <div className="flex items-center gap-3.5 z-10 overflow-hidden">
-        <div className="shrink-0 w-10 h-10 rounded-xl bg-primary-500/4 border border-primary-500/5 flex items-center justify-center text-primary-500/50 group-hover:bg-secondary-500 group-hover:border-secondary-500 group-hover:text-white transition-all duration-300">
+        <div className="shrink-0 w-10 h-10 rounded-xl bg-primary-500/4 border border-primary-500/5 flex items-center justify-center text-primary-500/70 group-hover:bg-secondary-500 group-hover:border-secondary-500 group-hover:text-white transition-all duration-300">
           {icon(item.icon, 18)}
         </div>
 
         <div className="flex flex-col min-w-0 pr-2">
-          <span className="text-[13px] font-semibold text-primary-900/85 group-hover:text-secondary-600 leading-snug transition-colors duration-300 line-clamp-2">
+          <span className="text-[13px] font-semibold text-primary-900/85 group-hover:text-secondary-700 leading-snug transition-colors duration-300 line-clamp-2">
             {item.link?.label}
           </span>
         </div>
       </div>
 
       <div className="shrink-0 pl-1 z-10 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">
-        <div className="w-7 h-7 rounded-xl bg-secondary-500/10 flex items-center justify-center text-secondary-500 group-hover:bg-secondary-500 group-hover:text-white transition-colors duration-300">
+        <div className="w-7 h-7 rounded-xl bg-secondary-500/10 flex items-center justify-center text-secondary-700 group-hover:bg-secondary-500 group-hover:text-white transition-colors duration-300">
           <ArrowUpRight size={14} strokeWidth={2} />
         </div>
       </div>

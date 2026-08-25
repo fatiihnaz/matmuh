@@ -26,7 +26,7 @@ export function MissionVision() {
       <div className="flex flex-col md:flex-row gap-8 w-full">
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-3">
-            <Target className="size-5 text-secondary-500" />
+            <Target className="size-5 text-secondary-700" />
             <EditableRegion
               blockPath="mission.label"
               blockType="ShortText"
@@ -40,12 +40,12 @@ export function MissionVision() {
             blockType="LongText"
             defaultValue="Matematiksel düşünce ve mühendislik yaklaşımını birleştirerek, toplumun ve endüstrinin ihtiyaç duyduğu nitelikli bilim insanları ve mühendisler yetiştirmek; evrensel bilime katkıda bulunmak."
             as="p"
-            className="text-[13px] text-primary-500/60 leading-relaxed"
+            className="text-[13px] text-primary-500/70 leading-relaxed"
           />
         </div>
         <div className="flex-1">
           <div className="flex items-center gap-2 mb-3">
-            <Lightbulb className="size-5 text-secondary-500" />
+            <Lightbulb className="size-5 text-secondary-700" />
             <EditableRegion
               blockPath="vision.label"
               blockType="ShortText"
@@ -59,7 +59,7 @@ export function MissionVision() {
             blockType="LongText"
             defaultValue="Matematik mühendisliği alanında ulusal ve uluslararası düzeyde öncü, yenilikçi araştırmalarıyla tanınan, tercih edilen bir bölüm olmak."
             as="p"
-            className="text-[13px] text-primary-500/60 leading-relaxed"
+            className="text-[13px] text-primary-500/70 leading-relaxed"
           />
         </div>
       </div>
@@ -84,7 +84,7 @@ export function EducationalGoals() {
           blockType="LongText"
           defaultValue="Matematik Mühendisliği, temel ve uygulamalı matematik bilgisiyle mühendislik, ekonomi ve sosyal hayatta karşılaşılan olayların matematiksel modelini kuran, bu modellere çözüm üreten ve bu amaçla bilgisayar yazılım ve uygulamaları geliştiren mühendisler yetiştirir."
           as="p"
-          className="text-[13px] text-primary-500/60 leading-relaxed"
+          className="text-[13px] text-primary-500/70 leading-relaxed"
         />
         <EditableList
           blockPath="goals.items"
@@ -113,7 +113,7 @@ export function EducationalGoals() {
               key={index}
               className="flex items-start gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5"
             >
-              <span className="font-mono text-[11px] font-bold text-secondary-500 shrink-0 mt-0.5">
+              <span className="font-mono text-[11px] font-bold text-secondary-700 shrink-0 mt-0.5">
                 {item.code}
               </span>
               <span className="text-[13px] text-primary-500/70 leading-relaxed">{item.text}</span>
@@ -168,14 +168,14 @@ Matematikçi`,
         {(group, index) => (
           <div key={index} className="flex-1">
             <div className="flex items-center gap-2 mb-3">
-              <Briefcase className="size-4 text-secondary-500" />
+              <Briefcase className="size-4 text-secondary-700" />
               <span className="font-semibold text-[13px] text-primary-500">{group.label}</span>
             </div>
             <ul className="flex flex-col gap-1.5">
               {lines(group.items).map((item, itemIndex) => (
                 <li
                   key={itemIndex}
-                  className="flex items-start gap-2 text-[13px] text-primary-500/60 leading-relaxed"
+                  className="flex items-start gap-2 text-[13px] text-primary-500/70 leading-relaxed"
                 >
                   <span className="w-1 h-1 rounded-full bg-secondary-500/50 shrink-0 mt-2" />
                   {item}
@@ -242,7 +242,7 @@ export function Milestones() {
                 />
               </div>
               <div className="flex-1">
-                <div className="font-mono text-[14px] font-bold text-secondary-500 leading-none">
+                <div className="font-mono text-[14px] font-bold text-secondary-700 leading-none">
                   {item.year}
                 </div>
                 <div className="text-[13px] font-medium text-primary-500 mt-1 leading-relaxed">
@@ -271,7 +271,7 @@ export function InternshipSummary() {
       href="/egitim/staj"
     >
       <div className="flex flex-col gap-3 pt-2">
-        <div className="announcement-body text-[13px] text-primary-500/60 leading-relaxed">
+        <div className="announcement-body text-[13px] text-primary-500/70 leading-relaxed">
           <EditableRegion
             blockPath="internship.intro"
             blockType="RichText"
@@ -310,18 +310,18 @@ export function InternshipSummary() {
               className="p-4 rounded-lg bg-primary-500/2 border border-primary-500/5"
             >
               <div className="flex items-center gap-2 mb-1.5 flex-wrap">
-                <GraduationCap className="size-4 text-secondary-500 shrink-0" />
+                <GraduationCap className="size-4 text-secondary-700 shrink-0" />
                 <span className="font-mono text-[12px] font-semibold text-primary-500">
                   {item.code}
                 </span>
-                <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-semibold bg-secondary-500/10 text-secondary-600">
+                <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-semibold bg-secondary-500/10 text-secondary-700">
                   {item.days}
                 </span>
               </div>
               <div className="text-[13px] font-medium text-primary-500 leading-snug">
                 {item.title}
               </div>
-              <div className="text-[11px] text-primary-500/45 mt-1 leading-relaxed">
+              <div className="text-[11px] text-primary-500/70 mt-1 leading-relaxed">
                 {item.note}
               </div>
             </div>
@@ -344,7 +344,7 @@ export function MinorPrograms() {
       }
     >
       <div className="flex flex-col gap-3 pt-2">
-        <div className="announcement-body text-[13px] text-primary-500/60 leading-relaxed">
+        <div className="announcement-body text-[13px] text-primary-500/70 leading-relaxed">
           <EditableRegion
             blockPath="minor.body"
             blockType="RichText"
@@ -356,7 +356,7 @@ export function MinorPrograms() {
           blockType="LongText"
           defaultValue="Başvuru koşulları ve o yıl açılan program listesi her akademik yıl güncellendiğinden, güncel bilgi için Öğrenci İşleri Daire Başkanlığı duyurularını takip ediniz."
           as="p"
-          className="text-[12px] text-primary-500/45 leading-relaxed"
+          className="text-[12px] text-primary-500/70 leading-relaxed"
         />
         <MinorLink />
       </div>
@@ -366,7 +366,7 @@ export function MinorPrograms() {
 
 function MinorLink() {
   return (
-    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-secondary-500">
+    <span className="inline-flex items-center gap-1.5 text-[12px] font-medium text-secondary-700">
       <EditableRegion
         blockPath="minor.link"
         blockType="Link"
@@ -374,7 +374,7 @@ function MinorLink() {
           href: "https://ogi.yildiz.edu.tr",
           label: "Öğrenci İşleri Daire Başkanlığı",
         }}
-        className="hover:text-secondary-600 transition-colors"
+        className="hover:text-secondary-700 transition-colors"
       />
       <ArrowUpRight size={13} strokeWidth={2} />
     </span>

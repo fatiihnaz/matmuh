@@ -90,10 +90,10 @@ export default function DepartmentFacts({ staff, curriculum }) {
                   <span className="font-mono text-base font-semibold leading-none text-secondary-500 sm:text-xl">
                     <CountUp value={fact.value} delay={0.2 + index * 0.1} />
                   </span>
-                  <span className="text-[11px] font-medium tracking-wide text-white/40 sm:mt-1 sm:block">
+                  <span className="text-[11px] font-medium tracking-wide text-white/60 sm:mt-1 sm:block">
                     {fact.label}
                   </span>
-                  <span className="text-[10px] leading-snug text-white/25 sm:mt-0.5 sm:block">
+                  <span className="text-[10px] leading-snug text-white/60 sm:mt-0.5 sm:block">
                     {fact.sub}
                   </span>
                 </div>

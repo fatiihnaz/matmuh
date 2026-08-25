@@ -160,11 +160,11 @@ export default function MobileNavbar({ isOpen, onClose }) {
 
               <div className="flex items-center justify-between gap-3 text-[11px]">
                 <div className="flex items-center gap-1.5 tracking-wide">
-                  <Link href={localePath(slug, "tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/40 hover:text-white transition-colors"}>
+                  <Link href={localePath(slug, "tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
                     TR
                   </Link>
-                  <span className="text-white/25 font-light">/</span>
-                  <Link href={localePath(slug, "en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/40 hover:text-white transition-colors"}>
+                  <span className="text-white/60 font-light">/</span>
+                  <Link href={localePath(slug, "en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
                     EN
                   </Link>
                 </div>

@@ -13,15 +13,15 @@ function Card({ item, label, direction }) {
       }`}
     >
       {forward ? (
-        <ArrowRight className="size-4 shrink-0 text-primary-500/30 group-hover:text-secondary-500 transition-colors" />
+        <ArrowRight className="size-4 shrink-0 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
       ) : (
-        <ArrowLeft className="size-4 shrink-0 text-primary-500/30 group-hover:text-secondary-500 transition-colors" />
+        <ArrowLeft className="size-4 shrink-0 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
       )}
       <span className="min-w-0">
-        <span className="block text-[10px] font-semibold uppercase tracking-widest text-primary-500/35">
+        <span className="block text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
           {label}
         </span>
-        <span className="block mt-0.5 text-[13px] text-primary-500 line-clamp-2 group-hover:text-secondary-600 transition-colors">
+        <span className="block mt-0.5 text-[13px] text-primary-500 line-clamp-2 group-hover:text-secondary-700 transition-colors">
           {item.title}
         </span>
       </span>

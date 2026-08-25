@@ -26,7 +26,7 @@ const RELATED = [
 
 const GRID = "grid grid-cols-1 xl:grid-cols-2 gap-2";
 const CATEGORY =
-  "xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/45 mt-3 first:mt-0";
+  "xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70 mt-3 first:mt-0";
 
 function FormRow({ item, previous }) {
   return (

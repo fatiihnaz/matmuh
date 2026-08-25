@@ -50,13 +50,13 @@ function CommissionCard({ commission }) {
           <span className="block text-[13px] font-semibold text-primary-500 leading-snug">
             {commission.name}
           </span>
-          <span className="block text-[11px] text-primary-500/45 wrap-break-word">
+          <span className="block text-[11px] text-primary-500/70 wrap-break-word">
             {chair ? chair : `${total} üye`}
           </span>
         </span>
-        <span className="shrink-0 text-[10px] text-primary-500/35">{total}</span>
+        <span className="shrink-0 text-[10px] text-primary-500/70">{total}</span>
         <ChevronDown
-          className={`shrink-0 size-4 text-primary-500/30 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
+          className={`shrink-0 size-4 text-primary-500/70 transition-transform duration-200 ${open ? "rotate-180" : ""}`}
         />
       </button>
 
@@ -68,7 +68,7 @@ function CommissionCard({ commission }) {
               <span className="text-[12px] text-primary-500/70 leading-snug">
                 {member.label}
                 {member.tag && (
-                  <span className="ml-1.5 text-[10px] font-medium text-secondary-500">
+                  <span className="ml-1.5 text-[10px] font-medium text-secondary-700">
                     {member.tag}
                   </span>
                 )}

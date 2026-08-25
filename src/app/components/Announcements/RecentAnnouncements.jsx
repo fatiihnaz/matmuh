@@ -14,10 +14,10 @@ export default function RecentAnnouncements({ items }) {
             href={announcementHref(item)}
             className="group flex flex-col gap-0.5 py-2.5 px-2 -mx-2 rounded-lg hover:bg-gray-50 transition-colors"
           >
-            <time dateTime={item.publishedAt} className="text-[10px] font-medium text-secondary-500">
+            <time dateTime={item.publishedAt} className="text-[10px] font-medium text-secondary-700">
               {formatTrDate(item.publishedAt)}
             </time>
-            <span className="text-[13px] text-primary-500 leading-snug line-clamp-2 group-hover:text-secondary-600 transition-colors">
+            <span className="text-[13px] text-primary-500 leading-snug line-clamp-2 group-hover:text-secondary-700 transition-colors">
               {item.title}
             </span>
           </Link>

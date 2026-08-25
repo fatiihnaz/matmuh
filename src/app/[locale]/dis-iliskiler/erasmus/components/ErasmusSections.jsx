@@ -29,7 +29,7 @@ function CoordinatorRow({ person, idx }) {
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}
         </span>
-        <span className="block text-[11px] text-primary-500/45 wrap-break-word">
+        <span className="block text-[11px] text-primary-500/70 wrap-break-word">
           Oda {person.office} · {person.phone}
         </span>
       </span>
@@ -37,7 +37,7 @@ function CoordinatorRow({ person, idx }) {
         <a
           href={`mailto:${person.email}`}
           title="E-posta gönder"
-          className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/30 hover:bg-secondary-500/10 hover:text-secondary-500 transition-colors"
+          className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />
         </a>
@@ -82,7 +82,7 @@ export function Coordinators({ initialStaff = [] }) {
         >
           {(item, index) => (
             <div key={index} className="flex flex-col gap-2">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
                 {item.role}
               </span>
               <div className="flex flex-col gap-1.5">
@@ -115,27 +115,27 @@ function AgreementRow({ item }) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            className="group-hover:text-secondary-600 hover:underline"
+            className="group-hover:text-secondary-700 hover:underline"
           >
             {item.institution}
           </a>
         ) : (
           item.institution
         )}
-        <span className="sm:hidden block mt-0.5 text-[11px] text-primary-500/45">
+        <span className="sm:hidden block mt-0.5 text-[11px] text-primary-500/70">
           {item.country} · <span className="font-mono">{item.code}</span>
         </span>
       </div>
-      <div className="hidden sm:block text-[12px] text-primary-500/55 whitespace-nowrap">
+      <div className="hidden sm:block text-[12px] text-primary-500/70 whitespace-nowrap">
         {item.country}
       </div>
-      <div className="hidden sm:block text-[11px] font-mono text-primary-500/45 whitespace-nowrap">
+      <div className="hidden sm:block text-[11px] font-mono text-primary-500/70 whitespace-nowrap">
         {item.code}
       </div>
       <div className="hidden sm:block">
         {href && (
           <a href={href} target="_blank" rel="noopener noreferrer" title="Anlaşmayı indir">
-            <FileDown className="size-3.5 text-primary-500/25 group-hover:text-secondary-500 transition-colors" />
+            <FileDown className="size-3.5 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
           </a>
         )}
       </div>
@@ -158,7 +158,7 @@ export function Agreements() {
       }
       count={items.length}
       action={
-        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-600 px-2 py-1 rounded-sm bg-secondary-500/10">
+        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-700 px-2 py-1 rounded-sm bg-secondary-500/10">
           <EditableRegion
             blockPath="agreements.period"
             blockType="ShortText"
@@ -169,7 +169,7 @@ export function Agreements() {
     >
       <Panel padding="p-0" className="overflow-hidden">
         <div
-          className={`hidden sm:grid ${COLUMNS} gap-x-5 px-5 py-3 border-b border-primary-500/8 text-[10px] font-semibold uppercase tracking-widest text-primary-500/45`}
+          className={`hidden sm:grid ${COLUMNS} gap-x-5 px-5 py-3 border-b border-primary-500/8 text-[10px] font-semibold uppercase tracking-widest text-primary-500/70`}
         >
           <div>Kurum</div>
           <div>Ülke</div>
@@ -215,7 +215,7 @@ export function Agreements() {
         blockType="LongText"
         defaultValue="Kontenjanlar, dil koşulları ve başvuru tarihleri anlaşma dosyasında yer alır. Güncel duyurular için YTÜ Erasmus+ Koordinatörlüğü sayfası takip edilmelidir."
         as="p"
-        className="text-[12px] text-primary-500/45 leading-relaxed"
+        className="text-[12px] text-primary-500/70 leading-relaxed"
       />
 
       <EditableList
@@ -266,13 +266,13 @@ export function ErasmusInternship() {
     >
       <Panel>
         <div className="flex gap-3">
-          <Briefcase className="size-4 shrink-0 mt-0.5 text-secondary-500" />
+          <Briefcase className="size-4 shrink-0 mt-0.5 text-secondary-700" />
           <EditableRegion
             blockPath="internship.body"
             blockType="LongText"
             defaultValue="Erasmus+ programı kapsamında yurt dışında staj yapılabilir. Bölüm Staj Komisyonunun uygun görüşü, bölüm başkanlığının önerisi ve Fakülte Yönetim Kurulu kararı gerekir; bu kapsamda en az 60 iş günü staj yapılması esastır."
             as="p"
-            className="text-[13px] text-primary-500/60 leading-relaxed"
+            className="text-[13px] text-primary-500/70 leading-relaxed"
           />
         </div>
       </Panel>
@@ -293,7 +293,7 @@ export function ErasmusSidebarCards() {
         }
       >
         <div className="flex items-center gap-2 text-[13px]">
-          <Mail className="size-4 shrink-0 text-secondary-500" />
+          <Mail className="size-4 shrink-0 text-secondary-700" />
           <EditableRegion
             blockPath="contact.email"
             blockType="Link"
@@ -301,7 +301,7 @@ export function ErasmusSidebarCards() {
               href: "mailto:mtmerasmus@yildiz.edu.tr",
               label: "mtmerasmus@yildiz.edu.tr",
             }}
-            className="min-w-0 truncate text-primary-500 hover:text-secondary-600 transition-colors"
+            className="min-w-0 truncate text-primary-500 hover:text-secondary-700 transition-colors"
           />
         </div>
       </MainCard>
@@ -339,9 +339,9 @@ export function ErasmusSidebarCards() {
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="group flex items-center gap-2 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors"
               >
-                <Globe className="size-4 shrink-0 text-primary-500/60" />
+                <Globe className="size-4 shrink-0 text-primary-500/70" />
                 <span className="flex-1">{item.link?.label}</span>
-                <ExternalLink className="size-3 shrink-0 text-primary-500/25 group-hover:text-secondary-500 transition-colors" />
+                <ExternalLink className="size-3 shrink-0 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
               </a>
             );
           }}

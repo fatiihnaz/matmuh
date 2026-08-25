@@ -49,7 +49,7 @@ export default function DersProgramiPage({ entries: all = [], term }) {
                   </button>
                 ))}
               </div>
-              <div className="flex items-center gap-2 text-primary-500/40">
+              <div className="flex items-center gap-2 text-primary-500/70">
                 <CalendarDays size={14} strokeWidth={1.5} />
                 <span style={{ fontSize: "0.75rem" }}>
                   {entries.length} ders bloğu

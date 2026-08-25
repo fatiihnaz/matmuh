@@ -6,8 +6,8 @@ function Chip({ href, active, children, count }) {
       href={href}
       className={`inline-flex shrink-0 items-center gap-1.5 px-2.5 py-1 rounded-md border text-xs font-medium whitespace-nowrap transition-colors ${
         active
-          ? "bg-secondary-500/12 border-secondary-500/20 text-secondary-600"
-          : "border-transparent text-primary-500/45 hover:bg-primary-500/4 hover:text-primary-500/70"
+          ? "bg-secondary-500/12 border-secondary-500/20 text-secondary-700"
+          : "border-transparent text-primary-500/70 hover:bg-primary-500/4 hover:text-primary-500/70"
       }`}
     >
       {children}

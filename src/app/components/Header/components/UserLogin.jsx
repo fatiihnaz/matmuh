@@ -135,7 +135,7 @@ export default function UserLogin() {
                   {name}
                 </p>
                 {email && (
-                  <p className="mt-0.5 text-[11px] text-primary-500/45 leading-snug break-all">
+                  <p className="mt-0.5 text-[11px] text-primary-500/70 leading-snug break-all">
                     {email}
                   </p>
                 )}
@@ -147,7 +147,7 @@ export default function UserLogin() {
                 {roles.map((role) => (
                   <span
                     key={role}
-                    className="text-[10px] font-medium text-secondary-600 bg-secondary-500/10 px-2 py-0.5 rounded-full"
+                    className="text-[10px] font-medium text-secondary-700 bg-secondary-500/10 px-2 py-0.5 rounded-full"
                   >
                     {role}
                   </span>
@@ -169,7 +169,7 @@ export default function UserLogin() {
                   }}
                   className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                 >
-                  <Icon size={14} className="shrink-0 text-secondary-500" />
+                  <Icon size={14} className="shrink-0 text-secondary-700" />
                   <span className="flex-1 text-left">{label}</span>
                 </button>
               ))}
@@ -177,7 +177,7 @@ export default function UserLogin() {
 
             {(canEdit || isAdmin) && (
               <div className="p-1.5 border-t border-primary-500/8">
-                <span className="block px-2.5 pb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500/35">
+                <span className="block px-2.5 pb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
                   {t("Yönetim")}
                 </span>
                 {isAdmin && (
@@ -189,7 +189,7 @@ export default function UserLogin() {
                     }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                   >
-                    <ClipboardCheck size={14} className="shrink-0 text-secondary-500" />
+                    <ClipboardCheck size={14} className="shrink-0 text-secondary-700" />
                     <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
                   </button>
                 )}
@@ -201,7 +201,7 @@ export default function UserLogin() {
                   onClick={() => setEditing(!editing)}
                   className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                 >
-                  <PencilLine size={14} className="shrink-0 text-secondary-500" />
+                  <PencilLine size={14} className="shrink-0 text-secondary-700" />
                   <span className="flex-1 text-left">{t("Düzenleme modu")}</span>
                   <span
                     className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${

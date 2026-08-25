@@ -74,7 +74,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
               transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
               className="flex shrink-0 items-center gap-2 rounded-xl border border-white/15 bg-white px-4 shadow-2xl shadow-primary-700/40 transition-[background-color,border-color] duration-300 focus-within:border-secondary-500/70"
             >
-              <Search size={18} className="shrink-0 text-primary-500/35" />
+              <Search size={18} className="shrink-0 text-primary-500/70" />
               <input
                 ref={inputRef}
                 type="search"
@@ -87,13 +87,13 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
                 aria-expanded={hasResults}
                 aria-controls={listId}
                 autoComplete="off"
-                className="w-full bg-transparent py-2.5 text-sm text-primary-600 outline-none! placeholder:text-primary-500/35"
+                className="w-full bg-transparent py-2.5 text-sm text-primary-600 outline-none! placeholder:text-primary-500/70"
               />
               <button
                 type="button"
                 onClick={close}
                 aria-label="Aramayı kapat"
-                className="shrink-0 rounded-lg p-1.5 text-primary-500/35 transition-colors hover:bg-primary-500/6 hover:text-primary-500"
+                className="shrink-0 rounded-lg p-1.5 text-primary-500/70 transition-colors hover:bg-primary-500/6 hover:text-primary-500"
               >
                 <X size={18} />
               </button>

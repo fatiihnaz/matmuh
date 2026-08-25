@@ -23,8 +23,8 @@ function PdfBody({ href, label }) {
 
   return (
     <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
-      <FileText size={30} strokeWidth={1.25} className="text-primary-500/25" />
-      <p className="text-[13px] text-primary-500/55">
+      <FileText size={30} strokeWidth={1.25} className="text-primary-500/70" />
+      <p className="text-[13px] text-primary-500/70">
         Belge telefonda kendi görüntüleyicisinde daha iyi açılıyor.
       </p>
       <a
@@ -64,7 +64,7 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
         </div>
 
         <div className="shrink-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 pt-3">
-          <span className="w-full sm:w-auto sm:flex-1 min-w-0 truncate text-center sm:text-left text-[11px] text-white/45">
+          <span className="w-full sm:w-auto sm:flex-1 min-w-0 truncate text-center sm:text-left text-[11px] text-white/60">
             {label}
           </span>
 

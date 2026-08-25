@@ -120,7 +120,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
           </span>
           <span
             className={`min-w-0 flex-1 truncate text-[11px] leading-snug font-medium ${
-              entry.cont && !active ? "text-primary-500/50" : "text-primary-600"
+              entry.cont && !active ? "text-primary-500/70" : "text-primary-600"
             }`}
           >
             {entry.name}
@@ -130,26 +130,26 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
               size={9}
               strokeWidth={2.25}
               aria-hidden
-              className="shrink-0 self-center text-secondary-600"
+              className="shrink-0 self-center text-secondary-700"
             />
           )}
           {entry.english && (
-            <span className="shrink-0 font-mono text-[8.5px] font-semibold tracking-wide text-secondary-600">
+            <span className="shrink-0 font-mono text-[8.5px] font-semibold tracking-wide text-secondary-700">
               EN
             </span>
           )}
-          <span className="shrink-0 font-mono text-[9px] text-primary-500/40">
+          <span className="shrink-0 font-mono text-[9px] text-primary-500/70">
             Gr.{entry.group}
           </span>
           <ChevronDown
             size={10}
             strokeWidth={2.25}
-            className={`shrink-0 self-center text-primary-500/30 transition-transform ${active ? "rotate-180" : ""}`}
+            className={`shrink-0 self-center text-primary-500/70 transition-transform ${active ? "rotate-180" : ""}`}
           />
         </span>
 
         {detailed && !active && (
-          <span className="mt-px block truncate text-[9.5px] leading-snug text-primary-500/45">
+          <span className="mt-px block truncate text-[9.5px] leading-snug text-primary-500/70">
             {meta.join(" · ")}
           </span>
         )}
@@ -163,12 +163,12 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
           className="border-t px-1.5 pt-1.5 pb-1.5"
           style={{ borderColor: `rgba(${NAVY},0.07)` }}
         >
-          <span className="block font-mono text-[9.5px] text-primary-500/45">
+          <span className="block font-mono text-[9.5px] text-primary-500/70">
             {DAYS[entry.day]} · {rangeOf(entry)}
           </span>
 
           <span className="mt-1 flex flex-wrap items-center gap-1">
-            <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/60">
+            <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/70">
               {entry.group}. grup
             </span>
             {(entry.badge || entry.type) && (
@@ -185,13 +185,13 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
               </span>
             )}
             {entry.english && (
-              <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-600">
+              <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-700">
                 İngilizce
               </span>
             )}
           </span>
 
-          <span className="mt-1.5 flex flex-col gap-1 text-[10px] leading-snug text-primary-500/55">
+          <span className="mt-1.5 flex flex-col gap-1 text-[10px] leading-snug text-primary-500/70">
             {entry.instructor && entry.instructor !== "-" && (
               <span className="flex items-start gap-1">
                 <User size={10} strokeWidth={1.5} className="mt-px shrink-0" />
@@ -199,7 +199,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
               </span>
             )}
             {entry.online ? (
-              <span className="flex items-center gap-1 text-secondary-600">
+              <span className="flex items-center gap-1 text-secondary-700">
                 <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
                 Çevrimiçi
               </span>
@@ -217,7 +217,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
           {href && (
             <Link
               href={href}
-              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-secondary-600 hover:underline"
+              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-secondary-700 hover:underline"
             >
               Ders sayfası
               <ArrowRight size={10} strokeWidth={2} />
@@ -290,7 +290,7 @@ function Cell({
           type="button"
           onClick={onExpand}
           aria-expanded={expanded}
-          className="flex items-center justify-center gap-0.5 rounded-md py-0.5 text-[9.5px] font-semibold text-secondary-600 transition-colors hover:bg-secondary-500/8"
+          className="flex items-center justify-center gap-0.5 rounded-md py-0.5 text-[9.5px] font-semibold text-secondary-700 transition-colors hover:bg-secondary-500/8"
         >
           <ChevronDown
             size={10}
@@ -351,7 +351,7 @@ export default function WeeklySchedule({
   return (
     <div className="overflow-hidden rounded-xl border border-primary-500/10 bg-white shadow-xs">
       <div className="border-b border-primary-500/6 px-4 py-2 text-center sm:hidden">
-        <span className="text-[11px] text-primary-500/40">
+        <span className="text-[11px] text-primary-500/70">
           ← Programı görmek için yatay kaydırın →
         </span>
       </div>
@@ -382,7 +382,7 @@ export default function WeeklySchedule({
                 borderRight: `1px solid rgba(${NAVY},0.06)`,
               }}
             >
-              <span className="text-[10px] font-semibold tracking-widest text-primary-500/30 uppercase">
+              <span className="text-[10px] font-semibold tracking-widest text-primary-500/70 uppercase">
                 Saat
               </span>
             </div>
@@ -413,7 +413,7 @@ export default function WeeklySchedule({
               if (row.type === "edge") {
                 return [
                   <TimeLabel key={`edgelabel-${ri}`} row={gridRow}>
-                    <span className="font-mono text-[9px] whitespace-nowrap text-primary-500/25">
+                    <span className="font-mono text-[9px] whitespace-nowrap text-primary-500/70">
                       {startOf(row.from)}
                     </span>
                   </TimeLabel>,
@@ -427,7 +427,7 @@ export default function WeeklySchedule({
                       borderBottom: `1px solid rgba(${NAVY},0.04)`,
                     }}
                   >
-                    <span className="font-mono text-[9px] tracking-wide text-primary-500/25">
+                    <span className="font-mono text-[9px] tracking-wide text-primary-500/70">
                       {startOf(row.from)} – {endOf(row.to)} · ders yok
                     </span>
                   </div>,
@@ -437,7 +437,7 @@ export default function WeeklySchedule({
               if (row.empty) {
                 return [
                   <TimeLabel key={`emptylabel-${ri}`} row={gridRow}>
-                    <span className="font-mono text-[9px] whitespace-nowrap text-primary-500/25">
+                    <span className="font-mono text-[9px] whitespace-nowrap text-primary-500/70">
                       {startOf(row.slot)}
                     </span>
                   </TimeLabel>,
@@ -455,10 +455,10 @@ export default function WeeklySchedule({
 
               return [
                 <TimeLabel key={`slotlabel-${ri}`} row={gridRow}>
-                  <span className="font-mono text-[10.5px] font-semibold whitespace-nowrap text-primary-500/55">
+                  <span className="font-mono text-[10.5px] font-semibold whitespace-nowrap text-primary-500/70">
                     {startOf(row.slot)}
                   </span>
-                  <span className="mt-0.5 font-mono text-[8.5px] whitespace-nowrap text-primary-500/25">
+                  <span className="mt-0.5 font-mono text-[8.5px] whitespace-nowrap text-primary-500/70">
                     {endOf(row.slot)}
                   </span>
                 </TimeLabel>,
@@ -490,13 +490,13 @@ export default function WeeklySchedule({
 
       {note && (
         <div className="border-t border-primary-500/6 px-4 py-2.5 text-center">
-          <span className="text-[11px] text-primary-500/45">{note}</span>
+          <span className="text-[11px] text-primary-500/70">{note}</span>
         </div>
       )}
 
       {entries.length === 0 && (
         <div className="border-t border-primary-500/6 py-12 text-center">
-          <span className="text-[13px] text-primary-500/30">
+          <span className="text-[13px] text-primary-500/70">
             Bu program için ders bulunmuyor.
           </span>
         </div>

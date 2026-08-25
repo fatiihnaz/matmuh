@@ -18,7 +18,7 @@ export default function Pagination({ basePath, params, page, pageCount }) {
     else if (pages.at(-1) !== "…") pages.push("…");
   }
 
-  const arrow = "flex items-center justify-center size-8 rounded-lg border border-primary-500/8 text-primary-500/50 hover:border-secondary-500/30 hover:text-secondary-600 transition-colors";
+  const arrow = "flex items-center justify-center size-8 rounded-lg border border-primary-500/8 text-primary-500/70 hover:border-secondary-500/30 hover:text-secondary-700 transition-colors";
 
   return (
     <nav className="flex items-center justify-center gap-1 pt-6" aria-label="Sayfalar">
@@ -30,7 +30,7 @@ export default function Pagination({ basePath, params, page, pageCount }) {
 
       {pages.map((entry, index) =>
         entry === "…" ? (
-          <span key={`gap-${index}`} className="px-1 text-xs text-primary-500/30">
+          <span key={`gap-${index}`} className="px-1 text-xs text-primary-500/70">
             …
           </span>
         ) : (
@@ -40,8 +40,8 @@ export default function Pagination({ basePath, params, page, pageCount }) {
             aria-current={entry === page ? "page" : undefined}
             className={`flex items-center justify-center size-8 rounded-lg text-xs font-medium border transition-colors ${
               entry === page
-                ? "bg-secondary-500/12 border-secondary-500/20 text-secondary-600"
-                : "border-primary-500/8 text-primary-500/50 hover:border-secondary-500/30 hover:text-secondary-600"
+                ? "bg-secondary-500/12 border-secondary-500/20 text-secondary-700"
+                : "border-primary-500/8 text-primary-500/70 hover:border-secondary-500/30 hover:text-secondary-700"
             }`}
           >
             {entry}

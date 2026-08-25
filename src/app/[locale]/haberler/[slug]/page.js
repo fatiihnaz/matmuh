@@ -62,7 +62,7 @@ export default async function NewsDetailPage({ params }) {
               />
             </div>
             {!item.body && (
-              <p className="text-[13px] text-primary-500/45">
+              <p className="text-[13px] text-primary-500/70">
                 Bu haberin ayrıntıları ekli belgede yer alıyor.
               </p>
             )}

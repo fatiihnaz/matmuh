@@ -40,7 +40,7 @@ function LoginPanel({ loading, onSignIn }) {
     <>
       <div className="rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
         <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
-          <Shield size={20} strokeWidth={1.5} className="text-secondary-500" />
+          <Shield size={20} strokeWidth={1.5} className="text-secondary-700" />
         </div>
         <div className="flex-1">
           <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
@@ -48,7 +48,7 @@ function LoginPanel({ loading, onSignIn }) {
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
             Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak için{" "}
-            <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
+            <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
               @std.yildiz.edu.tr
             </span>{" "}
             hesabınızla giriş yapmalısınız.
@@ -66,7 +66,7 @@ function LoginPanel({ loading, onSignIn }) {
       <div className="relative">
         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
           <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 backdrop-blur-sm shadow-xl">
-            <Eye size={16} strokeWidth={2} className="text-secondary-500" />
+            <Eye size={16} strokeWidth={2} className="text-secondary-700" />
             <span className="text-[13px] font-medium text-white">Önizleme</span>
           </div>
         </div>
@@ -118,7 +118,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
 
       <span className="w-12 h-14 rounded-lg flex flex-col items-center justify-center gap-1 bg-primary-500/5 shrink-0 transition-colors group-hover:bg-secondary-500/15">
         <FileText size={18} className="text-primary-700" strokeWidth={1.5} />
-        <span className="text-[8px] font-bold text-primary-500/50 tracking-wide">
+        <span className="text-[8px] font-bold text-primary-500/70 tracking-wide">
           {note.extension}
         </span>
       </span>
@@ -128,7 +128,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             {note.title}
           </span>
           {noteTypeLabel(note.type) && note.type !== "OTHER" && (
-            <span className="shrink-0 rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+            <span className="shrink-0 rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/70">
               {noteTypeLabel(note.type)}
             </span>
           )}
@@ -144,12 +144,12 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             ))}
         </div>
         {note.offering && (
-          <p className="mb-1.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-secondary-600">
+          <p className="mb-1.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-secondary-700">
             {[note.offering.instructor, note.offering.term, note.offering.group]
               .filter(Boolean)
               .map((part, index) => (
                 <span key={part}>
-                  {index > 0 && <span className="mr-1.5 text-primary-500/25">·</span>}
+                  {index > 0 && <span className="mr-1.5 text-primary-500/70">·</span>}
                   {part}
                 </span>
               ))}
@@ -157,7 +157,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
         )}
 
         {note.description && (
-          <p className="text-xs text-primary-500/50 leading-relaxed mb-1.5 line-clamp-2">
+          <p className="text-xs text-primary-500/70 leading-relaxed mb-1.5 line-clamp-2">
             {note.description}
           </p>
         )}
@@ -166,12 +166,12 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             <span className="text-[11px] text-gray-400 font-mono">{note.uploadedAt}</span>
           )}
           {note.size && (
-            <span className="text-[11px] font-bold text-secondary-500 bg-secondary-500/10 px-1.5 py-0.5 rounded-sm">
+            <span className="text-[11px] font-bold text-secondary-700 bg-secondary-500/10 px-1.5 py-0.5 rounded-sm">
               {note.size}
             </span>
           )}
           {note.uploadedBy && (
-            <span className="text-[11px] text-primary-500/40 truncate">
+            <span className="text-[11px] text-primary-500/70 truncate">
               {note.uploadedBy}
             </span>
           )}
@@ -203,7 +203,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             type="button"
             onClick={() => onCancel(note)}
             disabled={cancelling}
-            className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
+            className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-[11px] font-medium text-primary-500/70 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
           >
             {cancelling ? "…" : rejected ? "Kaldır" : "İptal et"}
           </button>
@@ -271,11 +271,11 @@ function UploadForm({ lectureId, onUploaded }) {
     return (
       <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
         {done ? (
-          <span className="text-xs text-primary-500/50">
+          <span className="text-xs text-primary-500/70">
             Notunuz yüklendi, yönetici onayı bekliyor.
           </span>
         ) : (
-          <span className="text-xs text-primary-500/40">
+          <span className="text-xs text-primary-500/70">
             Yüklenen notlar yönetici onayından sonra yayınlanır.
           </span>
         )}
@@ -300,7 +300,7 @@ function UploadForm({ lectureId, onUploaded }) {
           }}
           className={`inline-flex items-center gap-2 px-4 py-2 rounded-lg text-xs font-semibold transition-colors ${
             dragOver
-              ? "bg-secondary-500/20 text-secondary-600 ring-2 ring-secondary-500 ring-dashed"
+              ? "bg-secondary-500/20 text-secondary-700 ring-2 ring-secondary-500 ring-dashed"
               : "bg-secondary-500 text-primary-500 hover:bg-secondary-500/80"
           }`}
         >
@@ -326,7 +326,7 @@ function UploadForm({ lectureId, onUploaded }) {
             reset();
             setOpen(false);
           }}
-          className="text-primary-500/40 hover:text-primary-500 transition-colors"
+          className="text-primary-500/70 hover:text-primary-500 transition-colors"
           aria-label="Kapat"
         >
           <X size={16} strokeWidth={2} />
@@ -350,7 +350,7 @@ function UploadForm({ lectureId, onUploaded }) {
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50 resize-none"
       />
 
-      <label className="flex items-center gap-2 text-xs text-primary-500/50">
+      <label className="flex items-center gap-2 text-xs text-primary-500/70">
         Tür
         <select
           value={type}
@@ -390,12 +390,12 @@ function UploadForm({ lectureId, onUploaded }) {
             file ? "bg-secondary-500/15" : "bg-primary-500/5"
           }`}
         >
-          <Paperclip size={18} strokeWidth={1.5} className="text-secondary-500" />
+          <Paperclip size={18} strokeWidth={1.5} className="text-secondary-700" />
         </span>
         <span className="max-w-full truncate text-[13px] font-medium text-primary-600">
           {file ? file.name : dragOver ? "Bırakın" : "Dosyayı sürükleyin veya seçin"}
         </span>
-        <span className="text-[11px] text-primary-500/40">
+        <span className="text-[11px] text-primary-500/70">
           {file ? formatSize(file.size) : "PDF, Office, ZIP, görsel · en fazla 25 MB"}
         </span>
         <input
@@ -419,7 +419,7 @@ function UploadForm({ lectureId, onUploaded }) {
         </button>
 
         {!busy && missing && (
-          <span className="text-[11px] text-primary-500/45">{missing} girin</span>
+          <span className="text-[11px] text-primary-500/70">{missing} girin</span>
         )}
       </div>
     </form>
@@ -490,14 +490,14 @@ export default function LectureNotes({ lectureId, onSignIn }) {
               <NoteCard key={note.id} note={note} pending onCancel={cancelNote} cancelling={cancellingId === note.id} />
             ))}
           </div>
-          <p className="text-[11px] text-primary-500/40 mt-2.5">
+          <p className="text-[11px] text-primary-500/70 mt-2.5">
             Bu notlar yalnızca size görünür. Onaylananlar aşağıdaki listeye geçer.
           </p>
         </div>
       )}
 
       {failed ? (
-        <p className="text-sm text-primary-500/40 py-12 text-center border border-dashed border-primary-500/20 rounded-xl">
+        <p className="text-sm text-primary-500/70 py-12 text-center border border-dashed border-primary-500/20 rounded-xl">
           Ders notları alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyin.
         </p>
       ) : notes === null ? (
@@ -518,12 +518,12 @@ export default function LectureNotes({ lectureId, onSignIn }) {
         </div>
       ) : notes.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-          <FileText size={20} strokeWidth={1.5} className="text-primary-500/25" />
-          <span className="text-sm font-medium text-primary-500/40">
+          <FileText size={20} strokeWidth={1.5} className="text-primary-500/70" />
+          <span className="text-sm font-medium text-primary-500/70">
             Bu ders için henüz onaylanmış not yok.
           </span>
           {pending.length === 0 && (
-            <span className="text-xs text-primary-500/30">
+            <span className="text-xs text-primary-500/70">
               İlk notu siz yükleyebilirsiniz.
             </span>
           )}

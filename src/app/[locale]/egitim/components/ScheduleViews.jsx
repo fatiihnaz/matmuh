@@ -31,7 +31,7 @@ function ListRow({ entry, accent, courseHref }) {
         borderLeft: `2.5px solid ${accent}`,
       }}
     >
-      <span className="w-22 shrink-0 font-mono text-[11px] leading-snug text-primary-500/45">
+      <span className="w-22 shrink-0 font-mono text-[11px] leading-snug text-primary-500/70">
         {rangeOf(entry)}
       </span>
 
@@ -47,18 +47,18 @@ function ListRow({ entry, accent, courseHref }) {
             {entry.name}
           </span>
           {entry.group != null && (
-            <span className="font-mono text-[10px] text-primary-500/40">
+            <span className="font-mono text-[10px] text-primary-500/70">
               Gr.{entry.group}
             </span>
           )}
           {entry.english && (
-            <span className="font-mono text-[9.5px] font-semibold tracking-wide text-secondary-600">
+            <span className="font-mono text-[9.5px] font-semibold tracking-wide text-secondary-700">
               EN
             </span>
           )}
         </span>
 
-        <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-primary-500/45">
+        <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-primary-500/70">
           {entry.instructor && entry.instructor !== "-" && (
             <span className="inline-flex items-center gap-1">
               <User size={11} strokeWidth={1.5} className="shrink-0" />
@@ -108,7 +108,7 @@ function ScheduleList({ entries, courseHref, note }) {
   if (days.length === 0) {
     return (
       <div className="rounded-xl border border-primary-500/8 bg-white py-12 text-center">
-        <span className="text-[13px] text-primary-500/30">
+        <span className="text-[13px] text-primary-500/70">
           Bu dönem için ders bulunamadı.
         </span>
       </div>
@@ -121,7 +121,7 @@ function ScheduleList({ entries, courseHref, note }) {
         {days.map((day) => (
           <div key={day.label}>
             <div className="bg-primary-500/2 px-4 py-1.5">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
                 {day.label}
               </span>
             </div>
@@ -141,7 +141,7 @@ function ScheduleList({ entries, courseHref, note }) {
 
       {note && (
         <div className="border-t border-primary-500/6 px-4 py-2.5 text-center">
-          <span className="text-[11px] text-primary-500/45">{note}</span>
+          <span className="text-[11px] text-primary-500/70">{note}</span>
         </div>
       )}
     </div>
@@ -169,8 +169,8 @@ export default function ScheduleViews({
               aria-pressed={view === id}
               className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-medium transition-colors ${
                 view === id
-                  ? "bg-secondary-500/12 text-secondary-600"
-                  : "text-primary-500/45 hover:bg-primary-500/4 hover:text-primary-500"
+                  ? "bg-secondary-500/12 text-secondary-700"
+                  : "text-primary-500/70 hover:bg-primary-500/4 hover:text-primary-500"
               }`}
             >
               <Icon size={13} strokeWidth={2} />

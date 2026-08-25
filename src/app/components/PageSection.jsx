@@ -8,7 +8,7 @@ export default function PageSection({ title, count, action, children }) {
             {title}
           </h2>
           {count !== undefined && (
-            <span className="flex shrink-0 items-center justify-center px-2 py-0.5 rounded-xl bg-primary-500/5 text-[10px] font-bold text-primary-500/50">
+            <span className="flex shrink-0 items-center justify-center px-2 py-0.5 rounded-xl bg-primary-500/5 text-[10px] font-bold text-primary-500/70">
               {count}
             </span>
           )}

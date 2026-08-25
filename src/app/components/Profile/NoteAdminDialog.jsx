@@ -24,7 +24,7 @@ export default function NoteAdminDialog({ open, onClose }) {
           <ClipboardCheck
             size={16}
             strokeWidth={1.5}
-            className="text-secondary-500"
+            className="text-secondary-700"
           />
           <h2 className="text-sm font-semibold text-primary-600">
             Not Yönetimi
@@ -32,7 +32,7 @@ export default function NoteAdminDialog({ open, onClose }) {
           <Link
             href={href(PAGE)}
             onClick={onClose}
-            className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-secondary-600"
+            className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/70 transition-colors hover:text-secondary-700"
           >
             Sayfada aç
             <ExternalLink className="size-3" />

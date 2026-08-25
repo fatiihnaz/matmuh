@@ -23,7 +23,7 @@ export default function ManagementRows({ initialStaff = [] }) {
               <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
                 {person.academicTitle} {name}
               </span>
-              <span className="block text-[11px] text-primary-500/45 wrap-break-word">
+              <span className="block text-[11px] text-primary-500/70 wrap-break-word">
                 {person.role && `${person.role} · `}
                 Oda {person.office} · {person.phone}
               </span>
@@ -32,7 +32,7 @@ export default function ManagementRows({ initialStaff = [] }) {
               <a
                 href={`mailto:${person.email}`}
                 title="E-posta gönder"
-                className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/30 hover:bg-secondary-500/10 hover:text-secondary-500 transition-colors"
+                className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
               >
                 <Mail className="size-3.5" />
               </a>

@@ -27,7 +27,7 @@ function Bullets({ items }) {
       {items.map((item, index) => (
         <li key={index} className="flex gap-3">
           <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-secondary-500" />
-          <span className="text-[13px] text-primary-500/60 leading-relaxed">{item}</span>
+          <span className="text-[13px] text-primary-500/70 leading-relaxed">{item}</span>
         </li>
       ))}
     </ul>
@@ -43,7 +43,7 @@ function StaffCard({ person, idx }) {
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}
         </span>
-        <span className="block text-[11px] text-primary-500/45 wrap-break-word">
+        <span className="block text-[11px] text-primary-500/70 wrap-break-word">
           {person.role && `${person.role} · `}
           Oda {person.office} · {person.phone}
         </span>
@@ -52,7 +52,7 @@ function StaffCard({ person, idx }) {
         <a
           href={`mailto:${person.email}`}
           title="E-posta gönder"
-          className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/30 hover:bg-secondary-500/10 hover:text-secondary-500 transition-colors"
+          className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />
         </a>
@@ -87,7 +87,7 @@ export function MandatoryInternships() {
         }
       >
         <Panel>
-          <div className="announcement-body text-[13px] text-primary-500/60 leading-relaxed">
+          <div className="announcement-body text-[13px] text-primary-500/70 leading-relaxed">
             <EditableRegion
               blockPath="mandatory.intro"
               blockType="RichText"
@@ -134,15 +134,15 @@ export function MandatoryInternships() {
                 className="group flex flex-col gap-2 p-4 rounded-lg bg-primary-500/2 border border-primary-500/5 hover:border-secondary-500/30 transition-colors"
               >
                 <div className="flex items-center justify-between gap-2">
-                  <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary-500">
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary-700">
                     {item.order}
                   </span>
-                  <ArrowUpRight className="size-3.5 text-primary-500/25 group-hover:text-secondary-500 transition-colors" />
+                  <ArrowUpRight className="size-3.5 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
                 </div>
                 <span className="text-[14px] font-semibold text-primary-500 leading-snug">
                   {item.title}
                 </span>
-                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-primary-500/50">
+                <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-primary-500/70">
                   <span className="font-mono">{item.code}</span>
                   <span>{item.days} iş günü</span>
                   <span>{item.ects} AKTS</span>
@@ -217,7 +217,7 @@ export function ProcessSteps() {
           {(item, index) => (
             <li key={index} className="flex gap-4">
               <div className="flex flex-col items-center shrink-0">
-                <span className="flex items-center justify-center size-7 rounded-full bg-secondary-500/15 text-[11px] font-bold text-secondary-600">
+                <span className="flex items-center justify-center size-7 rounded-full bg-secondary-500/15 text-[11px] font-bold text-secondary-700">
                   {index + 1}
                 </span>
                 {index < items.length - 1 && (
@@ -226,7 +226,7 @@ export function ProcessSteps() {
               </div>
               <div className="flex flex-col gap-1 min-w-0 pb-1">
                 <span className="text-[13px] font-semibold text-primary-500">{item.title}</span>
-                <span className="text-[13px] text-primary-500/60 leading-relaxed">
+                <span className="text-[13px] text-primary-500/70 leading-relaxed">
                   {item.detail}
                 </span>
               </div>
@@ -264,7 +264,7 @@ Cumartesi çalışan iş yerlerinde cumartesi de iş gününden sayılır; iş y
           {lines(value).map((rule, index) => (
             <li key={index} className="flex gap-3">
               <span className="mt-1.5 size-1.5 shrink-0 rounded-full bg-secondary-500" />
-              <span className="text-[13px] text-primary-500/60 leading-relaxed">{rule}</span>
+              <span className="text-[13px] text-primary-500/70 leading-relaxed">{rule}</span>
             </li>
           ))}
         </ul>
@@ -322,12 +322,12 @@ export function InternshipDocuments() {
             return (
               <Fragment key={index}>
                 {item.category !== previous?.category && (
-                  <span className="xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/45 mt-3 first:mt-0">
+                  <span className="xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70 mt-3 first:mt-0">
                     {item.category}
                   </span>
                 )}
                 {item.note && (
-                  <p className="xl:col-span-2 text-[12px] text-primary-500/50 leading-relaxed">
+                  <p className="xl:col-span-2 text-[12px] text-primary-500/70 leading-relaxed">
                     {item.note}
                   </p>
                 )}
@@ -411,7 +411,7 @@ Gerek gördüğünde, Bölüm Sekreterliği aracılığıyla öğrencilere staj 
               <div key={index} className="flex flex-col gap-2">
                 <div className="flex flex-col">
                   <span className="text-[13px] font-semibold text-primary-500">{item.label}</span>
-                  <span className="text-[11px] text-primary-500/45">{item.subtitle}</span>
+                  <span className="text-[11px] text-primary-500/70">{item.subtitle}</span>
                 </div>
                 <div className="flex flex-col gap-1.5">
                   {lines(item.members).map((email, idx) => {
@@ -426,13 +426,13 @@ Gerek gördüğünde, Bölüm Sekreterliği aracılığıyla öğrencilere staj 
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 border-t border-primary-500/5">
             <div className="flex flex-col gap-2 pt-3">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
                 Oluşumu
               </span>
               <Bullets items={lines(composition.value)} />
             </div>
             <div className="flex flex-col gap-2 lg:pt-3">
-              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
+              <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
                 Görevleri
               </span>
               <Bullets items={lines(duties.value)} />
@@ -498,7 +498,7 @@ export function SpecialCases() {
             className="flex flex-col gap-1 p-4 rounded-xl border border-primary-500/10 shadow-xs bg-white"
           >
             <span className="text-[13px] font-semibold text-primary-500">{item.title}</span>
-            <span className="text-[13px] text-primary-500/60 leading-relaxed">{item.detail}</span>
+            <span className="text-[13px] text-primary-500/70 leading-relaxed">{item.detail}</span>
           </div>
         )}
       </EditableList>
@@ -519,7 +519,7 @@ export function InternshipContact() {
     >
       <div className="flex flex-col gap-3">
         <div className="flex items-center gap-2 text-[13px]">
-          <Mail className="size-4 shrink-0 text-secondary-500" />
+          <Mail className="size-4 shrink-0 text-secondary-700" />
           <EditableRegion
             blockPath="contact.email"
             blockType="Link"
@@ -527,7 +527,7 @@ export function InternshipContact() {
               href: "mailto:mtmstaj@yildiz.edu.tr",
               label: "mtmstaj@yildiz.edu.tr",
             }}
-            className="min-w-0 truncate text-primary-500 hover:text-secondary-600 transition-colors"
+            className="min-w-0 truncate text-primary-500 hover:text-secondary-700 transition-colors"
           />
         </div>
         <EditableRegion
@@ -536,7 +536,7 @@ export function InternshipContact() {
           defaultValue="DD-097 · YTÜ KMF Matematik Mühendisliği Bölümü Staj Uygulama Esasları
 Senato 23.05.2023 / 05-05"
           as="p"
-          className="text-[11px] text-primary-500/40 leading-relaxed"
+          className="text-[11px] text-primary-500/70 leading-relaxed"
         />
       </div>
     </MainCard>

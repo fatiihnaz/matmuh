@@ -72,7 +72,7 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
       <div className="shrink-0 pt-4 text-center">
         {image.caption && <p className="text-[13px] text-white/70">{image.caption}</p>}
 
-        <p className="mt-1 text-[11px] font-mono text-white/40">
+        <p className="mt-1 text-[11px] font-mono text-white/60">
           {index + 1} / {images.length}
         </p>
 

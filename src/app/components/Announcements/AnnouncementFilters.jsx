@@ -35,7 +35,7 @@ export default function AnnouncementFilters({ placeholder = "Duyurularda ara..."
       <Search
         size={14}
         strokeWidth={1.5}
-        className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-500/30"
+        className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-500/70"
       />
       <input
         type="search"
@@ -50,7 +50,7 @@ export default function AnnouncementFilters({ placeholder = "Duyurularda ara..."
           type="button"
           onClick={() => setValue("")}
           aria-label="Aramayı temizle"
-          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-primary-500/30 hover:text-primary-500/60 transition-colors"
+          className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-primary-500/70 hover:text-primary-500/70 transition-colors"
         >
           <X size={14} />
         </button>

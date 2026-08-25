@@ -31,7 +31,7 @@ export default function RecordPreview({ values, collection }) {
             dangerouslySetInnerHTML={{ __html: item.body }}
           />
         ) : (
-          <p className="text-[13px] text-primary-500/45">
+          <p className="text-[13px] text-primary-500/70">
             Bu {noun} ayrıntıları ekli belgede yer alıyor.
           </p>
         )}

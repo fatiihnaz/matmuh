@@ -28,11 +28,11 @@ export default function DocumentLink({ label, href, kind, term, size }) {
         onClick={handleClick}
         className="flex items-center gap-3 flex-1 min-w-0"
       >
-        <FileText className="size-4 shrink-0 text-secondary-500" />
+        <FileText className="size-4 shrink-0 text-secondary-700" />
         <span className="min-w-0 text-[13px] text-primary-500 leading-snug wrap-break-word">
           {label}
           {term && (
-            <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-primary-500/6 text-[10px] font-medium text-primary-500/50 align-middle">
+            <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-primary-500/6 text-[10px] font-medium text-primary-500/70 align-middle">
               {term}
             </span>
           )}
@@ -40,17 +40,17 @@ export default function DocumentLink({ label, href, kind, term, size }) {
       </a>
 
       {size > 0 && (
-        <span className="shrink-0 hidden sm:block text-[10px] font-mono text-primary-500/30">
+        <span className="shrink-0 hidden sm:block text-[10px] font-mono text-primary-500/70">
           {formatBytes(size)}
         </span>
       )}
-      <span className="shrink-0 hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-primary-500/40">
+      <span className="shrink-0 hidden sm:block text-[10px] font-semibold uppercase tracking-wider text-primary-500/70">
         {kind}
       </span>
 
       {previewable && (
         <Eye
-          className={`size-3.5 shrink-0 text-primary-500/25 group-hover:text-secondary-500 transition-colors ${
+          className={`size-3.5 shrink-0 text-primary-500/70 group-hover:text-secondary-700 transition-colors ${
             kind === "pdf" ? "hidden md:block" : ""
           }`}
         />
@@ -61,7 +61,7 @@ export default function DocumentLink({ label, href, kind, term, size }) {
         rel="noopener noreferrer"
         title="İndir"
         aria-label="İndir"
-        className="shrink-0 -m-2 p-2 text-primary-500/30 hover:text-secondary-500 transition-colors"
+        className="shrink-0 -m-2 p-2 text-primary-500/70 hover:text-secondary-700 transition-colors"
       >
         <Download className="size-3.5" />
       </a>

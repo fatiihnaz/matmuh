@@ -24,13 +24,13 @@ export default function NotFound() {
           </span>
         </div>
 
-        <p className="mt-4 font-mono text-[11px] uppercase tracking-widest text-primary-500/35">
+        <p className="mt-4 font-mono text-[11px] uppercase tracking-widest text-primary-500/70">
           404
         </p>
 
         <h1 className="mt-2 text-xl font-semibold text-primary-500">Sayfa bulunamadı</h1>
 
-        <p className="mt-3 text-[13px] text-primary-500/60 leading-relaxed">
+        <p className="mt-3 text-[13px] text-primary-500/70 leading-relaxed">
           Sıfıra bölmek gibi: aradığınız adresin bir karşılığı yok. Sayfa taşınmış,
           adı değişmiş ya da hiç var olmamış olabilir.
         </p>
@@ -42,7 +42,7 @@ export default function NotFound() {
               href={href}
               className="flex items-center gap-2 rounded-lg border border-primary-500/10 bg-white px-4 py-2 text-[13px] font-medium text-primary-500/70 shadow-xs transition-colors hover:border-primary-500/20 hover:text-primary-500"
             >
-              <Icon size={14} className="text-secondary-500" />
+              <Icon size={14} className="text-secondary-700" />
               {label}
             </Link>
           ))}

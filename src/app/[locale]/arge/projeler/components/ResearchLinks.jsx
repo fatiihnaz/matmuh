@@ -47,11 +47,11 @@ export default function ResearchLinks() {
               <span className="block text-[13px] font-semibold text-primary-500">
                 {item.link?.label}
               </span>
-              <span className="block text-[11px] text-primary-500/45 mt-0.5">
+              <span className="block text-[11px] text-primary-500/70 mt-0.5">
                 {item.description}
               </span>
             </span>
-            <ExternalLink className="size-3.5 shrink-0 text-primary-500/30 group-hover:text-secondary-500 transition-colors" />
+            <ExternalLink className="size-3.5 shrink-0 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
           </a>
         );
       }}

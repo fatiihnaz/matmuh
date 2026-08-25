@@ -25,7 +25,7 @@ export default function Avatar({ name, photo, idx = 0, size = "size-9", textSize
       className={`shrink-0 flex items-center justify-center rounded-full ${size}`}
       style={{ backgroundColor: AVATAR_COLORS[idx % AVATAR_COLORS.length] }}
     >
-      <span className={`${textSize} font-semibold tracking-wide text-secondary-500`}>
+      <span className={`${textSize} font-semibold tracking-wide text-secondary-700`}>
         {getInitials(name)}
       </span>
     </div>

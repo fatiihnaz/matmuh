@@ -47,8 +47,8 @@ const PAGE_SIZE = 20;
 function Notice({ icon: Icon, title, children }) {
   return (
     <div className="flex flex-col items-center gap-3 py-16 px-6 border border-dashed border-primary-500/20 rounded-xl text-center bg-white">
-      <Icon size={22} strokeWidth={1.5} className="text-primary-500/25" />
-      <span className="text-sm font-semibold text-primary-500/60">{title}</span>
+      <Icon size={22} strokeWidth={1.5} className="text-primary-500/70" />
+      <span className="text-sm font-semibold text-primary-500/70">{title}</span>
       {children}
     </div>
   );
@@ -62,7 +62,7 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">
         <FileText size={16} className="text-primary-700" strokeWidth={1.5} />
-        <span className="text-[8px] font-bold text-primary-500/50">{note.extension}</span>
+        <span className="text-[8px] font-bold text-primary-500/70">{note.extension}</span>
       </div>
 
       <div className="flex-1 min-w-0">
@@ -77,23 +77,23 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
             {BADGES[note.status].label}
           </span>
           {note.type !== "OTHER" && noteTypeLabel(note.type) && (
-            <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+            <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/70">
               {noteTypeLabel(note.type)}
             </span>
           )}
         </div>
 
         {note.description && (
-          <p className="text-xs text-primary-500/50 leading-relaxed mb-1.5 line-clamp-2">
+          <p className="text-xs text-primary-500/70 leading-relaxed mb-1.5 line-clamp-2">
             {note.description}
           </p>
         )}
 
-        <div className="flex items-center gap-3 flex-wrap text-[11px] text-primary-500/40">
+        <div className="flex items-center gap-3 flex-wrap text-[11px] text-primary-500/70">
           {note.lectureCode && (
             <Link
               href={`/egitim/mufredat/${note.lectureCode}`}
-              className="font-mono font-semibold text-secondary-500 hover:underline"
+              className="font-mono font-semibold text-secondary-700 hover:underline"
             >
               {note.lectureCode}
             </Link>
@@ -108,7 +108,7 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
       <div className="flex items-center gap-2 shrink-0">
         {confirming ? (
           <>
-            <span className="text-xs font-medium text-primary-500/60">Kaldırılsın mı?</span>
+            <span className="text-xs font-medium text-primary-500/70">Kaldırılsın mı?</span>
             <button
               onClick={() => onDelete(note)}
               disabled={busy}
@@ -118,7 +118,7 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
             </button>
             <button
               onClick={() => onConfirm(null)}
-              className="rounded-lg px-3 py-2 text-xs font-medium text-primary-500/50 transition-colors hover:text-primary-500"
+              className="rounded-lg px-3 py-2 text-xs font-medium text-primary-500/70 transition-colors hover:text-primary-500"
             >
               Vazgeç
             </button>
@@ -264,7 +264,7 @@ export function NoteAdminBody() {
   } else if (!isAdmin) {
     body = (
       <Notice icon={ShieldAlert} title="Bu sayfaya erişim yetkiniz yok">
-        <span className="text-xs text-primary-500/40">
+        <span className="text-xs text-primary-500/70">
           Ders notu yönetimi yalnızca yöneticilere açıktır.
         </span>
       </Notice>
@@ -307,7 +307,7 @@ export function NoteAdminBody() {
               <div className="relative">
                 <Search
                   size={13}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-500/30"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-primary-500/70"
                 />
                 <input
                   value={search}
@@ -326,9 +326,9 @@ export function NoteAdminBody() {
 
         <div className="rounded-xl border border-primary-500/10 shadow-xs bg-white overflow-hidden divide-y divide-primary-500/6">
           {result === null ? (
-            <p className="text-sm text-primary-500/40 py-16 text-center">Yükleniyor…</p>
+            <p className="text-sm text-primary-500/70 py-16 text-center">Yükleniyor…</p>
           ) : result.items.length === 0 ? (
-            <p className="text-sm text-primary-500/40 py-16 text-center">
+            <p className="text-sm text-primary-500/70 py-16 text-center">
               {query
                 ? "Aramanızla eşleşen not yok."
                 : filter === "pending"
@@ -352,7 +352,7 @@ export function NoteAdminBody() {
 
         {result && result.totalPages > 1 && (
           <div className="flex items-center justify-between gap-3 px-1">
-            <span className="text-xs text-primary-500/40">
+            <span className="text-xs text-primary-500/70">
               {result.totalElements} not · sayfa {result.page + 1}/{result.totalPages}
             </span>
             <div className="flex items-center gap-2">

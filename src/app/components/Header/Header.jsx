@@ -46,7 +46,7 @@ export default function Header() {
               <Link href={localePath(slug, "tr")} className={locale === "tr" ? "text-white font hover:opacity-80 transition-opacity" : "text-white/50 hover:text-white transition-colors"}>
                 TR
               </Link>
-              <span className="text-white/30 font-light">/</span>
+              <span className="text-white/60 font-light">/</span>
               <Link href={localePath(slug, "en")} className={locale === "en" ? "text-white hover:opacity-80 transition-opacity" : "text-white/50 hover:text-white transition-colors"}>
                 EN
               </Link>

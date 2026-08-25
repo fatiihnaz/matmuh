@@ -41,9 +41,9 @@ function QuickLinkTile({ item }) {
   const content = (
     <>
       <div className="w-9 h-9 rounded-lg bg-secondary-500/8 hover:bg-secondary-600/10 flex items-center justify-center">
-        {icon(item?.icon, "w-4 h-4 text-secondary-500 group-hover:text-secondary-600")}
+        {icon(item?.icon, "w-4 h-4 text-secondary-700 group-hover:text-secondary-700")}
       </div>
-      <span className="text-[10px] text-primary-500/55 text-center group-hover:text-primary-500 leading-tight">
+      <span className="text-[10px] text-primary-500/70 text-center group-hover:text-primary-500 leading-tight">
         {item?.shortLabel}
       </span>
     </>
@@ -71,9 +71,9 @@ function QuickLinkRow({ item }) {
     "flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors";
   const content = (
     <>
-      {icon(item?.icon, "w-4 h-4 text-primary-500/60 shrink-0")}
+      {icon(item?.icon, "w-4 h-4 text-primary-500/70 shrink-0")}
       <span className="flex-1">{item?.link?.label}</span>
-      {external && <ExternalLink className="w-3 h-3 text-primary-500/30 shrink-0" />}
+      {external && <ExternalLink className="w-3 h-3 text-primary-500/70 shrink-0" />}
     </>
   );
 

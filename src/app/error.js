@@ -21,19 +21,19 @@ export default function Error({ error, reset }) {
           </span>
         </div>
 
-        <p className="mt-4 font-mono text-[11px] uppercase tracking-widest text-primary-500/35">
+        <p className="mt-4 font-mono text-[11px] uppercase tracking-widest text-primary-500/70">
           500
         </p>
 
         <h1 className="mt-2 text-xl font-semibold text-primary-500">Bir şeyler ters gitti</h1>
 
-        <p className="mt-3 text-[13px] text-primary-500/60 leading-relaxed">
+        <p className="mt-3 text-[13px] text-primary-500/70 leading-relaxed">
           Beklenmeyen bir hata oluştu ve nedeni buradan belirlenemiyor.
           Tekrar denemek çoğu zaman yeterli oluyor.
         </p>
 
         {error?.digest && (
-          <p className="mt-4 font-mono text-[11px] text-primary-500/30">Hata kodu: {error.digest}</p>
+          <p className="mt-4 font-mono text-[11px] text-primary-500/70">Hata kodu: {error.digest}</p>
         )}
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
@@ -49,7 +49,7 @@ export default function Error({ error, reset }) {
             href="/"
             className="flex items-center gap-2 rounded-lg border border-primary-500/10 bg-white px-4 py-2 text-[13px] font-medium text-primary-500/70 shadow-xs transition-colors hover:border-primary-500/20 hover:text-primary-500"
           >
-            <Home size={14} className="text-secondary-500" />
+            <Home size={14} className="text-secondary-700" />
             Anasayfa
           </Link>
         </div>

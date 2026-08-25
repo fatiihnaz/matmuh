@@ -6,7 +6,7 @@ import NewsThumb from "./NewsThumb";
 export default function NewsList({ items }) {
   if (!items.length) {
     return (
-      <div className="py-16 text-center text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-xl">
+      <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
         Henüz haber yayımlanmadı.
       </div>
     );
@@ -24,11 +24,11 @@ export default function NewsList({ items }) {
           <div className="min-w-0">
             <time
               dateTime={item.publishedAt}
-              className="block text-xs text-secondary-500 font-medium mb-1"
+              className="block text-xs text-secondary-700 font-medium mb-1"
             >
               {formatTrDate(item.publishedAt)}
             </time>
-            <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-500 transition-colors mb-1 line-clamp-2">
+            <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors mb-1 line-clamp-2">
               {item.title}
             </h3>
             {item.summary && (

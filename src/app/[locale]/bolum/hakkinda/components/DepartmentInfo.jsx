@@ -339,8 +339,8 @@ export default function DepartmentInfo({ staff, curriculum }) {
                         <div
                           className={`p-1.5 rounded-lg transition-colors ${
                             isLarge
-                              ? "bg-secondary-500/10 text-secondary-500"
-                              : "bg-primary-500/4 text-primary-500/50"
+                              ? "bg-secondary-500/10 text-secondary-700"
+                              : "bg-primary-500/4 text-primary-500/70"
                           }`}
                         >
                           <Icon size={isLarge ? 15 : 13} strokeWidth={1.8} />

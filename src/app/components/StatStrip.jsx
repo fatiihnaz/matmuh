@@ -9,11 +9,11 @@ export default function StatStrip({ items }) {
           <span className="text-[22px] font-bold text-white leading-none">
             {item.value}
           </span>
-          <span className="text-[11px] text-secondary-500 uppercase tracking-wider">
+          <span className="text-[11px] text-secondary-700 uppercase tracking-wider">
             {item.label}
           </span>
           {item.hint && (
-            <span className="text-[11px] text-white/40 leading-snug">
+            <span className="text-[11px] text-white/60 leading-snug">
               {item.hint}
             </span>
           )}

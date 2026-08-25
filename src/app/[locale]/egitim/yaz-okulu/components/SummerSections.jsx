@@ -103,15 +103,15 @@ export function ApprovalPaths() {
           >
             <div className="flex flex-col gap-1">
               <span className="text-[14px] font-semibold text-primary-500">{item.label}</span>
-              <span className="text-[12px] text-secondary-600 font-medium">{item.summary}</span>
+              <span className="text-[12px] text-secondary-700 font-medium">{item.summary}</span>
             </div>
             <ol className="flex flex-col gap-2">
               {lines(item.steps).map((step, stepIndex) => (
                 <li key={stepIndex} className="flex gap-3">
-                  <span className="shrink-0 flex items-center justify-center size-5 rounded-sm bg-secondary-500/15 text-[10px] font-semibold text-secondary-600">
+                  <span className="shrink-0 flex items-center justify-center size-5 rounded-sm bg-secondary-500/15 text-[10px] font-semibold text-secondary-700">
                     {stepIndex + 1}
                   </span>
-                  <span className="text-[13px] text-primary-500/60 leading-relaxed">{step}</span>
+                  <span className="text-[13px] text-primary-500/70 leading-relaxed">{step}</span>
                 </li>
               ))}
             </ol>
@@ -140,11 +140,11 @@ export function Equivalence() {
             blockType="LongText"
             defaultValue="Başka bölümden ders alma veya yaz okulunda başka üniversiteden ders alma durumunda, saydırmak istediğin ders için listede belirtilen öğretim üyesinden uygunluk alınması zorunludur. Uygunluk, kurumsal e-posta adresi üzerinden ya da ders içerik çıktılarının üzerine yazılıp imzalanarak alınabilir. Uygunluk yazısında eşleşme net biçimde ifade edilmelidir."
             as="p"
-            className="text-[13px] text-primary-500/60 leading-relaxed"
+            className="text-[13px] text-primary-500/70 leading-relaxed"
           />
 
           <div className="flex flex-col gap-3">
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/45">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
               Örnek ifadeler
             </span>
             <EditableList
@@ -172,7 +172,7 @@ export function Equivalence() {
                   key={index}
                   className="flex flex-col gap-1.5 p-3 rounded-lg bg-primary-500/2 border-l-2 border-secondary-500/40"
                 >
-                  <span className="text-[11px] font-medium text-primary-500/45">
+                  <span className="text-[11px] font-medium text-primary-500/70">
                     {item.context}
                   </span>
                   <span className="text-[13px] text-primary-500/70 leading-relaxed italic">

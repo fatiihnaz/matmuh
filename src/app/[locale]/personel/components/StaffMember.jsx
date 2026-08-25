@@ -21,22 +21,22 @@ export default function StaffMember({ member, idx }) {
           textSize="font-sans text-base tracking-wider"
         />
 
-        <div className="font-sans text-sm font-semibold text-primary-500 leading-tight transition-colors duration-200 group-hover:text-secondary-500">
+        <div className="font-sans text-sm font-semibold text-primary-500 leading-tight transition-colors duration-200 group-hover:text-secondary-700">
           {member.academicTitle} {name}
         </div>
 
         {member.role && (
-          <div className="mt-1 font-sans text-xs font-semibold text-secondary-500 tracking-tight">
+          <div className="mt-1 font-sans text-xs font-semibold text-secondary-700 tracking-tight">
             {member.role}
           </div>
         )}
 
-        <div className="mt-2 pt-1 font-sans text-xs text-primary-500/60 leading-tight">
+        <div className="mt-2 pt-1 font-sans text-xs text-primary-500/70 leading-tight">
           Tel: {member.phone}
         </div>
 
         <div className="mt-2">
-          <span className="text-xs font-bold text-secondary-500 bg-secondary-500/10 px-2 py-1 rounded-md">
+          <span className="text-xs font-bold text-secondary-700 bg-secondary-500/10 px-2 py-1 rounded-md">
             {isRoomNumber ? `Oda: ${office}` : office}
           </span>
         </div>
@@ -45,7 +45,7 @@ export default function StaffMember({ member, idx }) {
           {member.email && (
             <a
               href={`mailto:${member.email}`}
-              className="rounded-md p-1.5 text-primary-500/30 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-500"
+              className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
               title="E-posta"
               onClick={(e) => e.stopPropagation()}
             >
@@ -58,7 +58,7 @@ export default function StaffMember({ member, idx }) {
               href={avesisUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-md p-1.5 text-primary-500/30 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-500"
+              className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
               title="AVESİS Profili"
               onClick={(e) => e.stopPropagation()}
             >

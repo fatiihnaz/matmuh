@@ -16,24 +16,24 @@ function LaboratoryCard({ lab }) {
   return (
     <div className="flex flex-col gap-3 p-5 rounded-xl border border-primary-500/10 shadow-xs bg-white">
       <div className="flex items-center gap-2">
-        <Monitor className="size-4 text-secondary-500" />
+        <Monitor className="size-4 text-secondary-700" />
         <span className="text-[14px] font-semibold text-primary-500">{lab.name}</span>
       </div>
 
-      <div className="flex items-center gap-2 text-[12px] text-primary-500/55">
-        <Users className="size-3.5 text-primary-500/35" />
+      <div className="flex items-center gap-2 text-[12px] text-primary-500/70">
+        <Users className="size-3.5 text-primary-500/70" />
         {lab.capacity} kapasiteli
       </div>
 
       <div className="flex flex-col gap-1.5">
-        <span className="text-[10px] font-semibold uppercase tracking-widest text-primary-500/40">
+        <span className="text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
           Kurulu Yazılımlar
         </span>
         <div className="flex flex-wrap gap-1.5">
           {softwareList(lab.software).map((item) => (
             <span
               key={item}
-              className="px-2 py-1 rounded-sm bg-secondary-500/10 text-[11px] font-medium text-secondary-600"
+              className="px-2 py-1 rounded-sm bg-secondary-500/10 text-[11px] font-medium text-secondary-700"
             >
               {item}
             </span>

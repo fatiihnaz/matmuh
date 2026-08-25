@@ -32,7 +32,7 @@ function SortBtn({ label, col, sortCol, sortDir, onSort }) {
   return (
     <button
       onClick={() => onSort(col)}
-      className="flex items-center gap-1.5 transition-colors hover:text-secondary-500"
+      className="flex items-center gap-1.5 transition-colors hover:text-secondary-700"
       style={{
         fontSize: "0.6875rem",
         fontWeight: 600,
@@ -468,7 +468,7 @@ export default function CurriculumPage({ semesters, summary }) {
                                   {...(isExternal
                                     ? { target: "_blank", rel: "noopener noreferrer" }
                                     : {})}
-                                  className="hover:text-secondary-500 transition-colors block truncate"
+                                  className="hover:text-secondary-700 transition-colors block truncate"
                                   style={{
                                     fontSize: "0.8125rem",
                                     fontWeight: 450,

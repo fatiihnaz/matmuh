@@ -18,13 +18,13 @@ export default function AnnouncementItem({ item, variant = "compact" }) {
         className="flex flex-col py-1.5 items-center justify-center w-13 shrink-0 bg-primary-500/3 border border-primary-500/6 rounded-lg"
       >
         <span className="text-lg font-bold text-primary-700 leading-tight">{day}</span>
-        <span className="text-[11px] font-medium text-secondary-500 uppercase">{month}</span>
+        <span className="text-[11px] font-medium text-secondary-700 uppercase">{month}</span>
       </time>
 
       <div className="min-w-0 flex-1 py-0.5">
-        <p className="text-sm text-primary-700 group-hover:text-secondary-600 transition-colors">
+        <p className="text-sm text-primary-700 group-hover:text-secondary-700 transition-colors">
           {item.pinned && (
-            <Pin className="inline size-3 mr-1.5 -mt-0.5 text-secondary-500" aria-label="Sabitlenmiş" />
+            <Pin className="inline size-3 mr-1.5 -mt-0.5 text-secondary-700" aria-label="Sabitlenmiş" />
           )}
           {item.title}
         </p>
@@ -39,13 +39,13 @@ export default function AnnouncementItem({ item, variant = "compact" }) {
           <div className="mt-2 flex items-center gap-2 flex-wrap">
             <CategoryTags ids={item.categories} />
             {item.attachments.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-[11px] text-primary-500/40">
+              <span className="inline-flex items-center gap-1 text-[11px] text-primary-500/70">
                 <Paperclip className="size-3" />
                 {item.attachments.length}
               </span>
             )}
             {item.gallery.length > 0 && (
-              <span className="inline-flex items-center gap-1 text-[11px] text-primary-500/40">
+              <span className="inline-flex items-center gap-1 text-[11px] text-primary-500/70">
                 <ImageIcon className="size-3" />
                 {item.gallery.length}
               </span>

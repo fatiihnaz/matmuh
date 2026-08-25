@@ -15,7 +15,7 @@ function BoardMemberRow({ member, idx }) {
           {member.rank && `${member.rank} `}
           {member.name}
         </span>
-        <span className="block text-[11px] text-primary-500/50 wrap-break-word">
+        <span className="block text-[11px] text-primary-500/70 wrap-break-word">
           {member.role}
         </span>
       </span>
@@ -38,7 +38,7 @@ export default function AdvisoryBoard() {
       }
       count={count}
       action={
-        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-600 px-2 py-1 rounded-sm bg-secondary-500/10">
+        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-700 px-2 py-1 rounded-sm bg-secondary-500/10">
           <EditableRegion
             blockPath="board.year"
             blockType="ShortText"

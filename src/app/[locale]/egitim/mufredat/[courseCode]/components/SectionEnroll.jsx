@@ -107,7 +107,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
   if (enrolled) {
     return (
       <div className="mt-3 flex items-center gap-2">
-        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-secondary-600">
+        <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-secondary-700">
           <Check size={13} strokeWidth={2} />
           Programında
         </span>
@@ -115,7 +115,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
           type="button"
           onClick={() => void run(unenroll)}
           disabled={busy}
-          className={`${BUTTON} text-primary-500/45 hover:bg-primary-500/5 hover:text-primary-500`}
+          className={`${BUTTON} text-primary-500/70 hover:bg-primary-500/5 hover:text-primary-500`}
         >
           {busy ? "…" : "Kaldır"}
         </button>
@@ -140,7 +140,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
           type="button"
           onClick={onAdd}
           disabled={busy}
-          className={`${BUTTON} border border-secondary-500/40 text-secondary-600 hover:bg-secondary-500/10`}
+          className={`${BUTTON} border border-secondary-500/40 text-secondary-700 hover:bg-secondary-500/10`}
         >
           <CalendarPlus size={13} strokeWidth={2} />
           {busy ? "…" : clash ? "Yine de ekle" : "Programıma ekle"}
@@ -150,7 +150,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
           <button
             type="button"
             onClick={() => setClash(null)}
-            className={`${BUTTON} text-primary-500/45 hover:text-primary-500`}
+            className={`${BUTTON} text-primary-500/70 hover:text-primary-500`}
           >
             <X size={13} strokeWidth={2} />
             Vazgeç

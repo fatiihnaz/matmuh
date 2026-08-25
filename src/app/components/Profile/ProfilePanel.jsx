@@ -48,8 +48,8 @@ function Skeleton({ rows = 4 }) {
 
 function Empty({ children }) {
   return (
-    <div className="flex flex-col items-center gap-2 px-4 py-12 text-center text-[13px] text-primary-500/40">
-      <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
+    <div className="flex flex-col items-center gap-2 px-4 py-12 text-center text-[13px] text-primary-500/70">
+      <Info size={18} strokeWidth={1.5} className="text-primary-500/70" />
       {children}
     </div>
   );
@@ -63,7 +63,7 @@ function NoteThumb({ note }) {
   const face = (
     <>
       <FileText size={15} strokeWidth={1.5} className="text-primary-700" />
-      <span className="text-[7px] font-bold tracking-wide text-primary-500/50">
+      <span className="text-[7px] font-bold tracking-wide text-primary-500/70">
         {note.extension}
       </span>
     </>
@@ -150,8 +150,8 @@ function NotesBody({
                 onClick={() => setStatus(filter.id)}
                 className={`rounded-md px-2 py-0.5 text-[11px] font-medium transition-colors ${
                   status === filter.id
-                    ? "bg-secondary-500/12 text-secondary-600"
-                    : "text-primary-500/45 hover:text-primary-500"
+                    ? "bg-secondary-500/12 text-secondary-700"
+                    : "text-primary-500/70 hover:text-primary-500"
                 }`}
               >
                 {filter.label}
@@ -182,18 +182,18 @@ function NotesBody({
                       {badge.label}
                     </span>
                     {note.type !== "OTHER" && noteTypeLabel(note.type) && (
-                      <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/55">
+                      <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/70">
                         {noteTypeLabel(note.type)}
                       </span>
                     )}
                   </span>
-                  <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-primary-500/45">
+                  <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-primary-500/70">
                     {note.lectureCode && (
                       <>
                         <Link
                           href={href(`/egitim/mufredat/${note.lectureCode}`)}
                           onClick={onNavigate}
-                          className="font-mono font-semibold text-secondary-500 hover:underline"
+                          className="font-mono font-semibold text-secondary-700 hover:underline"
                         >
                           {note.lectureCode}
                         </Link>
@@ -234,7 +234,7 @@ function NotesBody({
                     <button
                       type="button"
                       onClick={() => onConfirm(null)}
-                      className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-primary-500"
+                      className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/70 transition-colors hover:text-primary-500"
                     >
                       Vazgeç
                     </button>
@@ -245,7 +245,7 @@ function NotesBody({
                     onClick={() =>
                       draft ? onRemove(note) : onConfirm(note.id)
                     }
-                    className="shrink-0 rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700"
+                    className="shrink-0 rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/70 transition-colors hover:bg-red-50 hover:text-red-700"
                   >
                     {draft ? "İptal et" : "Kaldır"}
                   </button>
@@ -266,16 +266,16 @@ function ScheduleEntry({ entry, conflict }) {
         conflict ? "bg-white" : "bg-primary-500/2"
       }`}
     >
-      <span className="shrink-0 font-mono text-[11px] text-secondary-600">
+      <span className="shrink-0 font-mono text-[11px] text-secondary-700">
         {entry.startTime}
-        <span className="block text-primary-500/30">{entry.endTime}</span>
+        <span className="block text-primary-500/70">{entry.endTime}</span>
       </span>
       <span className="min-w-0 flex-1">
         <span className="block truncate text-[13px] font-medium text-primary-600">
           {entry.lectureCode ? `${entry.lectureCode} · ` : ""}
           {entry.title}
         </span>
-        <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-primary-500/45">
+        <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-primary-500/70">
           {entry.online ? (
             <span className="inline-flex items-center gap-1">
               <Wifi size={11} strokeWidth={1.5} /> Çevrimiçi
@@ -289,7 +289,7 @@ function ScheduleEntry({ entry, conflict }) {
             <span className="truncate">{entry.staffName}</span>
           )}
           {entry.examType && (
-            <span className="rounded-sm bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-600">
+            <span className="rounded-sm bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-700">
               Sınav
             </span>
           )}
@@ -328,7 +328,7 @@ function EnrolledCourses({ onChanged }) {
 
   return (
     <div className="border-b border-primary-500/8 px-4 py-3">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/40">
+      <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
         Kayıtlı dersler
       </p>
       <ul className="space-y-0.5">
@@ -338,14 +338,14 @@ function EnrolledCourses({ onChanged }) {
             className="flex items-center gap-2 rounded-lg py-1 pl-2 pr-1 hover:bg-primary-500/3"
           >
             <span className="min-w-0 flex-1 text-[12px] text-primary-600">
-              <span className="font-mono text-[11px] font-semibold text-secondary-600">
+              <span className="font-mono text-[11px] font-semibold text-secondary-700">
                 {row.lectureCode}
               </span>
               {row.lectureName && (
                 <span className="ml-1.5">{row.lectureName}</span>
               )}
               {row.groupNumber != null && (
-                <span className="ml-1.5 text-[11px] text-primary-500/40">
+                <span className="ml-1.5 text-[11px] text-primary-500/70">
                   Gr.{row.groupNumber}
                 </span>
               )}
@@ -355,7 +355,7 @@ function EnrolledCourses({ onChanged }) {
               onClick={() => void remove(row.offeringId)}
               disabled={busy === row.offeringId}
               aria-label={`${row.lectureName || row.lectureCode} dersini programdan kaldır`}
-              className="shrink-0 rounded-sm p-0.5 text-primary-500/30 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
+              className="shrink-0 rounded-sm p-0.5 text-primary-500/70 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
             >
               <X size={12} strokeWidth={2} />
             </button>
@@ -423,8 +423,8 @@ function ScheduleBody({ items, onChanged }) {
             aria-pressed={tab === entry.id}
             className={`rounded-md px-2.5 py-1 text-[11px] font-medium transition-colors ${
               tab === entry.id
-                ? "bg-secondary-500/12 text-secondary-600"
-                : "text-primary-500/45 hover:text-primary-500"
+                ? "bg-secondary-500/12 text-secondary-700"
+                : "text-primary-500/70 hover:text-primary-500"
             }`}
           >
             {entry.label}
@@ -447,10 +447,10 @@ function DatedSchedule({ items }) {
       {scheduleDays(items).map(({ date, blocks }) => (
         <div key={date} className="px-4 py-3">
           <div className="mb-2 flex items-baseline gap-2">
-            <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/40">
+            <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
               {weekdayOf(date)}
             </span>
-            <span className="text-[11px] text-primary-500/30">
+            <span className="text-[11px] text-primary-500/70">
               {formatDay(date)}
             </span>
           </div>
@@ -568,10 +568,10 @@ export default function ProfilePanel({ view, onClose }) {
     >
       <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
         <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
-          <Icon size={16} strokeWidth={1.5} className="text-secondary-500" />
+          <Icon size={16} strokeWidth={1.5} className="text-secondary-700" />
           <h2 className="text-sm font-semibold text-primary-600">{label}</h2>
           {status === "ready" && state.items.length > 0 && (
-            <span className="ml-auto text-[11px] text-primary-500/35">
+            <span className="ml-auto text-[11px] text-primary-500/70">
               {state.items.length} kayıt
             </span>
           )}

@@ -59,7 +59,7 @@ function SectionRow({ section, defaultOpen }) {
           <span className="block truncate text-[13px] font-semibold leading-tight text-primary-500">
             {section.instructor}
           </span>
-          <span className="mt-0.5 block text-[11px] text-primary-500/45">
+          <span className="mt-0.5 block text-[11px] text-primary-500/70">
             Grup {section.groupNo}
             {!open && first && (
               <>
@@ -72,7 +72,7 @@ function SectionRow({ section, defaultOpen }) {
         </span>
         <ChevronDown
           size={15}
-          className={`shrink-0 text-primary-500/30 transition-transform duration-200 ${
+          className={`shrink-0 text-primary-500/70 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
@@ -88,12 +88,12 @@ function SectionRow({ section, defaultOpen }) {
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs font-bold text-primary-500">{slot.day}</span>
                 {slot.online && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-700 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
                     <Wifi size={9} strokeWidth={2} /> Çevrimiçi
                   </span>
                 )}
               </div>
-              <div className="flex items-center gap-3 text-xs text-primary-500/50">
+              <div className="flex items-center gap-3 text-xs text-primary-500/70">
                 <span className="flex items-center gap-1.5">
                   <Clock size={12} /> {slot.time}
                 </span>
@@ -258,7 +258,7 @@ export default function CourseInfo({ course, sections = [] }) {
   const renderDistributionBars = (data) => {
     if (!data || data.length === 0) {
       return (
-        <div className="text-sm font-medium text-primary-500/40 py-8 px-2 border border-dashed border-primary-500/20 rounded-xl text-center">
+        <div className="text-sm font-medium text-primary-500/70 py-8 px-2 border border-dashed border-primary-500/20 rounded-xl text-center">
           Bu aralık için dağılım verisi bulunmuyor.
         </div>
       );
@@ -272,13 +272,13 @@ export default function CourseInfo({ course, sections = [] }) {
     return (
       <div className="relative pt-2 sm:pt-0">
         <div className="sm:hidden absolute -top-5 right-0 flex justify-end pointer-events-none">
-          <span className="text-[10px] flex items-center gap-1 text-primary-500/30">
+          <span className="text-[10px] flex items-center gap-1 text-primary-500/70">
             Kaydırın <ArrowRight size={10} />
           </span>
         </div>
         <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
           <div className="min-w-100 sm:min-w-0 space-y-2.5">
-            <div className="flex text-[10px] font-bold text-primary-500/40 uppercase mb-4 px-1 tracking-widest">
+            <div className="flex text-[10px] font-bold text-primary-500/70 uppercase mb-4 px-1 tracking-widest">
               <div className="w-12">HARF</div>
               <div className="w-10">BAŞ</div>
               <div className="w-10">BİTİŞ</div>
@@ -304,8 +304,8 @@ export default function CourseInfo({ course, sections = [] }) {
                   <div className="w-12 font-bold text-primary-500 text-sm tracking-tight">
                     {item.grade}
                   </div>
-                  <div className="w-10 text-primary-500/50">{item.start}</div>
-                  <div className="w-10 text-primary-500/50">{item.end}</div>
+                  <div className="w-10 text-primary-500/70">{item.start}</div>
+                  <div className="w-10 text-primary-500/70">{item.end}</div>
                   <div className="flex-1 px-4 flex items-center">
                     <div className="h-2 w-full bg-primary-500/5 rounded-full overflow-hidden">
                       <motion.div
@@ -320,10 +320,10 @@ export default function CourseInfo({ course, sections = [] }) {
                       />
                     </div>
                   </div>
-                  <div className="w-10 text-right text-primary-500/60 font-bold">
+                  <div className="w-10 text-right text-primary-500/70 font-bold">
                     {count}
                   </div>
-                  <div className="w-12 text-right text-primary-500/40">
+                  <div className="w-12 text-right text-primary-500/70">
                     {percent}%
                   </div>
                 </div>
@@ -355,8 +355,8 @@ export default function CourseInfo({ course, sections = [] }) {
           ))}
 
           {sections.length === 0 && (
-            <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-              <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
+            <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/70 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
+              <Info size={18} strokeWidth={1.5} className="text-primary-500/70" />
               Bu ders bu dönem açılmamış veya program bilgisi girilmemiş.
             </div>
           )}
@@ -377,7 +377,7 @@ export default function CourseInfo({ course, sections = [] }) {
             { label: "Dil", value: course.language ?? "-" },
           ].map((item, i) => (
             <div key={i} className="flex items-center justify-between text-xs">
-              <span className="text-primary-500/40 font-medium">
+              <span className="text-primary-500/70 font-medium">
                 {item.label}
               </span>
               <span className="font-medium text-primary-500 font-mono">
@@ -401,8 +401,8 @@ export default function CourseInfo({ course, sections = [] }) {
               className={`px-6 py-4 text-sm font-semibold transition-all border-b-2 flex items-center gap-2 whitespace-nowrap
                 ${
                   activeTab === idx
-                    ? "border-secondary-500 text-secondary-500"
-                    : "border-transparent text-primary-500/40 hover:text-primary-500"
+                    ? "border-secondary-500 text-secondary-700"
+                    : "border-transparent text-primary-500/70 hover:text-primary-500"
                 }`}
             >
               {tab.icon && (
@@ -410,14 +410,14 @@ export default function CourseInfo({ course, sections = [] }) {
                   size={16}
                   className={
                     activeTab === idx
-                      ? "text-secondary-500"
-                      : "text-primary-500/40"
+                      ? "text-secondary-700"
+                      : "text-primary-500/70"
                   }
                 />
               )}
               {tab.label}
               {tab.badge && (
-                <span className="bg-primary-500/5 text-primary-500/60 text-[10px] px-2 py-0.5 rounded-md font-bold ml-1 font-mono">
+                <span className="bg-primary-500/5 text-primary-500/70 text-[10px] px-2 py-0.5 rounded-md font-bold ml-1 font-mono">
                   {tab.badge}
                 </span>
               )}
@@ -426,8 +426,8 @@ export default function CourseInfo({ course, sections = [] }) {
                   size={14}
                   className={
                     activeTab === idx
-                      ? "text-secondary-500"
-                      : "text-primary-500/30"
+                      ? "text-secondary-700"
+                      : "text-primary-500/70"
                   }
                 />
               )}
@@ -455,7 +455,7 @@ export default function CourseInfo({ course, sections = [] }) {
                     </h3>
                   </div>
                   {course.content ? (
-                    <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
+                    <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
                       {course.content}
                     </p>
                   ) : course.bolognaLink ? (
@@ -465,20 +465,20 @@ export default function CourseInfo({ course, sections = [] }) {
                       rel="noopener noreferrer"
                       className="flex items-start gap-3 p-4 rounded-xl border border-primary-500/10 bg-primary-500/2 hover:border-secondary-500/40 transition-colors group"
                     >
-                      <div className="shrink-0 size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-500">
+                      <div className="shrink-0 size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-700">
                         <ExternalLink size={14} strokeWidth={2} />
                       </div>
-                      <span className="text-sm text-primary-500/60 leading-relaxed">
+                      <span className="text-sm text-primary-500/70 leading-relaxed">
                         Bu ders Matematik Mühendisliği bölümüne ait değil. İçerik,
                         kazanım ve değerlendirme bilgileri{" "}
-                        <span className="font-semibold text-primary-500 group-hover:text-secondary-500 transition-colors">
+                        <span className="font-semibold text-primary-500 group-hover:text-secondary-700 transition-colors">
                           YTÜ Bologna kataloğunda
                         </span>{" "}
                         tutuluyor.
                       </span>
                     </a>
                   ) : (
-                    <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
+                    <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
                       Bu ders için içerik açıklaması girilmemiş.
                     </p>
                   )}
@@ -494,7 +494,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             Değerlendirme
                           </h3>
                         </div>
-                        <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
+                        <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
                           {course.gradingPolicy}
                         </p>
                       </div>
@@ -508,7 +508,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             Kaynaklar
                           </h3>
                         </div>
-                        <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
+                        <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
                           {course.resources}
                         </p>
                       </div>
@@ -517,7 +517,7 @@ export default function CourseInfo({ course, sections = [] }) {
                 )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
-                    <span className="text-[10px] font-bold text-secondary-500 uppercase tracking-widest block mb-2">
+                    <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
                       Eğitim Dili
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
@@ -525,7 +525,7 @@ export default function CourseInfo({ course, sections = [] }) {
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
-                    <span className="text-[10px] font-bold text-secondary-500 uppercase tracking-widest block mb-2">
+                    <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
                       Değerlendirme Sistemi
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
@@ -552,14 +552,14 @@ export default function CourseInfo({ course, sections = [] }) {
                   <div className="flex items-center gap-2.5">
                     <Calendar
                       size={16}
-                      className="text-secondary-500"
+                      className="text-secondary-700"
                       strokeWidth={1.5}
                     />
                     <span className="text-sm font-semibold text-primary-500">
                       Haftalık İçerik
                     </span>
                   </div>
-                  <span className="text-xs font-medium text-primary-500/40">
+                  <span className="text-xs font-medium text-primary-500/70">
                     {weekCount} hafta
                   </span>
                 </div>
@@ -570,7 +570,7 @@ export default function CourseInfo({ course, sections = [] }) {
                       key={item.week}
                       className="flex items-start gap-4 py-3.5 border-b border-primary-500/10 last:border-0"
                     >
-                      <span className="shrink-0 size-8 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-secondary-500/10 border border-secondary-500/20 text-secondary-600">
+                      <span className="shrink-0 size-8 rounded-full flex items-center justify-center font-mono text-xs font-bold bg-secondary-500/10 border border-secondary-500/20 text-secondary-700">
                         {item.week}
                       </span>
                       <span className="pt-1.5 text-sm font-medium text-primary-500 leading-relaxed">
@@ -579,8 +579,8 @@ export default function CourseInfo({ course, sections = [] }) {
                     </div>
                   ))}
                   {weekCount === 0 && (
-                    <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/40 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-                      <Info size={18} strokeWidth={1.5} className="text-primary-500/25" />
+                    <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/70 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
+                      <Info size={18} strokeWidth={1.5} className="text-primary-500/70" />
                       Bu ders için haftalık içerik girilmemiş.
                     </div>
                   )}
@@ -647,7 +647,7 @@ export default function CourseInfo({ course, sections = [] }) {
                           </select>
                           <ChevronDown
                             size={14}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/40 pointer-events-none"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/70 pointer-events-none"
                           />
                         </div>
 
@@ -668,7 +668,7 @@ export default function CourseInfo({ course, sections = [] }) {
                           </select>
                           <ChevronDown
                             size={14}
-                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/40 pointer-events-none"
+                            className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/70 pointer-events-none"
                           />
                         </div>
 
@@ -689,15 +689,15 @@ export default function CourseInfo({ course, sections = [] }) {
                             </select>
                             <ChevronDown
                               size={14}
-                              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/40 pointer-events-none"
+                              className="absolute right-3.5 top-1/2 -translate-y-1/2 text-primary-500/70 pointer-events-none"
                             />
                           </div>
                         )}
                       </div>
 
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary-500/5 border border-primary-500/10 shrink-0">
-                        <Database size={12} className="text-primary-500/40" />
-                        <span className="text-[10px] font-bold text-primary-500/40 uppercase tracking-wider">
+                        <Database size={12} className="text-primary-500/70" />
+                        <span className="text-[10px] font-bold text-primary-500/70 uppercase tracking-wider">
                           OBS Verisi ({searchCode})
                         </span>
                       </div>
@@ -747,10 +747,10 @@ export default function CourseInfo({ course, sections = [] }) {
                           className="bg-white rounded-xl p-4 sm:p-5 border border-primary-500/10 shadow-xs flex flex-col justify-between h-full min-h-35 group hover:border-primary-500/20 transition-all"
                         >
                           <div className="flex items-center gap-2 mb-4">
-                            <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-500 shrink-0">
+                            <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-700 shrink-0">
                               <stat.icon size={14} strokeWidth={2.5} />
                             </div>
-                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/40 leading-tight">
+                            <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/70 leading-tight">
                               {stat.label}
                             </span>
                           </div>
@@ -758,12 +758,12 @@ export default function CourseInfo({ course, sections = [] }) {
                             <div className="text-2xl sm:text-3xl font-mono font-bold text-primary-500 mb-1 tracking-tighter leading-none">
                               {stat.val}
                               {stat.suffix && (
-                                <span className="text-[10px] font-sans text-primary-500/40 ml-1 tracking-normal">
+                                <span className="text-[10px] font-sans text-primary-500/70 ml-1 tracking-normal">
                                   {stat.suffix}
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs text-primary-500/40 tracking-tight">
+                            <div className="text-xs text-primary-500/70 tracking-tight">
                               {stat.sub}
                             </div>
                           </div>
@@ -772,10 +772,10 @@ export default function CourseInfo({ course, sections = [] }) {
 
                       <div className="bg-white rounded-xl p-4 sm:p-5 border border-primary-500/10 shadow-xs flex flex-col justify-between h-full min-h-35 group hover:border-primary-500/20 transition-all">
                         <div className="flex items-center gap-2 mb-4">
-                          <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-500 shrink-0">
+                          <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-700 shrink-0">
                             <User size={12} strokeWidth={2.5} />
                           </div>
-                          <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/40 leading-none">
+                          <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/70 leading-none">
                             Geçme Oranı
                           </span>
                         </div>
@@ -841,7 +841,7 @@ export default function CourseInfo({ course, sections = [] }) {
                           <div className="space-y-1">
                             <div className="flex items-center gap-2">
                               <div className="size-1.5 rounded-full bg-secondary-500 shrink-0" />
-                              <span className="text-[10px] text-primary-500/40 w-8">
+                              <span className="text-[10px] text-primary-500/70 w-8">
                                 Geçen
                               </span>
                               <span className="font-bold text-primary-500 font-mono text-xs leading-none">
@@ -850,7 +850,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             </div>
                             <div className="flex items-center gap-2">
                               <div className="size-1.5 rounded-full bg-primary-500/20 shrink-0" />
-                              <span className="text-[10px] text-primary-500/40 w-8">
+                              <span className="text-[10px] text-primary-500/70 w-8">
                                 Kalan
                               </span>
                               <span className="font-bold text-primary-500 font-mono text-xs leading-none">
@@ -870,7 +870,7 @@ export default function CourseInfo({ course, sections = [] }) {
                         >
                           <div className="px-4 sm:px-5 pt-4 sm:pt-5 pb-3 sm:pb-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
                             <div className="flex items-center gap-3 sm:gap-4 shrink-0">
-                              <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-500 group-hover:bg-secondary-500 group-hover:text-white transition-all duration-300">
+                              <div className="size-8 rounded-lg bg-secondary-500/10 flex items-center justify-center text-secondary-700 group-hover:bg-secondary-500 group-hover:text-white transition-all duration-300">
                                 {isFinalExam(exam) ? (
                                   <GraduationCap size={14} />
                                 ) : isMakeupExam(exam) ? (
@@ -879,40 +879,40 @@ export default function CourseInfo({ course, sections = [] }) {
                                   <FileText size={14} />
                                 )}
                               </div>
-                              <span className="text-[11px] font-bold text-primary-500/40 uppercase tracking-wider leading-none">
+                              <span className="text-[11px] font-bold text-primary-500/70 uppercase tracking-wider leading-none">
                                 {exam.name}
                               </span>
                             </div>
 
                             <div className="grid grid-cols-3 sm:flex sm:items-center sm:gap-6 bg-primary-500/5 sm:bg-transparent rounded-lg sm:rounded-none py-2 sm:py-0 divide-x divide-primary-500/10 sm:divide-x-0">
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                <Percent size={14} className="text-secondary-500" />
+                                <Percent size={14} className="text-secondary-700" />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
                                   {exam.weight}
                                 </span>
-                                <span className="text-[10px] sm:text-xs font-sans text-primary-500/40 sm:text-primary-500">
+                                <span className="text-[10px] sm:text-xs font-sans text-primary-500/70 sm:text-primary-500">
                                   ETKİ
                                 </span>
                               </div>
                               <div className="hidden sm:block w-px h-8 bg-primary-500/10" />
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                <Sigma size={14} className="text-secondary-500" />
+                                <Sigma size={14} className="text-secondary-700" />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
                                   {exam.average}
                                 </span>
-                                <span className="text-[10px] sm:text-xs font-sans text-primary-500/40 sm:text-primary-500">
+                                <span className="text-[10px] sm:text-xs font-sans text-primary-500/70 sm:text-primary-500">
                                   ORT
                                 </span>
                               </div>
                               <div className="hidden sm:block w-px h-8 bg-primary-500/10" />
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                <User size={14} className="text-secondary-500" />
+                                <User size={14} className="text-secondary-700" />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
                                   {exam.total
                                     ? `${exam.attended}/${exam.total}`
                                     : exam.attended}
                                 </span>
-                                <span className="text-[10px] sm:text-xs font-sans text-primary-500/40 sm:text-primary-500">
+                                <span className="text-[10px] sm:text-xs font-sans text-primary-500/70 sm:text-primary-500">
                                   {exam.total ? "GİREN" : "ÖĞR"}
                                 </span>
                               </div>
@@ -957,7 +957,7 @@ function EmptyStats({ code, message }) {
     <div className="flex flex-col items-center justify-center py-20 bg-primary-500/5 rounded-xl border border-primary-500/10 border-dashed">
       <Database size={48} strokeWidth={1} className="text-primary-500/20 mb-4" />
       <h3 className="text-lg font-bold text-primary-500 mb-2">{code}</h3>
-      <p className="text-sm text-primary-500/50 text-center max-w-sm">{message}</p>
+      <p className="text-sm text-primary-500/70 text-center max-w-sm">{message}</p>
     </div>
   );
 }
@@ -1017,7 +1017,7 @@ function StatsPreview() {
     <div className="relative mt-6">
       <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
         <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 shadow-xl">
-          <Eye size={16} strokeWidth={2} className="text-secondary-500" />
+          <Eye size={16} strokeWidth={2} className="text-secondary-700" />
           <span className="text-[13px] font-medium text-white">Önizleme</span>
         </div>
       </div>
@@ -1052,7 +1052,7 @@ function StatsPreview() {
                         style={{ width: card === 0 ? row.width : row.makeup }}
                       />
                     </div>
-                    <div className="w-8 text-right text-xs text-primary-500/55">
+                    <div className="w-8 text-right text-xs text-primary-500/70">
                       {card === 0 ? row.count : row.makeupCount}
                     </div>
                   </div>
@@ -1074,7 +1074,7 @@ function StatsPreview() {
             >
               <div className="flex items-center gap-2">
                 <div className="size-8 rounded-lg bg-secondary-500/10" />
-                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/40">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/70">
                   {stat.label}
                 </span>
               </div>
@@ -1082,7 +1082,7 @@ function StatsPreview() {
                 <div className="font-mono text-3xl font-bold tracking-tighter text-primary-500">
                   {stat.val}
                 </div>
-                <div className="text-xs text-primary-500/40">{stat.sub}</div>
+                <div className="text-xs text-primary-500/70">{stat.sub}</div>
               </div>
             </div>
           ))}
@@ -1097,7 +1097,7 @@ function LoginGate({ loading, onSignIn, code }) {
     <>
     <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
       <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
-        <Shield size={20} strokeWidth={1.5} className="text-secondary-500" />
+        <Shield size={20} strokeWidth={1.5} className="text-secondary-700" />
       </div>
       <div className="flex-1">
         <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
@@ -1106,7 +1106,7 @@ function LoginGate({ loading, onSignIn, code }) {
         <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
           {code} dersinin geçmiş dönem sınıf ortalamalarını, harf dağılımlarını ve
           eğitmen bilgilerini görüntülemek için{" "}
-          <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
+          <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
             @std.yildiz.edu.tr
           </span>{" "}
           hesabınızla giriş yapmalısınız.

@@ -49,7 +49,7 @@ export default async function AnnouncementsPage({ searchParams }) {
           </Panel>
 
           <div className="flex items-center justify-between gap-3 px-1">
-            <span className="text-xs text-primary-500/40">
+            <span className="text-xs text-primary-500/70">
               {total} duyuru{q ? ` · "${q}" için sonuçlar` : ""}
             </span>
             <NewRecordDialog collection="announcements" page="/duyurular/yeni" label="Yeni duyuru" title="Yeni Duyuru" submitLabel="Yayımla" />

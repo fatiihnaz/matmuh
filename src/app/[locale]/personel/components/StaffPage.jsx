@@ -192,7 +192,7 @@ function StaffContent({ initialStaff }) {
       </div>
 
       <div className="mb-4 flex items-center justify-between px-1">
-        <span className="text-xs text-primary-500/40">
+        <span className="text-xs text-primary-500/70">
           {filteredStaff.length} sonuç gösteriliyor
         </span>
       </div>
@@ -206,7 +206,7 @@ function StaffContent({ initialStaff }) {
       </div>
 
       {!isLoading && filteredStaff.length === 0 && (
-        <div className="text-center py-20 text-sm text-primary-500/40 font-medium border border-dashed border-primary-500/10 rounded-xl">
+        <div className="text-center py-20 text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
           {error ? "Personel listesi yüklenemedi." : "Kriterlere uygun personel bulunamadı."}
         </div>
       )}
