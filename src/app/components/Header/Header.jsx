@@ -5,7 +5,7 @@ import Link from "next/link";
 import NewTabHint from "@/app/components/NewTabHint";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Mail, Menu, X } from "lucide-react";
+import { Mail } from "lucide-react";
 import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
@@ -19,6 +19,8 @@ import { useCmsBlock, useCmsRoute } from "inscribed";
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 
+const BURGER_BAR =
+  "absolute top-1/2 left-0 -mt-px h-0.5 w-full rounded-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]";
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
@@ -138,9 +140,32 @@ export default function Header() {
 
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden text-neutral-400 hover:text-white transition-colors"
+              aria-label={mobileMenuOpen ? t("Menüyü kapat") : t("Menüyü aç")}
+              aria-expanded={mobileMenuOpen}
+              className="lg:hidden -m-2.5 p-2.5 text-neutral-400 hover:text-white transition-colors"
             >
-              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              <span aria-hidden="true" className="relative block h-4.5 w-5.5">
+                <span
+                  className={`${BURGER_BAR} motion-reduce:transition-none`}
+                  style={{
+                    transform: mobileMenuOpen
+                      ? "rotate(45deg)"
+                      : "translateY(-6px)",
+                  }}
+                />
+                <span
+                  className={`${BURGER_BAR} transition-opacity motion-reduce:transition-none`}
+                  style={{ opacity: mobileMenuOpen ? 0 : 1 }}
+                />
+                <span
+                  className={`${BURGER_BAR} motion-reduce:transition-none`}
+                  style={{
+                    transform: mobileMenuOpen
+                      ? "rotate(-45deg)"
+                      : "translateY(6px)",
+                  }}
+                />
+              </span>
             </button>
           </div>
         </div>
