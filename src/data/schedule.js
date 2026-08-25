@@ -45,6 +45,7 @@ function toEntry(slot, lecture) {
 
   return {
     id: slot.id,
+    offeringId: slot.offeringId ?? null,
     day,
     slot: index,
     span: Math.max(1, Math.ceil((end - start) / 60)),
@@ -99,10 +100,20 @@ export const getCourseSections = cache(async (code) => {
   for (const entry of entries) {
     if (entry.code.toUpperCase() !== wanted) continue;
     if (!sections.has(entry.group)) {
-      sections.set(entry.group, { groupNo: entry.group, instructor: entry.instructor, schedule: [] });
+      sections.set(entry.group, {
+        groupNo: entry.group,
+        offeringId: entry.offeringId,
+        instructor: entry.instructor,
+        schedule: [],
+      });
     }
     sections.get(entry.group).schedule.push({
       day: DAYS[entry.day],
+      // Cakisma kontrolu icin ham degerler de tasiniyor: gosterim metnini geri
+      // ayristirmak yerine gun indeksi ve dakika araligi dogrudan kullaniliyor.
+      dayIndex: entry.day,
+      startMin: (FIRST_HOUR + entry.slot) * 60,
+      endMin: (FIRST_HOUR + entry.slot + entry.span) * 60,
       time: `${TIME_SLOTS[entry.slot].split(" - ")[0]} - ${TIME_SLOTS[entry.slot + entry.span - 1].split(" - ")[1]}`,
       room: entry.room,
       online: entry.online,

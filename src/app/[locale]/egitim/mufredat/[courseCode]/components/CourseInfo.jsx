@@ -30,6 +30,7 @@ import { fetchCourseStatistics } from "@/data/statistics";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
 import LectureNotes from "./LectureNotes";
+import SectionEnroll from "./SectionEnroll";
 import { useAuth } from "@/lib/auth";
 
 const initials = (name) =>
@@ -316,6 +317,8 @@ export default function CourseInfo({ course, sections = [] }) {
                   </div>
                 ))}
               </div>
+
+              <SectionEnroll offeringId={section.offeringId} schedule={section.schedule} />
             </div>
           ))}
 
