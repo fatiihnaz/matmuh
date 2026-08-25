@@ -1,8 +1,10 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { Wifi, MapPin, User } from "lucide-react";
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
+import Modal from "@/app/components/Modal";
 
 function EntryCard({ entry, fill, href }) {
   const isElective = entry.type === "Seçmeli";
@@ -135,6 +137,183 @@ function EntryCard({ entry, fill, href }) {
   );
 }
 
+// Ayni saatte birden fazla ders varsa tam kartlari alt alta yigmak hucreyi
+// okunmaz hale getiriyordu — dordu birden sigmiyor, hicbiri okunmuyordu. Hepsi tek
+// kutuda toplaniyor ve her ders tek satira iniyor: ad, sonra grup / hoca / derslik.
+//
+// Bunu "cakisma" diye adlandirmiyoruz: genel programda ayni saatte iki ders olmasi
+// normal, paralel acilmis gruplardir. Cakisma ancak bir ogrencinin *kendi* programi
+// icin anlamli, o da profil panelinde ayrica isaretleniyor. Grup numarasi burada
+// gorunuyor cunku ayni saatteki satirlar cogu zaman ayni dersin farkli gruplari ve
+// ayirt edici olan tek sey o.
+function ParallelRow({ entry, href }) {
+  const isElective = entry.type === "Seçmeli";
+  const accent = isElective ? "var(--color-secondary-500)" : "var(--color-primary-500)";
+
+  const row = (
+    <div className="flex flex-col gap-0.5 rounded px-1.5 py-1 transition-colors hover:bg-primary-500/4">
+      <div className="flex items-baseline gap-1.5">
+        <span
+          className="shrink-0"
+          style={{
+            fontFamily: "'JetBrains Mono', monospace",
+            fontSize: "0.625rem",
+            fontWeight: 600,
+            color: accent,
+          }}
+        >
+          {entry.code}
+        </span>
+        <span
+          className="truncate leading-snug"
+          style={{ fontSize: "0.6875rem", fontWeight: 500, color: "var(--color-primary-500)" }}
+        >
+          {entry.name}
+        </span>
+      </div>
+      <div
+        className="flex flex-wrap items-center gap-x-1.5 gap-y-0.5"
+        style={{ fontSize: "0.5625rem", color: "rgba(29,36,69,0.5)" }}
+      >
+        <span className="font-mono font-semibold" style={{ color: accent }}>
+          Gr.{entry.group}
+        </span>
+        {entry.instructor && entry.instructor !== "-" && (
+          <>
+            <span aria-hidden>·</span>
+            <span className="truncate">{entry.instructor}</span>
+          </>
+        )}
+        {entry.online ? (
+          <>
+            <span aria-hidden>·</span>
+            <span className="inline-flex items-center gap-0.5">
+              <Wifi size={8} strokeWidth={2} /> Online
+            </span>
+          </>
+        ) : (
+          entry.room &&
+          entry.room !== "-" && (
+            <>
+              <span aria-hidden>·</span>
+              <span className="font-mono">{entry.room}</span>
+            </>
+          )
+        )}
+      </div>
+    </div>
+  );
+
+  if (!href) return row;
+  return (
+    <Link
+      href={href}
+      aria-label={`${entry.code} ${entry.name}, grup ${entry.group} - ders detayına git`}
+      className="block rounded focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-secondary-500"
+    >
+      {row}
+    </Link>
+  );
+}
+
+// Hucre yuksekligi `minmax(74px, auto)`: kaydirma koysak minicik bir kutuda kac
+// tane oldugu belirsiz bir liste olur, kaldirsak satir icerige gore buyuyup o
+// gundeki butun hucreleri gerer. Ikisi de kotu. Onun yerine dilim sayisi kadarini
+// yerinde gosterip gerisini yer olan bir yuzeye tasiyoruz — havuz derslerinde ayni
+// saatte on grup gorulebiliyor.
+// `clash`: ogrencinin kendi programinda ayni saatte iki ders **cakismadir**, genel
+// programda ise paralel gruplardir. Ayni bilesen iki baglamda calisiyor, tonu ve
+// sozu baglamdan geliyor.
+function ParallelCell({ items, span, courseHref, clash = false }) {
+  const [open, setOpen] = useState(false);
+
+  const fits = Math.min(items.length, Math.max(1, Math.min(span, 3)));
+  // Tek kayit gizlemek icin dugme koymak sacma; o durumda hepsini gosteriyoruz.
+  const shown = items.length - fits === 1 ? items.length : fits;
+  const hidden = items.length - shown;
+
+  return (
+    <>
+      <motion.div
+        initial={{ opacity: 0, scale: 0.97 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.2 }}
+        className="flex h-full flex-col overflow-hidden rounded-lg border"
+        style={{
+          borderColor: clash ? "rgba(180,120,20,0.35)" : "rgba(29,36,69,0.12)",
+          backgroundColor: clash ? "rgba(180,120,20,0.06)" : "rgba(29,36,69,0.03)",
+        }}
+      >
+        <div
+          className="shrink-0 px-2 pt-1.5 pb-1"
+          style={{
+            fontSize: "0.5625rem",
+            fontWeight: 600,
+            letterSpacing: "0.06em",
+            textTransform: "uppercase",
+            color: clash ? "#8A5A08" : "rgba(29,36,69,0.45)",
+          }}
+        >
+          {clash ? `${items.length} ders çakışıyor` : `Bu saatte ${items.length} grup`}
+        </div>
+
+        <div className="min-h-0 flex-1 space-y-0.5 px-1">
+          {items.slice(0, shown).map((entry, k) => (
+            <ParallelRow
+              key={`${entry.code}-${entry.group}-${k}`}
+              entry={entry}
+              href={courseHref?.(entry.code) || null}
+            />
+          ))}
+        </div>
+
+        {hidden > 0 && (
+          <button
+            type="button"
+            onClick={() => setOpen(true)}
+            className="shrink-0 border-t px-2 py-1 text-left transition-colors hover:bg-primary-500/4"
+            style={{
+              borderColor: "rgba(29,36,69,0.08)",
+              fontSize: "0.5625rem",
+              fontWeight: 600,
+              color: "var(--color-secondary-600, #8A7444)",
+            }}
+          >
+            +{hidden} grup — tümünü gör
+          </button>
+        )}
+      </motion.div>
+
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        label={`${DAYS[items[0].day]} ${TIME_SLOTS[items[0].slot]} — ${items.length} grup`}
+        contentClassName="flex items-center justify-center px-4 py-14"
+      >
+        <div className="flex max-h-full w-full max-w-lg flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
+          <div className="shrink-0 border-b border-primary-500/8 px-5 py-3.5">
+            <h2 className="text-sm font-semibold text-primary-600">
+              {DAYS[items[0].day]} · {TIME_SLOTS[items[0].slot].split(" - ")[0]}
+            </h2>
+            <p className="mt-0.5 text-[11px] text-primary-500/45">
+              Bu saatte açık {items.length} grup
+            </p>
+          </div>
+          <div className="min-h-0 flex-1 space-y-0.5 overflow-y-auto overscroll-contain p-2">
+            {items.map((entry, k) => (
+              <ParallelRow
+                key={`all-${entry.code}-${entry.group}-${k}`}
+                entry={entry}
+                href={courseHref?.(entry.code) || null}
+              />
+            ))}
+          </div>
+        </div>
+      </Modal>
+    </>
+  );
+}
+
 function groupEntries(entries) {
   const map = new Map();
   for (const e of entries) {
@@ -177,7 +356,7 @@ function buildRows(entries) {
   return rows;
 }
 
-export default function WeeklySchedule({ entries = [], courseHref }) {
+export default function WeeklySchedule({ entries = [], courseHref, note = null, clash = false }) {
   const groups = groupEntries(entries);
   const rows = buildRows(entries);
   const rowIndexOfSlot = new Map();
@@ -194,7 +373,10 @@ export default function WeeklySchedule({ entries = [], courseHref }) {
         </span>
       </div>
 
-      <div className="overflow-x-auto no-scrollbar">
+      {/* `no-scrollbar` kaldirildi: dar kapta izgara kayiyordu ama gostergesi
+          gizli oldugu icin son sutun kesik gorunuyor, kaydirilabildigi
+          anlasilmiyordu. Sigan genislikte cubuk zaten cikmiyor. */}
+      <div className="overflow-x-auto">
         <div style={{ minWidth: 820 }}>
           <div
             className="grid"
@@ -357,14 +539,20 @@ export default function WeeklySchedule({ entries = [], courseHref }) {
                     zIndex: 10,
                   }}
                 >
-                  {group.items.map((entry, k) => (
-                    <EntryCard
-                      key={`${entry.code}-${k}`}
-                      entry={entry}
-                      fill={!multiple}
-                      href={courseHref?.(entry.code) || null}
+                  {multiple ? (
+                    <ParallelCell
+                      items={group.items}
+                      span={group.span}
+                      courseHref={courseHref}
+                      clash={clash}
                     />
-                  ))}
+                  ) : (
+                    <EntryCard
+                      entry={group.items[0]}
+                      fill
+                      href={courseHref?.(group.items[0].code) || null}
+                    />
+                  )}
                 </div>
               );
             })}
@@ -377,6 +565,15 @@ export default function WeeklySchedule({ entries = [], courseHref }) {
           <span style={{ fontSize: "0.625rem", color: "rgba(29,36,69,0.35)" }}>
             Ders bulunmayan {hiddenCount} saat gizlendi
           </span>
+        </div>
+      )}
+
+      {/* Yabanci dil ve sosyal secmeliler bolumun programina girmiyor; ogrenci
+          onlari gormeyince programi eksik saniyor. Yoklugu acikca soylemek, sessiz
+          birakmaktan iyi. */}
+      {note && (
+        <div className="px-4 py-2.5 text-center border-t border-primary-500/6">
+          <span style={{ fontSize: "0.6875rem", color: "rgba(29,36,69,0.45)" }}>{note}</span>
         </div>
       )}
 
