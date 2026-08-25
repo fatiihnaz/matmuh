@@ -1,5 +1,6 @@
 "use client";
 
+import NewTabHint from "@/app/components/NewTabHint";
 import { useState } from "react";
 import { Download, Eye, FileText } from "lucide-react";
 import { formatBytes } from "@/lib/format";
@@ -29,6 +30,7 @@ export default function DocumentLink({ label, href, kind, term, size }) {
         className="flex items-center gap-3 flex-1 min-w-0"
       >
         <FileText className="size-4 shrink-0 text-secondary-700" />
+        <NewTabHint />
         <span className="min-w-0 text-[13px] text-primary-500 leading-snug wrap-break-word">
           {label}
           {term && (
@@ -59,8 +61,7 @@ export default function DocumentLink({ label, href, kind, term, size }) {
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        title="İndir"
-        aria-label="İndir"
+        aria-label="Belgeyi yeni sekmede indir"
         className="shrink-0 -m-2 p-2 text-primary-500/70 hover:text-secondary-700 transition-colors"
       >
         <Download className="size-3.5" />

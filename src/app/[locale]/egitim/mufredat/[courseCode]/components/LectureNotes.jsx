@@ -26,7 +26,8 @@ import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
-const ACCEPTED = ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md,.zip,.rar,.7z,.png,.jpg,.jpeg,.webp";
+const ACCEPTED =
+  ".pdf,.doc,.docx,.ppt,.pptx,.xls,.xlsx,.txt,.md,.zip,.rar,.7z,.png,.jpg,.jpeg,.webp";
 
 const PLACEHOLDERS = [
   { id: 1, title: "Vize Soruları.pdf", meta: "PDF · 2.4 MB" },
@@ -47,7 +48,8 @@ function LoginPanel({ loading, onSignIn }) {
             Giriş Yapmanız Gerekmektedir
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
-            Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak için{" "}
+            Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak
+            için{" "}
             <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
               @std.yildiz.edu.tr
             </span>{" "}
@@ -77,13 +79,19 @@ function LoginPanel({ loading, onSignIn }) {
               className="rounded-xl p-4 border border-gray-100 bg-white shadow-xs flex items-start gap-4"
             >
               <div className="w-12 h-14 rounded-lg flex flex-col items-center justify-center bg-primary-500/5">
-                <FileText size={20} className="text-primary-700" strokeWidth={1.5} />
+                <FileText
+                  size={20}
+                  className="text-primary-700"
+                  strokeWidth={1.5}
+                />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
                 <div className="text-sm font-semibold text-primary-700 truncate mb-1.5">
                   {item.title}
                 </div>
-                <span className="text-[11px] text-gray-400 font-mono">{item.meta}</span>
+                <span className="text-[11px] text-gray-400 font-mono">
+                  {item.meta}
+                </span>
               </div>
             </div>
           ))}
@@ -149,7 +157,9 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
               .filter(Boolean)
               .map((part, index) => (
                 <span key={part}>
-                  {index > 0 && <span className="mr-1.5 text-primary-500/70">·</span>}
+                  {index > 0 && (
+                    <span className="mr-1.5 text-primary-500/70">·</span>
+                  )}
                   {part}
                 </span>
               ))}
@@ -163,7 +173,9 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
         )}
         <div className="flex items-center gap-3 flex-wrap">
           {note.uploadedAt && (
-            <span className="text-[11px] text-gray-400 font-mono">{note.uploadedAt}</span>
+            <span className="text-[11px] text-gray-400 font-mono">
+              {note.uploadedAt}
+            </span>
           )}
           {note.size && (
             <span className="text-[11px] font-bold text-secondary-700 bg-secondary-500/10 px-1.5 py-0.5 rounded-sm">
@@ -237,7 +249,9 @@ function UploadForm({ lectureId, onUploaded }) {
   }, []);
 
   const missing =
-    [!title.trim() && "Başlık", !file && "dosya"].filter(Boolean).join(" ve ") || null;
+    [!title.trim() && "Başlık", !file && "dosya"]
+      .filter(Boolean)
+      .join(" ve ") || null;
 
   const reset = useCallback(() => {
     setTitle("");
@@ -255,7 +269,12 @@ function UploadForm({ lectureId, onUploaded }) {
     try {
       const token = await getAccessToken();
       if (!token) throw new Error("Oturumunuz sona ermiş, sayfayı yenileyin.");
-      await uploadLectureNote(lectureId, token, { title: title.trim(), description, file, type });
+      await uploadLectureNote(lectureId, token, {
+        title: title.trim(),
+        description,
+        file,
+        type,
+      });
       reset();
       setOpen(false);
       setDone(true);
@@ -337,6 +356,7 @@ function UploadForm({ lectureId, onUploaded }) {
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Başlık"
+        aria-label="Not başlığı"
         maxLength={150}
         required
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50"
@@ -345,6 +365,7 @@ function UploadForm({ lectureId, onUploaded }) {
         value={description}
         onChange={(e) => setDescription(e.target.value)}
         placeholder="Açıklama (isteğe bağlı)"
+        aria-label="Not açıklaması"
         rows={2}
         maxLength={500}
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50 resize-none"
@@ -381,8 +402,8 @@ function UploadForm({ lectureId, onUploaded }) {
           dragOver
             ? "border-secondary-500 bg-secondary-500/6"
             : file
-            ? "border-secondary-500/45 bg-secondary-500/3"
-            : "border-primary-500/15 bg-white hover:border-secondary-500/40"
+              ? "border-secondary-500/45 bg-secondary-500/3"
+              : "border-primary-500/15 bg-white hover:border-secondary-500/40"
         }`}
       >
         <span
@@ -390,17 +411,28 @@ function UploadForm({ lectureId, onUploaded }) {
             file ? "bg-secondary-500/15" : "bg-primary-500/5"
           }`}
         >
-          <Paperclip size={18} strokeWidth={1.5} className="text-secondary-700" />
+          <Paperclip
+            size={18}
+            strokeWidth={1.5}
+            className="text-secondary-700"
+          />
         </span>
         <span className="max-w-full truncate text-[13px] font-medium text-primary-600">
-          {file ? file.name : dragOver ? "Bırakın" : "Dosyayı sürükleyin veya seçin"}
+          {file
+            ? file.name
+            : dragOver
+              ? "Bırakın"
+              : "Dosyayı sürükleyin veya seçin"}
         </span>
         <span className="text-[11px] text-primary-500/70">
-          {file ? formatSize(file.size) : "PDF, Office, ZIP, görsel · en fazla 25 MB"}
+          {file
+            ? formatSize(file.size)
+            : "PDF, Office, ZIP, görsel · en fazla 25 MB"}
         </span>
         <input
           ref={inputRef}
           type="file"
+          aria-label="Yüklenecek dosyayı seçin"
           accept={ACCEPTED}
           onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
           className="hidden"
@@ -419,7 +451,9 @@ function UploadForm({ lectureId, onUploaded }) {
         </button>
 
         {!busy && missing && (
-          <span className="text-[11px] text-primary-500/70">{missing} girin</span>
+          <span className="text-[11px] text-primary-500/70">
+            {missing} girin
+          </span>
         )}
       </div>
     </form>
@@ -475,7 +509,10 @@ export default function LectureNotes({ lectureId, onSignIn }) {
 
   return (
     <div className="w-full">
-      <UploadForm lectureId={lectureId} onUploaded={() => setReloadKey((k) => k + 1)} />
+      <UploadForm
+        lectureId={lectureId}
+        onUploaded={() => setReloadKey((k) => k + 1)}
+      />
 
       {pending.length > 0 && (
         <div className="mb-6">
@@ -487,18 +524,26 @@ export default function LectureNotes({ lectureId, onSignIn }) {
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {pending.map((note) => (
-              <NoteCard key={note.id} note={note} pending onCancel={cancelNote} cancelling={cancellingId === note.id} />
+              <NoteCard
+                key={note.id}
+                note={note}
+                pending
+                onCancel={cancelNote}
+                cancelling={cancellingId === note.id}
+              />
             ))}
           </div>
           <p className="text-[11px] text-primary-500/70 mt-2.5">
-            Bu notlar yalnızca size görünür. Onaylananlar aşağıdaki listeye geçer.
+            Bu notlar yalnızca size görünür. Onaylananlar aşağıdaki listeye
+            geçer.
           </p>
         </div>
       )}
 
       {failed ? (
         <p className="text-sm text-primary-500/70 py-12 text-center border border-dashed border-primary-500/20 rounded-xl">
-          Ders notları alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyin.
+          Ders notları alınamadı. Oturumunuz sona ermiş olabilir, sayfayı
+          yenileyin.
         </p>
       ) : notes === null ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -518,7 +563,11 @@ export default function LectureNotes({ lectureId, onSignIn }) {
         </div>
       ) : notes.length === 0 ? (
         <div className="flex flex-col items-center gap-2 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-          <FileText size={20} strokeWidth={1.5} className="text-primary-500/70" />
+          <FileText
+            size={20}
+            strokeWidth={1.5}
+            className="text-primary-500/70"
+          />
           <span className="text-sm font-medium text-primary-500/70">
             Bu ders için henüz onaylanmış not yok.
           </span>

@@ -109,7 +109,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
         onClick={onToggle}
         aria-expanded={active}
         aria-label={label}
-        className="block w-full py-1 pr-1.5 pl-1.5 text-left transition-colors hover:bg-primary-500/4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-secondary-500"
+        className="block min-h-6 w-full py-1.5 pr-1.5 pl-1.5 text-left transition-colors hover:bg-primary-500/4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-secondary-500"
       >
         <span className="flex items-baseline gap-1">
           <span
@@ -290,7 +290,7 @@ function Cell({
           type="button"
           onClick={onExpand}
           aria-expanded={expanded}
-          className="flex items-center justify-center gap-0.5 rounded-md py-0.5 text-[9.5px] font-semibold text-secondary-700 transition-colors hover:bg-secondary-500/8"
+          className="flex min-h-6 items-center justify-center gap-0.5 rounded-md py-1 text-[10px] font-semibold text-secondary-700 transition-colors hover:bg-secondary-500/8"
         >
           <ChevronDown
             size={10}

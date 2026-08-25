@@ -65,7 +65,8 @@ function SectionRow({ section, defaultOpen }) {
               <>
                 <span aria-hidden> · </span>
                 {first.day} {first.time.split(" - ")[0]}
-                {section.schedule.length > 1 && ` +${section.schedule.length - 1}`}
+                {section.schedule.length > 1 &&
+                  ` +${section.schedule.length - 1}`}
               </>
             )}
           </span>
@@ -86,7 +87,9 @@ function SectionRow({ section, defaultOpen }) {
               className="p-3 rounded-lg bg-primary-500/2 border border-primary-500/10"
             >
               <div className="flex justify-between items-center mb-1">
-                <span className="text-xs font-bold text-primary-500">{slot.day}</span>
+                <span className="text-xs font-bold text-primary-500">
+                  {slot.day}
+                </span>
                 {slot.online && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-700 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
                     <Wifi size={9} strokeWidth={2} /> Çevrimiçi
@@ -106,7 +109,10 @@ function SectionRow({ section, defaultOpen }) {
             </div>
           ))}
 
-          <SectionEnroll offeringId={section.offeringId} schedule={section.schedule} />
+          <SectionEnroll
+            offeringId={section.offeringId}
+            schedule={section.schedule}
+          />
         </div>
       </Collapse>
     </div>
@@ -131,11 +137,14 @@ const isFinalExam = (exam) =>
 const isMakeupExam = (exam) =>
   exam.type === "RESIT" || /bütünleme/i.test(exam.name);
 
-
-
 export default function CourseInfo({ course, sections = [] }) {
   const [activeTab, setActiveTab] = useState(0);
-  const { isAuthenticated, isLoading: authLoading, signIn, getAccessToken } = useAuth();
+  const {
+    isAuthenticated,
+    isLoading: authLoading,
+    signIn,
+    getAccessToken,
+  } = useAuth();
 
   const searchCode = course.code;
 
@@ -177,7 +186,7 @@ export default function CourseInfo({ course, sections = [] }) {
 
   const availableInstructors = useMemo(
     () => activeTerm?.instructors ?? [],
-    [activeTerm]
+    [activeTerm],
   );
 
   const activeInstructor = useMemo(() => {
@@ -190,7 +199,7 @@ export default function CourseInfo({ course, sections = [] }) {
 
   const availableSections = useMemo(
     () => activeInstructor?.sections ?? [],
-    [activeInstructor]
+    [activeInstructor],
   );
 
   const activeStats = useMemo(() => {
@@ -220,7 +229,7 @@ export default function CourseInfo({ course, sections = [] }) {
     const dist = activeStats.gradeDistribution;
     const enrolled = dist.reduce(
       (acc, curr) => acc + (Number(curr.count) || 0),
-      0
+      0,
     );
     const passed = dist
       .filter((g) => !isLowGrade(g.grade))
@@ -252,7 +261,11 @@ export default function CourseInfo({ course, sections = [] }) {
       badge: course.noteCount > 0 ? String(course.noteCount) : null,
       locked: !isAuthenticated,
     },
-    { label: "Geçmiş İstatistikler", icon: BarChart3, locked: !isAuthenticated },
+    {
+      label: "Geçmiş İstatistikler",
+      icon: BarChart3,
+      locked: !isAuthenticated,
+    },
   ];
 
   const renderDistributionBars = (data) => {
@@ -289,12 +302,13 @@ export default function CourseInfo({ course, sections = [] }) {
             {data.map((item, idx) => {
               const count = Number(item.count) || 0;
               const barWidth = `${(count / safeMax) * 100}%`;
-              const percent = total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
+              const percent =
+                total > 0 ? ((count / total) * 100).toFixed(1) : "0.0";
               const barColor = isLowGrade(item.grade)
                 ? "bg-primary-500/20"
                 : isHighlightGrade(item.grade)
-                ? "bg-secondary-500"
-                : "bg-primary-500";
+                  ? "bg-secondary-500"
+                  : "bg-primary-500";
 
               return (
                 <div
@@ -356,7 +370,11 @@ export default function CourseInfo({ course, sections = [] }) {
 
           {sections.length === 0 && (
             <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/70 py-8 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-              <Info size={18} strokeWidth={1.5} className="text-primary-500/70" />
+              <Info
+                size={18}
+                strokeWidth={1.5}
+                className="text-primary-500/70"
+              />
               Bu ders bu dönem açılmamış veya program bilgisi girilmemiş.
             </div>
           )}
@@ -469,8 +487,8 @@ export default function CourseInfo({ course, sections = [] }) {
                         <ExternalLink size={14} strokeWidth={2} />
                       </div>
                       <span className="text-sm text-primary-500/70 leading-relaxed">
-                        Bu ders Matematik Mühendisliği bölümüne ait değil. İçerik,
-                        kazanım ve değerlendirme bilgileri{" "}
+                        Bu ders Matematik Mühendisliği bölümüne ait değil.
+                        İçerik, kazanım ve değerlendirme bilgileri{" "}
                         <span className="font-semibold text-primary-500 group-hover:text-secondary-700 transition-colors">
                           YTÜ Bologna kataloğunda
                         </span>{" "}
@@ -580,7 +598,11 @@ export default function CourseInfo({ course, sections = [] }) {
                   ))}
                   {weekCount === 0 && (
                     <div className="flex flex-col items-center gap-2 text-sm font-medium text-primary-500/70 py-12 px-4 border border-dashed border-primary-500/20 rounded-xl text-center">
-                      <Info size={18} strokeWidth={1.5} className="text-primary-500/70" />
+                      <Info
+                        size={18}
+                        strokeWidth={1.5}
+                        className="text-primary-500/70"
+                      />
                       Bu ders için haftalık içerik girilmemiş.
                     </div>
                   )}
@@ -631,6 +653,7 @@ export default function CourseInfo({ course, sections = [] }) {
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                         <div className="relative w-full sm:w-auto">
                           <select
+                            aria-label="Dönem seçin"
                             value={activeTerm?.name ?? ""}
                             onChange={(e) => {
                               setSelectedTerm(e.target.value);
@@ -653,6 +676,7 @@ export default function CourseInfo({ course, sections = [] }) {
 
                         <div className="relative w-full sm:w-auto">
                           <select
+                            aria-label="Eğitmen seçin"
                             value={activeInstructor?.name ?? ""}
                             onChange={(e) => {
                               setSelectedInstructor(e.target.value);
@@ -675,6 +699,7 @@ export default function CourseInfo({ course, sections = [] }) {
                         {availableSections.length > 1 && (
                           <div className="relative w-full sm:w-auto">
                             <select
+                              aria-label="İstatistik için grup seçin"
                               value={activeStats?.section ?? ""}
                               onChange={(e) =>
                                 setSelectedSection(e.target.value)
@@ -707,14 +732,14 @@ export default function CourseInfo({ course, sections = [] }) {
                       <MainCard title="HARF ARALIKLARI DAĞILIMI">
                         <div className="mt-4">
                           {renderDistributionBars(
-                            activeStats.gradeDistribution
+                            activeStats.gradeDistribution,
                           )}
                         </div>
                       </MainCard>
                       <MainCard title="BÜTÜNLEME HARF ARALIKLARI DAĞILIMI">
                         <div className="mt-4">
                           {renderDistributionBars(
-                            activeStats.makeupDistribution
+                            activeStats.makeupDistribution,
                           )}
                         </div>
                       </MainCard>
@@ -886,7 +911,10 @@ export default function CourseInfo({ course, sections = [] }) {
 
                             <div className="grid grid-cols-3 sm:flex sm:items-center sm:gap-6 bg-primary-500/5 sm:bg-transparent rounded-lg sm:rounded-none py-2 sm:py-0 divide-x divide-primary-500/10 sm:divide-x-0">
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                <Percent size={14} className="text-secondary-700" />
+                                <Percent
+                                  size={14}
+                                  className="text-secondary-700"
+                                />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
                                   {exam.weight}
                                 </span>
@@ -896,7 +924,10 @@ export default function CourseInfo({ course, sections = [] }) {
                               </div>
                               <div className="hidden sm:block w-px h-8 bg-primary-500/10" />
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                <Sigma size={14} className="text-secondary-700" />
+                                <Sigma
+                                  size={14}
+                                  className="text-secondary-700"
+                                />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
                                   {exam.average}
                                 </span>
@@ -906,7 +937,10 @@ export default function CourseInfo({ course, sections = [] }) {
                               </div>
                               <div className="hidden sm:block w-px h-8 bg-primary-500/10" />
                               <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-1 sm:gap-2">
-                                <User size={14} className="text-secondary-700" />
+                                <User
+                                  size={14}
+                                  className="text-secondary-700"
+                                />
                                 <span className="font-bold text-sm text-primary-500 font-mono">
                                   {exam.total
                                     ? `${exam.attended}/${exam.total}`
@@ -955,9 +989,15 @@ export default function CourseInfo({ course, sections = [] }) {
 function EmptyStats({ code, message }) {
   return (
     <div className="flex flex-col items-center justify-center py-20 bg-primary-500/5 rounded-xl border border-primary-500/10 border-dashed">
-      <Database size={48} strokeWidth={1} className="text-primary-500/20 mb-4" />
+      <Database
+        size={48}
+        strokeWidth={1}
+        className="text-primary-500/20 mb-4"
+      />
       <h3 className="text-lg font-bold text-primary-500 mb-2">{code}</h3>
-      <p className="text-sm text-primary-500/70 text-center max-w-sm">{message}</p>
+      <p className="text-sm text-primary-500/70 text-center max-w-sm">
+        {message}
+      </p>
     </div>
   );
 }
@@ -1027,44 +1067,55 @@ function StatsPreview() {
         className="blur-xs opacity-45 select-none pointer-events-none"
       >
         <div className="grid gap-6 lg:grid-cols-2">
-          {["HARF ARALIKLARI DAĞILIMI", "BÜTÜNLEME DAĞILIMI"].map((title, card) => (
-            <div
-              key={title}
-              className="rounded-xl border border-primary-500/10 bg-white p-6 shadow-xs"
-            >
-              <div className="mb-6 flex items-center gap-3">
-                <div className="h-5 w-1 rounded-full bg-secondary-500" />
-                <span className="text-xs font-semibold uppercase tracking-widest text-primary-700">
-                  {title}
-                </span>
+          {["HARF ARALIKLARI DAĞILIMI", "BÜTÜNLEME DAĞILIMI"].map(
+            (title, card) => (
+              <div
+                key={title}
+                className="rounded-xl border border-primary-500/10 bg-white p-6 shadow-xs"
+              >
+                <div className="mb-6 flex items-center gap-3">
+                  <div className="h-5 w-1 rounded-full bg-secondary-500" />
+                  <span className="text-xs font-semibold uppercase tracking-widest text-primary-700">
+                    {title}
+                  </span>
+                </div>
+                <div className="space-y-3.5">
+                  {STATS_PREVIEW.map((row) => (
+                    <div
+                      key={row.grade}
+                      className="flex items-center gap-4 font-mono"
+                    >
+                      <div className="w-8 text-sm font-bold tracking-tight text-primary-500">
+                        {row.grade}
+                      </div>
+                      <div className="h-2 flex-1 overflow-hidden rounded-full bg-primary-500/6">
+                        <div
+                          className={`h-full rounded-full ${
+                            row.grade === "FF"
+                              ? "bg-primary-500/20"
+                              : "bg-primary-500"
+                          }`}
+                          style={{ width: card === 0 ? row.width : row.makeup }}
+                        />
+                      </div>
+                      <div className="w-8 text-right text-xs text-primary-500/70">
+                        {card === 0 ? row.count : row.makeupCount}
+                      </div>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div className="space-y-3.5">
-                {STATS_PREVIEW.map((row) => (
-                  <div key={row.grade} className="flex items-center gap-4 font-mono">
-                    <div className="w-8 text-sm font-bold tracking-tight text-primary-500">
-                      {row.grade}
-                    </div>
-                    <div className="h-2 flex-1 overflow-hidden rounded-full bg-primary-500/6">
-                      <div
-                        className={`h-full rounded-full ${
-                          row.grade === "FF" ? "bg-primary-500/20" : "bg-primary-500"
-                        }`}
-                        style={{ width: card === 0 ? row.width : row.makeup }}
-                      />
-                    </div>
-                    <div className="w-8 text-right text-xs text-primary-500/70">
-                      {card === 0 ? row.count : row.makeupCount}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
+            ),
+          )}
         </div>
 
         <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
           {[
-            { label: "Sınıf Ortalaması", val: "64.8", sub: "Sınıf Düzeyi: Orta" },
+            {
+              label: "Sınıf Ortalaması",
+              val: "64.8",
+              sub: "Sınıf Düzeyi: Orta",
+            },
             { label: "Standart Sapma", val: "12.4", sub: "σ dağılımı" },
             { label: "Dersi Alan", val: "86", sub: "Geçme: %92.1" },
           ].map((stat) => (
@@ -1095,33 +1146,33 @@ function StatsPreview() {
 function LoginGate({ loading, onSignIn, code }) {
   return (
     <>
-    <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
-      <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
-        <Shield size={20} strokeWidth={1.5} className="text-secondary-700" />
+      <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
+        <div className="shrink-0 w-10 h-10 rounded-lg flex items-center justify-center mt-0.5 bg-secondary-500/10">
+          <Shield size={20} strokeWidth={1.5} className="text-secondary-700" />
+        </div>
+        <div className="flex-1">
+          <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
+            Giriş Yapmanız Gerekmektedir
+          </h4>
+          <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
+            {code} dersinin geçmiş dönem sınıf ortalamalarını, harf
+            dağılımlarını ve eğitmen bilgilerini görüntülemek için{" "}
+            <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
+              @std.yildiz.edu.tr
+            </span>{" "}
+            hesabınızla giriş yapmalısınız.
+          </p>
+          <button
+            onClick={onSignIn}
+            disabled={loading}
+            className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 disabled:opacity-50 shadow-md shadow-secondary-500/20"
+          >
+            <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
+          </button>
+        </div>
       </div>
-      <div className="flex-1">
-        <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
-          Giriş Yapmanız Gerekmektedir
-        </h4>
-        <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
-          {code} dersinin geçmiş dönem sınıf ortalamalarını, harf dağılımlarını ve
-          eğitmen bilgilerini görüntülemek için{" "}
-          <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
-            @std.yildiz.edu.tr
-          </span>{" "}
-          hesabınızla giriş yapmalısınız.
-        </p>
-        <button
-          onClick={onSignIn}
-          disabled={loading}
-          className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 disabled:opacity-50 shadow-md shadow-secondary-500/20"
-        >
-          <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
-        </button>
-      </div>
-    </div>
 
-    <StatsPreview />
+      <StatsPreview />
     </>
   );
 }

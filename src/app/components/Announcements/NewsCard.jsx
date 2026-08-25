@@ -17,14 +17,19 @@ export default function NewsCard({ item, priority = false }) {
       />
 
       <div className="flex flex-col gap-1.5 p-5 pt-4">
-        <time dateTime={item.publishedAt} className="text-xs font-medium text-secondary-700">
+        <time
+          dateTime={item.publishedAt}
+          className="text-xs font-medium text-secondary-700"
+        >
           {formatTrDate(item.publishedAt)}
         </time>
-        <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors line-clamp-2">
+        <h2 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors line-clamp-2">
           {item.title}
-        </h3>
+        </h2>
         {item.summary && (
-          <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">{item.summary}</p>
+          <p className="text-xs text-gray-500 leading-relaxed line-clamp-3">
+            {item.summary}
+          </p>
         )}
         <div className="flex items-center gap-1.5 flex-wrap mt-auto pt-2">
           <CategoryTags ids={item.categories} />

@@ -47,7 +47,6 @@ export default function NavSearch({ open, onOpen, onClose }) {
           onOpen();
         }}
         aria-label="Sitede ara"
-        title="Sitede ara"
         className="hidden lg:block pl-2 text-neutral-400 hover:text-white transition-colors"
       >
         <Search size={14} />
@@ -84,7 +83,6 @@ export default function NavSearch({ open, onOpen, onClose }) {
         type="button"
         onClick={onClose}
         aria-label={t("Aramayı kapat")}
-        title="Aramayı kapat"
         className="pl-2 text-neutral-400 hover:text-white transition-colors"
       >
         <X size={14} />

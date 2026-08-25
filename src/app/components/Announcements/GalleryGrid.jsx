@@ -22,7 +22,7 @@ export default function GalleryGrid({ images, title }) {
           >
             <Image
               src={image.src}
-              alt={image.alt}
+              alt={image.alt || title || ""}
               fill
               loading={index < 4 ? undefined : "lazy"}
               sizes="(min-width: 1024px) 25vw, (min-width: 640px) 33vw, 50vw"

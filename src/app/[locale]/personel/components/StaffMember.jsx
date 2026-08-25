@@ -45,8 +45,8 @@ export default function StaffMember({ member, idx }) {
           {member.email && (
             <a
               href={`mailto:${member.email}`}
+              aria-label={`${name} kişisine e-posta gönder`}
               className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
-              title="E-posta"
               onClick={(e) => e.stopPropagation()}
             >
               <Mail size={14} strokeWidth={2} />
@@ -58,8 +58,8 @@ export default function StaffMember({ member, idx }) {
               href={avesisUrl}
               target="_blank"
               rel="noopener noreferrer"
+              aria-label={`${name} AVESİS profili (yeni sekmede açılır)`}
               className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
-              title="AVESİS Profili"
               onClick={(e) => e.stopPropagation()}
             >
               <ExternalLink size={14} strokeWidth={2} />

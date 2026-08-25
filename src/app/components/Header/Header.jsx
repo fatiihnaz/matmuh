@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import NewTabHint from "@/app/components/NewTabHint";
 import Image from "next/image";
 import { motion } from "framer-motion";
 import { Mail, Menu, X } from "lucide-react";
@@ -9,7 +10,11 @@ import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
 import NavSearch from "./components/NavSearch";
-import { navigationItems, DEPARTMENT_EMAIL, YTU_ANA_SITE } from "@/data/navigation";
+import {
+  navigationItems,
+  DEPARTMENT_EMAIL,
+  YTU_ANA_SITE,
+} from "@/data/navigation";
 import { useCmsBlock, useCmsRoute } from "inscribed";
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -38,16 +43,36 @@ export default function Header() {
           </a>
 
           <div className="flex items-center gap-3 text-xs">
-            <a href={YTU_ANA_SITE} target="_blank" rel="noopener noreferrer" className="text-secondary-500 hover:text-secondary-300 transition-colors">
+            <a
+              href={YTU_ANA_SITE}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-secondary-500 hover:text-secondary-300 transition-colors"
+            >
               {t("YTÜ Ana Site")}
+              <NewTabHint />
             </a>
             <div className="w-px h-3 bg-neutral-600"></div>
             <div className="flex items-center gap-1.5 text-[11px] tracking-wide">
-              <Link href={localePath(slug, "tr")} className={locale === "tr" ? "text-white font hover:opacity-80 transition-opacity" : "text-white/50 hover:text-white transition-colors"}>
+              <Link
+                href={localePath(slug, "tr")}
+                className={
+                  locale === "tr"
+                    ? "text-white font hover:opacity-80 transition-opacity"
+                    : "text-white/50 hover:text-white transition-colors"
+                }
+              >
                 TR
               </Link>
               <span className="text-white/60 font-light">/</span>
-              <Link href={localePath(slug, "en")} className={locale === "en" ? "text-white hover:opacity-80 transition-opacity" : "text-white/50 hover:text-white transition-colors"}>
+              <Link
+                href={localePath(slug, "en")}
+                className={
+                  locale === "en"
+                    ? "text-white hover:opacity-80 transition-opacity"
+                    : "text-white/50 hover:text-white transition-colors"
+                }
+              >
                 EN
               </Link>
             </div>
@@ -55,7 +80,13 @@ export default function Header() {
         </div>
       </div>
 
-      <div className="w-full h-0.5" style={{ background: "linear-gradient(to right, var(--color-primary-500) 0%, var(--color-secondary-500) 30%, var(--color-secondary-500) 70%, var(--color-primary-500) 100%)" }} />
+      <div
+        className="w-full h-0.5"
+        style={{
+          background:
+            "linear-gradient(to right, var(--color-primary-500) 0%, var(--color-secondary-500) 30%, var(--color-secondary-500) 70%, var(--color-primary-500) 100%)",
+        }}
+      />
 
       <div className="relative z-20 bg-primary-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between">
@@ -85,7 +116,9 @@ export default function Header() {
               >
                 {navigationItems.map((item) => (
                   <NavItems key={item.label} item={item}>
-                    {t(item.label).toLocaleUpperCase(locale === "en" ? "en-US" : "tr-TR")}
+                    {t(item.label).toLocaleUpperCase(
+                      locale === "en" ? "en-US" : "tr-TR",
+                    )}
                   </NavItems>
                 ))}
               </motion.nav>
@@ -103,13 +136,19 @@ export default function Header() {
 
             <UserLogin />
 
-            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="lg:hidden text-neutral-400 hover:text-white transition-colors">
+            <button
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              className="lg:hidden text-neutral-400 hover:text-white transition-colors"
+            >
               {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
             </button>
           </div>
         </div>
       </div>
-      <MobileNavbar isOpen={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+      <MobileNavbar
+        isOpen={mobileMenuOpen}
+        onClose={() => setMobileMenuOpen(false)}
+      />
     </header>
   );
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import NewTabHint from "@/app/components/NewTabHint";
 import { Briefcase, ExternalLink, FileDown, Globe, Mail } from "lucide-react";
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
@@ -36,7 +37,7 @@ function CoordinatorRow({ person, idx }) {
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          title="E-posta gönder"
+          aria-label={`${name} kişisine e-posta gönder`}
           className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />
@@ -89,7 +90,9 @@ export function Coordinators({ initialStaff = [] }) {
                 {lines(item.members).map((email, idx) => {
                   const person = findPerson(people, email);
                   if (!person) return null;
-                  return <CoordinatorRow key={email} person={person} idx={idx} />;
+                  return (
+                    <CoordinatorRow key={email} person={person} idx={idx} />
+                  );
                 })}
               </div>
             </div>
@@ -118,6 +121,7 @@ function AgreementRow({ item }) {
             className="group-hover:text-secondary-700 hover:underline"
           >
             {item.institution}
+            <NewTabHint />
           </a>
         ) : (
           item.institution
@@ -134,7 +138,12 @@ function AgreementRow({ item }) {
       </div>
       <div className="hidden sm:block">
         {href && (
-          <a href={href} target="_blank" rel="noopener noreferrer" title="Anlaşmayı indir">
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Anlaşmayı yeni sekmede indir"
+          >
             <FileDown className="size-3.5 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
           </a>
         )}
@@ -189,21 +198,138 @@ export function Agreements() {
             file: { blockType: "Link", defaultValue: { href: "", label: "" } },
           }}
           defaultValue={[
-            { institution: "Universidad de León", country: "İspanya", code: "E LEON01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/E%20LEON01_613_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "E LEON01" } },
-            { institution: "Sorbonne Université", country: "Fransa", code: "F PARIS 468", file: { href: "https://erasmus.yildiz.edu.tr/media/files/F%20PARIS468_541_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "F PARIS 468" } },
-            { institution: "Université du Littoral Côte d’Opale", country: "Fransa", code: "F DUNKERQ09", file: { href: "", label: "" } },
-            { institution: "Goce Delcev University", country: "Makedonya", code: "MK STIP01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/MK%20STIP01_541%20ve%20613_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "MK STIP01" } },
-            { institution: "Università degli Studi di Bari Aldo Moro", country: "İtalya", code: "I BARI 01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/I%20BARI01_MATEMAT%C4%B0K%20M%C3%9CHEND%C4%B0SL%C4%B0%C4%9E%C4%B0.pdf", label: "I BARI 01" } },
-            { institution: "Università degli Studi di Firenze", country: "İtalya", code: "I FIRENZE01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/I%20FIRENZE01%20MAT%20MUH.pdf", label: "I FIRENZE01" } },
-            { institution: "Technical University of Civil Engineering", country: "Romanya", code: "RO BUCURES08", file: { href: "https://erasmus.yildiz.edu.tr/media/files/RO%20BUCURES08_541_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "RO BUCURES08" } },
-            { institution: "Brno University of Technology", country: "Çekya", code: "CZ BRNO01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/CZ%20BRNO01%20MAT%20MUH.pdf", label: "CZ BRNO01" } },
-            { institution: "Technological University of the Shannon", country: "İrlanda", code: "IRLSHANNON02", file: { href: "https://erasmus.yildiz.edu.tr/media/files/IRLSHANNON02_613_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "IRLSHANNON02" } },
-            { institution: "University of Piraeus", country: "Yunanistan", code: "G PIREAS 01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/G%20PIREAS01_610_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "G PIREAS 01" } },
-            { institution: "Halmstad University", country: "İsveç", code: "S HALMSTA 01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/S%20HALMSTA01%20Mat%20M%C3%BCh.pdf", label: "S HALMSTA 01" } },
-            { institution: "Martin Luther University Halle-Wittenberg", country: "Almanya", code: "D HALLE 01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/D%20HALLE01_610_MAT%20M%C3%9CH.pdf", label: "D HALLE 01" } },
-            { institution: "Polytechnic Institute of Coimbra", country: "Portekiz", code: "P COIMBRA02", file: { href: "https://erasmus.yildiz.edu.tr/media/files/MAT_%20MUH_%20P%20COIMBRA02.pdf", label: "P COIMBRA02" } },
-            { institution: "University of Łódź", country: "Polonya", code: "PL LODZ01", file: { href: "https://erasmus.yildiz.edu.tr/media/files/PL%20LODZ01%20mat%20m%C3%BCh.pdf", label: "PL LODZ01" } },
-            { institution: "Universidade Fernando Pessoa", country: "Portekiz", code: "P PORTO 26", file: { href: "https://erasmus.yildiz.edu.tr/media/files/P%20PORTO26_610_MATEMAT%C4%B0K%20M%C3%9CH.pdf", label: "P PORTO 26" } },
+            {
+              institution: "Universidad de León",
+              country: "İspanya",
+              code: "E LEON01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/E%20LEON01_613_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "E LEON01",
+              },
+            },
+            {
+              institution: "Sorbonne Université",
+              country: "Fransa",
+              code: "F PARIS 468",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/F%20PARIS468_541_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "F PARIS 468",
+              },
+            },
+            {
+              institution: "Université du Littoral Côte d’Opale",
+              country: "Fransa",
+              code: "F DUNKERQ09",
+              file: { href: "", label: "" },
+            },
+            {
+              institution: "Goce Delcev University",
+              country: "Makedonya",
+              code: "MK STIP01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/MK%20STIP01_541%20ve%20613_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "MK STIP01",
+              },
+            },
+            {
+              institution: "Università degli Studi di Bari Aldo Moro",
+              country: "İtalya",
+              code: "I BARI 01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/I%20BARI01_MATEMAT%C4%B0K%20M%C3%9CHEND%C4%B0SL%C4%B0%C4%9E%C4%B0.pdf",
+                label: "I BARI 01",
+              },
+            },
+            {
+              institution: "Università degli Studi di Firenze",
+              country: "İtalya",
+              code: "I FIRENZE01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/I%20FIRENZE01%20MAT%20MUH.pdf",
+                label: "I FIRENZE01",
+              },
+            },
+            {
+              institution: "Technical University of Civil Engineering",
+              country: "Romanya",
+              code: "RO BUCURES08",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/RO%20BUCURES08_541_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "RO BUCURES08",
+              },
+            },
+            {
+              institution: "Brno University of Technology",
+              country: "Çekya",
+              code: "CZ BRNO01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/CZ%20BRNO01%20MAT%20MUH.pdf",
+                label: "CZ BRNO01",
+              },
+            },
+            {
+              institution: "Technological University of the Shannon",
+              country: "İrlanda",
+              code: "IRLSHANNON02",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/IRLSHANNON02_613_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "IRLSHANNON02",
+              },
+            },
+            {
+              institution: "University of Piraeus",
+              country: "Yunanistan",
+              code: "G PIREAS 01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/G%20PIREAS01_610_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "G PIREAS 01",
+              },
+            },
+            {
+              institution: "Halmstad University",
+              country: "İsveç",
+              code: "S HALMSTA 01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/S%20HALMSTA01%20Mat%20M%C3%BCh.pdf",
+                label: "S HALMSTA 01",
+              },
+            },
+            {
+              institution: "Martin Luther University Halle-Wittenberg",
+              country: "Almanya",
+              code: "D HALLE 01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/D%20HALLE01_610_MAT%20M%C3%9CH.pdf",
+                label: "D HALLE 01",
+              },
+            },
+            {
+              institution: "Polytechnic Institute of Coimbra",
+              country: "Portekiz",
+              code: "P COIMBRA02",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/MAT_%20MUH_%20P%20COIMBRA02.pdf",
+                label: "P COIMBRA02",
+              },
+            },
+            {
+              institution: "University of Łódź",
+              country: "Polonya",
+              code: "PL LODZ01",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/PL%20LODZ01%20mat%20m%C3%BCh.pdf",
+                label: "PL LODZ01",
+              },
+            },
+            {
+              institution: "Universidade Fernando Pessoa",
+              country: "Portekiz",
+              code: "P PORTO 26",
+              file: {
+                href: "https://erasmus.yildiz.edu.tr/media/files/P%20PORTO26_610_MATEMAT%C4%B0K%20M%C3%9CH.pdf",
+                label: "P PORTO 26",
+              },
+            },
           ]}
         >
           {(item, index) => <AgreementRow key={index} item={item} />}
@@ -324,9 +450,24 @@ export function ErasmusSidebarCards() {
             link: { blockType: "Link", defaultValue: { href: "", label: "" } },
           }}
           defaultValue={[
-            { link: { href: "https://erasmus.yildiz.edu.tr/", label: "YTÜ Erasmus+ Koordinatörlüğü" } },
-            { link: { href: "https://erasmus.yildiz.edu.tr/sayfa/24/4", label: "Erasmus+ Anlaşmaları" } },
-            { link: { href: "https://erasmus.yildiz.edu.tr/sayfa/21/1", label: "Giden Öğrenci İşlemleri" } },
+            {
+              link: {
+                href: "https://erasmus.yildiz.edu.tr/",
+                label: "YTÜ Erasmus+ Koordinatörlüğü",
+              },
+            },
+            {
+              link: {
+                href: "https://erasmus.yildiz.edu.tr/sayfa/24/4",
+                label: "Erasmus+ Anlaşmaları",
+              },
+            },
+            {
+              link: {
+                href: "https://erasmus.yildiz.edu.tr/sayfa/21/1",
+                label: "Giden Öğrenci İşlemleri",
+              },
+            },
           ]}
         >
           {(item, index) => {
@@ -336,7 +477,9 @@ export function ErasmusSidebarCards() {
               <a
                 key={index}
                 href={href}
-                {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                {...(external
+                  ? { target: "_blank", rel: "noopener noreferrer" }
+                  : {})}
                 className="group flex items-center gap-2 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors"
               >
                 <Globe className="size-4 shrink-0 text-primary-500/70" />

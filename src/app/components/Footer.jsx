@@ -10,14 +10,14 @@ export default function Footer() {
       <div className="bg-primary-600">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-10 flex flex-col md:flex-row md:justify-between gap-10">
           <div>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
+            <h2 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <EditableRegion
                 blockPath="footer.address.title"
                 blockType="ShortText"
                 defaultValue="Adres"
                 scope="global"
               />
-            </h3>
+            </h2>
             <div className="text-neutral-400 text-xs font-light leading-relaxed">
               <EditableRegion
                 blockPath="footer.address.body"
@@ -33,14 +33,14 @@ Davutpaşa Kampüsü
           </div>
 
           <div>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
+            <h2 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <EditableRegion
                 blockPath="footer.contact.title"
                 blockType="ShortText"
                 defaultValue="İletişim"
                 scope="global"
               />
-            </h3>
+            </h2>
             <div className="text-neutral-400 text-xs font-light space-y-3">
               <div className="flex items-center gap-2">
                 <Mail size={14} className="shrink-0" />
@@ -57,14 +57,14 @@ Davutpaşa Kampüsü
           </div>
 
           <div>
-            <h3 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
+            <h2 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
               <EditableRegion
                 blockPath="footer.links.title"
                 blockType="ShortText"
                 defaultValue="Bağlantılar"
                 scope="global"
               />
-            </h3>
+            </h2>
             <div className="text-neutral-400 text-xs font-light">
               <FooterLinks />
             </div>

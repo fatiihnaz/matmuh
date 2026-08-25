@@ -20,7 +20,10 @@ export function fullName(person) {
 
 export function useStaff(initial = []) {
   const { items, isLoading, error } = useCollection("staff", STAFF_WINDOW);
-  const people = (items ?? []).map((item) => ({ ...item.data, slug: item.slug }));
+  const people = (items ?? []).map((item) => ({
+    ...item.data,
+    slug: item.slug,
+  }));
   const roster = people.length > 0 ? people : initial;
   return { people: roster, isLoading, error };
 }
@@ -52,7 +55,7 @@ export default function PersonRow({ id, idx = 0, staff = [] }) {
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          title="E-posta gönder"
+          aria-label={`${name} kişisine e-posta gönder`}
           className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />

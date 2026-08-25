@@ -16,7 +16,7 @@ export default function NewsThumb({ cover, sizes, priority = false, className = 
     <div className={`relative aspect-4/3 overflow-hidden bg-primary-500/4 ${className}`}>
       <Image
         src={cover.src}
-        alt={cover.alt}
+        alt={cover.alt || ""}
         fill
         priority={priority}
         sizes={sizes}

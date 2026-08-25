@@ -122,6 +122,7 @@ function StaffContent({ initialStaff }) {
           <input
             type="text"
             placeholder="İsim ara..."
+            aria-label="Personel içinde isme göre ara"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-3 py-2 rounded-lg outline-none transition-all duration-200 focus:ring-1"

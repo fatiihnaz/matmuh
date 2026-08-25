@@ -60,7 +60,7 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
       >
         <Image
           src={image.src}
-          alt={image.alt}
+          alt={image.alt || title || ""}
           fill
           sizes="90vw"
           priority

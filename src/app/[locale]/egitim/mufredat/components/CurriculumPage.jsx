@@ -38,7 +38,10 @@ function SortBtn({ label, col, sortCol, sortDir, onSort }) {
         fontWeight: 600,
         letterSpacing: "0.06em",
         textTransform: "uppercase",
-        color: sortCol === col ? "var(--color-secondary-500)" : "rgba(29,36,69,0.38)",
+        color:
+          sortCol === col
+            ? "var(--color-secondary-500)"
+            : "rgba(29,36,69,0.38)",
       }}
     >
       {label}
@@ -56,7 +59,9 @@ function StatusBadge({ status }) {
         fontSize: "0.6875rem",
         fontWeight: 500,
         letterSpacing: "0.02em",
-        color: isRequired ? "var(--color-primary-500)" : "var(--color-secondary-500)",
+        color: isRequired
+          ? "var(--color-primary-500)"
+          : "var(--color-secondary-500)",
         backgroundColor: isRequired
           ? "rgba(29,36,69,0.06)"
           : "rgba(173,151,111,0.1)",
@@ -108,7 +113,10 @@ export default function CurriculumPage({ semesters, summary }) {
 
   function handleSort(col) {
     if (sortCol === col) setSortDir((d) => (d === "asc" ? "desc" : "asc"));
-    else { setSortCol(col); setSortDir("asc"); }
+    else {
+      setSortCol(col);
+      setSortDir("asc");
+    }
   }
 
   function handleTabChange(idx) {
@@ -129,7 +137,9 @@ export default function CurriculumPage({ semesters, summary }) {
     setExpandedGroup(null);
   }
 
-  const panelKey = expandedGroup ? `group-${expandedGroup.code}` : `sem-${activeTab}`;
+  const panelKey = expandedGroup
+    ? `group-${expandedGroup.code}`
+    : `sem-${activeTab}`;
 
   return (
     <>
@@ -139,7 +149,6 @@ export default function CurriculumPage({ semesters, summary }) {
       />
       <PageLayout>
         <div className="space-y-4">
-
           <div className="rounded-xl overflow-hidden border border-primary-500/10 shadow-xs bg-white">
             <div className="grid grid-cols-2 sm:grid-cols-4">
               {[
@@ -183,7 +192,6 @@ export default function CurriculumPage({ semesters, summary }) {
           </div>
 
           <div className="rounded-xl overflow-hidden border border-primary-500/10 shadow-xs bg-white">
-
             <div
               className="flex items-center gap-0 overflow-x-auto no-scrollbar px-1 pt-1"
               style={{ borderBottom: "1px solid rgba(29,36,69,0.06)" }}
@@ -235,7 +243,9 @@ export default function CurriculumPage({ semesters, summary }) {
                     color: "var(--color-primary-500)",
                   }}
                 >
-                  {expandedGroup ? expandedGroup.groupTitle : (semester?.name ?? "")}
+                  {expandedGroup
+                    ? expandedGroup.groupTitle
+                    : (semester?.name ?? "")}
                 </span>
                 {!expandedGroup && (
                   <span
@@ -252,7 +262,9 @@ export default function CurriculumPage({ semesters, summary }) {
                   </span>
                 )}
               </div>
-              <span style={{ fontSize: "0.75rem", color: "rgba(29,36,69,0.4)" }}>
+              <span
+                style={{ fontSize: "0.75rem", color: "rgba(29,36,69,0.4)" }}
+              >
                 {expandedGroup
                   ? `${expandedGroup.options.length} ders`
                   : `${rows.length} ders`}
@@ -284,7 +296,9 @@ export default function CurriculumPage({ semesters, summary }) {
             )}
 
             <div className="sm:hidden px-4 pb-2 text-center">
-              <span style={{ fontSize: "0.6875rem", color: "rgba(29,36,69,0.4)" }}>
+              <span
+                style={{ fontSize: "0.6875rem", color: "rgba(29,36,69,0.4)" }}
+              >
                 ← Tabloyu görmek için yatay kaydırın →
               </span>
             </div>
@@ -292,117 +306,255 @@ export default function CurriculumPage({ semesters, summary }) {
             <div className="overflow-x-auto no-scrollbar">
               <div className="min-w-160">
                 <table className="w-full table-fixed">
-              <Colgroup />
-              <thead>
-                <tr style={{ borderBottom: "1px solid rgba(29,36,69,0.06)" }}>
-                  {COLS.map((col) => (
-                    <th key={col.key} className="text-left px-4 sm:px-6 py-3">
-                      {col.key !== "_action" && (
-                        <SortBtn
-                          label={col.label}
-                          col={col.key}
-                          sortCol={sortCol}
-                          sortDir={sortDir}
-                          onSort={handleSort}
-                        />
-                      )}
-                    </th>
-                  ))}
-                </tr>
-              </thead>
-            </table>
+                  <caption className="sr-only">
+                    Müfredat ders listesinin sütun başlıkları
+                  </caption>
+                  <Colgroup />
+                  <thead>
+                    <tr
+                      style={{ borderBottom: "1px solid rgba(29,36,69,0.06)" }}
+                    >
+                      {COLS.map((col) => (
+                        <th
+                          key={col.key}
+                          scope="col"
+                          className="text-left px-4 sm:px-6 py-3"
+                        >
+                          {col.key !== "_action" && (
+                            <SortBtn
+                              label={col.label}
+                              col={col.key}
+                              sortCol={sortCol}
+                              sortDir={sortDir}
+                              onSort={handleSort}
+                            />
+                          )}
+                        </th>
+                      ))}
+                    </tr>
+                  </thead>
+                </table>
 
-            <div className="relative overflow-hidden h-[60vh] sm:h-105">
-              <AnimatePresence initial={false} custom={direction}>
-                <motion.div
-                  key={panelKey}
-                  custom={direction}
-                  variants={slideVariants}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  transition={slideTransition}
-                  className="absolute inset-0 overflow-y-auto"
-                >
-                  <table className="w-full table-fixed">
-                    <Colgroup />
-                    <tbody>
-                      {(expandedGroup ? electiveRows(expandedGroup) : sorted).map(
-                        (row, idx, arr) => {
-                          if (row._empty) {
-                            return (
-                              <tr key="empty">
-                                <td colSpan={6} className="px-4 sm:px-6 py-12 text-center">
-                                  <span style={{ fontSize: "0.8125rem", color: "rgba(29,36,69,0.3)" }}>
-                                    Ders bilgisi mevcut değil
-                                  </span>
-                                </td>
-                              </tr>
-                            );
-                          }
+                <div className="relative overflow-hidden h-[60vh] sm:h-105">
+                  <AnimatePresence initial={false} custom={direction}>
+                    <motion.div
+                      key={panelKey}
+                      custom={direction}
+                      variants={slideVariants}
+                      initial="enter"
+                      animate="center"
+                      exit="exit"
+                      transition={slideTransition}
+                      className="absolute inset-0 overflow-y-auto"
+                    >
+                      <table className="w-full table-fixed">
+                        <caption className="sr-only">
+                          Müfredat dersleri: kod, ad, saat, AKTS ve durum
+                        </caption>
+                        <Colgroup />
+                        <tbody>
+                          {(expandedGroup
+                            ? electiveRows(expandedGroup)
+                            : sorted
+                          ).map((row, idx, arr) => {
+                            if (row._empty) {
+                              return (
+                                <tr key="empty">
+                                  <td
+                                    colSpan={6}
+                                    className="px-4 sm:px-6 py-12 text-center"
+                                  >
+                                    <span
+                                      style={{
+                                        fontSize: "0.8125rem",
+                                        color: "rgba(29,36,69,0.3)",
+                                      }}
+                                    >
+                                      Ders bilgisi mevcut değil
+                                    </span>
+                                  </td>
+                                </tr>
+                              );
+                            }
 
-                          const isLast = idx === arr.length - 1;
-                          const rowStyle = {
-                            borderBottom: !isLast ? "1px solid rgba(29,36,69,0.03)" : "none",
-                            backgroundColor:
-                              idx % 2 === 1 ? "rgba(29,36,69,0.012)" : "transparent",
-                          };
+                            const isLast = idx === arr.length - 1;
+                            const rowStyle = {
+                              borderBottom: !isLast
+                                ? "1px solid rgba(29,36,69,0.03)"
+                                : "none",
+                              backgroundColor:
+                                idx % 2 === 1
+                                  ? "rgba(29,36,69,0.012)"
+                                  : "transparent",
+                            };
 
-                          if (row.isGroup) {
+                            if (row.isGroup) {
+                              return (
+                                <tr
+                                  key={`${row.code}-${idx}`}
+                                  className="transition-colors cursor-pointer hover:bg-[rgba(173,151,111,0.04)] group"
+                                  style={rowStyle}
+                                  onClick={() => openGroup(row)}
+                                >
+                                  <td className="px-4 sm:px-6 py-3.5">
+                                    <span
+                                      style={{
+                                        fontFamily:
+                                          "'JetBrains Mono', monospace",
+                                        fontSize: "0.8125rem",
+                                        color: "rgba(173,151,111,0.35)",
+                                      }}
+                                    >
+                                      -
+                                    </span>
+                                  </td>
+                                  <td className="px-4 sm:px-6 py-3.5">
+                                    <span className="flex items-center gap-2 min-w-0">
+                                      <ListFilter
+                                        size={13}
+                                        strokeWidth={1.5}
+                                        style={{
+                                          color: "var(--color-secondary-500)",
+                                          opacity: 0.6,
+                                          flexShrink: 0,
+                                        }}
+                                      />
+                                      <span
+                                        className="truncate"
+                                        style={{
+                                          fontSize: "0.8125rem",
+                                          fontWeight: 450,
+                                          color: "rgba(29,36,69,0.65)",
+                                        }}
+                                      >
+                                        {row.groupTitle}
+                                      </span>
+                                      {row.options.length > 0 && (
+                                        <span
+                                          className="shrink-0"
+                                          style={{
+                                            fontSize: "0.625rem",
+                                            color: "rgba(29,36,69,0.3)",
+                                          }}
+                                        >
+                                          ({row.options.length} seçenek)
+                                        </span>
+                                      )}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 sm:px-6 py-3.5">
+                                    <span
+                                      style={{
+                                        fontFamily:
+                                          row.hours === "-"
+                                            ? undefined
+                                            : "'JetBrains Mono', monospace",
+                                        fontSize: "0.75rem",
+                                        color:
+                                          row.hours === "-"
+                                            ? "rgba(29,36,69,0.2)"
+                                            : "rgba(29,36,69,0.45)",
+                                      }}
+                                    >
+                                      {row.hours}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 sm:px-6 py-3.5">
+                                    <span
+                                      style={{
+                                        fontFamily:
+                                          row.ects === "-"
+                                            ? undefined
+                                            : "'JetBrains Mono', monospace",
+                                        fontSize:
+                                          row.ects === "-"
+                                            ? "0.75rem"
+                                            : "0.8125rem",
+                                        fontWeight:
+                                          row.ects === "-" ? 400 : 600,
+                                        color:
+                                          row.ects === "-"
+                                            ? "rgba(29,36,69,0.2)"
+                                            : "var(--color-primary-500)",
+                                      }}
+                                    >
+                                      {row.ects}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 sm:px-6 py-3.5">
+                                    <StatusBadge status="Seçmeli" />
+                                  </td>
+                                  <td className="px-4 sm:px-6 py-3.5">
+                                    <ChevronRight
+                                      size={14}
+                                      strokeWidth={1.5}
+                                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                      style={{
+                                        color: "var(--color-secondary-500)",
+                                      }}
+                                    />
+                                  </td>
+                                </tr>
+                              );
+                            }
+
+                            const isExternal = Boolean(row.external);
+                            const target = row.href;
+
                             return (
                               <tr
                                 key={`${row.code}-${idx}`}
-                                className="transition-colors cursor-pointer hover:bg-[rgba(173,151,111,0.04)] group"
+                                className="transition-colors cursor-pointer hover:bg-[rgba(173,151,111,0.03)] group"
                                 style={rowStyle}
-                                onClick={() => openGroup(row)}
+                                onClick={() =>
+                                  isExternal
+                                    ? window.open(
+                                        target,
+                                        "_blank",
+                                        "noopener,noreferrer",
+                                      )
+                                    : router.push(target)
+                                }
                               >
                                 <td className="px-4 sm:px-6 py-3.5">
                                   <span
                                     style={{
                                       fontFamily: "'JetBrains Mono', monospace",
                                       fontSize: "0.8125rem",
-                                      color: "rgba(173,151,111,0.35)",
+                                      fontWeight: 500,
+                                      color: "var(--color-secondary-500)",
+                                      letterSpacing: "0.02em",
                                     }}
                                   >
-                                    -
+                                    {row.code}
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
-                                  <span className="flex items-center gap-2 min-w-0">
-                                    <ListFilter
-                                      size={13}
-                                      strokeWidth={1.5}
-                                      style={{ color: "var(--color-secondary-500)", opacity: 0.6, flexShrink: 0 }}
-                                    />
-                                    <span
-                                      className="truncate"
-                                      style={{
-                                        fontSize: "0.8125rem",
-                                        fontWeight: 450,
-                                        color: "rgba(29,36,69,0.65)",
-                                      }}
-                                    >
-                                      {row.groupTitle}
-                                    </span>
-                                    {row.options.length > 0 && (
-                                      <span
-                                        className="shrink-0"
-                                        style={{
-                                          fontSize: "0.625rem",
-                                          color: "rgba(29,36,69,0.3)",
-                                        }}
-                                      >
-                                        ({row.options.length} seçenek)
-                                      </span>
-                                    )}
-                                  </span>
+                                  <Link
+                                    href={target}
+                                    {...(isExternal
+                                      ? {
+                                          target: "_blank",
+                                          rel: "noopener noreferrer",
+                                        }
+                                      : {})}
+                                    className="hover:text-secondary-700 transition-colors block truncate"
+                                    style={{
+                                      fontSize: "0.8125rem",
+                                      fontWeight: 450,
+                                      color: "var(--color-primary-500)",
+                                    }}
+                                    onClick={(e) => e.stopPropagation()}
+                                  >
+                                    {row.name}
+                                  </Link>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
                                   <span
                                     style={{
-                                      fontFamily: row.hours === "-" ? undefined : "'JetBrains Mono', monospace",
+                                      fontFamily: "'JetBrains Mono', monospace",
                                       fontSize: "0.75rem",
-                                      color: row.hours === "-" ? "rgba(29,36,69,0.2)" : "rgba(29,36,69,0.45)",
+                                      color: "rgba(29,36,69,0.45)",
                                     }}
                                   >
                                     {row.hours}
@@ -411,125 +563,44 @@ export default function CurriculumPage({ semesters, summary }) {
                                 <td className="px-4 sm:px-6 py-3.5">
                                   <span
                                     style={{
-                                      fontFamily: row.ects === "-" ? undefined : "'JetBrains Mono', monospace",
-                                      fontSize: row.ects === "-" ? "0.75rem" : "0.8125rem",
-                                      fontWeight: row.ects === "-" ? 400 : 600,
-                                      color: row.ects === "-" ? "rgba(29,36,69,0.2)" : "var(--color-primary-500)",
+                                      fontFamily: "'JetBrains Mono', monospace",
+                                      fontSize: "0.8125rem",
+                                      fontWeight: 600,
+                                      color: "var(--color-primary-500)",
                                     }}
                                   >
                                     {row.ects}
                                   </span>
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
-                                  <StatusBadge status="Seçmeli" />
+                                  <StatusBadge status={row.status} />
                                 </td>
                                 <td className="px-4 sm:px-6 py-3.5">
-                                  <ChevronRight
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                                    style={{ color: "var(--color-secondary-500)" }}
-                                  />
+                                  {isExternal ? (
+                                    <ExternalLink
+                                      size={14}
+                                      strokeWidth={1.5}
+                                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                      style={{
+                                        color: "var(--color-secondary-500)",
+                                      }}
+                                    />
+                                  ) : (
+                                    <Info
+                                      size={14}
+                                      strokeWidth={1.5}
+                                      className="opacity-0 group-hover:opacity-100 transition-opacity"
+                                      style={{ color: "rgba(29,36,69,0.3)" }}
+                                    />
+                                  )}
                                 </td>
                               </tr>
                             );
-                          }
-
-                          const isExternal = Boolean(row.external);
-                          const target = row.href;
-
-                          return (
-                            <tr
-                              key={`${row.code}-${idx}`}
-                              className="transition-colors cursor-pointer hover:bg-[rgba(173,151,111,0.03)] group"
-                              style={rowStyle}
-                              onClick={() =>
-                                isExternal
-                                  ? window.open(target, "_blank", "noopener,noreferrer")
-                                  : router.push(target)
-                              }
-                            >
-                              <td className="px-4 sm:px-6 py-3.5">
-                                <span
-                                  style={{
-                                    fontFamily: "'JetBrains Mono', monospace",
-                                    fontSize: "0.8125rem",
-                                    fontWeight: 500,
-                                    color: "var(--color-secondary-500)",
-                                    letterSpacing: "0.02em",
-                                  }}
-                                >
-                                  {row.code}
-                                </span>
-                              </td>
-                              <td className="px-4 sm:px-6 py-3.5">
-                                <Link
-                                  href={target}
-                                  {...(isExternal
-                                    ? { target: "_blank", rel: "noopener noreferrer" }
-                                    : {})}
-                                  className="hover:text-secondary-700 transition-colors block truncate"
-                                  style={{
-                                    fontSize: "0.8125rem",
-                                    fontWeight: 450,
-                                    color: "var(--color-primary-500)",
-                                  }}
-                                  onClick={(e) => e.stopPropagation()}
-                                >
-                                  {row.name}
-                                </Link>
-                              </td>
-                              <td className="px-4 sm:px-6 py-3.5">
-                                <span
-                                  style={{
-                                    fontFamily: "'JetBrains Mono', monospace",
-                                    fontSize: "0.75rem",
-                                    color: "rgba(29,36,69,0.45)",
-                                  }}
-                                >
-                                  {row.hours}
-                                </span>
-                              </td>
-                              <td className="px-4 sm:px-6 py-3.5">
-                                <span
-                                  style={{
-                                    fontFamily: "'JetBrains Mono', monospace",
-                                    fontSize: "0.8125rem",
-                                    fontWeight: 600,
-                                    color: "var(--color-primary-500)",
-                                  }}
-                                >
-                                  {row.ects}
-                                </span>
-                              </td>
-                              <td className="px-4 sm:px-6 py-3.5">
-                                <StatusBadge status={row.status} />
-                              </td>
-                              <td className="px-4 sm:px-6 py-3.5">
-                                {isExternal ? (
-                                  <ExternalLink
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                                    style={{ color: "var(--color-secondary-500)" }}
-                                  />
-                                ) : (
-                                  <Info
-                                    size={14}
-                                    strokeWidth={1.5}
-                                    className="opacity-0 group-hover:opacity-100 transition-opacity"
-                                    style={{ color: "rgba(29,36,69,0.3)" }}
-                                  />
-                                )}
-                              </td>
-                            </tr>
-                          );
-                        }
-                      )}
-                    </tbody>
-                  </table>
-                </motion.div>
-              </AnimatePresence>
+                          })}
+                        </tbody>
+                      </table>
+                    </motion.div>
+                  </AnimatePresence>
                 </div>
               </div>
             </div>
@@ -543,13 +614,22 @@ export default function CurriculumPage({ semesters, summary }) {
                   <button
                     onClick={closeGroup}
                     className="flex items-center gap-1.5 transition-colors"
-                    style={{ fontSize: "0.75rem", color: "var(--color-secondary-500)" }}
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "var(--color-secondary-500)",
+                    }}
                   >
                     <ChevronLeft size={12} strokeWidth={1.5} />
                     Yarıyıl listesine dön
                   </button>
                 ) : (
-                  <span style={{ fontSize: "0.75rem", color: "rgba(29,36,69,0.4)", fontWeight: 400 }}>
+                  <span
+                    style={{
+                      fontSize: "0.75rem",
+                      color: "rgba(29,36,69,0.4)",
+                      fontWeight: 400,
+                    }}
+                  >
                     Toplam {rows.length} ders · {totalEcts} ECTS
                   </span>
                 )}
@@ -588,7 +668,6 @@ export default function CurriculumPage({ semesters, summary }) {
               </div>
             </div>
           </div>
-
         </div>
       </PageLayout>
     </>
