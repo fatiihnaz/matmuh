@@ -2,12 +2,25 @@
 
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/link";
-import { CalendarDays, Eye, FileText, Info, MapPin, TriangleAlert, Wifi, X } from "lucide-react";
+import {
+  CalendarDays,
+  Eye,
+  FileText,
+  Info,
+  MapPin,
+  TriangleAlert,
+  Wifi,
+  X,
+} from "lucide-react";
 
 import Modal from "@/app/components/Modal";
 import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
-import { fetchMyEnrollments, fetchMyWeeklyEntries, unenroll } from "@/data/enrollments";
+import {
+  fetchMyEnrollments,
+  fetchMyWeeklyEntries,
+  unenroll,
+} from "@/data/enrollments";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -24,7 +37,10 @@ function Skeleton({ rows = 4 }) {
   return (
     <div className="space-y-2 p-4">
       {Array.from({ length: rows }, (_, i) => (
-        <div key={i} className="h-14 animate-pulse rounded-lg bg-primary-500/6" />
+        <div
+          key={i}
+          className="h-14 animate-pulse rounded-lg bg-primary-500/6"
+        />
       ))}
     </div>
   );
@@ -90,7 +106,14 @@ const NOTE_FILTERS = [
   { id: "REJECTED", label: "Reddedilen" },
 ];
 
-function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }) {
+function NotesBody({
+  items,
+  busyId,
+  confirmId,
+  onRemove,
+  onConfirm,
+  onNavigate,
+}) {
   const { href } = useLocaleNav();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
@@ -102,7 +125,9 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
     (note) =>
       (status === "all" || note.status === status) &&
       (needle === "" ||
-        `${note.title} ${note.lectureCode ?? ""}`.toLocaleLowerCase("tr").includes(needle)),
+        `${note.title} ${note.lectureCode ?? ""}`
+          .toLocaleLowerCase("tr")
+          .includes(needle)),
   );
 
   return (
@@ -140,86 +165,94 @@ function NotesBody({ items, busyId, confirmId, onRemove, onConfirm, onNavigate }
         <Empty>Bu koşullara uyan not yok.</Empty>
       ) : (
         <ul className="divide-y divide-primary-500/6">
-        {shown.map((note) => {
-        const badge = NOTE_STATUS[note.status] ?? NOTE_STATUS.PENDING;
-        const draft = note.status !== "APPROVED";
-        return (
-          <li key={note.id} className="flex items-start gap-3 px-4 py-3">
-            <NoteThumb note={note} />
-            <span className="min-w-0 flex-1">
-              <span className="flex flex-wrap items-center gap-2">
-                <span className="text-[13px] font-medium text-primary-600">{note.title}</span>
-                <span className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${badge.tone}`}>
-                  {badge.label}
-                </span>
-                {note.type !== "OTHER" && noteTypeLabel(note.type) && (
-                  <span className="rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/55">
-                    {noteTypeLabel(note.type)}
-                  </span>
-                )}
-              </span>
-              <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-primary-500/45">
-                {note.lectureCode && (
-                  <>
-                    <Link
-                      href={href(`/egitim/mufredat/${note.lectureCode}`)}
-                      onClick={onNavigate}
-                      className="font-mono font-semibold text-secondary-500 hover:underline"
-                    >
-                      {note.lectureCode}
-                    </Link>
-                    <span aria-hidden>·</span>
-                  </>
-                )}
-                {formatDay(note.createdAt)}
-                {note.offering?.instructor && (
-                  <>
-                    <span aria-hidden>·</span>
-                    <span className="truncate">{note.offering.instructor}</span>
-                  </>
-                )}
-                {note.status === "APPROVED" && (
-                  <>
-                    <span aria-hidden>·</span>
-                    <span className="inline-flex items-center gap-1">
-                      <Eye size={11} strokeWidth={1.5} />
-                      {note.viewCount} görüntülenme
+          {shown.map((note) => {
+            const badge = NOTE_STATUS[note.status] ?? NOTE_STATUS.PENDING;
+            const draft = note.status !== "APPROVED";
+            return (
+              <li key={note.id} className="flex items-start gap-3 px-4 py-3">
+                <NoteThumb note={note} />
+                <span className="min-w-0 flex-1">
+                  <span className="flex flex-wrap items-center gap-2">
+                    <span className="text-[13px] font-medium text-primary-600">
+                      {note.title}
                     </span>
-                  </>
-                )}
-              </span>
-            </span>
+                    <span
+                      className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${badge.tone}`}
+                    >
+                      {badge.label}
+                    </span>
+                    {note.type !== "OTHER" && noteTypeLabel(note.type) && (
+                      <span className="rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/55">
+                        {noteTypeLabel(note.type)}
+                      </span>
+                    )}
+                  </span>
+                  <span className="mt-0.5 flex flex-wrap items-center gap-x-1.5 text-[11px] text-primary-500/45">
+                    {note.lectureCode && (
+                      <>
+                        <Link
+                          href={href(`/egitim/mufredat/${note.lectureCode}`)}
+                          onClick={onNavigate}
+                          className="font-mono font-semibold text-secondary-500 hover:underline"
+                        >
+                          {note.lectureCode}
+                        </Link>
+                        <span aria-hidden>·</span>
+                      </>
+                    )}
+                    {formatDay(note.createdAt)}
+                    {note.offering?.instructor && (
+                      <>
+                        <span aria-hidden>·</span>
+                        <span className="truncate">
+                          {note.offering.instructor}
+                        </span>
+                      </>
+                    )}
+                    {note.status === "APPROVED" && (
+                      <>
+                        <span aria-hidden>·</span>
+                        <span className="inline-flex items-center gap-1">
+                          <Eye size={11} strokeWidth={1.5} />
+                          {note.viewCount} görüntülenme
+                        </span>
+                      </>
+                    )}
+                  </span>
+                </span>
 
-            {confirmId === note.id ? (
-              <span className="flex shrink-0 items-center gap-1">
-                <button
-                  type="button"
-                  onClick={() => onRemove(note)}
-                  disabled={busyId === note.id}
-                  className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
-                >
-                  {busyId === note.id ? "…" : "Onayla"}
-                </button>
-                <button
-                  type="button"
-                  onClick={() => onConfirm(null)}
-                  className="rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-primary-500"
-                >
-                  Vazgeç
-                </button>
-              </span>
-            ) : (
-              <button
-                type="button"
-                onClick={() => (draft ? onRemove(note) : onConfirm(note.id))}
-                className="shrink-0 rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700"
-              >
-                {draft ? "İptal et" : "Kaldır"}
-              </button>
-            )}
-          </li>
-        );
-      })}
+                {confirmId === note.id ? (
+                  <span className="flex shrink-0 items-center gap-1">
+                    <button
+                      type="button"
+                      onClick={() => onRemove(note)}
+                      disabled={busyId === note.id}
+                      className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
+                    >
+                      {busyId === note.id ? "…" : "Onayla"}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => onConfirm(null)}
+                      className="rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-primary-500"
+                    >
+                      Vazgeç
+                    </button>
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() =>
+                      draft ? onRemove(note) : onConfirm(note.id)
+                    }
+                    className="shrink-0 rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700"
+                  >
+                    {draft ? "İptal et" : "Kaldır"}
+                  </button>
+                )}
+              </li>
+            );
+          })}
         </ul>
       )}
     </>
@@ -252,7 +285,9 @@ function ScheduleEntry({ entry, conflict }) {
               <MapPin size={11} strokeWidth={1.5} /> {entry.classroom}
             </span>
           ) : null}
-          {entry.staffName && <span className="truncate">{entry.staffName}</span>}
+          {entry.staffName && (
+            <span className="truncate">{entry.staffName}</span>
+          )}
           {entry.examType && (
             <span className="rounded bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-600">
               Sınav
@@ -306,7 +341,9 @@ function EnrolledCourses({ onChanged }) {
               <span className="font-mono text-[11px] font-semibold text-secondary-600">
                 {row.lectureCode}
               </span>
-              {row.lectureName && <span className="ml-1.5">{row.lectureName}</span>}
+              {row.lectureName && (
+                <span className="ml-1.5">{row.lectureName}</span>
+              )}
               {row.groupNumber != null && (
                 <span className="ml-1.5 text-[11px] text-primary-500/40">
                   Gr.{row.groupNumber}
@@ -413,7 +450,9 @@ function DatedSchedule({ items }) {
             <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/40">
               {weekdayOf(date)}
             </span>
-            <span className="text-[11px] text-primary-500/30">{formatDay(date)}</span>
+            <span className="text-[11px] text-primary-500/30">
+              {formatDay(date)}
+            </span>
           </div>
           <div className="space-y-1.5">
             {blocks.map(({ entries, conflict, overlap }) =>
@@ -426,7 +465,9 @@ function DatedSchedule({ items }) {
                     <TriangleAlert size={12} strokeWidth={2} />
                     Çakışma
                     {overlap && (
-                      <span className="font-mono font-normal text-amber-700/70">{overlap}</span>
+                      <span className="font-mono font-normal text-amber-700/70">
+                        {overlap}
+                      </span>
                     )}
                   </p>
                   <ul className="space-y-1.5">
@@ -449,13 +490,27 @@ function DatedSchedule({ items }) {
 }
 
 const VIEWS = {
-  notes: { label: "Notlarım", icon: FileText, load: fetchMyNotes, Body: NotesBody },
-  schedule: { label: "Ders Programım", icon: CalendarDays, load: fetchMySchedule, Body: ScheduleBody },
+  notes: {
+    label: "Notlarım",
+    icon: FileText,
+    load: fetchMyNotes,
+    Body: NotesBody,
+  },
+  schedule: {
+    label: "Ders Programım",
+    icon: CalendarDays,
+    load: fetchMySchedule,
+    Body: ScheduleBody,
+  },
 };
 
 export default function ProfilePanel({ view, onClose }) {
   const { getAccessToken } = useAuth();
-  const [state, setState] = useState({ view: null, status: "loading", items: [] });
+  const [state, setState] = useState({
+    view: null,
+    status: "loading",
+    items: [],
+  });
   const [busyId, setBusyId] = useState(null);
   const [actionError, setActionError] = useState(null);
   const [confirmId, setConfirmId] = useState(null);
@@ -511,7 +566,7 @@ export default function ProfilePanel({ view, onClose }) {
       label={label}
       contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
     >
-      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-full sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
+      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
         <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
           <Icon size={16} strokeWidth={1.5} className="text-secondary-500" />
           <h2 className="text-sm font-semibold text-primary-600">{label}</h2>

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { ExternalLink } from "lucide-react";
+import { ClipboardCheck, ExternalLink } from "lucide-react";
 
 import Modal from "@/app/components/Modal";
 import { NoteAdminBody } from "@/app/[locale]/yonetim/ders-notlari/components/NoteAdminPage";
@@ -17,15 +17,22 @@ export default function NoteAdminDialog({ open, onClose }) {
       open={open}
       onClose={onClose}
       label="Not Yönetimi"
-      contentClassName="flex items-start justify-center px-3 py-14 sm:px-6"
+      contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
     >
-      <div className="flex max-h-full w-full max-w-5xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
-        <div className="flex shrink-0 items-center gap-3 border-b border-primary-500/8 px-5 py-3.5">
-          <h2 className="flex-1 text-sm font-semibold text-primary-600">Not Yönetimi</h2>
+      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
+        <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
+          <ClipboardCheck
+            size={16}
+            strokeWidth={1.5}
+            className="text-secondary-500"
+          />
+          <h2 className="text-sm font-semibold text-primary-600">
+            Not Yönetimi
+          </h2>
           <Link
             href={href(PAGE)}
             onClick={onClose}
-            className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-secondary-600"
+            className="ml-auto inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-secondary-600"
           >
             Sayfada aç
             <ExternalLink className="size-3" />
