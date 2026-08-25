@@ -58,7 +58,7 @@ export default function UserLogin() {
     return (
       <button
         onClick={() => signIn()}
-        className="h-9 px-3.5 flex items-center gap-2 border border-secondary-500 text-secondary-500 rounded-lg hover:bg-secondary-500 hover:text-primary-500 transition-colors font-medium text-xs"
+        className="h-9 shrink-0 px-2.5 sm:px-3.5 flex items-center gap-1.5 sm:gap-2 border border-secondary-500 text-secondary-500 rounded-lg hover:bg-secondary-500 hover:text-primary-500 transition-colors font-medium text-[11px] sm:text-xs"
       >
         <LogIn size={14} className="shrink-0" />
         <span>{t("Giriş")}</span>

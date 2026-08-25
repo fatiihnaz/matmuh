@@ -58,8 +58,8 @@ export default function Header() {
       <div className="w-full h-0.5" style={{ background: "linear-gradient(to right, var(--color-primary-500) 0%, var(--color-secondary-500) 30%, var(--color-secondary-500) 70%, var(--color-primary-500) 100%)" }} />
 
       <div className="relative z-20 bg-primary-500">
-        <div className="max-w-7xl mx-auto px-6 py-2 flex items-center justify-between">
-          <Link href={href("/")} className="shrink-0 py-2">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between">
+          <Link href={href("/")} className="min-w-0 shrink py-2">
             <Image
               src={locale === "en" ? "/main-logo-en.svg" : "/main-logo.svg"}
               alt={
@@ -69,12 +69,12 @@ export default function Header() {
               }
               width={locale === "en" ? 414 : 397}
               height={54}
-              className="h-8 sm:h-10 w-auto"
+              className="h-auto w-auto max-h-8 max-w-full sm:max-h-10"
               priority
             />
           </Link>
 
-          <div className="flex flex-1 items-center justify-end gap-2">
+          <div className="flex flex-1 items-center justify-end gap-1.5 sm:gap-2">
             {!searchOpen && (
               <motion.nav
                 aria-label={t("Ana menü")}
