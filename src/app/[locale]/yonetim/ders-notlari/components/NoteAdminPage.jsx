@@ -160,7 +160,10 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
           </button>
         )}
 
-        {note.status !== "REJECTED" && (
+        {/* Reddetmek bir inceleme karari, yayindaki icerige uygulanmaz. Onayli
+            notta zaten "Onayi Kaldir" var ve not incelemeye doner; oradan
+            reddedilebilir. Ikisini yan yana koymak ayni isi iki dugmeye bolmekti. */}
+        {note.status === "PENDING" && (
           <button
             onClick={() => onSetStatus(note, "REJECTED")}
             disabled={busy}
@@ -274,7 +277,9 @@ export function NoteAdminBody() {
       <div className="space-y-4">
         <div className="rounded-xl border border-primary-500/10 shadow-xs bg-white overflow-hidden">
           <div className="flex items-center justify-between gap-4 px-4 py-3 flex-wrap">
-            <div className="flex items-center gap-1 overflow-x-auto no-scrollbar -mx-1 px-1">
+            {/* `no-scrollbar` kaldirildi: dar ekranda filtreler kayiyor ama
+                gostergesi gizli oldugu icin sondaki sekme kesik gorunuyordu. */}
+            <div className="flex items-center gap-1 overflow-x-auto -mx-1 px-1 pb-1">
               {FILTERS.map((item) => (
                 <button
                   key={item.id}
