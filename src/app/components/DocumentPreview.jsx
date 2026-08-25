@@ -2,32 +2,20 @@
 
 import { Download, ExternalLink, FileText } from "lucide-react";
 import Modal from "./Modal";
-import OfficeDocument from "./OfficeDocument";
 import { useMediaQuery } from "@/app/lib/useWideViewport";
 
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
-// Tarayicida cozdugumuz turler. Eski .doc/.xls ve .ppt/.pptx disarida: onlar icin
-// olgun bir istemci tarafi cozucu yok, indirmede kaliyorlar.
-const OFFICE_KINDS = ["docx", "xlsx"];
+export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS]);
 
-export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS, ...OFFICE_KINDS]);
-
-// Backend Gotenberg ile ofis belgelerini yuklemede PDF'e ceviriyor ve `previewUrl`
-// donuyor. O varsa her ofis turu acilir. Yoksa istemci tarafi cozucuye dusuyoruz; o
-// baytlari okudugu icin CORS'a tabi, yani yalnizca ayni kokenden dogrudan servis
-// edilen dosyalarda calisir.
+// Ofis belgeleri tarayicida cozulmuyor: backend Gotenberg ile yuklemede PDF'e
+// ceviriyor ve `previewUrl` donuyor, biz onu gosteriyoruz. Istemci tarafi cozucu
+// (docx-preview / read-excel-file) kaldirildi — dosya ucu 302 ile imzali S3
+// adresine yonlendigi ve orada CORS kurali olmadigi icin bayt okuyan hicbir cozum
+// bu mimaride calisamiyordu.
 export function canPreview(href, kind, previewHref = null) {
   if (previewHref) return true;
-  if (!href || !PREVIEWABLE_KINDS.has(kind)) return false;
-  if (!OFFICE_KINDS.includes(kind)) return true;
-  if (href.startsWith("/")) return true;
-  if (typeof window === "undefined") return false;
-  try {
-    return new URL(href, window.location.origin).origin === window.location.origin;
-  } catch {
-    return false;
-  }
+  return Boolean(href) && PREVIEWABLE_KINDS.has(kind);
 }
 
 const ACTION =
@@ -63,7 +51,6 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
   if (!open) return null;
 
   const isImage = !previewHref && IMAGE_KINDS.includes(kind);
-  const isOffice = !previewHref && OFFICE_KINDS.includes(kind);
   const source = previewHref ?? href;
 
   return (
@@ -75,9 +62,7 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
         className="flex flex-col h-full pt-14 pb-3 px-3 sm:px-6"
       >
         <div className="relative flex-1 min-h-0 rounded-lg overflow-hidden bg-white">
-          {isOffice ? (
-            <OfficeDocument href={href} kind={kind} />
-          ) : isImage ? (
+          {isImage ? (
             // `next/image` burada calismaz: istegi `/_next/image` uzerinden Next
             // sunucusu yapar ve onun ne kullanicinin cerezi ne token'i vardir.
             // eslint-disable-next-line @next/next/no-img-element
@@ -92,9 +77,8 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
             {label}
           </span>
 
-          {/* Donusturulmus PDF de orijinal de sunucuda duruyor. Ek satirindan
-              dogrudan indirmeye tiklayan orijinali alir; burada ikisi de acikca
-              sunuluyor, cunku okumak icin PDF, doldurmak icin orijinal gerekiyor. */}
+          {/* Donusturulmus PDF de orijinal de sunucuda duruyor: okumak icin PDF,
+              doldurmak icin orijinal gerekiyor. */}
           <a href={href} download={label} className={ACTION}>
             <Download className="size-3.5" />
             {previewHref ? `Orijinali indir${kind ? ` (${kind.toUpperCase()})` : ""}` : "İndir"}
