@@ -4,14 +4,19 @@ import { useEffect, useState } from "react";
 
 import { useAuth } from "@/lib/auth";
 
-// `/api/uploads/files/**` kimlik dogrulamali. Prod'da HttpOnly cerez ayni kokene
-// gittigi icin <iframe src> calisiyor, ama gelistirmede oturum elle yapistirilan bir
-// bearer token; iframe basik tasiyamadigi icin 401 aliyorduk. Dosyayi fetch ile
-// cekip blob URL'e cevirince iki ortam da ayni yoldan gidiyor.
+// Yalnizca `/api/uploads/files/**` kimlik dogrulamali (SecurityConfig). Prod'da
+// HttpOnly cerez ayni kokene gittigi icin <iframe src> calisiyor, ama gelistirmede
+// oturum elle yapistirilan bir bearer token; iframe basik tasiyamadigi icin 401
+// aliyorduk. Dosyayi fetch ile cekip blob URL'e cevirince iki ortam da ayni yoldan
+// gidiyor.
 //
-// Gorseller bu yoldan gecmiyor: `/api/uploads/images/**` zaten permitAll.
+// Herkese acik adresler bu yoldan gecmiyor: onlari dogrudan veriyoruz, boylece
+// tarayici PDF'i parca parca cizebiliyor ve dosya bellege kopyalanmiyor. Formlar gibi
+// giris istemeyen belgeler acik bir yola tasindiginda kendiliginden bu tarafa duser.
+const PROTECTED = "/api/uploads/files/";
+
 function needsAuth(href) {
-  return typeof href === "string" && href.startsWith("/api/");
+  return typeof href === "string" && href.startsWith(PROTECTED);
 }
 
 export function useAuthedFile(href, active) {
