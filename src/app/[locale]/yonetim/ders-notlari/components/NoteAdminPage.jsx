@@ -57,7 +57,7 @@ function Notice({ icon: Icon, title, children }) {
 function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = canPreview(note.href, kind);
+  const previewable = canPreview(note.href, kind, note.previewHref);
   return (
     <div className="px-4 sm:px-5 py-4 flex flex-col lg:flex-row lg:items-center gap-4">
       <div className="w-11 h-12 rounded-lg flex flex-col items-center justify-center gap-0.5 bg-primary-500/5 shrink-0">
@@ -188,6 +188,7 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
           label={note.title}
           href={note.href}
           kind={kind}
+          previewHref={note.previewHref}
         />
       )}
     </div>

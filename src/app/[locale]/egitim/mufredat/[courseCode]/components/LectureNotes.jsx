@@ -96,7 +96,7 @@ function LoginPanel({ loading, onSignIn }) {
 function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = canPreview(note.href, kind);
+  const previewable = canPreview(note.href, kind, note.previewHref);
   const rejected = note.status === "REJECTED";
 
   return (
@@ -185,6 +185,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
           label={note.title}
           href={note.href}
           kind={kind}
+          previewHref={note.previewHref}
         />
       )}
       <div className="relative z-10 flex shrink-0 flex-col items-stretch gap-1.5">

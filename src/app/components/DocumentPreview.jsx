@@ -13,11 +13,13 @@ const OFFICE_KINDS = ["docx", "xlsx"];
 
 export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS, ...OFFICE_KINDS]);
 
-// Office turleri baytlari okuyarak cizildigi icin CORS'a tabi. Dis kokendeki
-// belgeler (kalite.yildiz.edu.tr, eski alan adi) izin basligi gondermiyor, yani
-// tarayicida acilamazlar. PDF ve gorseller etkilenmiyor: onlari iframe/img
-// dogrudan gosteriyor, bayt okumak gerekmiyor.
-export function canPreview(href, kind) {
+// Backend Gotenberg ile ofis belgelerini yuklemede PDF'e ceviriyor ve `previewUrl`
+// donuyor. O varsa her ofis turu acilir, cunku artik PDF gosteriyoruz ve dosya bizim
+// kokenimizde duruyor. Yoksa istemci tarafi cozucuye dusuyoruz; o da baytlari okudugu
+// icin CORS'a tabi, yani yalnizca ayni kokendeki dosyalarda calisir. PDF ve gorseller
+// hicbir durumda etkilenmez: onlari iframe/img dogrudan gosteriyor.
+export function canPreview(href, kind, previewHref = null) {
+  if (previewHref) return true;
   if (!href || !PREVIEWABLE_KINDS.has(kind)) return false;
   if (!OFFICE_KINDS.includes(kind)) return true;
   if (href.startsWith("/")) return true;
@@ -32,11 +34,11 @@ export function canPreview(href, kind) {
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
-export default function DocumentPreview({ open, onClose, label, href, kind }) {
+export default function DocumentPreview({ open, onClose, label, href, kind, previewHref = null }) {
   if (!open) return null;
 
-  const isImage = IMAGE_KINDS.includes(kind);
-  const isOffice = OFFICE_KINDS.includes(kind);
+  const isImage = !previewHref && IMAGE_KINDS.includes(kind);
+  const isOffice = !previewHref && OFFICE_KINDS.includes(kind);
 
   return (
     <Modal open={open} onClose={onClose} label={label}>
@@ -52,7 +54,7 @@ export default function DocumentPreview({ open, onClose, label, href, kind }) {
           ) : isOffice ? (
             <OfficeDocument href={href} kind={kind} />
           ) : (
-            <iframe src={href} title={label} className="w-full h-full border-0" />
+            <iframe src={previewHref ?? href} title={label} className="w-full h-full border-0" />
           )}
         </div>
 

@@ -40,7 +40,7 @@ function Empty({ children }) {
 function NoteThumb({ note }) {
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = canPreview(note.href, kind);
+  const previewable = canPreview(note.href, kind, note.previewHref);
 
   const face = (
     <>
@@ -75,6 +75,7 @@ function NoteThumb({ note }) {
         label={note.title}
         href={note.href}
         kind={kind}
+        previewHref={note.previewHref}
       />
     </>
   );
