@@ -26,12 +26,95 @@ import {
 } from "lucide-react";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
+import Collapse from "@/app/components/Collapse";
 import { fetchCourseStatistics } from "@/data/statistics";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 
 import LectureNotes from "./LectureNotes";
 import SectionEnroll from "./SectionEnroll";
 import { useAuth } from "@/lib/auth";
+
+// Bir dersin 16 grubu olabiliyor; hepsini acik listelemek kenar cubugunu
+// okunmaz hale getiriyordu. Kapaliyken ilk dersin gunu ve saati basligda
+// gorunuyor, boylece acmadan da taranabiliyor.
+function SectionRow({ section, defaultOpen }) {
+  const [open, setOpen] = useState(defaultOpen);
+  const first = section.schedule[0];
+
+  return (
+    <div className="rounded-lg border border-primary-500/8">
+      <button
+        type="button"
+        onClick={() => setOpen((prev) => !prev)}
+        aria-expanded={open}
+        className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 text-left transition-colors hover:bg-primary-500/3"
+      >
+        <span
+          className="size-9 shrink-0 rounded-full flex items-center justify-center text-[11px] font-semibold"
+          style={{
+            backgroundColor: "var(--color-primary-500)",
+            color: "var(--color-secondary-500, #AD976F)",
+          }}
+        >
+          {initials(section.instructor)}
+        </span>
+        <span className="min-w-0 flex-1">
+          <span className="block truncate text-[13px] font-semibold leading-tight text-primary-500">
+            {section.instructor}
+          </span>
+          <span className="mt-0.5 block text-[11px] text-primary-500/45">
+            Grup {section.groupNo}
+            {!open && first && (
+              <>
+                <span aria-hidden> · </span>
+                {first.day} {first.time.split(" - ")[0]}
+                {section.schedule.length > 1 && ` +${section.schedule.length - 1}`}
+              </>
+            )}
+          </span>
+        </span>
+        <ChevronDown
+          size={15}
+          className={`shrink-0 text-primary-500/30 transition-transform duration-200 ${
+            open ? "rotate-180" : ""
+          }`}
+        />
+      </button>
+
+      <Collapse open={open}>
+        <div className="space-y-2 px-2.5 pb-2.5">
+          {section.schedule.map((slot, index) => (
+            <div
+              key={index}
+              className="p-3 rounded-lg bg-primary-500/2 border border-primary-500/10"
+            >
+              <div className="flex justify-between items-center mb-1">
+                <span className="text-xs font-bold text-primary-500">{slot.day}</span>
+                {slot.online && (
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded uppercase tracking-wider">
+                    <Wifi size={9} strokeWidth={2} /> Online
+                  </span>
+                )}
+              </div>
+              <div className="flex items-center gap-3 text-xs text-primary-500/50">
+                <span className="flex items-center gap-1.5">
+                  <Clock size={12} /> {slot.time}
+                </span>
+                {!slot.online && slot.room !== "-" && (
+                  <span className="flex items-center gap-1.5">
+                    <MapPin size={12} /> {slot.room}
+                  </span>
+                )}
+              </div>
+            </div>
+          ))}
+
+          <SectionEnroll offeringId={section.offeringId} schedule={section.schedule} />
+        </div>
+      </Collapse>
+    </div>
+  );
+}
 
 const initials = (name) =>
   String(name ?? "")
@@ -265,61 +348,13 @@ export default function CourseInfo({ course, sections = [] }) {
   const SidebarContent = (
     <div className="flex flex-col gap-5 lg:sticky lg:top-8 font-sans">
       <MainCard title="Şubeler & Program">
-        <div className="space-y-6 pt-2">
+        <div className="space-y-2 pt-2">
           {sections.map((section) => (
-            <div key={section.groupNo}>
-              <div className="flex items-center gap-3 mb-3">
-                <div
-                  className="size-11 rounded-full flex items-center justify-center font-semibold text-sm shrink-0"
-                  style={{
-                    backgroundColor: "var(--color-primary-500)",
-                    color: "var(--color-secondary-500, #AD976F)",
-                  }}
-                >
-                  {initials(section.instructor)}
-                </div>
-                <div className="min-w-0">
-                  <div className="text-sm font-semibold text-primary-500 leading-tight">
-                    {section.instructor}
-                  </div>
-                  <span className="text-xs text-primary-500/50">
-                    Grup {section.groupNo}
-                  </span>
-                </div>
-              </div>
-
-              <div className="space-y-2">
-                {section.schedule.map((slot, index) => (
-                  <div
-                    key={index}
-                    className="p-3 rounded-lg bg-primary-500/2 border border-primary-500/10"
-                  >
-                    <div className="flex justify-between items-center mb-1">
-                      <span className="text-xs font-bold text-primary-500">
-                        {slot.day}
-                      </span>
-                      {slot.online && (
-                        <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded uppercase tracking-wider">
-                          <Wifi size={9} strokeWidth={2} /> Online
-                        </span>
-                      )}
-                    </div>
-                    <div className="flex items-center gap-3 text-xs text-primary-500/50">
-                      <span className="flex items-center gap-1.5">
-                        <Clock size={12} /> {slot.time}
-                      </span>
-                      {!slot.online && slot.room !== "-" && (
-                        <span className="flex items-center gap-1.5">
-                          <MapPin size={12} /> {slot.room}
-                        </span>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <SectionEnroll offeringId={section.offeringId} schedule={section.schedule} />
-            </div>
+            <SectionRow
+              key={section.groupNo}
+              section={section}
+              defaultOpen={sections.length === 1}
+            />
           ))}
 
           {sections.length === 0 && (
