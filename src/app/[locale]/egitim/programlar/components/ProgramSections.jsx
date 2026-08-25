@@ -17,7 +17,7 @@ function TrackLink({ value }) {
     <a
       href={href}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      className="group flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-primary-500/4 hover:bg-secondary-500/10 text-[12px] text-primary-500 hover:text-secondary-600 transition-colors"
+      className="group flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-primary-500/4 hover:bg-secondary-500/10 text-[12px] text-primary-500 hover:text-secondary-600 transition-colors"
     >
       {value.label}
       <ExternalLink className="size-3 text-primary-500/30 group-hover:text-secondary-500 transition-colors" />

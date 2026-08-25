@@ -1,5 +1,5 @@
 export function SkeletonLine({ className = "" }) {
-  return <div className={`h-3 animate-pulse rounded bg-primary-500/8 ${className}`} />;
+  return <div className={`h-3 animate-pulse rounded-sm bg-primary-500/8 ${className}`} />;
 }
 
 export function SkeletonBlock({ className = "" }) {

@@ -344,7 +344,7 @@ export default function DepartmentInfo({ staff, curriculum }) {
                     blockType="ShortText"
                     defaultValue="Grafik alanlar arası akademik bağları temsil eder"
                     as="p"
-                    className="text-[10px] text-white/30 uppercase font-bold tracking-widest bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-lg border border-white/5"
+                    className="text-[10px] text-white/30 uppercase font-bold tracking-widest bg-black/20 backdrop-blur-sm px-3 py-1.5 rounded-md border border-white/5"
                   />
                 </div>
               </div>

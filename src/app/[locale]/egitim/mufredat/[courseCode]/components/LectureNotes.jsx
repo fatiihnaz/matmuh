@@ -48,7 +48,7 @@ function LoginPanel({ loading, onSignIn }) {
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
             Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak için{" "}
-            <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded">
+            <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
               @std.yildiz.edu.tr
             </span>{" "}
             hesabınızla giriş yapmalısınız.
@@ -128,17 +128,17 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             {note.title}
           </span>
           {noteTypeLabel(note.type) && note.type !== "OTHER" && (
-            <span className="shrink-0 rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+            <span className="shrink-0 rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
               {noteTypeLabel(note.type)}
             </span>
           )}
           {pending &&
             (rejected ? (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 bg-red-500/12 px-1.5 py-0.5 rounded shrink-0">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 bg-red-500/12 px-1.5 py-0.5 rounded-sm shrink-0">
                 <X size={9} strokeWidth={2.5} /> Reddedildi
               </span>
             ) : (
-              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-500/15 px-1.5 py-0.5 rounded shrink-0">
+              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-500/15 px-1.5 py-0.5 rounded-sm shrink-0">
                 <Clock3 size={9} strokeWidth={2.5} /> Onay bekliyor
               </span>
             ))}
@@ -166,7 +166,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             <span className="text-[11px] text-gray-400 font-mono">{note.uploadedAt}</span>
           )}
           {note.size && (
-            <span className="text-[11px] font-bold text-secondary-500 bg-secondary-500/10 px-1.5 py-0.5 rounded">
+            <span className="text-[11px] font-bold text-secondary-500 bg-secondary-500/10 px-1.5 py-0.5 rounded-sm">
               {note.size}
             </span>
           )}
@@ -203,7 +203,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             type="button"
             onClick={() => onCancel(note)}
             disabled={cancelling}
-            className="inline-flex items-center justify-center rounded-lg px-3 py-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
+            className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
           >
             {cancelling ? "…" : rejected ? "Kaldır" : "İptal et"}
           </button>

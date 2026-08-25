@@ -163,12 +163,12 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
           </span>
 
           <span className="mt-1 flex flex-wrap items-center gap-1">
-            <span className="rounded bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/60">
+            <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/60">
               {entry.group}. grup
             </span>
             {(entry.badge || entry.type) && (
               <span
-                className="rounded px-1 py-px text-[9px] font-medium"
+                className="rounded-sm px-1 py-px text-[9px] font-medium"
                 style={{
                   backgroundColor: `rgba(${elective ? GOLD : NAVY},0.1)`,
                   color: elective
@@ -180,7 +180,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
               </span>
             )}
             {entry.english && (
-              <span className="rounded bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-600">
+              <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-600">
                 İngilizce
               </span>
             )}

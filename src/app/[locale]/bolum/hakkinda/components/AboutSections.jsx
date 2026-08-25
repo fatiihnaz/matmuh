@@ -314,7 +314,7 @@ export function InternshipSummary() {
                 <span className="font-mono text-[12px] font-semibold text-primary-500">
                   {item.code}
                 </span>
-                <span className="px-1.5 py-0.5 rounded text-[10px] font-semibold bg-secondary-500/10 text-secondary-600">
+                <span className="px-1.5 py-0.5 rounded-sm text-[10px] font-semibold bg-secondary-500/10 text-secondary-600">
                   {item.days}
                 </span>
               </div>

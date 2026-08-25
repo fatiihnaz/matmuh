@@ -71,13 +71,13 @@ function NoteRow({ note, busy, confirming, onSetStatus, onDelete, onConfirm }) {
             {note.title}
           </span>
           <span
-            className="text-[10px] font-bold px-1.5 py-0.5 rounded"
+            className="text-[10px] font-bold px-1.5 py-0.5 rounded-sm"
             style={BADGES[note.status].style}
           >
             {BADGES[note.status].label}
           </span>
           {note.type !== "OTHER" && noteTypeLabel(note.type) && (
-            <span className="rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
+            <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/60">
               {noteTypeLabel(note.type)}
             </span>
           )}
@@ -359,14 +359,14 @@ export function NoteAdminBody() {
               <button
                 onClick={() => setPage((p) => Math.max(0, p - 1))}
                 disabled={result.page === 0}
-                className="px-3 py-1.5 rounded-lg bg-primary-500/5 text-xs font-semibold text-primary-500 disabled:opacity-40"
+                className="px-3 py-1.5 rounded-md bg-primary-500/5 text-xs font-semibold text-primary-500 disabled:opacity-40"
               >
                 Önceki
               </button>
               <button
                 onClick={() => setPage((p) => p + 1)}
                 disabled={result.page + 1 >= result.totalPages}
-                className="px-3 py-1.5 rounded-lg bg-primary-500/5 text-xs font-semibold text-primary-500 disabled:opacity-40"
+                className="px-3 py-1.5 rounded-md bg-primary-500/5 text-xs font-semibold text-primary-500 disabled:opacity-40"
               >
                 Sonraki
               </button>

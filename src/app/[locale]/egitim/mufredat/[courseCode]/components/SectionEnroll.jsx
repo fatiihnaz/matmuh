@@ -53,7 +53,7 @@ function findClash(schedule, enrolledSlots, ownOfferingId) {
 }
 
 const BUTTON =
-  "inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[11px] font-medium transition-colors disabled:opacity-40";
+  "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] font-medium transition-colors disabled:opacity-40";
 
 export default function SectionEnroll({ offeringId, schedule = [] }) {
   const { isAuthenticated, getAccessToken } = useAuth();

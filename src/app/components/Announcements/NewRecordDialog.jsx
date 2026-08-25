@@ -29,7 +29,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-secondary-500/10 px-3 py-1.5 text-[12px] font-medium text-secondary-600 transition-colors hover:bg-secondary-500/15"
+        className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-secondary-500/10 px-3 py-1.5 text-[12px] font-medium text-secondary-600 transition-colors hover:bg-secondary-500/15"
       >
         <Plus className="size-3.5" />
         {label}
@@ -55,7 +55,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
             <button
               type="button"
               onClick={() => setOpen(false)}
-              className="rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-primary-500/5 hover:text-primary-500"
+              className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-primary-500/5 hover:text-primary-500"
             >
               Vazgeç
             </button>
@@ -123,7 +123,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
             key={entry.id}
             type="button"
             onClick={() => setPane(entry.id)}
-            className={`rounded-lg px-3 py-1.5 text-[12px] font-medium transition-colors ${
+            className={`rounded-md px-3 py-1.5 text-[12px] font-medium transition-colors ${
               pane === entry.id
                 ? "bg-secondary-500/10 text-secondary-600"
                 : "text-primary-500/45 hover:bg-primary-500/5"
@@ -172,7 +172,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
                 deleteDraft();
               }}
               disabled={isPending}
-              className="rounded-lg px-3 py-1.5 text-[12px] font-medium text-primary-500/45 transition-colors hover:bg-primary-500/5 hover:text-primary-500 disabled:opacity-40"
+              className="rounded-md px-3 py-1.5 text-[12px] font-medium text-primary-500/45 transition-colors hover:bg-primary-500/5 hover:text-primary-500 disabled:opacity-40"
             >
               Taslağı temizle
             </button>
@@ -181,7 +181,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
             type="button"
             onClick={() => submit(onCreated)}
             disabled={isPending}
-            className="rounded-lg bg-secondary-500/10 px-4 py-1.5 text-[12px] font-medium text-secondary-600 transition-colors hover:bg-secondary-500/15 disabled:opacity-40"
+            className="rounded-md bg-secondary-500/10 px-4 py-1.5 text-[12px] font-medium text-secondary-600 transition-colors hover:bg-secondary-500/15 disabled:opacity-40"
           >
             {isPending ? "Kaydediliyor…" : submitLabel}
           </button>

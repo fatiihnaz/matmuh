@@ -108,7 +108,7 @@ export function ApprovalPaths() {
             <ol className="flex flex-col gap-2">
               {lines(item.steps).map((step, stepIndex) => (
                 <li key={stepIndex} className="flex gap-3">
-                  <span className="shrink-0 flex items-center justify-center size-5 rounded bg-secondary-500/15 text-[10px] font-semibold text-secondary-600">
+                  <span className="shrink-0 flex items-center justify-center size-5 rounded-sm bg-secondary-500/15 text-[10px] font-semibold text-secondary-600">
                     {stepIndex + 1}
                   </span>
                   <span className="text-[13px] text-primary-500/60 leading-relaxed">{step}</span>

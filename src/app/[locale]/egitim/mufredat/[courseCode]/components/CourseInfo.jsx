@@ -88,7 +88,7 @@ function SectionRow({ section, defaultOpen }) {
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs font-bold text-primary-500">{slot.day}</span>
                 {slot.online && (
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded uppercase tracking-wider">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-500 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
                     <Wifi size={9} strokeWidth={2} /> Online
                   </span>
                 )}
@@ -1106,7 +1106,7 @@ function LoginGate({ loading, onSignIn, code }) {
         <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
           {code} dersinin geçmiş dönem sınıf ortalamalarını, harf dağılımlarını ve
           eğitmen bilgilerini görüntülemek için{" "}
-          <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded">
+          <span className="font-mono text-[11px] font-bold text-secondary-500 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
             @std.yildiz.edu.tr
           </span>{" "}
           hesabınızla giriş yapmalısınız.

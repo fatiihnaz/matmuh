@@ -11,7 +11,7 @@ export default function AnnouncementMeta({ item }) {
       </span>
 
       {item.updatedAt && (
-        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-secondary-500/10 text-[10px] font-semibold uppercase tracking-wider text-secondary-600">
+        <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm bg-secondary-500/10 text-[10px] font-semibold uppercase tracking-wider text-secondary-600">
           <RefreshCw className="size-3" />
           Güncellendi
         </span>

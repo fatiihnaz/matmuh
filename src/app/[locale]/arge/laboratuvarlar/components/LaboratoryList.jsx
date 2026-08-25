@@ -33,7 +33,7 @@ function LaboratoryCard({ lab }) {
           {softwareList(lab.software).map((item) => (
             <span
               key={item}
-              className="px-2 py-1 rounded bg-secondary-500/10 text-[11px] font-medium text-secondary-600"
+              className="px-2 py-1 rounded-sm bg-secondary-500/10 text-[11px] font-medium text-secondary-600"
             >
               {item}
             </span>

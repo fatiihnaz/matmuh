@@ -158,7 +158,7 @@ export function Agreements() {
       }
       count={items.length}
       action={
-        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-600 px-2 py-1 rounded bg-secondary-500/10">
+        <span className="shrink-0 text-[10px] font-semibold uppercase tracking-widest text-secondary-600 px-2 py-1 rounded-sm bg-secondary-500/10">
           <EditableRegion
             blockPath="agreements.period"
             blockType="ShortText"

@@ -32,7 +32,7 @@ export default function DocumentLink({ label, href, kind, term, size }) {
         <span className="min-w-0 text-[13px] text-primary-500 leading-snug wrap-break-word">
           {label}
           {term && (
-            <span className="ml-2 inline-block px-1.5 py-0.5 rounded bg-primary-500/6 text-[10px] font-medium text-primary-500/50 align-middle">
+            <span className="ml-2 inline-block px-1.5 py-0.5 rounded-sm bg-primary-500/6 text-[10px] font-medium text-primary-500/50 align-middle">
               {term}
             </span>
           )}

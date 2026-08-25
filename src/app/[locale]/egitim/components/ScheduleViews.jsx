@@ -167,7 +167,7 @@ export default function ScheduleViews({
               type="button"
               onClick={() => setView(id)}
               aria-pressed={view === id}
-              className={`inline-flex items-center gap-1.5 rounded-lg px-2.5 py-1.5 text-[12px] font-medium transition-colors ${
+              className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[12px] font-medium transition-colors ${
                 view === id
                   ? "bg-secondary-500/12 text-secondary-600"
                   : "text-primary-500/45 hover:bg-primary-500/4 hover:text-primary-500"

@@ -177,12 +177,12 @@ function NotesBody({
                       {note.title}
                     </span>
                     <span
-                      className={`rounded px-1.5 py-0.5 text-[10px] font-semibold ${badge.tone}`}
+                      className={`rounded-sm px-1.5 py-0.5 text-[10px] font-semibold ${badge.tone}`}
                     >
                       {badge.label}
                     </span>
                     {note.type !== "OTHER" && noteTypeLabel(note.type) && (
-                      <span className="rounded bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/55">
+                      <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/55">
                         {noteTypeLabel(note.type)}
                       </span>
                     )}
@@ -227,14 +227,14 @@ function NotesBody({
                       type="button"
                       onClick={() => onRemove(note)}
                       disabled={busyId === note.id}
-                      className="rounded-lg bg-red-600 px-2 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
+                      className="rounded-md bg-red-600 px-2 py-1 text-[11px] font-semibold text-white transition-colors hover:bg-red-700 disabled:opacity-40"
                     >
                       {busyId === note.id ? "…" : "Onayla"}
                     </button>
                     <button
                       type="button"
                       onClick={() => onConfirm(null)}
-                      className="rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-primary-500"
+                      className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:text-primary-500"
                     >
                       Vazgeç
                     </button>
@@ -245,7 +245,7 @@ function NotesBody({
                     onClick={() =>
                       draft ? onRemove(note) : onConfirm(note.id)
                     }
-                    className="shrink-0 rounded-lg px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700"
+                    className="shrink-0 rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/45 transition-colors hover:bg-red-50 hover:text-red-700"
                   >
                     {draft ? "İptal et" : "Kaldır"}
                   </button>
@@ -289,7 +289,7 @@ function ScheduleEntry({ entry, conflict }) {
             <span className="truncate">{entry.staffName}</span>
           )}
           {entry.examType && (
-            <span className="rounded bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-600">
+            <span className="rounded-sm bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-600">
               Sınav
             </span>
           )}
@@ -355,7 +355,7 @@ function EnrolledCourses({ onChanged }) {
               onClick={() => void remove(row.offeringId)}
               disabled={busy === row.offeringId}
               aria-label={`${row.lectureName || row.lectureCode} dersini programdan kaldır`}
-              className="shrink-0 rounded p-0.5 text-primary-500/30 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
+              className="shrink-0 rounded-sm p-0.5 text-primary-500/30 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
             >
               <X size={12} strokeWidth={2} />
             </button>

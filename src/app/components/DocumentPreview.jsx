@@ -14,7 +14,7 @@ export function canPreview(href, kind, previewHref = null) {
 }
 
 const ACTION =
-  "inline-flex items-center gap-1.5 shrink-0 rounded-lg border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
+  "inline-flex items-center gap-1.5 shrink-0 rounded-md border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
 function PdfBody({ href, label }) {
   const inline = useMediaQuery("(min-width: 768px)");

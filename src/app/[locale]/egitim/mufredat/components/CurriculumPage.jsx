@@ -239,7 +239,7 @@ export default function CurriculumPage({ semesters, summary }) {
                 </span>
                 {!expandedGroup && (
                   <span
-                    className="ml-2 px-2 py-0.5 rounded"
+                    className="ml-2 px-2 py-0.5 rounded-sm"
                     style={{
                       fontSize: "0.625rem",
                       fontWeight: 500,
@@ -556,7 +556,7 @@ export default function CurriculumPage({ semesters, summary }) {
               </div>
               <div className="flex items-center gap-2">
                 <span
-                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded"
+                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded-sm"
                   style={{
                     fontSize: "0.625rem",
                     fontWeight: 500,
@@ -571,7 +571,7 @@ export default function CurriculumPage({ semesters, summary }) {
                   Zorunlu
                 </span>
                 <span
-                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded"
+                  className="inline-flex items-center gap-1.5 px-2 py-1 rounded-sm"
                   style={{
                     fontSize: "0.625rem",
                     fontWeight: 500,
