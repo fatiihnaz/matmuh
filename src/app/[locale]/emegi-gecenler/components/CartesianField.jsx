@@ -13,32 +13,43 @@ const rule = (direction, color, width) =>
 const MINOR = "rgba(98,109,158,0.34)";
 const MAJOR_COLOR = "rgba(98,109,158,0.6)";
 
-const FADE = "radial-gradient(ellipse 78% 72% at 50% 50%, #000 42%, transparent 100%)";
+const FADE = "radial-gradient(ellipse 82% 78% at 50% 50%, #000 38%, transparent 100%)";
+
+// Dikey sonum ayri bir katmanda. Iki maskeyi tek elemanda birlestirmek
+// `mask-composite` isterdi; Safari'nin sozdizimi farkli oldugu icin ic ice iki
+// eleman kullaniyoruz — maskeler carpiliyor, ek ozellik gerekmiyor.
+const EDGE =
+  "linear-gradient(to bottom, transparent 0%, #000 14%, #000 86%, transparent 100%)";
 
 export default function CartesianField() {
   return (
     <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
       <div
         className="absolute inset-0"
-        style={{
-          backgroundImage: `${rule("to right", MINOR, "0.5px")}, ${rule("to bottom", MINOR, "0.5px")}`,
-          backgroundSize: `${UNIT}px ${UNIT}px`,
-          backgroundPosition: "center",
-          maskImage: FADE,
-          WebkitMaskImage: FADE,
-        }}
-      />
+        style={{ maskImage: EDGE, WebkitMaskImage: EDGE }}
+      >
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `${rule("to right", MINOR, "0.5px")}, ${rule("to bottom", MINOR, "0.5px")}`,
+            backgroundSize: `${UNIT}px ${UNIT}px`,
+            backgroundPosition: "center",
+            maskImage: FADE,
+            WebkitMaskImage: FADE,
+          }}
+        />
 
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage: `${rule("to right", MAJOR_COLOR, "0.5px")}, ${rule("to bottom", MAJOR_COLOR, "0.5px")}`,
-          backgroundSize: `${MAJOR}px ${MAJOR}px`,
-          backgroundPosition: "center",
-          maskImage: FADE,
-          WebkitMaskImage: FADE,
-        }}
-      />
+        <div
+          className="absolute inset-0"
+          style={{
+            backgroundImage: `${rule("to right", MAJOR_COLOR, "0.5px")}, ${rule("to bottom", MAJOR_COLOR, "0.5px")}`,
+            backgroundSize: `${MAJOR}px ${MAJOR}px`,
+            backgroundPosition: "center",
+            maskImage: FADE,
+            WebkitMaskImage: FADE,
+          }}
+        />
+      </div>
 
       <div
         className="absolute inset-0"
