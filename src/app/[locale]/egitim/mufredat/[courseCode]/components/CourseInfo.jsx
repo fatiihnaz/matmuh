@@ -486,6 +486,40 @@ export default function CourseInfo({ course, sections = [] }) {
                     </p>
                   )}
                 </div>
+
+                {/* Bu ikisi CMS semasinda vardi ama hicbir yere ulasmiyordu:
+                    editor doldurup sitede hicbir sey gormuyordu. */}
+                {(course.gradingPolicy || course.resources) && (
+                  <div className="flex flex-col gap-6">
+                    {course.gradingPolicy && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-1 h-4 bg-secondary-500 rounded-full" />
+                          <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
+                            Değerlendirme
+                          </h3>
+                        </div>
+                        <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
+                          {course.gradingPolicy}
+                        </p>
+                      </div>
+                    )}
+
+                    {course.resources && (
+                      <div>
+                        <div className="flex items-center gap-2 mb-3">
+                          <div className="w-1 h-4 bg-secondary-500 rounded-full" />
+                          <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
+                            Kaynaklar
+                          </h3>
+                        </div>
+                        <p className="text-sm text-primary-500/60 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
+                          {course.resources}
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
                     <span className="text-[10px] font-bold text-secondary-500 uppercase tracking-widest block mb-2">

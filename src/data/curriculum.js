@@ -129,6 +129,8 @@ function lectureView(lecture) {
     slug: lecture.slug,
     title: (lecture.name ?? lecture.code).trim(),
     content: lecture.about ?? null,
+    gradingPolicy: lecture.gradingPolicy ?? null,
+    resources: lecture.resources ?? null,
     language: lecture.language ?? null,
     ects: lecture.ects ?? null,
     hours: hoursOf(lecture) ?? "-",
