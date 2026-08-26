@@ -37,7 +37,8 @@ function icon(key, className) {
 function QuickLinkTile({ item }) {
   const href = safeHref(item?.link?.href);
   const external = isExternalHref(href);
-  const className = "flex flex-col items-center gap-1.5 w-16 shrink-0 group";
+  const className =
+    "relative flex flex-col items-center gap-1.5 w-16 shrink-0 group";
   const content = (
     <>
       <div className="w-9 h-9 rounded-lg bg-secondary-500/8 hover:bg-secondary-600/10 flex items-center justify-center">
@@ -77,7 +78,7 @@ function QuickLinkRow({ item }) {
   const href = safeHref(item?.link?.href);
   const external = isExternalHref(href);
   const className =
-    "flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors";
+    "relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors";
   const content = (
     <>
       {icon(item?.icon, "w-4 h-4 text-primary-500/70 shrink-0")}
