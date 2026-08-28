@@ -1,5 +1,5 @@
 import { createCmsPage } from "inscribed/page";
-import { CollectionRecord, CollectionRows } from "inscribed/collections";
+import { CollectionProvider, CollectionRecord, CollectionRows } from "inscribed/collections";
 import { revalidateCmsSlug } from "inscribed/actions";
 
 import { revalidateCollection } from "./cms-actions.js";
@@ -11,7 +11,7 @@ export const { CmsPage, getCmsRoute, localePath, CollectionRegion, CollectionIte
   createCmsPage({
     config: cmsConfig,
     Provider: AppCmsProvider,
-    collections: { CollectionRecord, CollectionRows },
+    collections: { CollectionProvider, CollectionRecord, CollectionRows },
     onAfterSave: revalidateCmsSlug,
     onAfterCollectionSave: revalidateCollection,
   });
