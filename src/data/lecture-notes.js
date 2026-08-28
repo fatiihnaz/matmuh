@@ -129,16 +129,20 @@ export async function fetchMyPendingNotes(lectureId, token) {
     .filter((note) => note.status !== "APPROVED");
 }
 
-export async function fetchAllNotes(token, { status, search, page = 0, size = 20 } = {}) {
+// The review panel addresses the backend through inscribed's panel transport
+// rather than `fetch`, so it gets paths and mappers here instead of whole
+// calls. Paths are relative: the transport resolves them against its baseUrl.
+
+export function noteListPath({ status, search, page = 0, size = 20 } = {}) {
   const params = new URLSearchParams({ page: String(page), size: String(size), sort: "createdAt,desc" });
   if (status) params.set("status", status);
   if (search) params.set("search", search);
+  return `/lecture-notes?${params}`;
+}
 
-  const res = await fetch(`${API}/lecture-notes?${params}`, {
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  if (!res.ok) throw new Error(`lecture-notes ${res.status}`);
-  const body = await res.json();
+export const notePath = (id) => `/lecture-notes/${id}`;
+
+export function toNoteList(body) {
   const data = body?.data ?? body ?? {};
   return {
     items: (data.content ?? []).map(toNote),
@@ -148,16 +152,11 @@ export async function fetchAllNotes(token, { status, search, page = 0, size = 20
   };
 }
 
-export async function setNoteStatus(id, status, token) {
-  const res = await fetch(`${API}/lecture-notes/${id}`, {
-    method: "PATCH",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
-    body: JSON.stringify({ status }),
-  });
-  if (!res.ok) {
-    const body = await res.json().catch(() => null);
-    throw new Error(body?.message || `İşlem başarısız (${res.status})`);
-  }
+// This backend reports errors in its own envelope ({ message, ... }) rather than
+// RFC 7807, so CmsApiError finds no `detail` and falls back to the status text.
+// The sentence worth showing is in `problem`.
+export function noteErrorMessage(error) {
+  return error?.problem?.message || error?.message || "İşlem başarısız.";
 }
 
 export async function deleteNote(id, token) {

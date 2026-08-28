@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import Link from "next/link";
 import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine, FileText, CalendarDays } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
@@ -9,7 +8,7 @@ import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useWideViewport } from "@/app/lib/useWideViewport";
 import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
-import NoteAdminDialog from "@/app/components/Profile/NoteAdminDialog";
+import { NOTES_PANEL_ID } from "@/app/components/CmsPanels/notes-panel-meta";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -28,7 +27,6 @@ export default function UserLogin() {
   const t = useT();
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState(null);
-  const [noteAdmin, setNoteAdmin] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -73,6 +71,15 @@ export default function UserLogin() {
     : "--";
   const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
+
+  // A full load, not a router push: the drawer reads ?cms-panel= once when it
+  // mounts, and inscribed exports no way to reach it afterwards. Shown only
+  // when the drawer is actually there to receive it, or the trip buys nothing.
+  const openNotesPanel = () => {
+    const url = new URL(window.location.href);
+    url.searchParams.set("cms-panel", NOTES_PANEL_ID);
+    window.location.assign(url);
+  };
 
   return (
     <div ref={ref} className="relative z-30">
@@ -175,17 +182,17 @@ export default function UserLogin() {
               ))}
             </div>
 
-            {(canEdit || isAdmin) && (
+            {canEdit && (
               <div className="p-1.5 border-t border-primary-500/8">
                 <span className="block px-2.5 pb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
                   {t("Yönetim")}
                 </span>
-                {isAdmin && (
+                {isAdmin && editing && (
                   <button
                     type="button"
                     onClick={() => {
                       setOpen(false);
-                      setNoteAdmin(true);
+                      openNotesPanel();
                     }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                   >
@@ -193,7 +200,6 @@ export default function UserLogin() {
                     <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
                   </button>
                 )}
-                {canEdit && (
                 <button
                   type="button"
                   role="switch"
@@ -215,7 +221,6 @@ export default function UserLogin() {
                     />
                   </span>
                 </button>
-                )}
               </div>
             )}
 
@@ -236,7 +241,6 @@ export default function UserLogin() {
       </AnimatePresence>
 
       <ProfilePanel view={panel} onClose={() => setPanel(null)} />
-      <NoteAdminDialog open={noteAdmin} onClose={() => setNoteAdmin(false)} />
     </div>
   );
 }

@@ -76,13 +76,26 @@ export function useIsEditor() {
   return canEdit && editing && wide;
 }
 
-export function AppCmsProvider(props) {
+export function AppCmsProvider({ panels, ...props }) {
   const { user, getAccessToken, signOut } = useAuth();
   const editing = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
   const wide = useWideViewport();
 
   const canEdit =
     DEV_FORCE_ADMIN || !!user?.authorities?.some((role) => EDIT_ROLES.includes(role));
+
+  // A panel's `requiresRole` is ours, not inscribed's: the drawer mounts for
+  // every editor, so an area only some of them may open has to be dropped
+  // before it becomes a rail button that opens a 403.
+  const allowedPanels = useMemo(() => {
+    const kept = (panels ?? []).filter(
+      (panel) =>
+        !panel.requiresRole ||
+        DEV_FORCE_ADMIN ||
+        user?.authorities?.includes(panel.requiresRole),
+    );
+    return kept.length ? kept : undefined;
+  }, [panels, user]);
 
   const setEditing = useCallback((next) => {
     storage()?.setItem(STORAGE_KEY, next ? "1" : "0");
@@ -105,6 +118,7 @@ export function AppCmsProvider(props) {
     <EditingContext.Provider value={editingValue}>
       <CmsProvider
         {...props}
+        panels={allowedPanels}
         isAdmin={canEdit && editing && wide}
         getAccessToken={getAccessToken}
         userInfo={userInfo}
