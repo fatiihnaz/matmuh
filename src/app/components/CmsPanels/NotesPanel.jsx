@@ -34,11 +34,11 @@ import {
 } from "lucide-react";
 
 import { canPreview } from "@/app/components/DocumentPreview";
+import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { noteTypeLabel } from "@/data/lecture-notes";
 import { NOTE_FILTERS, useNoteReview } from "@/data/useNoteReview";
 import { NOTES_PANEL_ACCENT } from "./notes-panel-meta";
 import NotePreviewPane from "./NotePreviewPane";
-import { useDrawerVisible } from "./useDrawerVisible";
 import PanelTabBar from "./PanelTabBar";
 import {
   CHEVRON_CLASS,
@@ -105,7 +105,9 @@ function Notice({ icon: Icon, title, children }) {
       }}
     >
       <Icon size={20} strokeWidth={1.5} style={{ color: T.faint }} />
-      <span style={{ font: `600 12px/1.3 ${F.sans}`, color: T.mid }}>{title}</span>
+      <span style={{ font: `600 12px/1.3 ${F.sans}`, color: T.mid }}>
+        {title}
+      </span>
       {children}
     </div>
   );
@@ -130,10 +132,17 @@ function Message({ children, tone }) {
 /** One note, at the weight the Collections area gives a record row. */
 function NoteRow({ note, onOpen }) {
   const typeLabel = note.type !== "OTHER" ? noteTypeLabel(note.type) : null;
-  const meta = [typeLabel, note.uploadedBy, note.uploadedAt].filter(Boolean).join(" · ");
+  const meta = [typeLabel, note.uploadedBy, note.uploadedAt]
+    .filter(Boolean)
+    .join(" · ");
 
   return (
-    <button type="button" onClick={onOpen} className={SUBROW_CLASS} style={rowStyle}>
+    <button
+      type="button"
+      onClick={onOpen}
+      className={SUBROW_CLASS}
+      style={rowStyle}
+    >
       <span style={{ ...rowIconStyle, color: T.muted }} aria-hidden="true">
         <FileText size={13} strokeWidth={1.6} />
       </span>
@@ -146,7 +155,9 @@ function NoteRow({ note, onOpen }) {
           </span>
         </span>
         <span style={rowPropertyStyle}>
-          {note.lectureCode && <span style={rowCodeStyle}>{note.lectureCode}</span>}
+          {note.lectureCode && (
+            <span style={rowCodeStyle}>{note.lectureCode}</span>
+          )}
           <span style={rowMetaStyle}>{meta}</span>
         </span>
       </span>
@@ -162,13 +173,25 @@ function Field({ label, children }) {
   if (!children) return null;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <span style={{ font: `500 10px/1 ${F.sans}`, color: T.faint }}>{label}</span>
-      <span style={{ font: `12px/1.45 ${F.sans}`, color: T.text }}>{children}</span>
+      <span style={{ font: `500 10px/1 ${F.sans}`, color: T.faint }}>
+        {label}
+      </span>
+      <span style={{ font: `12px/1.45 ${F.sans}`, color: T.text }}>
+        {children}
+      </span>
     </div>
   );
 }
 
-function Action({ icon: Icon, children, onClick, href, download, disabled, tone }) {
+function Action({
+  icon: Icon,
+  children,
+  onClick,
+  href,
+  download,
+  disabled,
+  tone,
+}) {
   const glyph = Icon ? <Icon size={12} strokeWidth={2} /> : null;
   const style = {
     display: "inline-flex",
@@ -190,7 +213,11 @@ function Action({ icon: Icon, children, onClick, href, download, disabled, tone 
 
   if (href) {
     return (
-      <a href={href} download={download} style={{ ...style, textDecoration: "none" }}>
+      <a
+        href={href}
+        download={download}
+        style={{ ...style, textDecoration: "none" }}
+      >
         {glyph}
         {children}
       </a>
@@ -204,7 +231,15 @@ function Action({ icon: Icon, children, onClick, href, download, disabled, tone 
   );
 }
 
-function NoteDetail({ note, busy, confirming, onSetStatus, onDelete, onConfirm, onPreview }) {
+function NoteDetail({
+  note,
+  busy,
+  confirming,
+  onSetStatus,
+  onDelete,
+  onConfirm,
+  onPreview,
+}) {
   const status = STATUS[note.status] ?? STATUS.PENDING;
   const kind = String(note.extension ?? "").toLowerCase();
   const previewable = canPreview(note.href, kind, note.previewHref);
@@ -212,7 +247,9 @@ function NoteDetail({ note, busy, confirming, onSetStatus, onDelete, onConfirm, 
   return (
     <div style={{ ...listStyle, gap: 16, padding: 16 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <span style={{ font: `600 14px/1.35 ${F.sans}`, color: T.textHi }}>{note.title}</span>
+        <span style={{ font: `600 14px/1.35 ${F.sans}`, color: T.textHi }}>
+          {note.title}
+        </span>
         <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
           <span
             style={{
@@ -234,7 +271,15 @@ function NoteDetail({ note, busy, confirming, onSetStatus, onDelete, onConfirm, 
         </span>
       </div>
 
-      <div style={{ display: "grid", gap: 12, padding: 12, borderRadius: R.md, background: T.surface1 }}>
+      <div
+        style={{
+          display: "grid",
+          gap: 12,
+          padding: 12,
+          borderRadius: R.md,
+          background: T.surface1,
+        }}
+      >
         <Field label="Ders">
           {note.lectureCode
             ? `${note.lectureCode}${note.lectureName ? ` · ${note.lectureName}` : ""}`
@@ -262,11 +307,23 @@ function NoteDetail({ note, busy, confirming, onSetStatus, onDelete, onConfirm, 
       <div style={{ height: 1, background: T.hairline }} />
 
       {confirming ? (
-        <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: 8 }}>
+        <div
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            alignItems: "center",
+            gap: 8,
+          }}
+        >
           <span style={{ flex: 1, font: `12px/1.3 ${F.sans}`, color: T.mid }}>
             Bu not kalıcı olarak kaldırılsın mı?
           </span>
-          <Action icon={Trash2} tone="danger" onClick={() => onDelete(note)} disabled={busy}>
+          <Action
+            icon={Trash2}
+            tone="danger"
+            onClick={() => onDelete(note)}
+            disabled={busy}
+          >
             Kaldır
           </Action>
           <Action icon={X} onClick={() => onConfirm(null)}>
@@ -276,20 +333,39 @@ function NoteDetail({ note, busy, confirming, onSetStatus, onDelete, onConfirm, 
       ) : (
         <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
           {note.status === "APPROVED" ? (
-            <Action icon={RotateCcw} onClick={() => onSetStatus(note, "PENDING")} disabled={busy}>
+            <Action
+              icon={RotateCcw}
+              onClick={() => onSetStatus(note, "PENDING")}
+              disabled={busy}
+            >
               Onayı Kaldır
             </Action>
           ) : (
-            <Action icon={Check} tone="primary" onClick={() => onSetStatus(note, "APPROVED")} disabled={busy}>
+            <Action
+              icon={Check}
+              tone="primary"
+              onClick={() => onSetStatus(note, "APPROVED")}
+              disabled={busy}
+            >
               Onayla
             </Action>
           )}
           {note.status === "PENDING" && (
-            <Action icon={X} tone="danger" onClick={() => onSetStatus(note, "REJECTED")} disabled={busy}>
+            <Action
+              icon={X}
+              tone="danger"
+              onClick={() => onSetStatus(note, "REJECTED")}
+              disabled={busy}
+            >
               Reddet
             </Action>
           )}
-          <Action icon={Trash2} tone="danger" onClick={() => onConfirm(note.id)} disabled={busy}>
+          <Action
+            icon={Trash2}
+            tone="danger"
+            onClick={() => onConfirm(note.id)}
+            disabled={busy}
+          >
             Kaldır
           </Action>
         </div>
@@ -325,6 +401,7 @@ export function NotesPanel() {
   const [openNoteId, setOpenNoteId] = useState(null);
   const [preview, setPreview] = useState(null);
   const anchorRef = useRef(null);
+  const { openRequest } = useCmsEditing();
 
   const backToStart = useCallback(() => {
     setOpenNoteId(null);
@@ -332,7 +409,13 @@ export function NotesPanel() {
     selectFilter(NOTE_FILTERS[0].id);
   }, [selectFilter]);
 
-  useDrawerVisible(anchorRef, backToStart);
+  const seenRequest = useRef(openRequest);
+  useEffect(() => {
+    if (seenRequest.current === openRequest) return undefined;
+    seenRequest.current = openRequest;
+    const frame = requestAnimationFrame(backToStart);
+    return () => cancelAnimationFrame(frame);
+  }, [openRequest, backToStart]);
 
   useEffect(() => {
     setBadge(pendingCount || null);
@@ -371,7 +454,8 @@ export function NotesPanel() {
   const onBack = useCallback(() => setOpenNoteId(null), []);
   const closePreview = useCallback(() => setPreview(null), []);
 
-  if (authLoading) return <Notice icon={Clock} title="Oturum kontrol ediliyor…" />;
+  if (authLoading)
+    return <Notice icon={Clock} title="Oturum kontrol ediliyor…" />;
 
   if (!isAdmin) {
     return (
@@ -406,7 +490,10 @@ export function NotesPanel() {
           }}
           style={{ position: "relative", padding: "10px 16px 2px" }}
         >
-          <Search size={12} style={{ position: "absolute", left: 26, top: 20, color: T.muted }} />
+          <Search
+            size={12}
+            style={{ position: "absolute", left: 26, top: 20, color: T.muted }}
+          />
           <input
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -431,11 +518,17 @@ export function NotesPanel() {
       {result === null ? (
         <Message>Yükleniyor…</Message>
       ) : result.items.length === 0 ? (
-        <Message>{query ? "Aramanızla eşleşen not yok." : "Bu sekmede not yok."}</Message>
+        <Message>
+          {query ? "Aramanızla eşleşen not yok." : "Bu sekmede not yok."}
+        </Message>
       ) : (
         <div style={tightListStyle}>
           {result.items.map((note) => (
-            <NoteRow key={note.id} note={note} onOpen={() => setOpenNoteId(note.id)} />
+            <NoteRow
+              key={note.id}
+              note={note}
+              onOpen={() => setOpenNoteId(note.id)}
+            />
           ))}
         </div>
       )}
@@ -500,7 +593,11 @@ export function NotesPanel() {
         ]}
       />
 
-      <NotePreviewPane note={preview} onClose={closePreview} anchorRef={anchorRef} />
+      <NotePreviewPane
+        note={preview}
+        onClose={closePreview}
+        anchorRef={anchorRef}
+      />
     </>
   );
 }

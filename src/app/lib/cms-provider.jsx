@@ -5,6 +5,7 @@ import {
   useCallback,
   useContext,
   useMemo,
+  useState,
   useSyncExternalStore,
 } from "react";
 import { CmsProvider } from "inscribed";
@@ -64,6 +65,7 @@ const EditingContext = createContext({
   editing: true,
   setEditing: () => {},
   openPanel: () => {},
+  openRequest: 0,
 });
 
 export function useCmsEditing() {
@@ -77,6 +79,7 @@ export function useIsEditor() {
 
 export function AppCmsProvider({ panels, ...props }) {
   const { user, getAccessToken, signOut } = useAuth();
+  const [openRequest, setOpenRequest] = useState(0);
   const editing = useSyncExternalStore(
     subscribe,
     getSnapshot,
@@ -101,6 +104,7 @@ export function AppCmsProvider({ panels, ...props }) {
   }, [panels, user]);
 
   const openPanel = useCallback((panelLabel) => {
+    setOpenRequest((n) => n + 1);
     const handle = document.querySelector(".inscribed-handle");
     const select = () =>
       document
@@ -122,8 +126,8 @@ export function AppCmsProvider({ panels, ...props }) {
   }, []);
 
   const editingValue = useMemo(
-    () => ({ canEdit, editing, setEditing, openPanel }),
-    [canEdit, editing, setEditing, openPanel],
+    () => ({ canEdit, editing, setEditing, openPanel, openRequest }),
+    [canEdit, editing, setEditing, openPanel, openRequest],
   );
 
   const userInfo = useMemo(
