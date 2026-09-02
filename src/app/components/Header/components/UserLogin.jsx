@@ -1,11 +1,18 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { LogIn, ChevronDown, LogOut, ClipboardCheck, PencilLine, FileText, CalendarDays } from "lucide-react";
+import {
+  LogIn,
+  ChevronDown,
+  LogOut,
+  ClipboardCheck,
+  PencilLine,
+  FileText,
+  CalendarDays,
+} from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/lib/auth";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
-import { useWideViewport } from "@/app/lib/useWideViewport";
 import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 import { NOTES_PANEL_LABEL } from "@/app/components/CmsPanels/notes-panel-meta";
@@ -20,9 +27,7 @@ const SLOT = "w-9 h-9 sm:w-16";
 
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
-  const { canEdit: mayEdit, editing, setEditing, openPanel } = useCmsEditing();
-  const wide = useWideViewport();
-  const canEdit = mayEdit && wide;
+  const { canEdit, editing, setEditing, openPanel } = useCmsEditing();
 
   const t = useT();
   const [open, setOpen] = useState(false);
@@ -67,7 +72,12 @@ export default function UserLogin() {
   const name = user?.name || "Ad Soyad";
   const email = user?.email || "";
   const initials = user?.name
-    ? user.name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
+    ? user.name
+        .split(" ")
+        .map((n) => n[0])
+        .join("")
+        .slice(0, 2)
+        .toUpperCase()
     : "--";
   const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
@@ -80,7 +90,9 @@ export default function UserLogin() {
         aria-haspopup="menu"
         title={name}
         className={`${SLOT} group relative z-50 flex items-center justify-center gap-1.5 px-2 rounded-lg transition-colors ${
-          open ? "bg-primary-500 ring-1 ring-secondary-500/30" : "hover:bg-white/5"
+          open
+            ? "bg-primary-500 ring-1 ring-secondary-500/30"
+            : "hover:bg-white/5"
         }`}
       >
         <span
@@ -95,7 +107,9 @@ export default function UserLogin() {
         <ChevronDown
           size={13}
           className={`hidden sm:block shrink-0 transition-all duration-200 ${
-            open ? "rotate-180 text-secondary-500" : "text-neutral-400 group-hover:text-neutral-300"
+            open
+              ? "rotate-180 text-secondary-500"
+              : "text-neutral-400 group-hover:text-neutral-300"
           }`}
         />
       </button>
@@ -156,7 +170,11 @@ export default function UserLogin() {
             <div className="p-1.5 border-t border-primary-500/8">
               {[
                 { id: "notes", label: t("Notlarım"), icon: FileText },
-                { id: "schedule", label: t("Ders Programım"), icon: CalendarDays },
+                {
+                  id: "schedule",
+                  label: t("Ders Programım"),
+                  icon: CalendarDays,
+                },
               ].map(({ id, label, icon: Icon }) => (
                 <button
                   key={id}
@@ -187,8 +205,13 @@ export default function UserLogin() {
                     }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                   >
-                    <ClipboardCheck size={14} className="shrink-0 text-secondary-700" />
-                    <span className="flex-1 text-left">{t("Not Yönetimi")}</span>
+                    <ClipboardCheck
+                      size={14}
+                      className="shrink-0 text-secondary-700"
+                    />
+                    <span className="flex-1 text-left">
+                      {t("Not Yönetimi")}
+                    </span>
                   </button>
                 )}
                 <button
@@ -198,8 +221,13 @@ export default function UserLogin() {
                   onClick={() => setEditing(!editing)}
                   className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                 >
-                  <PencilLine size={14} className="shrink-0 text-secondary-700" />
-                  <span className="flex-1 text-left">{t("Düzenleme modu")}</span>
+                  <PencilLine
+                    size={14}
+                    className="shrink-0 text-secondary-700"
+                  />
+                  <span className="flex-1 text-left">
+                    {t("Düzenleme modu")}
+                  </span>
                   <span
                     className={`relative h-4 w-7 shrink-0 rounded-full transition-colors ${
                       editing ? "bg-secondary-500" : "bg-primary-500/15"

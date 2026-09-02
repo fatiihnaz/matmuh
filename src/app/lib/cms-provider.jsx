@@ -10,7 +10,6 @@ import {
 import { CmsProvider } from "inscribed";
 
 import { useAuth } from "@/lib/auth";
-import { useWideViewport } from "./useWideViewport";
 
 /**
  * @file Plugs our auth layer into inscribed's consumer-auth seams.
@@ -73,17 +72,20 @@ export function useCmsEditing() {
 
 export function useIsEditor() {
   const { canEdit, editing } = useCmsEditing();
-  const wide = useWideViewport();
-  return canEdit && editing && wide;
+  return canEdit && editing;
 }
 
 export function AppCmsProvider({ panels, ...props }) {
   const { user, getAccessToken, signOut } = useAuth();
-  const editing = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
-  const wide = useWideViewport();
+  const editing = useSyncExternalStore(
+    subscribe,
+    getSnapshot,
+    getServerSnapshot,
+  );
 
   const canEdit =
-    DEV_FORCE_ADMIN || !!user?.authorities?.some((role) => EDIT_ROLES.includes(role));
+    DEV_FORCE_ADMIN ||
+    !!user?.authorities?.some((role) => EDIT_ROLES.includes(role));
 
   // A panel's `requiresRole` is ours, not inscribed's: the drawer mounts for
   // every editor, so an area only some of them may open has to be dropped
@@ -136,7 +138,7 @@ export function AppCmsProvider({ panels, ...props }) {
       <CmsProvider
         {...props}
         panels={allowedPanels}
-        isAdmin={canEdit && editing && wide}
+        isAdmin={canEdit && editing}
         getAccessToken={getAccessToken}
         userInfo={userInfo}
         onSignOut={onSignOut}
