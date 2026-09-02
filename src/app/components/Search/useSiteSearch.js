@@ -17,7 +17,7 @@ const HREF = {
 export const hrefForHit = (hit) => (HREF[hit.type] ?? (() => "/duyurular"))(hit);
 
 export function useSiteSearch(query, { perGroup = 3 } = {}) {
-  const [result, setResult] = useState({ term: "", groups: [] });
+  const [result, setResult] = useState({ term: "", groups: [], failed: false });
   const term = query.trim();
 
   useEffect(() => {
@@ -30,11 +30,12 @@ export function useSiteSearch(query, { perGroup = 3 } = {}) {
           `${API}/search?q=${encodeURIComponent(term)}&limit=${perGroup}`,
           { signal: controller.signal },
         );
-        if (!res.ok) return;
+        if (!res.ok) throw new Error(String(res.status));
         const body = await res.json();
-        setResult({ term, groups: body?.data?.groups ?? [] });
+        setResult({ term, groups: body?.data?.groups ?? [], failed: false });
       } catch {
-        /* iptal edilen istek ya da ağ hatası: öneri gösterme */
+        if (controller.signal.aborted) return;
+        setResult({ term, groups: [], failed: true });
       }
     }, 250);
 
@@ -44,7 +45,20 @@ export function useSiteSearch(query, { perGroup = 3 } = {}) {
     };
   }, [term, perGroup]);
 
-  const groups = result.term === term ? result.groups.filter((g) => g.items?.length > 0) : [];
+  const settled = result.term === term;
+  const groups = settled ? result.groups.filter((g) => g.items?.length > 0) : [];
+  const hasResults = groups.length > 0;
 
-  return { term, groups, hasResults: groups.length > 0 };
+  const status =
+    term.length < MIN_CHARS
+      ? "idle"
+      : !settled
+        ? "loading"
+        : result.failed
+          ? "error"
+          : hasResults
+            ? "ready"
+            : "empty";
+
+  return { term, groups, hasResults, status };
 }

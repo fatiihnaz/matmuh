@@ -7,6 +7,8 @@
 
 export const NOTES_PANEL_ID = "not-yonetimi";
 
+export const NOTES_PANEL_LABEL = "Not Yönetimi";
+
 // Amber, distinct from the drawer's own two accents (sand for page blocks,
 // lilac for collections) so the rail reads as three areas.
 export const NOTES_PANEL_ACCENT = "#E3B778";

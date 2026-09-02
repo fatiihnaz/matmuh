@@ -38,6 +38,7 @@ import { noteTypeLabel } from "@/data/lecture-notes";
 import { NOTE_FILTERS, useNoteReview } from "@/data/useNoteReview";
 import { NOTES_PANEL_ACCENT } from "./notes-panel-meta";
 import NotePreviewPane from "./NotePreviewPane";
+import { useDrawerVisible } from "./useDrawerVisible";
 import PanelTabBar from "./PanelTabBar";
 import {
   CHEVRON_CLASS,
@@ -323,6 +324,15 @@ export function NotesPanel() {
 
   const [openNoteId, setOpenNoteId] = useState(null);
   const [preview, setPreview] = useState(null);
+  const anchorRef = useRef(null);
+
+  const backToStart = useCallback(() => {
+    setOpenNoteId(null);
+    setPreview(null);
+    selectFilter(NOTE_FILTERS[0].id);
+  }, [selectFilter]);
+
+  useDrawerVisible(anchorRef, backToStart);
 
   useEffect(() => {
     setBadge(pendingCount || null);
@@ -466,6 +476,8 @@ export function NotesPanel() {
 
   return (
     <>
+      <span ref={anchorRef} hidden />
+
       <PanelStack
         onBack={onBack}
         views={[
@@ -488,7 +500,7 @@ export function NotesPanel() {
         ]}
       />
 
-      <NotePreviewPane note={preview} onClose={closePreview} />
+      <NotePreviewPane note={preview} onClose={closePreview} anchorRef={anchorRef} />
     </>
   );
 }

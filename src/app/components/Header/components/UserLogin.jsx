@@ -8,7 +8,7 @@ import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useWideViewport } from "@/app/lib/useWideViewport";
 import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
-import { NOTES_PANEL_ID } from "@/app/components/CmsPanels/notes-panel-meta";
+import { NOTES_PANEL_LABEL } from "@/app/components/CmsPanels/notes-panel-meta";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -20,7 +20,7 @@ const SLOT = "w-9 h-9 sm:w-16";
 
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
-  const { canEdit: mayEdit, editing, setEditing } = useCmsEditing();
+  const { canEdit: mayEdit, editing, setEditing, openPanel } = useCmsEditing();
   const wide = useWideViewport();
   const canEdit = mayEdit && wide;
 
@@ -71,15 +71,6 @@ export default function UserLogin() {
     : "--";
   const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
   const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
-
-  // A full load, not a router push: the drawer reads ?cms-panel= once when it
-  // mounts, and inscribed exports no way to reach it afterwards. Shown only
-  // when the drawer is actually there to receive it, or the trip buys nothing.
-  const openNotesPanel = () => {
-    const url = new URL(window.location.href);
-    url.searchParams.set("cms-panel", NOTES_PANEL_ID);
-    window.location.assign(url);
-  };
 
   return (
     <div ref={ref} className="relative z-30">
@@ -192,7 +183,7 @@ export default function UserLogin() {
                     type="button"
                     onClick={() => {
                       setOpen(false);
-                      openNotesPanel();
+                      openPanel(NOTES_PANEL_LABEL);
                     }}
                     className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                   >

@@ -6,8 +6,8 @@ import { Search, X } from "lucide-react";
 
 import { useT } from "@/i18n/useT";
 
-import SearchResults from "@/app/components/Search/SearchResults";
-import { MIN_CHARS, useSiteSearch } from "@/app/components/Search/useSiteSearch";
+import SearchResults, { SearchEmpty } from "@/app/components/Search/SearchResults";
+import { useSiteSearch } from "@/app/components/Search/useSiteSearch";
 
 export default function NavSearch({ open, onOpen, onClose }) {
   const t = useT();
@@ -16,7 +16,8 @@ export default function NavSearch({ open, onOpen, onClose }) {
   const inputRef = useRef(null);
   const listId = useId();
 
-  const { term, groups, hasResults } = useSiteSearch(query);
+  const { term, groups, hasResults, status } = useSiteSearch(query);
+  const showPanel = status === "ready" || status === "empty" || status === "error";
 
   useEffect(() => {
     if (!open) return undefined;
@@ -72,7 +73,7 @@ export default function NavSearch({ open, onOpen, onClose }) {
           role="combobox"
           aria-label="Sitede ara"
           aria-autocomplete="list"
-          aria-expanded={hasResults}
+          aria-expanded={showPanel}
           aria-controls={listId}
           autoComplete="off"
           className="w-full bg-transparent py-2 text-sm text-white outline-none! placeholder:text-neutral-500"
@@ -88,17 +89,15 @@ export default function NavSearch({ open, onOpen, onClose }) {
         <X size={14} />
       </button>
 
-      {hasResults && (
-        <div
-          className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] max-h-[70svh] overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/30"
-        >
-          <SearchResults id={listId} groups={groups} term={term} onNavigate={onClose} />
-        </div>
-      )}
-
-      {term.length >= MIN_CHARS && !hasResults && (
-        <div className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] rounded-xl border border-primary-500/10 bg-white px-4 py-3 text-center text-[13px] text-primary-500/70 shadow-2xl shadow-primary-700/30">
-          Sonuç bulunamadı.
+      {showPanel && (
+        <div className="absolute right-0 top-full mt-2 w-[min(32rem,60vw)] max-h-[70svh] overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/30">
+          {hasResults ? (
+            <SearchResults id={listId} groups={groups} term={term} onNavigate={onClose} />
+          ) : (
+            <div id={listId}>
+              <SearchEmpty status={status} term={term} />
+            </div>
+          )}
         </div>
       )}
     </div>

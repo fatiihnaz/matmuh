@@ -5,6 +5,7 @@ import Link from "next/link";
 import { CalendarRange, List, MapPin, User, Wifi } from "lucide-react";
 
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
+import { MyScheduleProvider } from "@/data/useMySchedule";
 import { colorOf, courseColors, tintOf } from "@/data/schedule-colors";
 import WeeklySchedule from "./WeeklySchedule";
 
@@ -148,12 +149,15 @@ function ScheduleList({ entries, courseHref, note }) {
   );
 }
 
-export default function ScheduleViews({
-  entries = [],
-  courseHref,
-  note = null,
-  legend = null,
-}) {
+export default function ScheduleViews(props) {
+  return (
+    <MyScheduleProvider>
+      <ScheduleBody {...props} />
+    </MyScheduleProvider>
+  );
+}
+
+function ScheduleBody({ entries = [], courseHref, note = null, legend = null }) {
   const [view, setView] = useState("grid");
 
   return (

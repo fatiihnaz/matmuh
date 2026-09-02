@@ -119,6 +119,33 @@ select.inscribed-field option {
   animation-play-state: paused;
 }
 
+@keyframes mm-route-sweep {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(400%);
+  }
+}
+
+.mm-route-sweep {
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    rgba(255, 255, 255, 0.9) 50%,
+    transparent 100%
+  );
+  animation: mm-route-sweep 1s cubic-bezier(0.45, 0, 0.55, 1) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mm-route-sweep {
+    width: 100%;
+    animation: none;
+    background: rgba(255, 255, 255, 0.45);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
   .mm-float {
     animation: none;

@@ -10,6 +10,7 @@ import UserLogin from "./components/UserLogin";
 import MobileNavbar from "./components/MobileNavbar";
 import NavItems from "./components/NavItems";
 import NavSearch from "./components/NavSearch";
+import { useRouteProgress } from "./useRouteProgress";
 import {
   navigationItems,
   DEPARTMENT_EMAIL,
@@ -24,11 +25,11 @@ const BURGER_BAR =
 export default function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [searchOpen, setSearchOpen] = useState(false);
+  const navigating = useRouteProgress();
   const { locale, slug, localePath } = useCmsRoute();
   const t = useT();
   const { href } = useLocaleNav();
   const { value: eposta } = useCmsBlock("footer.contact.email");
-  const isHome = slug === "/";
   const epostaAdresi = eposta?.label || DEPARTMENT_EMAIL;
   const epostaBagi = eposta?.href || `mailto:${DEPARTMENT_EMAIL}`;
 
@@ -83,12 +84,16 @@ export default function Header() {
       </div>
 
       <div
-        className="w-full h-0.5"
+        className="relative w-full h-0.5 overflow-hidden"
         style={{
           background:
             "linear-gradient(to right, var(--color-primary-500) 0%, var(--color-secondary-500) 30%, var(--color-secondary-500) 70%, var(--color-primary-500) 100%)",
         }}
-      />
+      >
+        {navigating && (
+          <span aria-hidden="true" className="mm-route-sweep absolute inset-y-0 w-1/3" />
+        )}
+      </div>
 
       <div className="relative z-20 bg-primary-500">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 py-2 flex items-center justify-between">
@@ -126,13 +131,11 @@ export default function Header() {
               </motion.nav>
             )}
 
-            {!isHome && (
-              <NavSearch
-                open={searchOpen}
-                onOpen={() => setSearchOpen(true)}
-                onClose={() => setSearchOpen(false)}
-              />
-            )}
+            <NavSearch
+              open={searchOpen}
+              onOpen={() => setSearchOpen(true)}
+              onClose={() => setSearchOpen(false)}
+            />
 
             <div className="hidden lg:block w-[0.5px] h-6 bg-neutral-600"></div>
 

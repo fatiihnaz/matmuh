@@ -43,18 +43,16 @@ export async function fetchMyEnrollments(token, academicYear) {
   }));
 }
 
-export async function fetchMyWeeklyEntries(token) {
-  const enrolled = await fetchMyEnrollments(token);
-  if (enrolled.length === 0) return [];
+export async function fetchWeeklyEntries(offeringIds) {
+  if (offeringIds.size === 0) return [];
 
-  const ids = new Set(enrolled.map((row) => row.offeringId));
   const res = await fetch(`${API}/calendar/weekly`).catch(() => null);
   if (!res?.ok) return [];
   const body = await res.json().catch(() => null);
 
   return coalesceEntries(
     (body?.data ?? [])
-      .filter((slot) => ids.has(slot.offeringId))
+      .filter((slot) => offeringIds.has(slot.offeringId))
       .map(toGridEntry)
       .filter(Boolean),
   );

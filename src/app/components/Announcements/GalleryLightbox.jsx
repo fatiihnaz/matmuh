@@ -5,6 +5,23 @@ import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Modal from "@/app/components/Modal";
 
+function pointOnImage(container, x, y) {
+  const img = container.querySelector("img");
+  if (!img) return false;
+
+  const rect = img.getBoundingClientRect();
+  const { naturalWidth: nw, naturalHeight: nh } = img;
+  if (!nw || !nh) return true;
+
+  const scale = Math.min(rect.width / nw, rect.height / nh);
+  const width = nw * scale;
+  const height = nh * scale;
+  const left = rect.left + (rect.width - width) / 2;
+  const top = rect.top + (rect.height - height) / 2;
+
+  return x >= left && x <= left + width && y >= top && y <= top + height;
+}
+
 export default function GalleryLightbox({ images, index, title, onIndexChange, onClose }) {
   const open = index >= 0 && index < images.length;
 
@@ -24,6 +41,21 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
   }, [open, step]);
 
   const touchRef = useRef(null);
+  const pressRef = useRef(null);
+
+  const onPointerDown = (event) => {
+    pressRef.current = { x: event.clientX, y: event.clientY };
+  };
+
+  const onFrameClick = (event) => {
+    const press = pressRef.current;
+    pressRef.current = null;
+    if (press && Math.hypot(event.clientX - press.x, event.clientY - press.y) > 8) {
+      return;
+    }
+    if (pointOnImage(event.currentTarget, event.clientX, event.clientY)) return;
+    onClose();
+  };
 
   const onTouchStart = (event) => {
     const t = event.touches[0];
@@ -57,6 +89,8 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
         className="relative flex-1 min-h-0 touch-pan-y"
         onTouchStart={onTouchStart}
         onTouchEnd={onTouchEnd}
+        onPointerDown={onPointerDown}
+        onClick={onFrameClick}
       >
         <Image
           src={image.src}

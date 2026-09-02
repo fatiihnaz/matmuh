@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import { motion, useReducedMotion } from "framer-motion";
 import { Search } from "lucide-react";
 
-import SearchResults from "@/app/components/Search/SearchResults";
+import SearchResults, { SearchEmpty } from "@/app/components/Search/SearchResults";
 import { useSiteSearch } from "@/app/components/Search/useSiteSearch";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 
@@ -21,8 +21,10 @@ export default function HeroSearch() {
   const [rect, setRect] = useState(null);
   const mounted = useSyncExternalStore(neverChanges, () => true, () => false);
 
-  const { term, groups, hasResults } = useSiteSearch(query);
-  const open = hasResults && dismissed !== term;
+  const { term, groups, hasResults, status } = useSiteSearch(query);
+  const open =
+    (status === "ready" || status === "empty" || status === "error") &&
+    dismissed !== term;
   const reducedMotion = useReducedMotion();
   const { href } = useLocaleNav();
 
@@ -99,12 +101,18 @@ export default function HeroSearch() {
             transition={{ duration: reducedMotion ? 0 : 0.16, ease: [0.22, 1, 0.36, 1] }}
             className="fixed z-60 max-h-[70svh] overflow-y-auto overscroll-contain rounded-b-xl border border-t-0 border-white/20 bg-white shadow-lg shadow-primary-700/20"
           >
-            <SearchResults
-              id={listId}
-              groups={groups}
-              term={term}
-              onNavigate={() => setDismissed(term)}
-            />
+            {hasResults ? (
+              <SearchResults
+                id={listId}
+                groups={groups}
+                term={term}
+                onNavigate={() => setDismissed(term)}
+              />
+            ) : (
+              <div id={listId}>
+                <SearchEmpty status={status} term={term} />
+              </div>
+            )}
           </motion.div>,
           document.body,
         )}

@@ -64,6 +64,7 @@ const EditingContext = createContext({
   canEdit: false,
   editing: true,
   setEditing: () => {},
+  openPanel: () => {},
 });
 
 export function useCmsEditing() {
@@ -97,14 +98,30 @@ export function AppCmsProvider({ panels, ...props }) {
     return kept.length ? kept : undefined;
   }, [panels, user]);
 
+  const openPanel = useCallback((panelLabel) => {
+    const handle = document.querySelector(".inscribed-handle");
+    const select = () =>
+      document
+        .querySelector(`.inscribed-rail-btn[aria-label="${panelLabel}"]`)
+        ?.click();
+
+    if (handle?.getAttribute("aria-expanded") === "true") {
+      select();
+      return;
+    }
+
+    handle?.click();
+    requestAnimationFrame(select);
+  }, []);
+
   const setEditing = useCallback((next) => {
     storage()?.setItem(STORAGE_KEY, next ? "1" : "0");
     notify();
   }, []);
 
   const editingValue = useMemo(
-    () => ({ canEdit, editing, setEditing }),
-    [canEdit, editing, setEditing],
+    () => ({ canEdit, editing, setEditing, openPanel }),
+    [canEdit, editing, setEditing, openPanel],
   );
 
   const userInfo = useMemo(

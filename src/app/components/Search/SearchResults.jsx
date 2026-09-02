@@ -1,9 +1,35 @@
 "use client";
 
 import Link from "next/link";
+import { SearchX, WifiOff } from "lucide-react";
 
 import { hrefForHit } from "./useSiteSearch";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
+
+export function SearchEmpty({ status, term }) {
+  const failed = status === "error";
+  const Icon = failed ? WifiOff : SearchX;
+
+  return (
+    <div className="flex flex-col items-center gap-1.5 px-4 py-7 text-center">
+      <Icon size={18} strokeWidth={1.5} className="text-primary-500/70" />
+      <p className="text-[13px] text-primary-600">
+        {failed ? (
+          "Arama şu an yapılamıyor."
+        ) : (
+          <>
+            <span className="font-medium">“{term}”</span> için sonuç bulunamadı.
+          </>
+        )}
+      </p>
+      <p className="text-[11px] text-primary-500/70">
+        {failed
+          ? "Bağlantınızı kontrol edip tekrar deneyin."
+          : "Yazımı kontrol edin ya da daha kısa bir anahtar kelime deneyin."}
+      </p>
+    </div>
+  );
+}
 
 export default function SearchResults({ groups, term, onNavigate, id }) {
   const { href } = useLocaleNav();

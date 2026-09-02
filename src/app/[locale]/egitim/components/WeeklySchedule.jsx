@@ -1,15 +1,19 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
+  Check,
   ChevronDown,
   MapPin,
+  Plus,
   TriangleAlert,
   User,
   Wifi,
+  X,
 } from "lucide-react";
+import { useMySchedule } from "@/data/useMySchedule";
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
 import {
   GOLD_RGB as GOLD,
@@ -26,6 +30,97 @@ const endOf = (slot) => TIME_SLOTS[slot]?.split(" - ")[1] ?? "";
 const spanOf = (entry) => Math.max(1, entry.span || 1);
 const rangeOf = (entry) =>
   `${startOf(entry.slot)} – ${endOf(entry.slot + spanOf(entry) - 1)}`;
+
+const MINI_BUTTON =
+  "inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-[9.5px] font-semibold transition-colors disabled:opacity-40";
+
+function EnrollAction({ entry }) {
+  const my = useMySchedule();
+  const [clash, setClash] = useState(null);
+
+  if (!my || my.status !== "ready" || !entry.offeringId) return null;
+
+  const busy = my.busyId === entry.offeringId;
+  const failed = my.failedId === entry.offeringId;
+
+  if (my.isEnrolled(entry.offeringId)) {
+    return (
+      <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
+        <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-secondary-700">
+          <Check size={9} strokeWidth={2.5} />
+          Programımda
+        </span>
+        <button
+          type="button"
+          onClick={() => void my.remove(entry.offeringId)}
+          disabled={busy}
+          className={`${MINI_BUTTON} text-primary-500/70 hover:bg-primary-500/6 hover:text-primary-500`}
+        >
+          {busy ? "…" : "Kaldır"}
+        </button>
+      </span>
+    );
+  }
+
+  const onAdd = () => {
+    if (!clash) {
+      const found = my.clashOf(entry);
+      if (found) {
+        setClash(found);
+        return;
+      }
+    }
+    void my.add(entry).then((ok) => ok && setClash(null));
+  };
+
+  return (
+    <span className="mt-1.5 block">
+      {clash && (
+        <span className="mb-1 flex items-start gap-1 rounded-sm bg-amber-50 px-1.5 py-1 text-[9.5px] leading-snug text-amber-800">
+          <TriangleAlert size={9} strokeWidth={2.25} className="mt-px shrink-0" />
+          <span>
+            {DAYS[clash.day]} {rangeOf(clash)} · {clash.code} Gr.{clash.group} ile
+            çakışıyor.
+          </span>
+        </span>
+      )}
+
+      <span className="flex flex-wrap items-center gap-1">
+        <button
+          type="button"
+          onClick={onAdd}
+          disabled={busy}
+          className={`${MINI_BUTTON} border border-secondary-500/40 text-secondary-700 hover:bg-secondary-500/10`}
+        >
+          {busy ? (
+            "…"
+          ) : (
+            <>
+              <Plus size={9} strokeWidth={2.5} />
+              {clash ? "Yine de ekle" : "Programıma ekle"}
+            </>
+          )}
+        </button>
+        {clash && (
+          <button
+            type="button"
+            onClick={() => setClash(null)}
+            className={`${MINI_BUTTON} text-primary-500/70 hover:text-primary-500`}
+          >
+            <X size={9} strokeWidth={2.5} />
+            Vazgeç
+          </button>
+        )}
+      </span>
+
+      {failed && (
+        <span className="mt-1 block text-[9.5px] text-red-700/75">
+          İşlem tamamlanamadı.
+        </span>
+      )}
+    </span>
+  );
+}
 
 function metaOf(entry) {
   return [
@@ -155,76 +250,86 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
         )}
       </button>
 
-      {active && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.12 }}
-          className="border-t px-1.5 pt-1.5 pb-1.5"
-          style={{ borderColor: `rgba(${NAVY},0.07)` }}
-        >
-          <span className="block font-mono text-[9.5px] text-primary-500/70">
-            {DAYS[entry.day]} · {rangeOf(entry)}
-          </span>
-
-          <span className="mt-1 flex flex-wrap items-center gap-1">
-            <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/70">
-              {entry.group}. grup
-            </span>
-            {(entry.badge || entry.type) && (
-              <span
-                className="rounded-sm px-1 py-px text-[9px] font-medium"
-                style={{
-                  backgroundColor: `rgba(${elective ? GOLD : NAVY},0.1)`,
-                  color: elective
-                    ? "var(--color-secondary-600)"
-                    : "rgba(29,36,69,0.6)",
-                }}
-              >
-                {entry.badge || entry.type}
-              </span>
-            )}
-            {entry.english && (
-              <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-700">
-                İngilizce
-              </span>
-            )}
-          </span>
-
-          <span className="mt-1.5 flex flex-col gap-1 text-[10px] leading-snug text-primary-500/70">
-            {entry.instructor && entry.instructor !== "-" && (
-              <span className="flex items-start gap-1">
-                <User size={10} strokeWidth={1.5} className="mt-px shrink-0" />
-                {entry.instructor}
-              </span>
-            )}
-            {entry.online ? (
-              <span className="flex items-center gap-1 text-secondary-700">
-                <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
-                Çevrimiçi
-              </span>
-            ) : (
-              entry.room &&
-              entry.room !== "-" && (
-                <span className="flex items-center gap-1 font-mono">
-                  <MapPin size={10} strokeWidth={1.5} className="shrink-0" />
-                  {entry.room}
-                </span>
-              )
-            )}
-          </span>
-
-          {href && (
-            <Link
-              href={href}
-              className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-secondary-700 hover:underline"
+      <AnimatePresence initial={false}>
+        {active && (
+          <motion.div
+            key="detail"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.18, ease: [0.22, 1, 0.36, 1] }}
+            className="overflow-hidden"
+          >
+            <div
+              className="border-t px-1.5 pt-1.5 pb-1.5"
+              style={{ borderColor: `rgba(${NAVY},0.07)` }}
             >
-              Ders sayfası
-              <ArrowRight size={10} strokeWidth={2} />
-            </Link>
-          )}
-        </motion.div>
-      )}
+              <span className="block font-mono text-[9.5px] text-primary-500/70">
+                {DAYS[entry.day]} · {rangeOf(entry)}
+              </span>
+
+              <span className="mt-1 flex flex-wrap items-center gap-1">
+                <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/70">
+                  {entry.group}. grup
+                </span>
+                {(entry.badge || entry.type) && (
+                  <span
+                    className="rounded-sm px-1 py-px text-[9px] font-medium"
+                    style={{
+                      backgroundColor: `rgba(${elective ? GOLD : NAVY},0.1)`,
+                      color: elective
+                        ? "var(--color-secondary-600)"
+                        : "rgba(29,36,69,0.6)",
+                    }}
+                  >
+                    {entry.badge || entry.type}
+                  </span>
+                )}
+                {entry.english && (
+                  <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-700">
+                    İngilizce
+                  </span>
+                )}
+              </span>
+
+              <span className="mt-1.5 flex flex-col gap-1 text-[10px] leading-snug text-primary-500/70">
+                {entry.instructor && entry.instructor !== "-" && (
+                  <span className="flex items-start gap-1">
+                    <User size={10} strokeWidth={1.5} className="mt-px shrink-0" />
+                    {entry.instructor}
+                  </span>
+                )}
+                {entry.online ? (
+                  <span className="flex items-center gap-1 text-secondary-700">
+                    <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
+                    Çevrimiçi
+                  </span>
+                ) : (
+                  entry.room &&
+                  entry.room !== "-" && (
+                    <span className="flex items-center gap-1 font-mono">
+                      <MapPin size={10} strokeWidth={1.5} className="shrink-0" />
+                      {entry.room}
+                    </span>
+                  )
+                )}
+              </span>
+
+              {href && (
+                <Link
+                  href={href}
+                  className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-secondary-700 hover:underline"
+                >
+                  Ders sayfası
+                  <ArrowRight size={10} strokeWidth={2} />
+                </Link>
+              )}
+
+              <EnrollAction entry={entry} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

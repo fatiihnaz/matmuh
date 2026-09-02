@@ -10,6 +10,7 @@ import { NotesPanel, NotesPanelIcon } from "@/app/components/CmsPanels/NotesPane
 import {
   NOTES_PANEL_ACCENT,
   NOTES_PANEL_ID,
+  NOTES_PANEL_LABEL,
 } from "@/app/components/CmsPanels/notes-panel-meta.js";
 
 export const { CmsPage, getCmsRoute, localePath, CollectionRegion, CollectionItem } =
@@ -22,7 +23,7 @@ export const { CmsPage, getCmsRoute, localePath, CollectionRegion, CollectionIte
     panels: [
       {
         id: NOTES_PANEL_ID,
-        label: "Not Yönetimi",
+        label: NOTES_PANEL_LABEL,
         icon: <NotesPanelIcon />,
         accent: NOTES_PANEL_ACCENT,
         Component: NotesPanel,

@@ -183,7 +183,7 @@ export default function Hero({ highlights = [] }) {
             </svg>
 
             <motion.div
-              className="absolute w-[46%] sm:w-[26%] max-w-120 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none"
+              className="absolute w-[46%] sm:w-[26%] max-w-120 aspect-square flex items-center justify-center z-20 overflow-visible pointer-events-none -rotate-90 sm:rotate-0"
               animate={{
                 filter: isHovered
                   ? "drop-shadow(0 0 6px #0D112B) drop-shadow(0 0 26px rgba(173,151,111,0.6))"

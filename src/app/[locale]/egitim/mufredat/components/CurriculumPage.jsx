@@ -1,6 +1,7 @@
 "use client";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { startRouteProgress } from "@/app/components/Header/useRouteProgress";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   BookOpen,
@@ -506,15 +507,18 @@ export default function CurriculumPage({ semesters, summary }) {
                                 key={`${row.code}-${idx}`}
                                 className="transition-colors cursor-pointer hover:bg-[rgba(173,151,111,0.03)] group"
                                 style={rowStyle}
-                                onClick={() =>
-                                  isExternal
-                                    ? window.open(
-                                        target,
-                                        "_blank",
-                                        "noopener,noreferrer",
-                                      )
-                                    : router.push(target)
-                                }
+                                onClick={() => {
+                                  if (isExternal) {
+                                    window.open(
+                                      target,
+                                      "_blank",
+                                      "noopener,noreferrer",
+                                    );
+                                    return;
+                                  }
+                                  startRouteProgress();
+                                  router.push(target);
+                                }}
                               >
                                 <td className="px-4 sm:px-6 py-3.5">
                                   <span

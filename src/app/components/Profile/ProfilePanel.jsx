@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
   CalendarDays,
@@ -16,11 +16,7 @@ import {
 import Modal from "@/app/components/Modal";
 import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
-import {
-  fetchMyEnrollments,
-  fetchMyWeeklyEntries,
-  unenroll,
-} from "@/data/enrollments";
+import { MyScheduleProvider, useMySchedule } from "@/data/useMySchedule";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -300,30 +296,13 @@ function ScheduleEntry({ entry, conflict }) {
 }
 
 function EnrolledCourses({ onChanged }) {
-  const { getAccessToken } = useAuth();
-  const [rows, setRows] = useState(null);
-  const [busy, setBusy] = useState(null);
+  const { rows, busyId, remove } = useMySchedule();
 
-  const load = useCallback(async () => {
-    const token = await getAccessToken();
-    setRows(await fetchMyEnrollments(token));
-  }, [getAccessToken]);
+  if (rows.length === 0) return null;
 
-  useEffect(() => {
-    void load().catch(() => setRows([]));
-  }, [load]);
-
-  if (!rows || rows.length === 0) return null;
-
-  const remove = async (offeringId) => {
-    setBusy(offeringId);
-    try {
-      await unenroll(offeringId, await getAccessToken());
-      await load();
-      onChanged?.();
-    } finally {
-      setBusy(null);
-    }
+  const onRemove = async (offeringId) => {
+    await remove(offeringId);
+    onChanged?.();
   };
 
   return (
@@ -352,8 +331,8 @@ function EnrolledCourses({ onChanged }) {
             </span>
             <button
               type="button"
-              onClick={() => void remove(row.offeringId)}
-              disabled={busy === row.offeringId}
+              onClick={() => void onRemove(row.offeringId)}
+              disabled={busyId === row.offeringId}
               aria-label={`${row.lectureName || row.lectureCode} dersini programdan kaldır`}
               className="shrink-0 rounded-sm p-0.5 text-primary-500/70 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
             >
@@ -367,25 +346,9 @@ function EnrolledCourses({ onChanged }) {
 }
 
 function WeekGrid() {
-  const { getAccessToken } = useAuth();
-  const [entries, setEntries] = useState(null);
+  const { status, entries } = useMySchedule();
 
-  useEffect(() => {
-    let alive = true;
-    (async () => {
-      try {
-        const rows = await fetchMyWeeklyEntries(await getAccessToken());
-        if (alive) setEntries(rows);
-      } catch {
-        if (alive) setEntries([]);
-      }
-    })();
-    return () => {
-      alive = false;
-    };
-  }, [getAccessToken]);
-
-  if (entries === null) return <Skeleton rows={3} />;
+  if (status === "loading") return <Skeleton rows={3} />;
   if (entries.length === 0) {
     return <Empty>Haftalık programınızda ders görünmüyor.</Empty>;
   }
@@ -407,7 +370,15 @@ const SCHEDULE_TABS = [
   { id: "dated", label: "Bu hafta" },
 ];
 
-function ScheduleBody({ items, onChanged }) {
+function ScheduleBody(props) {
+  return (
+    <MyScheduleProvider>
+      <ScheduleTabs {...props} />
+    </MyScheduleProvider>
+  );
+}
+
+function ScheduleTabs({ items, onChanged }) {
   const [tab, setTab] = useState("week");
 
   return (
