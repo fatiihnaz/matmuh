@@ -17,7 +17,11 @@ export function formatDate(value) {
   if (!value) return null;
   const date = new Date(value);
   if (Number.isNaN(date.getTime())) return null;
-  return date.toLocaleDateString("tr-TR", { day: "2-digit", month: "short", year: "numeric" });
+  return date.toLocaleDateString("tr-TR", {
+    day: "2-digit",
+    month: "short",
+    year: "numeric",
+  });
 }
 
 const extensionOf = (fileName) => {
@@ -46,7 +50,10 @@ const SEMESTERS = { FALL: "Güz", SPRING: "Bahar", SUMMER: "Yaz" };
 
 export function toOffering(offering) {
   if (!offering) return null;
-  const term = [offering.academicYear, SEMESTERS[offering.semester] ?? offering.semester]
+  const term = [
+    offering.academicYear,
+    SEMESTERS[offering.semester] ?? offering.semester,
+  ]
     .filter(Boolean)
     .join(" ");
   return {
@@ -90,13 +97,20 @@ export async function fetchLectureNotes(lectureId, token) {
   return (Array.isArray(rows) ? rows : []).map(toNote);
 }
 
-export async function uploadLectureNote(lectureId, token, { title, description, file, type }) {
+export async function uploadLectureNote(
+  lectureId,
+  token,
+  { title, description, file, type },
+) {
   const form = new FormData();
   form.append(
     "data",
-    new Blob([JSON.stringify({ title, description: description || null, type })], {
-      type: "application/json",
-    }),
+    new Blob(
+      [JSON.stringify({ title, description: description || null, type })],
+      {
+        type: "application/json",
+      },
+    ),
   );
   form.append("file", file);
 
@@ -134,13 +148,28 @@ export async function fetchMyPendingNotes(lectureId, token) {
 // calls. Paths are relative: the transport resolves them against its baseUrl.
 
 export function noteListPath({ status, search, page = 0, size = 20 } = {}) {
-  const params = new URLSearchParams({ page: String(page), size: String(size), sort: "createdAt,desc" });
+  const params = new URLSearchParams({
+    page: String(page),
+    size: String(size),
+    sort: "createdAt,desc",
+  });
   if (status) params.set("status", status);
   if (search) params.set("search", search);
   return `/lecture-notes?${params}`;
 }
 
 export const notePath = (id) => `/lecture-notes/${id}`;
+
+export async function fetchPendingNoteCount(token) {
+  const res = await fetch(
+    `${API}${noteListPath({ status: "PENDING", size: 1 })}`,
+    {
+      headers: { Authorization: `Bearer ${token}` },
+    },
+  );
+  if (!res.ok) throw new Error(`pending count ${res.status}`);
+  return toNoteList(await res.json()).totalElements;
+}
 
 export function toNoteList(body) {
   const data = body?.data ?? body ?? {};

@@ -16,6 +16,7 @@ import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { useT } from "@/i18n/useT";
 import ProfilePanel from "@/app/components/Profile/ProfilePanel";
 import { NOTES_PANEL_LABEL } from "@/app/components/CmsPanels/notes-panel-meta";
+import { fetchPendingNoteCount } from "@/data/lecture-notes";
 
 const ROLE_LABELS = {
   ROLE_ADMIN: "Admin",
@@ -26,13 +27,27 @@ const ROLE_LABELS = {
 const SLOT = "w-9 h-9 sm:w-16";
 
 export default function UserLogin() {
-  const { user, isAuthenticated, isLoading, signIn, signOut } = useAuth();
+  const { user, isAuthenticated, isLoading, signIn, signOut, getAccessToken } =
+    useAuth();
   const { canEdit, editing, setEditing, openPanel } = useCmsEditing();
 
   const t = useT();
   const [open, setOpen] = useState(false);
   const [panel, setPanel] = useState(null);
+  const [pending, setPending] = useState(null);
   const ref = useRef(null);
+
+  const moderates = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
+
+  const toggle = () => {
+    const next = !open;
+    setOpen(next);
+    if (!next || !moderates) return;
+    getAccessToken()
+      .then(fetchPendingNoteCount)
+      .then(setPending)
+      .catch(() => setPending(null));
+  };
 
   useEffect(() => {
     function handlePointerDown(e) {
@@ -80,12 +95,11 @@ export default function UserLogin() {
         .toUpperCase()
     : "--";
   const roles = (user?.authorities ?? []).map((a) => t(ROLE_LABELS[a] ?? a));
-  const isAdmin = Boolean(user?.authorities?.includes("ROLE_ADMIN"));
 
   return (
     <div ref={ref} className="relative z-30">
       <button
-        onClick={() => setOpen((prev) => !prev)}
+        onClick={toggle}
         aria-expanded={open}
         aria-haspopup="menu"
         title={name}
@@ -196,7 +210,7 @@ export default function UserLogin() {
                 <span className="block px-2.5 pb-1 text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
                   {t("Yönetim")}
                 </span>
-                {isAdmin && editing && (
+                {moderates && editing && (
                   <button
                     type="button"
                     onClick={() => {
@@ -212,6 +226,14 @@ export default function UserLogin() {
                     <span className="flex-1 text-left">
                       {t("Not Yönetimi")}
                     </span>
+                    {pending > 0 && (
+                      <span
+                        className="shrink-0 rounded-full bg-amber-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-700"
+                        aria-label={`${pending} not onay bekliyor`}
+                      >
+                        {pending}
+                      </span>
+                    )}
                   </button>
                 )}
                 <button
