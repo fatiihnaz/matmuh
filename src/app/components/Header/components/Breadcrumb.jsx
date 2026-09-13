@@ -34,6 +34,8 @@ const labelMap = {
   endustriyel: "Endüstriyel İşbirlikleri",
   duyurular: "Duyurular",
   haberler: "Haberler",
+  gizlilik: "Gizlilik Politikası",
+  kvkk: "KVKK Aydınlatma Metni",
 };
 
 const unclickablePaths = [

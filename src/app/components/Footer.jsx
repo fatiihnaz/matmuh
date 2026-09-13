@@ -3,11 +3,12 @@ import { EditableRegion } from "inscribed";
 
 import { FooterLinks, FooterPhones, FooterSocial } from "./FooterLists";
 import CreditsLink from "./CreditsLink";
+import LegalLinks from "./LegalLinks";
 
 export default function Footer() {
   return (
     <footer className="w-full">
-      <div className="bg-primary-600">
+      <div className="bg-primary-600 -mt-px">
         <div className="max-w-7xl mx-auto px-6 md:px-16 py-10 flex flex-col md:flex-row md:justify-between gap-10">
           <div>
             <h2 className="text-white font-semibold text-xs uppercase tracking-wide mb-4">
@@ -84,6 +85,7 @@ Davutpaşa Kampüsü
             />
             {" · "}
             <CreditsLink />
+            <LegalLinks />
           </div>
 
           <FooterSocial />
