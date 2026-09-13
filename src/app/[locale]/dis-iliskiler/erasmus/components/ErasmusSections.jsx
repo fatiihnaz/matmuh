@@ -108,7 +108,7 @@ function AgreementRow({ item }) {
 
   return (
     <div
-      className={`grid grid-cols-1 ${COLUMNS} sm:items-center gap-x-5 px-4 sm:px-5 py-2.5 border-b border-primary-500/5 last:border-0 ${
+      className={`grid grid-cols-1 ${COLUMNS} sm:items-center gap-x-5 px-4 sm:px-5 py-2.5 ${
         href ? "group hover:bg-secondary-500/4 transition-colors" : ""
       }`}
     >
@@ -189,7 +189,7 @@ export function Agreements() {
         <EditableList
           blockPath="agreements.items"
           as="div"
-          className="flex flex-col"
+          className="flex flex-col divide-y divide-primary-500/5"
           style={{ display: "flex" }}
           itemSchema={{
             institution: { blockType: "ShortText", defaultValue: "" },

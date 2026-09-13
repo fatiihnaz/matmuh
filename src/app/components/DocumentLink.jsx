@@ -9,7 +9,7 @@ import DocumentPreview, { canPreview } from "./DocumentPreview";
 const ROW =
   "group flex items-center gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5 hover:border-secondary-500/30 hover:bg-secondary-500/4 transition-colors";
 
-export default function DocumentLink({ label, href, kind, term, size }) {
+export default function DocumentLink({ label, href, kind, term, size, style }) {
   const [open, setOpen] = useState(false);
   const previewable = canPreview(href, kind);
 
@@ -21,7 +21,7 @@ export default function DocumentLink({ label, href, kind, term, size }) {
   };
 
   return (
-    <div className={ROW}>
+    <div className={ROW} style={style}>
       <a
         href={href}
         target="_blank"

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
+import { useIsEditor } from "@/app/lib/cms-provider.jsx";
+
 import MainCard from "@/app/components/MainCard";
 import Panel from "@/app/components/Panel";
 import PageSection from "@/app/components/PageSection";
@@ -276,8 +278,16 @@ Cumartesi çalışan iş yerlerinde cumartesi de iş gününden sayılır; iş y
 const DOC_GRID = "grid grid-cols-1 xl:grid-cols-2 gap-2";
 
 export function InternshipDocuments() {
+  const editing = useIsEditor();
   const { value } = useCmsBlock("documents.items");
   const items = Array.isArray(value) ? value : [];
+  const rank = {};
+  const first = {};
+  items.forEach((item, index) => {
+    if (item.category in rank) return;
+    rank[item.category] = Object.keys(rank).length;
+    first[item.category] = index;
+  });
 
   return (
     <PageSection
@@ -318,16 +328,27 @@ export function InternshipDocuments() {
           ]}
         >
           {(item, index) => {
-            const previous = items[index - 1];
+            const seat = rank[item.category] ?? 0;
             return (
               <Fragment key={index}>
-                {item.category !== previous?.category && (
-                  <span className="xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70 mt-3 first:mt-0">
+                {!editing && first[item.category] === index && (
+                  <span
+                    className="xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70 mt-3 first:mt-0"
+                    style={{ order: seat * 2 }}
+                  >
+                    {item.category}
+                  </span>
+                )}
+                {editing && item.category && (
+                  <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary-700/70">
                     {item.category}
                   </span>
                 )}
                 {item.note && (
-                  <p className="xl:col-span-2 text-[12px] text-primary-500/70 leading-relaxed">
+                  <p
+                    className="xl:col-span-2 text-[12px] text-primary-500/70 leading-relaxed"
+                    style={editing ? undefined : { order: seat * 2 + 1 }}
+                  >
                     {item.note}
                   </p>
                 )}
@@ -336,6 +357,7 @@ export function InternshipDocuments() {
                   href={safeHref(item.file?.href)}
                   kind={item.kind}
                   size={Number(item.size) || 0}
+                  style={editing ? undefined : { order: seat * 2 + 1 }}
                 />
               </Fragment>
             );

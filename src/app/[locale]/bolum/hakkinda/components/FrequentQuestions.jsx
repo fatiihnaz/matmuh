@@ -13,7 +13,7 @@ function Question({ item }) {
   const href = item?.link?.href;
 
   return (
-    <div className="border-b border-primary-500/6 last:border-b-0">
+    <div>
       <button
         type="button"
         onClick={() => setOpen(!open)}
@@ -63,7 +63,7 @@ export default function FrequentQuestions() {
       <EditableList
         blockPath="faq.items"
         as="div"
-        className="-mt-1"
+        className="-mt-1 divide-y divide-primary-500/6"
         itemSchema={{
           question: { blockType: "ShortText", defaultValue: "" },
           answer: { blockType: "LongText", defaultValue: "" },

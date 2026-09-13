@@ -4,6 +4,8 @@ import { Fragment, useState } from "react";
 import { Briefcase, BookOpen, Sun } from "lucide-react";
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
+import { useIsEditor } from "@/app/lib/cms-provider.jsx";
+
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import Panel from "@/app/components/Panel";
@@ -27,24 +29,47 @@ const RELATED = [
 const GRID = "grid grid-cols-1 xl:grid-cols-2 gap-2";
 const CATEGORY =
   "xl:col-span-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70 mt-3 first:mt-0";
+const CATEGORY_INLINE =
+  "text-[10px] font-semibold uppercase tracking-widest text-secondary-700/70";
 
-function FormRow({ item, previous }) {
+function groupOrder(items) {
+  const rank = {};
+  const first = {};
+  items.forEach((item, index) => {
+    if (!(item.category in rank)) {
+      rank[item.category] = Object.keys(rank).length;
+      first[item.category] = index;
+    }
+  });
+  return { rank, first };
+}
+
+function FormRow({ item, index, rank, first, editing }) {
+  const seat = rank[item.category] ?? 0;
   return (
     <Fragment>
-      {item.category !== previous?.category && (
-        <span className={CATEGORY}>{item.category}</span>
+      {!editing && first[item.category] === index && (
+        <span className={CATEGORY} style={{ order: seat * 2 }}>
+          {item.category}
+        </span>
+      )}
+      {editing && item.category && (
+        <span className={CATEGORY_INLINE}>{item.category}</span>
       )}
       <DocumentLink
         label={item.file?.label}
         href={safeHref(item.file?.href)}
         kind={item.kind}
         size={Number(item.size) || 0}
+        style={editing ? undefined : { order: seat * 2 + 1 }}
       />
     </Fragment>
   );
 }
 
 function StudentForms({ items }) {
+  const editing = useIsEditor();
+  const { rank, first } = groupOrder(items);
   return (
     <EditableList
       blockPath="forms.student"
@@ -70,12 +95,23 @@ function StudentForms({ items }) {
             { category: "Lisansüstü", file: { href: "https://kalite.yildiz.edu.tr/media/files/FR-1503-FBE%20Seminer%20Dersi%20Kay%C4%B1t%20ve%20De%C4%9Ferlendirme%20Formu%20(GSSE%20Registration%20and%20Evaluation%20Form%20for%20Seminar%20Course).docx", label: "FR-1503 FBE Seminer Dersi Kayıt ve Değerlendirme Formu" }, kind: "docx", size: "737360" },
       ]}
     >
-      {(item, index) => <FormRow key={index} item={item} previous={items[index - 1]} />}
+      {(item, index) => (
+        <FormRow
+          key={index}
+          item={item}
+          index={index}
+          rank={rank}
+          first={first}
+          editing={editing}
+        />
+      )}
     </EditableList>
   );
 }
 
 function StaffForms({ items }) {
+  const editing = useIsEditor();
+  const { rank, first } = groupOrder(items);
   return (
     <EditableList
       blockPath="forms.staff"
@@ -97,7 +133,16 @@ function StaffForms({ items }) {
             { category: "Akademik ve İdari Personel", file: { href: "https://kalite.yildiz.edu.tr/media/files/FR-0245-EUS%20Ek%20Ders%20Beyan%20Formu.xls", label: "FR-0245 EUS Ek Ders Beyan Formu" }, kind: "xls", size: "63488" },
       ]}
     >
-      {(item, index) => <FormRow key={index} item={item} previous={items[index - 1]} />}
+      {(item, index) => (
+        <FormRow
+          key={index}
+          item={item}
+          index={index}
+          rank={rank}
+          first={first}
+          editing={editing}
+        />
+      )}
     </EditableList>
   );
 }
