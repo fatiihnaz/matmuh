@@ -3,6 +3,7 @@
 import { EditableList, EditableRegion } from "inscribed";
 
 import CartesianField from "./CartesianField";
+import HeartCurve, { HeartMark } from "./HeartCurve";
 import CreditCard from "./CreditCard";
 
 const CELLS = [
@@ -55,8 +56,11 @@ export default function CreditsBoard() {
         />
       </div>
 
+      <HeartMark />
+
       <div className="relative flex w-full flex-1 items-center justify-center mt-10 lg:mt-14">
         <CartesianField />
+        <HeartCurve />
 
         <EditableList
           blockPath="credits.people"
