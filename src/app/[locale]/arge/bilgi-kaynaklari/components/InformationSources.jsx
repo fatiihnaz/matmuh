@@ -4,6 +4,9 @@ import { createElement, Fragment } from "react";
 import { ArrowUpRight, Award, BookOpen, Briefcase, Building2, ContactRound, Database, Earth, Euro, ExternalLink, FileText, Flag, Globe, GraduationCap, History, Landmark, Languages, Library, Link as LinkIcon, MapPin, Network, Scale, School, Search, SearchCode, ShieldCheck, Twitter, UserPlus, Users, Wallet } from "lucide-react";
 import { EditableList, useCmsBlock } from "inscribed";
 
+import PageLayout from "@/app/components/PageLayout";
+
+import { useIsEditor } from "@/app/lib/cms-provider.jsx";
 import { safeHref, isExternalHref } from "@/lib/href";
 
 const ICONS = {
@@ -48,24 +51,24 @@ const GRID =
 function CategoryHeading({ label, count, order }) {
   return (
     <div
-      className="col-span-full flex items-center gap-4 mt-11 first:mt-0"
+      className="col-span-full flex items-center gap-3 sm:gap-4 flex-wrap mt-8 first:mt-0"
       style={{ order }}
     >
-      <div className="flex items-center gap-3">
-        <div className="w-1.5 h-5 bg-secondary-500 rounded-xl" />
-        <h3 className="text-[13px] font-bold uppercase tracking-[0.15em] text-primary-800">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="w-1.5 h-5 shrink-0 bg-secondary-500 rounded-xl" />
+        <h2 className="text-[13px] font-bold uppercase tracking-[0.15em] text-primary-800 wrap-break-word">
           {label}
-        </h3>
-        <span className="flex items-center justify-center px-2 py-0.5 rounded-xl bg-primary-500/5 text-[10px] font-bold text-primary-500/70">
+        </h2>
+        <span className="flex shrink-0 items-center justify-center px-2 py-0.5 rounded-xl bg-primary-500/5 text-[10px] font-bold text-primary-500/70">
           {count}
         </span>
       </div>
-      <div className="h-px flex-1 bg-linear-to-r from-primary-500/10 via-primary-500/5 to-transparent" />
+      <div className="h-px flex-1 min-w-4 bg-linear-to-r from-primary-500/10 via-primary-500/5 to-transparent" />
     </div>
   );
 }
 
-function SourceCard({ item, order }) {
+function SourceCard({ item, order, category }) {
   const href = safeHref(item.link?.href);
   const external = isExternalHref(href);
 
@@ -84,6 +87,11 @@ function SourceCard({ item, order }) {
         </div>
 
         <div className="flex flex-col min-w-0 pr-2">
+          {category && (
+            <span className="text-[10px] font-semibold uppercase tracking-widest text-secondary-700/70">
+              {item.category}
+            </span>
+          )}
           <span className="text-[13px] font-semibold text-primary-900/85 group-hover:text-secondary-700 leading-snug transition-colors duration-300 line-clamp-2">
             {item.link?.label}
           </span>
@@ -100,6 +108,7 @@ function SourceCard({ item, order }) {
 }
 
 export default function InformationSources() {
+  const editing = useIsEditor();
   const { value } = useCmsBlock("sources.items");
   const items = Array.isArray(value) ? value : [];
   const counts = items.reduce((acc, item) => {
@@ -116,7 +125,7 @@ export default function InformationSources() {
   });
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+    <PageLayout>
       <EditableList
         blockPath="sources.items"
         as="div"
@@ -162,17 +171,21 @@ export default function InformationSources() {
       >
         {(item, index) => (
           <Fragment key={index}>
-            {firstOf[item.category] === index && (
+            {!editing && firstOf[item.category] === index && (
               <CategoryHeading
                 label={item.category}
                 count={counts[item.category] ?? 0}
                 order={(order[item.category] ?? 0) * 2}
               />
             )}
-            <SourceCard item={item} order={(order[item.category] ?? 0) * 2 + 1} />
+            <SourceCard
+              item={item}
+              category={editing}
+              order={editing ? undefined : (order[item.category] ?? 0) * 2 + 1}
+            />
           </Fragment>
         )}
       </EditableList>
-    </div>
+    </PageLayout>
   );
 }
