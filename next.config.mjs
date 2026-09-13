@@ -9,6 +9,9 @@ const lanOrigins = Object.values(os.networkInterfaces())
 const nextConfig = {
   agentRules: false,
   allowedDevOrigins: lanOrigins,
+  experimental: {
+    staleTimes: { dynamic: 30 },
+  },
   async rewrites() {
     const target = process.env.API_PROXY_TARGET;
     if (!target) return [];
