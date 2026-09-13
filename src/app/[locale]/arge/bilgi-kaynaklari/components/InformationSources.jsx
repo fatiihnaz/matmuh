@@ -1,7 +1,6 @@
 "use client";
 
 import { createElement, Fragment } from "react";
-import { motion } from "framer-motion";
 import { ArrowUpRight, Award, BookOpen, Briefcase, Building2, ContactRound, Database, Earth, Euro, ExternalLink, FileText, Flag, Globe, GraduationCap, History, Landmark, Languages, Library, Link as LinkIcon, MapPin, Network, Scale, School, Search, SearchCode, ShieldCheck, Twitter, UserPlus, Users, Wallet } from "lucide-react";
 import { EditableList, useCmsBlock } from "inscribed";
 
@@ -46,9 +45,12 @@ function icon(key, size) {
 const GRID =
   "grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5";
 
-function CategoryHeading({ label, count }) {
+function CategoryHeading({ label, count, order }) {
   return (
-    <div className="col-span-full flex items-center gap-4 mt-11 first:mt-0">
+    <div
+      className="col-span-full flex items-center gap-4 mt-11 first:mt-0"
+      style={{ order }}
+    >
       <div className="flex items-center gap-3">
         <div className="w-1.5 h-5 bg-secondary-500 rounded-xl" />
         <h3 className="text-[13px] font-bold uppercase tracking-[0.15em] text-primary-800">
@@ -63,18 +65,15 @@ function CategoryHeading({ label, count }) {
   );
 }
 
-function SourceCard({ item, index }) {
+function SourceCard({ item, order }) {
   const href = safeHref(item.link?.href);
   const external = isExternalHref(href);
 
   return (
-    <motion.a
+    <a
       href={href}
+      style={{ order }}
       {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
-      initial={{ opacity: 0, y: 12, scale: 0.98 }}
-      whileInView={{ opacity: 1, y: 0, scale: 1 }}
-      viewport={{ once: true, margin: "-40px" }}
-      transition={{ duration: 0.4, delay: (index % 8) * 0.04, ease: [0.25, 0.8, 0.25, 1] }}
       className="group relative flex items-center justify-between p-3.5 bg-white rounded-xl border border-primary-500/10 shadow-sm hover:shadow-lg hover:shadow-secondary-500/5 hover:border-secondary-500/30 hover:-translate-y-0.5 transition-all duration-300 min-h-18 overflow-hidden"
     >
       <div className="absolute inset-0 bg-linear-to-br from-secondary-500/2 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -96,7 +95,7 @@ function SourceCard({ item, index }) {
           <ArrowUpRight size={14} strokeWidth={2} />
         </div>
       </div>
-    </motion.a>
+    </a>
   );
 }
 
@@ -107,6 +106,14 @@ export default function InformationSources() {
     acc[item.category] = (acc[item.category] ?? 0) + 1;
     return acc;
   }, {});
+  const order = {};
+  for (const item of items) {
+    if (!(item.category in order)) order[item.category] = Object.keys(order).length;
+  }
+  const firstOf = {};
+  items.forEach((item, index) => {
+    if (!(item.category in firstOf)) firstOf[item.category] = index;
+  });
 
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
@@ -155,13 +162,14 @@ export default function InformationSources() {
       >
         {(item, index) => (
           <Fragment key={index}>
-            {item.category !== items[index - 1]?.category && (
+            {firstOf[item.category] === index && (
               <CategoryHeading
                 label={item.category}
                 count={counts[item.category] ?? 0}
+                order={(order[item.category] ?? 0) * 2}
               />
             )}
-            <SourceCard item={item} index={index} />
+            <SourceCard item={item} order={(order[item.category] ?? 0) * 2 + 1} />
           </Fragment>
         )}
       </EditableList>
