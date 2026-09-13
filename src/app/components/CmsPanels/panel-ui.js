@@ -17,6 +17,8 @@ const sans =
 const mono =
   'var(--ins-font-mono, ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace)';
 
+const fs = (px) => `calc(${px}px * var(--ins-fs-scale, 1))`;
+
 export const F = { sans, mono };
 
 export const T = {
@@ -100,7 +102,7 @@ export const rowPropertyStyle = {
 export const rowTitleStyle = {
   flex: "0 1 auto",
   minWidth: 0,
-  font: `500 12px/1.2 ${sans}`,
+  fontWeight: 500, fontSize: fs(12), lineHeight: 1.2, fontFamily: sans,
   color: T.text,
   whiteSpace: "nowrap",
   overflow: "hidden",
@@ -110,7 +112,7 @@ export const rowTitleStyle = {
 // Identifiers are mono here exactly as block paths and collection keys are.
 export const rowCodeStyle = {
   flexShrink: 0,
-  font: `500 11px/1.2 ${mono}`,
+  fontWeight: 500, fontSize: fs(11), lineHeight: 1.2, fontFamily: mono,
   color: T.mid,
   whiteSpace: "nowrap",
 };
@@ -118,7 +120,7 @@ export const rowCodeStyle = {
 export const rowMetaStyle = {
   flex: "1 1 auto",
   minWidth: 0,
-  font: `11px/1.2 ${sans}`,
+  fontSize: fs(11), lineHeight: 1.2, fontFamily: sans,
   color: T.muted,
   whiteSpace: "nowrap",
   overflow: "hidden",
@@ -127,7 +129,7 @@ export const rowMetaStyle = {
 
 export const rowCountStyle = {
   flexShrink: 0,
-  font: `500 10px/1 ${sans}`,
+  fontWeight: 500, fontSize: fs(10), lineHeight: 1, fontFamily: sans,
   fontVariantNumeric: "tabular-nums",
   color: T.faint,
   whiteSpace: "nowrap",
@@ -153,7 +155,7 @@ export const chevronStyle = {
 // way rather than in tracked-out micro-caps.
 export const groupLabelStyle = {
   padding: "12px 12px 4px",
-  font: `500 11px/1 ${sans}`,
+  fontWeight: 500, fontSize: fs(11), lineHeight: 1, fontFamily: sans,
   letterSpacing: "-0.005em",
   color: T.muted,
 };
@@ -220,7 +222,7 @@ export const tabButtonStyle = {
   border: 0,
   borderBottom: "2px solid transparent",
   color: T.muted,
-  font: `500 12px/1 ${sans}`,
+  fontWeight: 500, fontSize: fs(12), lineHeight: 1, fontFamily: sans,
   letterSpacing: "-0.005em",
   cursor: "pointer",
   transition: "color 140ms ease",
@@ -231,7 +233,7 @@ export const tabButtonStyle = {
 export const tabButtonActiveStyle = { color: T.textHi };
 
 export const tabCountStyle = {
-  font: `500 10px/1 ${sans}`,
+  fontWeight: 500, fontSize: fs(10), lineHeight: 1, fontFamily: sans,
   fontVariantNumeric: "tabular-nums",
   padding: "3px 6px",
   borderRadius: R.pill,

@@ -17,23 +17,9 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { PanelStack, useCmsPanel } from "inscribed/panels";
-import {
-  Check,
-  ChevronLeft,
-  ChevronRight,
-  ClipboardCheck,
-  Clock,
-  Download,
-  Eye,
-  FileText,
-  RotateCcw,
-  Search,
-  ShieldAlert,
-  Trash2,
-  X,
-} from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, ClipboardCheck, Clock, Download, ExternalLink, Eye, FileText, RotateCcw, Search, ShieldAlert, Trash2, X } from "lucide-react";
 
-import { canPreview } from "@/app/components/DocumentPreview";
+import { canPreview, useEmbedsInline } from "@/app/components/DocumentPreview";
 import { useCmsEditing } from "@/app/lib/cms-provider.jsx";
 import { noteTypeLabel } from "@/data/lecture-notes";
 import { NOTE_FILTERS, useNoteReview } from "@/data/useNoteReview";
@@ -59,6 +45,8 @@ import {
   rowTitleStyle,
   tightListStyle,
 } from "./panel-ui";
+
+const fs = (px) => `calc(${px}px * var(--ins-fs-scale, 1))`;
 
 const PAGE_SIZE = 15;
 
@@ -105,7 +93,7 @@ function Notice({ icon: Icon, title, children }) {
       }}
     >
       <Icon size={20} strokeWidth={1.5} style={{ color: T.faint }} />
-      <span style={{ font: `600 12px/1.3 ${F.sans}`, color: T.mid }}>
+      <span style={{ fontWeight: 600, fontSize: fs(12), lineHeight: 1.3, fontFamily: F.sans, color: T.mid }}>
         {title}
       </span>
       {children}
@@ -120,7 +108,7 @@ function Message({ children, tone }) {
         margin: 0,
         padding: "48px 16px",
         textAlign: "center",
-        font: `12px/1.45 ${F.sans}`,
+        fontSize: fs(12), lineHeight: 1.45, fontFamily: F.sans,
         color: tone === "danger" ? T.danger : T.muted,
       }}
     >
@@ -173,10 +161,10 @@ function Field({ label, children }) {
   if (!children) return null;
   return (
     <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
-      <span style={{ font: `500 10px/1 ${F.sans}`, color: T.faint }}>
+      <span style={{ fontWeight: 500, fontSize: fs(10), lineHeight: 1, fontFamily: F.sans, color: T.faint }}>
         {label}
       </span>
-      <span style={{ font: `12px/1.45 ${F.sans}`, color: T.text }}>
+      <span style={{ fontSize: fs(12), lineHeight: 1.45, fontFamily: F.sans, color: T.text }}>
         {children}
       </span>
     </div>
@@ -189,6 +177,7 @@ function Action({
   onClick,
   href,
   download,
+  newTab,
   disabled,
   tone,
 }) {
@@ -202,7 +191,7 @@ function Action({
     borderRadius: R.btn,
     border: 0,
     cursor: "pointer",
-    font: `600 11px/1 ${F.sans}`,
+    fontWeight: 600, fontSize: fs(11), lineHeight: 1, fontFamily: F.sans,
     ...(tone === "primary"
       ? { background: NOTES_PANEL_ACCENT, color: T.bg }
       : tone === "danger"
@@ -216,6 +205,7 @@ function Action({
       <a
         href={href}
         download={download}
+        {...(newTab ? { target: "_blank", rel: "noopener noreferrer" } : null)}
         style={{ ...style, textDecoration: "none" }}
       >
         {glyph}
@@ -242,12 +232,13 @@ function NoteDetail({
 }) {
   const status = STATUS[note.status] ?? STATUS.PENDING;
   const kind = String(note.extension ?? "").toLowerCase();
-  const previewable = canPreview(note.href, kind, note.previewHref);
+  const embeds = useEmbedsInline(kind, note.previewHref);
+  const previewable = canPreview(note.href, kind, note.previewHref) && embeds;
 
   return (
     <div style={{ ...listStyle, gap: 16, padding: 16 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <span style={{ font: `600 14px/1.35 ${F.sans}`, color: T.textHi }}>
+        <span style={{ fontWeight: 600, fontSize: fs(14), lineHeight: 1.35, fontFamily: F.sans, color: T.textHi }}>
           {note.title}
         </span>
         <span style={{ display: "flex", alignItems: "center", gap: 8 }}>
@@ -258,7 +249,7 @@ function NoteDetail({
               gap: 5,
               padding: "3px 8px",
               borderRadius: R.pill,
-              font: `600 10px/1 ${F.sans}`,
+              fontWeight: 600, fontSize: fs(10), lineHeight: 1, fontFamily: F.sans,
               color: status.color,
               background: `color-mix(in srgb, ${status.color} 14%, transparent)`,
             }}
@@ -297,6 +288,11 @@ function NoteDetail({
             Önizle
           </Action>
         )}
+        {!previewable && (note.previewHref ?? note.href) && (
+          <Action icon={ExternalLink} href={note.previewHref ?? note.href} newTab>
+            Aç
+          </Action>
+        )}
         {note.href && (
           <Action icon={Download} href={note.href} download={note.title}>
             İndir
@@ -315,7 +311,7 @@ function NoteDetail({
             gap: 8,
           }}
         >
-          <span style={{ flex: 1, font: `12px/1.3 ${F.sans}`, color: T.mid }}>
+          <span style={{ flex: 1, fontSize: fs(12), lineHeight: 1.3, fontFamily: F.sans, color: T.mid }}>
             Bu not kalıcı olarak kaldırılsın mı?
           </span>
           <Action
@@ -460,7 +456,7 @@ export function NotesPanel() {
   if (!isAdmin) {
     return (
       <Notice icon={ShieldAlert} title="Bu alana erişim yetkiniz yok">
-        <span style={{ font: `11px/1.4 ${F.sans}`, color: T.faint }}>
+        <span style={{ fontSize: fs(11), lineHeight: 1.4, fontFamily: F.sans, color: T.faint }}>
           Ders notu yönetimi yalnızca yöneticilere açıktır.
         </span>
       </Notice>
@@ -506,7 +502,7 @@ export function NotesPanel() {
               border: `1px solid ${T.border}`,
               background: T.surface1,
               color: T.text,
-              font: `11px/1 ${F.sans}`,
+              fontSize: fs(12), lineHeight: 1, fontFamily: F.sans,
               outline: "none",
             }}
           />
@@ -522,7 +518,7 @@ export function NotesPanel() {
           {query ? "Aramanızla eşleşen not yok." : "Bu sekmede not yok."}
         </Message>
       ) : (
-        <div style={tightListStyle}>
+        <div className="mm-note-list" style={tightListStyle}>
           {result.items.map((note) => (
             <NoteRow
               key={note.id}
