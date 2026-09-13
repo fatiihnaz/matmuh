@@ -34,7 +34,7 @@ export default function Header() {
   const epostaBagi = eposta?.href || `mailto:${DEPARTMENT_EMAIL}`;
 
   return (
-    <header className="w-full sticky top-0 z-50">
+    <header className="w-full sticky top-0 z-[10000]">
       <div className="hidden sm:block bg-primary-600">
         <div className="max-w-7xl mx-auto px-6 py-1 flex items-center justify-between">
           <a

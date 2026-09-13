@@ -244,3 +244,8 @@ select.inscribed-field option {
 .announcement-body li::marker {
   color: var(--color-secondary-500);
 }
+
+.inscribed-panel,
+.inscribed-handle {
+  z-index: 10001 !important;
+}
