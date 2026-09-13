@@ -49,7 +49,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
           exit={{ opacity: 0 }}
           transition={{ duration: 0.18 }}
           onClick={close}
-          className={`fixed inset-0 z-[10010] bg-primary-700/85 backdrop-blur-sm ${
+          className={`fixed inset-0 z-[10040] bg-primary-700/85 backdrop-blur-sm ${
             fullScreen ? "" : "top-(--header-h)"
           }`}
         >

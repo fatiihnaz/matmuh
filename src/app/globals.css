@@ -247,5 +247,11 @@ select.inscribed-field option {
 
 .inscribed-panel,
 .inscribed-handle {
-  z-index: 10001 !important;
+  z-index: 10020 !important;
+}
+
+@media (max-width: 768px) {
+  .mm-note-list {
+    --ins-fs-scale: 1.15;
+  }
 }

@@ -4,14 +4,16 @@ import NewTabHint from "@/app/components/NewTabHint";
 import { useState } from "react";
 import { Download, Eye, FileText } from "lucide-react";
 import { formatBytes } from "@/lib/format";
-import DocumentPreview, { canPreview } from "./DocumentPreview";
+import DocumentPreview, { canPreview, useEmbedsInline } from "./DocumentPreview";
 
 const ROW =
   "group flex items-center gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5 hover:border-secondary-500/30 hover:bg-secondary-500/4 transition-colors";
 
-export default function DocumentLink({ label, href, kind, term, size, style }) {
+export default function DocumentLink({ label, href, kind, term, size, style, previewHref = null }) {
   const [open, setOpen] = useState(false);
-  const previewable = canPreview(href, kind);
+  const embeds = useEmbedsInline(kind, previewHref);
+  const previewable = canPreview(href, kind, previewHref) && embeds;
+  const target = embeds ? href : (previewHref ?? href);
 
   const handleClick = (event) => {
     if (!previewable) return;
@@ -23,7 +25,7 @@ export default function DocumentLink({ label, href, kind, term, size, style }) {
   return (
     <div className={ROW} style={style}>
       <a
-        href={href}
+        href={target}
         target="_blank"
         rel="noopener noreferrer"
         onClick={handleClick}
@@ -74,6 +76,7 @@ export default function DocumentLink({ label, href, kind, term, size, style }) {
           label={label}
           href={href}
           kind={kind}
+          previewHref={previewHref}
         />
       )}
     </div>

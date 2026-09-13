@@ -8,6 +8,11 @@ const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
 export const PREVIEWABLE_KINDS = new Set(["pdf", ...IMAGE_KINDS]);
 
+export function useEmbedsInline(kind, previewHref = null) {
+  const inline = useMediaQuery("(min-width: 768px)");
+  return (!previewHref && IMAGE_KINDS.includes(kind)) || inline;
+}
+
 export function canPreview(href, kind, previewHref = null) {
   if (previewHref) return true;
   return Boolean(href) && PREVIEWABLE_KINDS.has(kind);
@@ -16,13 +21,11 @@ export function canPreview(href, kind, previewHref = null) {
 const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-md border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
-function PdfBody({ href, label }) {
-  const inline = useMediaQuery("(min-width: 768px)");
-
+function PdfBody({ href, label, inline }) {
   if (inline) return <iframe src={href} title={label} className="h-full w-full border-0" />;
 
   return (
-    <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+    <div className="flex flex-col items-center justify-center gap-4 px-6 py-10 text-center">
       <FileText size={30} strokeWidth={1.25} className="text-primary-500/70" />
       <p className="text-[13px] text-primary-500/70">
         Belge telefonda kendi görüntüleyicisinde daha iyi açılıyor.
@@ -41,10 +44,12 @@ function PdfBody({ href, label }) {
 }
 
 export default function DocumentPreview({ open, onClose, label, href, kind, previewHref = null }) {
+  const inline = useMediaQuery("(min-width: 768px)");
   if (!open) return null;
 
   const isImage = !previewHref && IMAGE_KINDS.includes(kind);
   const source = previewHref ?? href;
+  const embeds = isImage || inline;
 
   return (
     <Modal open={open} onClose={onClose} label={label}>
@@ -52,14 +57,20 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
         onClick={(event) => {
           if (event.target === event.currentTarget) onClose();
         }}
-        className="flex flex-col h-full pt-14 pb-3 px-3 sm:px-6"
+        className={`flex flex-col h-full pt-14 pb-3 px-3 sm:px-6 ${
+          embeds ? "" : "justify-center"
+        }`}
       >
-        <div className="relative flex-1 min-h-0 rounded-lg overflow-hidden bg-white">
+        <div
+          className={`relative rounded-lg overflow-hidden bg-white ${
+            embeds ? "flex-1 min-h-0" : "shrink-0"
+          }`}
+        >
           {isImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={source} alt={label} className="h-full w-full object-contain" />
           ) : (
-            <PdfBody href={source} label={label} />
+            <PdfBody href={source} label={label} inline={inline} />
           )}
         </div>
 

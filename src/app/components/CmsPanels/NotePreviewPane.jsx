@@ -21,11 +21,8 @@ import { useDrawerVisible } from "./useDrawerVisible";
 
 // inscribed's PANEL_WIDTH. The pane butts against the drawer instead of
 // overlapping it, which is the point of reading side by side.
-const DRAWER_WIDTH = 460;
-// The drawer sits at 9998: beside it the pane stays just under, so drawer
-// chrome always wins. With no room to sit beside, it covers the drawer instead.
-const Z_BESIDE = 9997;
-const Z_OVER = 9999;
+const PANEL_WIDTH = "var(--ins-panel-w, 460px)";
+const Z_PANE = 10010;
 
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
@@ -38,6 +35,14 @@ export default function NotePreviewPane({ note, onClose, anchorRef }) {
   // Same threshold `DocumentPreview` uses: below it a document reads better in
   // the phone's own viewer than in an iframe.
   const inlineDoc = useMediaQuery("(min-width: 768px)");
+
+  useEffect(() => {
+    if (!note || wide) return undefined;
+    const handle = document.querySelector(".inscribed-handle");
+    if (handle?.getAttribute("aria-expanded") !== "true") return undefined;
+    handle.click();
+    return () => handle.click();
+  }, [note, wide]);
 
   useEffect(() => {
     if (!note) return undefined;
@@ -57,6 +62,7 @@ export default function NotePreviewPane({ note, onClose, anchorRef }) {
   const kind = String(note.extension ?? "").toLowerCase();
   const source = note.previewHref ?? note.href;
   const isImage = !note.previewHref && IMAGE_KINDS.includes(kind);
+  const embeds = isImage || inlineDoc;
 
   const beside = wide && drawerVisible;
 
@@ -74,8 +80,8 @@ export default function NotePreviewPane({ note, onClose, anchorRef }) {
       animate={{ opacity: 1 }}
       transition={{ duration: 0.18 }}
       style={{
-        left: beside ? DRAWER_WIDTH : 0,
-        zIndex: beside ? Z_BESIDE : Z_OVER,
+        left: beside ? PANEL_WIDTH : 0,
+        zIndex: Z_PANE,
         transition: "left 260ms cubic-bezier(0.22, 1, 0.36, 1)",
       }}
       onClick={closeOnBackdrop}
@@ -91,16 +97,22 @@ export default function NotePreviewPane({ note, onClose, anchorRef }) {
 
       <div
         onClick={closeOnBackdrop}
-        className="flex h-full flex-col px-3 pt-14 pb-3 sm:px-6"
+        className={`flex h-full flex-col px-3 pt-14 pb-3 sm:px-6 ${
+          embeds ? "" : "justify-center"
+        }`}
       >
-        <div className="relative min-h-0 flex-1 overflow-hidden rounded-lg bg-white">
+        <div
+          className={`relative overflow-hidden rounded-lg bg-white ${
+            embeds ? "min-h-0 flex-1" : "shrink-0"
+          }`}
+        >
           {isImage ? (
             // eslint-disable-next-line @next/next/no-img-element
             <img src={source} alt={note.title} className="h-full w-full object-contain" />
           ) : inlineDoc ? (
             <iframe src={source} title={note.title} className="h-full w-full border-0" />
           ) : (
-            <div className="flex h-full flex-col items-center justify-center gap-4 px-6 text-center">
+            <div className="flex flex-col items-center justify-center gap-4 px-6 py-10 text-center">
               <FileText size={30} strokeWidth={1.25} className="text-primary-500/70" />
               <p className="text-[13px] text-primary-500/70">
                 Belge telefonda kendi görüntüleyicisinde daha iyi açılıyor.
