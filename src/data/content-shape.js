@@ -1,3 +1,18 @@
+const sameOrigin = (fileUrl) => {
+  if (!fileUrl) return fileUrl ?? "";
+  try {
+    const { pathname, search } = new URL(fileUrl);
+    return pathname.startsWith("/api/") ? `${pathname}${search}` : fileUrl;
+  } catch {
+    return fileUrl;
+  }
+};
+
+const extensionOf = (fileName) => {
+  const match = /\.([A-Za-z0-9]{1,6})$/.exec(String(fileName ?? ""));
+  return match ? match[1] : null;
+};
+
 export const CONTENT_CATEGORIES = [
   { id: "sinav", label: "Sınav & Program" },
   { id: "mezuniyet", label: "Mezuniyet" },
@@ -59,12 +74,16 @@ export function announcementFromData(data) {
     publishedAt: data.publishedAt ?? "",
     pinned: Boolean(data.featured),
     coverImage: data.coverImage ?? null,
-    attachments: (data.attachments ?? []).map((a) => ({
-      label: a.name ?? "",
-      href: a.url ?? "",
-      kind: (a.type ?? "").toLowerCase(),
-      size: a.size ?? 0,
-    })),
+    attachments: (data.attachments ?? []).map((a) => {
+      const f = a.file ?? a;
+      return {
+        label: a.name ?? f.name ?? "",
+        href: sameOrigin(f.url),
+        previewHref: f.previewUrl ? sameOrigin(f.previewUrl) : null,
+        kind: (a.type ?? extensionOf(f.name) ?? "").toLowerCase(),
+        size: a.size ?? f.size ?? 0,
+      };
+    }),
     gallery: (data.gallery ?? [])
       .filter((g) => g.image?.src)
       .map((g) => ({

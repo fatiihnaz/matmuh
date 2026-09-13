@@ -14,6 +14,7 @@ export default function AttachmentList({ items }) {
           href={item.href}
           kind={item.kind}
           size={item.size}
+          previewHref={item.previewHref}
         />
       ))}
     </div>
