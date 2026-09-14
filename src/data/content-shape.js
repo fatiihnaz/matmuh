@@ -80,7 +80,7 @@ export function announcementFromData(data) {
         label: a.name ?? f.name ?? "",
         href: sameOrigin(f.url),
         previewHref: f.previewUrl ? sameOrigin(f.previewUrl) : null,
-        kind: (a.type ?? extensionOf(f.name) ?? "").toLowerCase(),
+        kind: (a.type ?? extensionOf(f.name) ?? extensionOf(f.url) ?? "").toLowerCase(),
         size: a.size ?? f.size ?? 0,
       };
     }),
