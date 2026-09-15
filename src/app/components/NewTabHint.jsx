@@ -1,9 +1,8 @@
-import { getCmsRoute } from "@/app/lib/cms.jsx";
-import { translate } from "@/i18n";
+"use client";
 
-export default async function NewTabHint() {
-  const { locale } = await getCmsRoute();
-  return (
-    <span className="sr-only"> {translate(locale, "(yeni sekmede açılır)")}</span>
-  );
+import { useT } from "@/i18n/useT";
+
+export default function NewTabHint() {
+  const t = useT();
+  return <span className="sr-only"> {t("(yeni sekmede açılır)")}</span>;
 }

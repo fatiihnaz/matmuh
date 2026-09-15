@@ -1,7 +1,6 @@
 "use client";
 
 import { Fragment, useState } from "react";
-import { Briefcase, BookOpen, Sun } from "lucide-react";
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
 import { useIsEditor } from "@/app/lib/cms-provider.jsx";
@@ -10,20 +9,12 @@ import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
 import Panel from "@/app/components/Panel";
 import PageSection from "@/app/components/PageSection";
-import RelatedPages from "@/app/components/RelatedPages";
-import QuickLinks from "@/app/components/QuickLinks";
 import DocumentLink from "@/app/components/DocumentLink";
 import { safeHref } from "@/lib/href";
 
 const TABS = [
   { id: "ogrenci", label: "Öğrenci", blockPath: "forms.student" },
   { id: "personel", label: "Personel", blockPath: "forms.staff" },
-];
-
-const RELATED = [
-  { label: "Staj İşlemleri", href: "/egitim/staj", icon: Briefcase },
-  { label: "Yaz Okulu", href: "/egitim/yaz-okulu", icon: Sun },
-  { label: "Müfredat", href: "/egitim/mufredat", icon: BookOpen },
 ];
 
 const GRID = "grid grid-cols-1 xl:grid-cols-2 gap-2";
@@ -147,16 +138,7 @@ function StaffForms({ items }) {
   );
 }
 
-function Sidebar() {
-  return (
-    <div className="flex flex-col gap-6">
-      <RelatedPages items={RELATED} />
-      <QuickLinks external title="Kurumsal Sistemler" />
-    </div>
-  );
-}
-
-export default function FormsPage() {
+export default function FormsPage({ sidebar }) {
   const [activeTab, setActiveTab] = useState(TABS[0].id);
   const active = TABS.find((tab) => tab.id === activeTab);
 
@@ -183,7 +165,7 @@ export default function FormsPage() {
           />
         }
       />
-      <PageLayout sidebar={<Sidebar />}>
+      <PageLayout sidebar={sidebar}>
         <div className="flex flex-col gap-8">
           <PageSection
             title={
