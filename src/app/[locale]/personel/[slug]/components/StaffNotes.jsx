@@ -8,8 +8,10 @@ import DocumentLink from "@/app/components/DocumentLink";
 import { SkeletonBlock } from "@/app/components/Skeleton";
 import { useAuth } from "@/lib/auth";
 import { fetchStaffNotes, noteTypeLabel } from "@/data/lecture-notes";
+import { useT } from "@/i18n/useT";
 
 export default function StaffNotes({ staffId }) {
+  const t = useT();
   const { isAuthenticated, getAccessToken, signIn } = useAuth();
   const [notes, setNotes] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -38,14 +40,14 @@ export default function StaffNotes({ staffId }) {
         <div className="flex flex-col items-center gap-3 py-6 text-center">
           <Lock className="size-5 text-primary-500/70" />
           <p className="text-[13px] text-primary-500/70">
-            Derslerine yüklenen notlar giriş yapan kullanıcılara açıktır.
+            {t("Derslerine yüklenen notlar giriş yapan kullanıcılara açıktır.")}
           </p>
           <button
             type="button"
             onClick={() => signIn()}
             className="rounded-lg border border-secondary-500 px-3.5 py-1.5 text-xs font-medium text-secondary-700 transition-colors hover:bg-secondary-500 hover:text-primary-500"
           >
-            Giriş yap
+            {t("Giriş yap")}
           </button>
         </div>
       </Panel>
@@ -56,7 +58,7 @@ export default function StaffNotes({ staffId }) {
     return (
       <Panel>
         <p className="py-4 text-center text-[13px] text-primary-500/70">
-          Notlar yüklenemedi.
+          {t("Notlar yüklenemedi.")}
         </p>
       </Panel>
     );
@@ -76,7 +78,7 @@ export default function StaffNotes({ staffId }) {
     return (
       <Panel>
         <p className="py-4 text-center text-[13px] text-primary-500/70">
-          Derslerine yüklenmiş onaylı not bulunmuyor.
+          {t("Derslerine yüklenmiş onaylı not bulunmuyor.")}
         </p>
       </Panel>
     );

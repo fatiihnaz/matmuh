@@ -10,6 +10,7 @@ import GradeDistribution from "@/app/components/GradeDistribution";
 import { SkeletonBlock } from "@/app/components/Skeleton";
 import { useAuth } from "@/lib/auth";
 import { fetchStaffOfferings } from "@/data/statistics";
+import { useT } from "@/i18n/useT";
 
 const STAT = "flex flex-col gap-0.5 rounded-lg bg-primary-500/2 px-3 py-2";
 
@@ -73,7 +74,7 @@ function LectureRow({ lecture, defaultOpen }) {
               href={`/egitim/mufredat/${lecture.code}`}
               className="text-[11px] font-medium text-secondary-700 hover:underline"
             >
-              Ders sayfası
+              {t("Ders sayfası")}
             </Link>
           )}
           {lecture.sections.map((section) => (
@@ -92,6 +93,7 @@ function LectureRow({ lecture, defaultOpen }) {
 }
 
 export default function StaffOfferings({ staffId }) {
+  const t = useT();
   const { isAuthenticated, getAccessToken, signIn } = useAuth();
   const [terms, setTerms] = useState(null);
   const [failed, setFailed] = useState(false);
@@ -120,14 +122,14 @@ export default function StaffOfferings({ staffId }) {
         <div className="flex flex-col items-center gap-3 py-6 text-center">
           <Lock className="size-5 text-primary-500/70" />
           <p className="text-[13px] text-primary-500/70">
-            Verdiği dersler ve not istatistikleri giriş yapan kullanıcılara açıktır.
+            {t("Verdiği dersler ve not istatistikleri giriş yapan kullanıcılara açıktır.")}
           </p>
           <button
             type="button"
             onClick={() => signIn()}
             className="rounded-lg border border-secondary-500 px-3.5 py-1.5 text-xs font-medium text-secondary-700 transition-colors hover:bg-secondary-500 hover:text-primary-500"
           >
-            Giriş yap
+            {t("Giriş yap")}
           </button>
         </div>
       </Panel>
@@ -138,7 +140,7 @@ export default function StaffOfferings({ staffId }) {
     return (
       <Panel>
         <p className="py-4 text-center text-[13px] text-primary-500/70">
-          İstatistikler yüklenemedi.
+          {t("İstatistikler yüklenemedi.")}
         </p>
       </Panel>
     );
@@ -158,7 +160,7 @@ export default function StaffOfferings({ staffId }) {
     return (
       <Panel>
         <p className="py-4 text-center text-[13px] text-primary-500/70">
-          Kayıtlı dönem bulunmuyor.
+          {t("Kayıtlı dönem bulunmuyor.")}
         </p>
       </Panel>
     );

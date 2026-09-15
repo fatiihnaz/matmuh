@@ -34,8 +34,10 @@ import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 import LectureNotes from "./LectureNotes";
 import SectionEnroll from "./SectionEnroll";
 import { useAuth } from "@/lib/auth";
+import { useT } from "@/i18n/useT";
 
 function SectionRow({ section, defaultOpen }) {
+  const t = useT();
   const [open, setOpen] = useState(defaultOpen);
   const first = section.schedule[0];
 
@@ -93,7 +95,7 @@ function SectionRow({ section, defaultOpen }) {
                 </span>
                 {slot.online && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-700 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
-                    <Wifi size={9} strokeWidth={2} /> Çevrimiçi
+                    <Wifi size={9} strokeWidth={2} /> {t("Çevrimiçi")}
                   </span>
                 )}
               </div>
@@ -136,6 +138,7 @@ const isMakeupExam = (exam) =>
   exam.type === "RESIT" || /bütünleme/i.test(exam.name);
 
 export default function CourseInfo({ course, sections = [] }) {
+  const t = useT();
   const [activeTab, setActiveTab] = useState(0);
   const {
     isAuthenticated,
@@ -275,7 +278,7 @@ export default function CourseInfo({ course, sections = [] }) {
 
   const SidebarContent = (
     <div className="flex flex-col gap-5 lg:sticky lg:top-8 font-sans">
-      <MainCard title="Şubeler & Program">
+      <MainCard title={t("Şubeler & Program")}>
         <div className="space-y-2 pt-2">
           {sections.map((section) => (
             <SectionRow
@@ -386,7 +389,7 @@ export default function CourseInfo({ course, sections = [] }) {
                   <div className="flex items-center gap-2 mb-4">
                     <div className="w-1 h-4 bg-secondary-500 rounded-full" />
                     <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-                      Ders Hakkında
+                      {t("Ders Hakkında")}
                     </h3>
                   </div>
                   {course.content ? (
@@ -570,7 +573,7 @@ export default function CourseInfo({ course, sections = [] }) {
                       <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full sm:w-auto">
                         <div className="relative w-full sm:w-auto">
                           <select
-                            aria-label="Dönem seçin"
+                            aria-label={t("Dönem seçin")}
                             value={activeTerm?.name ?? ""}
                             onChange={(e) => {
                               setSelectedTerm(e.target.value);
@@ -593,7 +596,7 @@ export default function CourseInfo({ course, sections = [] }) {
 
                         <div className="relative w-full sm:w-auto">
                           <select
-                            aria-label="Eğitmen seçin"
+                            aria-label={t("Eğitmen seçin")}
                             value={activeInstructor?.name ?? ""}
                             onChange={(e) => {
                               setSelectedInstructor(e.target.value);
@@ -616,7 +619,7 @@ export default function CourseInfo({ course, sections = [] }) {
                         {availableSections.length > 1 && (
                           <div className="relative w-full sm:w-auto">
                             <select
-                              aria-label="İstatistik için grup seçin"
+                              aria-label={t("İstatistik için grup seçin")}
                               value={activeStats?.section ?? ""}
                               onChange={(e) =>
                                 setSelectedSection(e.target.value)
@@ -646,12 +649,12 @@ export default function CourseInfo({ course, sections = [] }) {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      <MainCard title="HARF ARALIKLARI DAĞILIMI">
+                      <MainCard title={t("HARF ARALIKLARI DAĞILIMI")}>
                         <div className="mt-4">
                           <GradeDistribution data={activeStats.gradeDistribution} />
                         </div>
                       </MainCard>
-                      <MainCard title="BÜTÜNLEME HARF ARALIKLARI DAĞILIMI">
+                      <MainCard title={t("BÜTÜNLEME HARF ARALIKLARI DAĞILIMI")}>
                         <div className="mt-4">
                           <GradeDistribution data={activeStats.makeupDistribution} />
                         </div>
@@ -714,7 +717,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             <User size={12} strokeWidth={2.5} />
                           </div>
                           <span className="text-[10px] font-bold uppercase tracking-widest text-primary-500/70 leading-none">
-                            Geçme Oranı
+                            {t("Geçme Oranı")}
                           </span>
                         </div>
                         <div className="flex items-center gap-3 mt-auto">
@@ -832,7 +835,7 @@ export default function CourseInfo({ course, sections = [] }) {
                                   {exam.weight}
                                 </span>
                                 <span className="text-[10px] sm:text-xs font-sans text-primary-500/70 sm:text-primary-500">
-                                  ETKİ
+                                  {t("ETKİ")}
                                 </span>
                               </div>
                               <div className="hidden sm:block w-px h-8 bg-primary-500/10" />
@@ -966,12 +969,13 @@ function StatsSkeleton() {
 }
 
 function StatsPreview() {
+  const t = useT();
   return (
     <div className="relative mt-6">
       <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
         <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 shadow-xl">
           <Eye size={16} strokeWidth={2} className="text-secondary-700" />
-          <span className="text-[13px] font-medium text-white">Önizleme</span>
+          <span className="text-[13px] font-medium text-white">{t("Önizleme")}</span>
         </div>
       </div>
 
@@ -1057,6 +1061,7 @@ function StatsPreview() {
 }
 
 function LoginGate({ loading, onSignIn, code }) {
+  const t = useT();
   return (
     <>
       <div className="rounded-xl p-5 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
@@ -1065,7 +1070,7 @@ function LoginGate({ loading, onSignIn, code }) {
         </div>
         <div className="flex-1">
           <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
-            Giriş Yapmanız Gerekmektedir
+            {t("Giriş Yapmanız Gerekmektedir")}
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
             {code} dersinin geçmiş dönem sınıf ortalamalarını, harf
@@ -1080,7 +1085,7 @@ function LoginGate({ loading, onSignIn, code }) {
             disabled={loading}
             className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 disabled:opacity-50 shadow-md shadow-secondary-500/20"
           >
-            <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
+            <Lock size={14} strokeWidth={2} /> {t("Öğrenci Girişi")}
           </button>
         </div>
       </div>

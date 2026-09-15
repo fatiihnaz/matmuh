@@ -24,6 +24,7 @@ import {
 import { useAuth } from "@/lib/auth";
 import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
+import { useT } from "@/i18n/useT";
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
 const ACCEPTED =
@@ -37,6 +38,7 @@ const PLACEHOLDERS = [
 ];
 
 function LoginPanel({ loading, onSignIn }) {
+  const t = useT();
   return (
     <>
       <div className="rounded-xl p-5 mb-8 flex flex-col sm:flex-row items-start gap-4 bg-primary-500/3 border border-primary-500/10">
@@ -45,7 +47,7 @@ function LoginPanel({ loading, onSignIn }) {
         </div>
         <div className="flex-1">
           <h4 className="text-[15px] font-bold text-primary-700 mb-1.5">
-            Giriş Yapmanız Gerekmektedir
+            {t("Giriş Yapmanız Gerekmektedir")}
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
             Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak
@@ -60,7 +62,7 @@ function LoginPanel({ loading, onSignIn }) {
             disabled={loading}
             className="flex items-center gap-2 px-5 py-2.5 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold transition-all hover:bg-secondary-500/80 disabled:opacity-50 shadow-md shadow-secondary-500/20"
           >
-            <Lock size={14} strokeWidth={2} /> Öğrenci Girişi
+            <Lock size={14} strokeWidth={2} /> {t("Öğrenci Girişi")}
           </button>
         </div>
       </div>
@@ -69,7 +71,7 @@ function LoginPanel({ loading, onSignIn }) {
         <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
           <div className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-500 backdrop-blur-sm shadow-xl">
             <Eye size={16} strokeWidth={2} className="text-secondary-700" />
-            <span className="text-[13px] font-medium text-white">Önizleme</span>
+            <span className="text-[13px] font-medium text-white">{t("Önizleme")}</span>
           </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 filter blur-[6px] opacity-40 select-none pointer-events-none">
@@ -102,6 +104,7 @@ function LoginPanel({ loading, onSignIn }) {
 }
 
 function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
+  const t = useT();
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
   const previewable = canPreview(note.href, kind, note.previewHref);
@@ -207,7 +210,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             download
             className="inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-primary-500/5 text-primary-500 text-xs font-semibold hover:bg-secondary-500 hover:text-white transition-colors"
           >
-            <Download size={13} strokeWidth={2} /> İndir
+            <Download size={13} strokeWidth={2} /> {t("İndir")}
           </a>
         )}
         {pending && (
@@ -226,6 +229,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
 }
 
 function UploadForm({ lectureId, onUploaded }) {
+  const t = useT();
   const { getAccessToken } = useAuth();
   const inputRef = useRef(null);
   const [open, setOpen] = useState(false);
@@ -291,11 +295,11 @@ function UploadForm({ lectureId, onUploaded }) {
       <div className="mb-6 flex items-center justify-between gap-3 flex-wrap">
         {done ? (
           <span className="text-xs text-primary-500/70">
-            Notunuz yüklendi, yönetici onayı bekliyor.
+            {t("Notunuz yüklendi, yönetici onayı bekliyor.")}
           </span>
         ) : (
           <span className="text-xs text-primary-500/70">
-            Yüklenen notlar yönetici onayından sonra yayınlanır.
+            {t("Yüklenen notlar yönetici onayından sonra yayınlanır.")}
           </span>
         )}
         <button
@@ -324,7 +328,7 @@ function UploadForm({ lectureId, onUploaded }) {
           }`}
         >
           <Upload size={14} strokeWidth={2} />
-          {dragOver ? "Dosyayı bırakın" : "Not Yükle"}
+          {dragOver ? t("Dosyayı bırakın") : t("Not Yükle")}
         </button>
       </div>
     );
@@ -337,7 +341,7 @@ function UploadForm({ lectureId, onUploaded }) {
     >
       <div className="flex items-center justify-between">
         <span className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-          Not Yükle
+          {t("Not Yükle")}
         </span>
         <button
           type="button"
@@ -355,8 +359,8 @@ function UploadForm({ lectureId, onUploaded }) {
       <input
         value={title}
         onChange={(e) => setTitle(e.target.value)}
-        placeholder="Başlık"
-        aria-label="Not başlığı"
+        placeholder={t("Başlık")}
+        aria-label={t("Not başlığı")}
         maxLength={150}
         required
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50"
@@ -364,15 +368,15 @@ function UploadForm({ lectureId, onUploaded }) {
       <textarea
         value={description}
         onChange={(e) => setDescription(e.target.value)}
-        placeholder="Açıklama (isteğe bağlı)"
-        aria-label="Not açıklaması"
+        placeholder={t("Açıklama (isteğe bağlı)")}
+        aria-label={t("Not açıklaması")}
         rows={2}
         maxLength={500}
         className="w-full rounded-lg border border-primary-500/10 bg-white px-3 py-2 text-sm text-primary-500 outline-none focus:border-secondary-500/50 resize-none"
       />
 
       <label className="flex items-center gap-2 text-xs text-primary-500/70">
-        Tür
+        {t("Tür")}
         <select
           value={type}
           onChange={(e) => setType(e.target.value)}
@@ -432,7 +436,7 @@ function UploadForm({ lectureId, onUploaded }) {
         <input
           ref={inputRef}
           type="file"
-          aria-label="Yüklenecek dosyayı seçin"
+          aria-label={t("Yüklenecek dosyayı seçin")}
           accept={ACCEPTED}
           onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
           className="hidden"
@@ -461,6 +465,7 @@ function UploadForm({ lectureId, onUploaded }) {
 }
 
 export default function LectureNotes({ lectureId, onSignIn }) {
+  const t = useT();
   const { isAuthenticated, isLoading: authLoading, getAccessToken } = useAuth();
   const [notes, setNotes] = useState(null);
   const [pending, setPending] = useState([]);
@@ -519,7 +524,7 @@ export default function LectureNotes({ lectureId, onSignIn }) {
           <div className="flex items-center gap-2 mb-3">
             <div className="w-1 h-4 bg-amber-500 rounded-full" />
             <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-              Yüklediğiniz, henüz yayımlanmamış notlar
+              {t("Yüklediğiniz, henüz yayımlanmamış notlar")}
             </h3>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -569,11 +574,11 @@ export default function LectureNotes({ lectureId, onSignIn }) {
             className="text-primary-500/70"
           />
           <span className="text-sm font-medium text-primary-500/70">
-            Bu ders için henüz onaylanmış not yok.
+            {t("Bu ders için henüz onaylanmış not yok.")}
           </span>
           {pending.length === 0 && (
             <span className="text-xs text-primary-500/70">
-              İlk notu siz yükleyebilirsiniz.
+              {t("İlk notu siz yükleyebilirsiniz.")}
             </span>
           )}
         </div>

@@ -8,6 +8,7 @@ import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 import { fullName, useStaff } from "@/app/components/PersonRow";
+import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 const categories = [
@@ -60,6 +61,7 @@ function StaffSkeleton() {
 }
 
 function StaffContent({ initialStaff }) {
+  const t = useT();
   const router = useRouter();
   const searchParams = useSearchParams();
   const { href } = useLocaleNav();
@@ -121,8 +123,8 @@ function StaffContent({ initialStaff }) {
           <Search size={14} strokeWidth={1.5} className="absolute left-3 top-1/2 -translate-y-1/2" style={{ color: "rgba(29,36,69,0.3)" }} />
           <input
             type="text"
-            placeholder="İsim ara..."
-            aria-label="Personel içinde isme göre ara"
+            placeholder={t("İsim ara...")}
+            aria-label={t("Personel içinde isme göre ara")}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="w-full pl-9 pr-3 py-2 rounded-lg outline-none transition-all duration-200 focus:ring-1"
@@ -151,7 +153,7 @@ function StaffContent({ initialStaff }) {
                 borderColor: categoryParam === cat.id ? "rgba(173,151,111,0.2)" : "transparent",
               }}
             >
-              {cat.label}
+              {t(cat.label)}
             </button>
           ))}
         </div>
@@ -165,7 +167,7 @@ function StaffContent({ initialStaff }) {
             <select
               value={rankFilter}
               onChange={(e) => setRankFilter(e.target.value)}
-              aria-label="Unvana göre süz"
+              aria-label={t("Unvana göre süz")}
               className="w-40 appearance-none rounded-md border py-1 pl-2.5 pr-7 text-xs font-medium outline-none transition-colors"
               style={{
                 backgroundColor: rankFilter === "Tümü" ? "transparent" : "rgba(29,36,69,0.08)",
@@ -175,7 +177,7 @@ function StaffContent({ initialStaff }) {
             >
               {availableRanks.map((r) => (
                 <option key={r} value={r}>
-                  {r}
+                  {t(r)}
                 </option>
               ))}
             </select>
@@ -194,7 +196,7 @@ function StaffContent({ initialStaff }) {
 
       <div className="mb-4 flex items-center justify-between px-1">
         <span className="text-xs text-primary-500/70">
-          {filteredStaff.length} sonuç gösteriliyor
+          {filteredStaff.length} {t("sonuç gösteriliyor")}
         </span>
       </div>
 
@@ -208,7 +210,9 @@ function StaffContent({ initialStaff }) {
 
       {!isLoading && filteredStaff.length === 0 && (
         <div className="text-center py-20 text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
-          {error ? "Personel listesi yüklenemedi." : "Kriterlere uygun personel bulunamadı."}
+          {error
+            ? t("Personel listesi yüklenemedi.")
+            : t("Kriterlere uygun personel bulunamadı.")}
         </div>
       )}
     </>

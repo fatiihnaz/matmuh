@@ -8,10 +8,11 @@ import StaffOfferings from "./StaffOfferings";
 import StaffNotes from "./StaffNotes";
 import { fullName } from "@/lib/person";
 import { safeHref } from "@/lib/href";
+import { translate } from "@/i18n";
 
 const LINE = "flex items-center gap-2.5 text-[13px] text-primary-500/70";
 
-function Contact({ person }) {
+function Contact({ person, locale }) {
   const avesis = safeHref(person.avesisLink);
   const office = person.office ?? "";
   const isRoom = office && (office.includes("-") || /^\d+$/.test(office));
@@ -44,14 +45,14 @@ function Contact({ person }) {
           rel="noopener noreferrer"
         >
           <ExternalLink className="size-4 shrink-0 text-secondary-700" />
-          AVESİS profili
+          {translate(locale, "AVESİS profili")}
         </a>
       )}
     </div>
   );
 }
 
-export default function StaffDetail({ person, entries }) {
+export default function StaffDetail({ person, entries, locale }) {
   const name = fullName(person);
 
   return (
@@ -76,22 +77,22 @@ export default function StaffDetail({ person, entries }) {
                 </p>
               )}
             </div>
-            <Contact person={person} />
+            <Contact person={person} locale={locale} />
           </div>
         </div>
       </Panel>
 
       {entries.length > 0 && (
-        <PageSection title="Haftalık Ders Programı">
+        <PageSection title={translate(locale, "Haftalık Ders Programı")}>
           <StaffSchedule entries={entries} />
         </PageSection>
       )}
 
-      <PageSection title="Verdiği Dersler">
+      <PageSection title={translate(locale, "Verdiği Dersler")}>
         <StaffOfferings staffId={person.id} />
       </PageSection>
 
-      <PageSection title="Ders Notları">
+      <PageSection title={translate(locale, "Ders Notları")}>
         <StaffNotes staffId={person.id} />
       </PageSection>
     </div>

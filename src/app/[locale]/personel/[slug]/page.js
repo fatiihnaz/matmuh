@@ -26,7 +26,7 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function Page({ params }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const person = await findPerson(slug);
   if (!person) notFound();
 
@@ -41,7 +41,7 @@ export default async function Page({ params }) {
         lastLabel={name}
       />
       <PageLayout>
-        <StaffDetail person={person} entries={entries} />
+        <StaffDetail person={person} entries={entries} locale={locale} />
       </PageLayout>
     </>
   );
