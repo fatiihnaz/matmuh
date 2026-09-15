@@ -8,6 +8,7 @@ import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
 import { MyScheduleProvider } from "@/data/useMySchedule";
 import { colorOf, courseColors, tintOf } from "@/data/schedule-colors";
 import WeeklySchedule from "./WeeklySchedule";
+import { useT } from "@/i18n/useT";
 
 const VIEWS = [
   { id: "grid", label: "Izgara", icon: CalendarRange },
@@ -21,6 +22,7 @@ const rangeOf = (entry) => {
 };
 
 function ListRow({ entry, accent, courseHref }) {
+  const t = useT();
   const isElective = entry.type === "Seçmeli";
   const href = courseHref?.(entry.code) || null;
 
@@ -68,7 +70,7 @@ function ListRow({ entry, accent, courseHref }) {
           )}
           {entry.online ? (
             <span className="inline-flex items-center gap-1">
-              <Wifi size={11} strokeWidth={1.5} /> Çevrimiçi
+              <Wifi size={11} strokeWidth={1.5} /> {t("Çevrimiçi")}
             </span>
           ) : (
             entry.room &&
@@ -110,7 +112,7 @@ function ScheduleList({ entries, courseHref, note }) {
     return (
       <div className="rounded-xl border border-primary-500/8 bg-white py-12 text-center">
         <span className="text-[13px] text-primary-500/70">
-          Bu dönem için ders bulunamadı.
+          {t("Bu dönem için ders bulunamadı.")}
         </span>
       </div>
     );
@@ -158,6 +160,7 @@ export default function ScheduleViews(props) {
 }
 
 function ScheduleBody({ entries = [], courseHref, note = null, legend = null }) {
+  const t = useT();
   const [view, setView] = useState("grid");
 
   return (

@@ -1,8 +1,10 @@
 import { Wifi } from "lucide-react";
 
 import { COURSE_COLORS } from "@/data/schedule-colors";
+import { useT } from "@/i18n/useT";
 
 export default function ScheduleLegend({ items = [], showOnline = false }) {
+  const t = useT();
   return (
     <div className="flex items-center gap-3 flex-wrap px-1">
       {items.map((item) => (
@@ -31,7 +33,7 @@ export default function ScheduleLegend({ items = [], showOnline = false }) {
             />
           ))}
         </span>
-        Aynı ders, aynı renk
+        {t("Aynı ders, aynı renk")}
       </span>
 
       {showOnline && (
@@ -40,7 +42,7 @@ export default function ScheduleLegend({ items = [], showOnline = false }) {
           style={{ fontSize: "0.6875rem", color: "var(--color-secondary-600)" }}
         >
           <Wifi size={11} strokeWidth={2} />
-          Çevrimiçi
+          {t("Çevrimiçi")}
         </span>
       )}
     </div>

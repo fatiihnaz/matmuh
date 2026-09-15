@@ -15,6 +15,7 @@ import {
 import Link from "next/link";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
+import { useT } from "@/i18n/useT";
 
 function sortRows(rows, col, dir) {
   if (!col) return rows;
@@ -52,6 +53,7 @@ function SortBtn({ label, col, sortCol, sortDir, onSort }) {
 }
 
 function StatusBadge({ status }) {
+  const t = useT();
   const isRequired = status === "Zorunlu";
   return (
     <span
@@ -68,7 +70,7 @@ function StatusBadge({ status }) {
           : "rgba(173,151,111,0.1)",
       }}
     >
-      {status}
+      {t(status)}
     </span>
   );
 }
@@ -100,6 +102,7 @@ function Colgroup() {
 }
 
 export default function CurriculumPage({ semesters, summary }) {
+  const t = useT();
   const [activeTab, setActiveTab] = useState(0);
   const [sortCol, setSortCol] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
@@ -145,7 +148,7 @@ export default function CurriculumPage({ semesters, summary }) {
   return (
     <>
       <SubHeader
-        title="Müfredat & Dersler"
+        title={t("Müfredat & Dersler")}
         subTitle="Lisans programı ders planı ve kredi bilgileri"
       />
       <PageLayout>
@@ -300,7 +303,7 @@ export default function CurriculumPage({ semesters, summary }) {
               <span
                 style={{ fontSize: "0.6875rem", color: "rgba(29,36,69,0.4)" }}
               >
-                ← Tabloyu görmek için yatay kaydırın →
+                {t("← Tabloyu görmek için yatay kaydırın →")}
               </span>
             </div>
 
@@ -308,7 +311,7 @@ export default function CurriculumPage({ semesters, summary }) {
               <div className="min-w-160">
                 <table className="w-full table-fixed">
                   <caption className="sr-only">
-                    Müfredat ders listesinin sütun başlıkları
+                    {t("Müfredat ders listesinin sütun başlıkları")}
                   </caption>
                   <Colgroup />
                   <thead>
@@ -350,7 +353,7 @@ export default function CurriculumPage({ semesters, summary }) {
                     >
                       <table className="w-full table-fixed">
                         <caption className="sr-only">
-                          Müfredat dersleri: kod, ad, saat, AKTS ve durum
+                          {t("Müfredat dersleri: kod, ad, saat, AKTS ve durum")}
                         </caption>
                         <Colgroup />
                         <tbody>
@@ -371,7 +374,7 @@ export default function CurriculumPage({ semesters, summary }) {
                                         color: "rgba(29,36,69,0.3)",
                                       }}
                                     >
-                                      Ders bilgisi mevcut değil
+                                      {t("Ders bilgisi mevcut değil")}
                                     </span>
                                   </td>
                                 </tr>
@@ -624,7 +627,7 @@ export default function CurriculumPage({ semesters, summary }) {
                     }}
                   >
                     <ChevronLeft size={12} strokeWidth={1.5} />
-                    Yarıyıl listesine dön
+                    {t("Yarıyıl listesine dön")}
                   </button>
                 ) : (
                   <span
@@ -652,7 +655,7 @@ export default function CurriculumPage({ semesters, summary }) {
                     className="w-2 h-2 rounded-sm inline-block"
                     style={{ backgroundColor: "rgba(29,36,69,0.15)" }}
                   />
-                  Zorunlu
+                  {t("Zorunlu")}
                 </span>
                 <span
                   className="inline-flex items-center gap-1.5 px-2 py-1 rounded-sm"
@@ -667,7 +670,7 @@ export default function CurriculumPage({ semesters, summary }) {
                     className="w-2 h-2 rounded-sm inline-block"
                     style={{ backgroundColor: "rgba(173,151,111,0.3)" }}
                   />
-                  Seçmeli
+                  {t("Seçmeli")}
                 </span>
               </div>
             </div>

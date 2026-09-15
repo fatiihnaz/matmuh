@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { useMySchedule } from "@/data/useMySchedule";
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
+import { useT } from "@/i18n/useT";
 import {
   GOLD_RGB as GOLD,
   NAVY_RGB as NAVY,
@@ -35,6 +36,7 @@ const MINI_BUTTON =
   "inline-flex items-center gap-1 rounded-sm px-1.5 py-0.5 text-[9.5px] font-semibold transition-colors disabled:opacity-40";
 
 function EnrollAction({ entry }) {
+  const t = useT();
   const my = useMySchedule();
   const [clash, setClash] = useState(null);
 
@@ -48,7 +50,7 @@ function EnrollAction({ entry }) {
       <span className="mt-1.5 flex flex-wrap items-center gap-1.5">
         <span className="inline-flex items-center gap-1 text-[9.5px] font-semibold text-secondary-700">
           <Check size={9} strokeWidth={2.5} />
-          Programımda
+          {t("Programımda")}
         </span>
         <button
           type="button"
@@ -108,14 +110,14 @@ function EnrollAction({ entry }) {
             className={`${MINI_BUTTON} text-primary-500/70 hover:text-primary-500`}
           >
             <X size={9} strokeWidth={2.5} />
-            Vazgeç
+            {t("Vazgeç")}
           </button>
         )}
       </span>
 
       {failed && (
         <span className="mt-1 block text-[9.5px] text-red-700/75">
-          İşlem tamamlanamadı.
+          {t("İşlem tamamlanamadı.")}
         </span>
       )}
     </span>
@@ -177,6 +179,7 @@ function buildRows(entries) {
 }
 
 function Strip({ entry, color, slim, active, href, onToggle }) {
+  const t = useT();
   const elective = entry.type === "Seçmeli";
   const meta = metaOf(entry);
   const detailed = !slim && !entry.cont && meta.length > 0;
@@ -287,7 +290,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                 )}
                 {entry.english && (
                   <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-700">
-                    İngilizce
+                    {t("İngilizce")}
                   </span>
                 )}
               </span>
@@ -302,7 +305,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                 {entry.online ? (
                   <span className="flex items-center gap-1 text-secondary-700">
                     <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
-                    Çevrimiçi
+                    {t("Çevrimiçi")}
                   </span>
                 ) : (
                   entry.room &&
@@ -320,7 +323,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                   href={href}
                   className="mt-1.5 inline-flex items-center gap-1 text-[10px] font-medium text-secondary-700 hover:underline"
                 >
-                  Ders sayfası
+                  {t("Ders sayfası")}
                   <ArrowRight size={10} strokeWidth={2} />
                 </Link>
               )}
@@ -348,6 +351,7 @@ function Cell({
   expanded,
   onExpand,
 }) {
+  const t = useT();
   const conflict = clash && items.length > 1;
   const overflow = items.length > VISIBLE + 1;
   const shown = overflow && !expanded ? items.slice(0, VISIBLE) : items;
@@ -371,7 +375,7 @@ function Cell({
       {conflict && (
         <span className="flex items-center gap-1 px-0.5 text-[9px] font-semibold tracking-wide text-amber-700 uppercase">
           <TriangleAlert size={9} strokeWidth={2.25} />
-          Çakışma
+          {t("Çakışma")}
         </span>
       )}
 
@@ -431,6 +435,7 @@ export default function WeeklySchedule({
   note = null,
   clash = false,
 }) {
+  const t = useT();
   const [openId, setOpenId] = useState(null);
   const [expanded, setExpanded] = useState(() => new Set());
 
@@ -457,7 +462,7 @@ export default function WeeklySchedule({
     <div className="overflow-hidden rounded-xl border border-primary-500/10 bg-white shadow-xs">
       <div className="border-b border-primary-500/6 px-4 py-2 text-center sm:hidden">
         <span className="text-[11px] text-primary-500/70">
-          ← Programı görmek için yatay kaydırın →
+          {t("← Programı görmek için yatay kaydırın →")}
         </span>
       </div>
 
@@ -602,7 +607,7 @@ export default function WeeklySchedule({
       {entries.length === 0 && (
         <div className="border-t border-primary-500/6 py-12 text-center">
           <span className="text-[13px] text-primary-500/70">
-            Bu program için ders bulunmuyor.
+            {t("Bu program için ders bulunmuyor.")}
           </span>
         </div>
       )}

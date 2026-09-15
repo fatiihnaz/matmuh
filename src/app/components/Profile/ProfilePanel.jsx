@@ -20,6 +20,7 @@ import { MyScheduleProvider, useMySchedule } from "@/data/useMySchedule";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
+import { useT } from "@/i18n/useT";
 import {
   NOTE_STATUS,
   fetchMyNotes,
@@ -110,11 +111,12 @@ function NotesBody({
   onConfirm,
   onNavigate,
 }) {
+  const t = useT();
   const { href } = useLocaleNav();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
 
-  if (items.length === 0) return <Empty>Henüz not yüklemediniz.</Empty>;
+  if (items.length === 0) return <Empty>{t("Henüz not yüklemediniz.")}</Empty>;
 
   const needle = query.toLocaleLowerCase("tr");
   const shown = items.filter(
@@ -135,7 +137,7 @@ function NotesBody({
             value={query}
             onChange={(event) => setQuery(event.target.value)}
             placeholder="Not veya ders kodu ara…"
-            aria-label="Notlarımda ara"
+            aria-label={t("Notlarımda ara")}
             className="w-full rounded-lg border border-primary-500/10 bg-primary-500/2 px-3 py-1.5 text-[13px] text-primary-600 outline-none! focus:border-secondary-500/50"
           />
           <div className="flex flex-wrap gap-1.5">
@@ -158,7 +160,7 @@ function NotesBody({
       )}
 
       {shown.length === 0 ? (
-        <Empty>Bu koşullara uyan not yok.</Empty>
+        <Empty>{t("Bu koşullara uyan not yok.")}</Empty>
       ) : (
         <ul className="divide-y divide-primary-500/6">
           {shown.map((note) => {
@@ -232,7 +234,7 @@ function NotesBody({
                       onClick={() => onConfirm(null)}
                       className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/70 transition-colors hover:text-primary-500"
                     >
-                      Vazgeç
+                      {t("Vazgeç")}
                     </button>
                   </span>
                 ) : (
@@ -256,6 +258,7 @@ function NotesBody({
 }
 
 function ScheduleEntry({ entry, conflict }) {
+  const t = useT();
   return (
     <li
       className={`flex items-start gap-3 rounded-lg px-3 py-2 ${
@@ -286,7 +289,7 @@ function ScheduleEntry({ entry, conflict }) {
           )}
           {entry.examType && (
             <span className="rounded-sm bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-700">
-              Sınav
+              {t("Sınav")}
             </span>
           )}
         </span>
@@ -296,6 +299,7 @@ function ScheduleEntry({ entry, conflict }) {
 }
 
 function EnrolledCourses({ onChanged }) {
+  const t = useT();
   const { rows, busyId, remove } = useMySchedule();
 
   if (rows.length === 0) return null;
@@ -308,7 +312,7 @@ function EnrolledCourses({ onChanged }) {
   return (
     <div className="border-b border-primary-500/8 px-4 py-3">
       <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-        Kayıtlı dersler
+        {t("Kayıtlı dersler")}
       </p>
       <ul className="space-y-0.5">
         {rows.map((row) => (
@@ -346,11 +350,12 @@ function EnrolledCourses({ onChanged }) {
 }
 
 function WeekGrid() {
+  const t = useT();
   const { status, entries } = useMySchedule();
 
   if (status === "loading") return <Skeleton rows={3} />;
   if (entries.length === 0) {
-    return <Empty>Haftalık programınızda ders görünmüyor.</Empty>;
+    return <Empty>{t("Haftalık programınızda ders görünmüyor.")}</Empty>;
   }
 
   return (
@@ -409,8 +414,9 @@ function ScheduleTabs({ items, onChanged }) {
 }
 
 function DatedSchedule({ items }) {
+  const t = useT();
   if (items.length === 0) {
-    return <Empty>Bu hafta için ders kaydınız görünmüyor.</Empty>;
+    return <Empty>{t("Bu hafta için ders kaydınız görünmüyor.")}</Empty>;
   }
 
   return (
@@ -476,6 +482,7 @@ const VIEWS = {
 };
 
 export default function ProfilePanel({ view, onClose }) {
+  const t = useT();
   const { getAccessToken } = useAuth();
   const [state, setState] = useState({
     view: null,
@@ -556,7 +563,7 @@ export default function ProfilePanel({ view, onClose }) {
 
         <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
           {status === "loading" && <Skeleton />}
-          {status === "error" && <Empty>Bilgiler alınamadı.</Empty>}
+          {status === "error" && <Empty>{t("Bilgiler alınamadı.")}</Empty>}
           {status === "ready" && (
             <Body
               items={state.items}

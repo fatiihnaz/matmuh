@@ -1,17 +1,20 @@
 import { notFound } from "next/navigation";
 
 import SubHeader from "@/app/components/Header/SubHeader";
+import { translate } from "@/i18n";
 import { getCourseByCode } from "@/data/curriculum";
 
 export default async function CourseLayout({ params, children }) {
-  const { courseCode } = await params;
+  const { courseCode, locale } = await params;
   const course = await getCourseByCode(courseCode);
 
   if (!course) notFound();
 
   const detailString = [
-    course.semester ? `${course.semester}. Yarıyıl` : null,
-    course.type,
+    course.semester
+      ? `${course.semester}. ${translate(locale, "Yarıyıl")}`
+      : null,
+    translate(locale, course.type),
     course.hours,
     course.ects != null ? `${course.ects} ECTS` : null,
   ]

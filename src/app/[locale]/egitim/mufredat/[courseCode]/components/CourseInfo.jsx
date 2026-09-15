@@ -310,7 +310,7 @@ export default function CourseInfo({ course, sections = [] }) {
               label: "Yarıyıl",
               value: course.semester ? `${course.semester}. Yarıyıl` : "-",
             },
-            { label: "Tür", value: course.type },
+            { label: t("Tür"), value: t(course.type) },
             { label: "Kategori", value: course.category ?? "-" },
             { label: "Dil", value: course.language ?? "-" },
           ].map((item, i) => (

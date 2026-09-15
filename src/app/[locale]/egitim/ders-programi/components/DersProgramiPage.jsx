@@ -5,12 +5,14 @@ import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import ScheduleViews from "@/app/[locale]/egitim/components/ScheduleViews";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
+import { useT } from "@/i18n/useT";
 
 const CLASSES = [1, 2, 3, 4].map((id) => ({ id, label: `${id}. Sınıf` }));
 
 const classOf = (entry) => (entry.term ? Math.ceil(entry.term / 2) : null);
 
 export default function DersProgramiPage({ entries: all = [], term }) {
+  const t = useT();
   const [activeClass, setActiveClass] = useState(CLASSES[0].id);
 
   const entries = useMemo(
@@ -64,8 +66,8 @@ export default function DersProgramiPage({ entries: all = [], term }) {
             legend={
               <ScheduleLegend
                 items={[
-                  { color: "rgba(29,36,69,0.15)", label: "Zorunlu" },
-                  { color: "rgba(173,151,111,0.4)", label: "Seçmeli" },
+                  { color: "rgba(29,36,69,0.15)", label: t("Zorunlu") },
+                  { color: "rgba(173,151,111,0.4)", label: t("Seçmeli") },
                 ]}
                 showOnline
               />
