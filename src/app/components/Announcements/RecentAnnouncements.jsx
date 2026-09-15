@@ -3,7 +3,7 @@ import MainCard from "@/app/components/MainCard";
 import { announcementHref } from "@/data/content";
 import { formatTrDate } from "@/lib/date";
 
-export default function RecentAnnouncements({ items }) {
+export default function RecentAnnouncements({ items, locale }) {
   if (!items.length) return null;
   return (
     <MainCard title="Son Duyurular" buttonTitle="Tümü" href="/duyurular" prefetch={false}>
@@ -11,7 +11,7 @@ export default function RecentAnnouncements({ items }) {
         {items.map((item) => (
           <Link
             key={item.id}
-            href={announcementHref(item)}
+            href={announcementHref(item, locale)}
             className="group flex flex-col gap-0.5 py-2.5 px-2 -mx-2 rounded-lg hover:bg-gray-50 transition-colors"
           >
             <time dateTime={item.publishedAt} className="text-[10px] font-medium text-secondary-700">

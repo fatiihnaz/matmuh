@@ -38,18 +38,21 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function AnnouncementDetailPage({ params }) {
-  const { slug } = await params;
+  const { slug, locale } = await params;
   const item = await getAnnouncementBySlug(slug);
   if (!item) notFound();
 
   const [{ older, newer }, { items: recent }] = await Promise.all([
     getAdjacent(slug),
-    getAnnouncements({ limit: 6 }),
+    getAnnouncements({ limit: 6, locale }),
   ]);
 
   const sidebar = (
     <div className="flex flex-col gap-6">
-      <RecentAnnouncements items={recent.filter((entry) => entry.id !== item.id).slice(0, 5)} />
+      <RecentAnnouncements
+        items={recent.filter((entry) => entry.id !== item.id).slice(0, 5)}
+        locale={locale}
+      />
       <QuickLinks external title="Kurumsal Sistemler" />
     </div>
   );
@@ -90,7 +93,7 @@ export default async function AnnouncementDetailPage({ params }) {
             </PageSection>
           )}
 
-          <AdjacentNav older={older} newer={newer} />
+          <AdjacentNav older={older} newer={newer} locale={locale} />
         </div>
       </PageLayout>
     </CollectionItem>

@@ -20,10 +20,11 @@ import { EditableRegion } from "inscribed";
 
 export const revalidate = 3600;
 
-export default async function LandingPage() {
+export default async function LandingPage({ params }) {
+  const { locale } = await params;
   const [{ items: announcements }, { items: news }] = await Promise.all([
-    getAnnouncements({ limit: 8 }),
-    getNews({ limit: 3 }),
+    getAnnouncements({ limit: 8, locale }),
+    getNews({ limit: 3, locale }),
   ]);
 
   const homeCategories = CONTENT_CATEGORIES.filter((c) =>
@@ -34,13 +35,13 @@ export default async function LandingPage() {
     announcements[0] && {
       label: "Son duyuru",
       title: announcements[0].title,
-      href: announcementHref(announcements[0]),
+      href: announcementHref(announcements[0], locale),
       date: formatTrDate(announcements[0].publishedAt),
     },
     news[0] && {
       label: "Son haber",
       title: news[0].title,
-      href: newsHref(news[0]),
+      href: newsHref(news[0], locale),
       date: formatTrDate(news[0].publishedAt),
     },
   ].filter(Boolean);
@@ -76,7 +77,7 @@ export default async function LandingPage() {
             <div className="pb-3 mb-1 border-b border-primary-500/6">
               <CategoryChips categories={homeCategories} />
             </div>
-            <AnnouncementList items={announcements} />
+            <AnnouncementList items={announcements} locale={locale} />
           </MainCard>
 
           <MainCard
@@ -101,7 +102,7 @@ export default async function LandingPage() {
               />
             }
           >
-            <NewsList items={news} />
+            <NewsList items={news} locale={locale} />
           </MainCard>
         </div>
       </PageLayout>

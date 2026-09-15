@@ -15,11 +15,12 @@ export const metadata = {
     "Bölümümüzden mezuniyet törenleri, kariyer etkinlikleri ve duyurulan programlara ilişkin haberler.",
 };
 
-export default async function NewsPage({ searchParams }) {
+export default async function NewsPage({ params: routeParams, searchParams }) {
+  const { locale } = await routeParams;
   const params = await searchParams;
   const page = Math.max(1, Number(params?.sayfa) || 1);
 
-  const { items, total } = await getNews({ limit: PER_PAGE, offset: (page - 1) * PER_PAGE });
+  const { items, total } = await getNews({ limit: PER_PAGE, offset: (page - 1) * PER_PAGE, locale });
 
   return (
     <>
@@ -37,7 +38,7 @@ export default async function NewsPage({ searchParams }) {
           {items.length ? (
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
               {items.map((item, index) => (
-                <NewsCard key={item.id} item={item} priority={index < 3} />
+                <NewsCard key={item.id} item={item} locale={locale} priority={index < 3} />
               ))}
             </div>
           ) : (

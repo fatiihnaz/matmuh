@@ -4,13 +4,13 @@ import { announcementHref } from "@/data/content";
 import { formatTrDayMonth } from "@/lib/date";
 import CategoryTags from "./CategoryTags";
 
-export default function AnnouncementItem({ item, variant = "compact" }) {
+export default function AnnouncementItem({ item, variant = "compact", locale }) {
   const { day, month } = formatTrDayMonth(item.publishedAt);
   const full = variant === "full";
 
   return (
     <Link
-      href={announcementHref(item)}
+      href={announcementHref(item, locale)}
       className="group flex items-start gap-3.5 py-2.5 px-2 rounded-lg hover:bg-gray-50 transition-colors"
     >
       <time

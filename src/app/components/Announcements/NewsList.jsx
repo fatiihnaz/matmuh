@@ -3,7 +3,7 @@ import { newsHref } from "@/data/content";
 import { formatTrDate } from "@/lib/date";
 import NewsThumb from "./NewsThumb";
 
-export default function NewsList({ items }) {
+export default function NewsList({ items, locale }) {
   if (!items.length) {
     return (
       <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
@@ -15,7 +15,7 @@ export default function NewsList({ items }) {
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-5">
       {items.map((item) => (
-        <Link key={item.id} href={newsHref(item)} className="group flex gap-3 sm:flex-col sm:gap-0">
+        <Link key={item.id} href={newsHref(item, locale)} className="group flex gap-3 sm:flex-col sm:gap-0">
           <NewsThumb
             cover={item.gallery[0] ?? null}
             sizes="(min-width: 640px) 30vw, 112px"

@@ -16,15 +16,16 @@ export const metadata = {
     "Sınav programları, staj, mezuniyet ve ders kayıtlarına ilişkin bölüm duyuruları.",
 };
 
-export default async function AnnouncementsPage({ searchParams }) {
+export default async function AnnouncementsPage({ params: routeParams, searchParams }) {
+  const { locale } = await routeParams;
   const params = await searchParams;
   const category = params?.kategori ?? null;
   const q = params?.q ?? "";
   const page = Math.max(1, Number(params?.sayfa) || 1);
 
   const [{ items, total }, categories] = await Promise.all([
-    getAnnouncements({ category, q, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE }),
-    getCategoriesWithCounts(),
+    getAnnouncements({ category, q, limit: PAGE_SIZE, offset: (page - 1) * PAGE_SIZE, locale }),
+    getCategoriesWithCounts(locale),
   ]);
 
   const activeParams = {};
@@ -56,7 +57,7 @@ export default async function AnnouncementsPage({ searchParams }) {
           </div>
 
           <Panel padding="p-2">
-            <AnnouncementList items={items} variant="full" />
+            <AnnouncementList items={items} variant="full" locale={locale} />
           </Panel>
 
           <Pagination

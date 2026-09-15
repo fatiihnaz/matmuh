@@ -1,6 +1,6 @@
 import AnnouncementItem from "./AnnouncementItem";
 
-export default function AnnouncementList({ items, variant = "compact", emptyMessage = "Bu kriterlere uygun duyuru bulunamadı." }) {
+export default function AnnouncementList({ items, variant = "compact", locale, emptyMessage = "Bu kriterlere uygun duyuru bulunamadı." }) {
   if (!items.length) {
     return (
       <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
@@ -12,7 +12,7 @@ export default function AnnouncementList({ items, variant = "compact", emptyMess
   return (
     <div className="divide-y divide-primary-500/6">
       {items.map((item) => (
-        <AnnouncementItem key={item.id} item={item} variant={variant} />
+        <AnnouncementItem key={item.id} item={item} variant={variant} locale={locale} />
       ))}
     </div>
   );

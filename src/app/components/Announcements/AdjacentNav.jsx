@@ -1,13 +1,15 @@
 import Link from "next/link";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
-function Card({ item, label, direction }) {
+import { announcementHref } from "@/data/content";
+
+function Card({ item, label, direction, locale }) {
   if (!item) return <div className="hidden sm:block" />;
   const forward = direction === "forward";
 
   return (
     <Link
-      href={`/duyurular/${item.slug}`}
+      href={announcementHref(item, locale)}
       className={`group flex items-center gap-3 p-4 rounded-xl bg-white border border-primary-500/10 shadow-xs hover:border-secondary-500/30 transition-colors ${
         forward ? "sm:flex-row-reverse sm:text-right" : ""
       }`}
@@ -29,12 +31,12 @@ function Card({ item, label, direction }) {
   );
 }
 
-export default function AdjacentNav({ older, newer }) {
+export default function AdjacentNav({ older, newer, locale }) {
   if (!older && !newer) return null;
   return (
     <nav aria-label="Önceki ve sonraki duyuru" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <Card item={older} label="Önceki duyuru" direction="back" />
-      <Card item={newer} label="Sonraki duyuru" direction="forward" />
+      <Card item={older} label="Önceki duyuru" direction="back" locale={locale} />
+      <Card item={newer} label="Sonraki duyuru" direction="forward" locale={locale} />
     </nav>
   );
 }

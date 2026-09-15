@@ -4,10 +4,10 @@ import { formatTrDate } from "@/lib/date";
 import CategoryTags from "./CategoryTags";
 import NewsThumb from "./NewsThumb";
 
-export default function NewsCard({ item, priority = false }) {
+export default function NewsCard({ item, locale, priority = false }) {
   return (
     <Link
-      href={newsHref(item)}
+      href={newsHref(item, locale)}
       className="group flex flex-col rounded-xl bg-white border border-primary-500/10 shadow-xs overflow-hidden hover:border-secondary-500/30 transition-colors"
     >
       <NewsThumb
