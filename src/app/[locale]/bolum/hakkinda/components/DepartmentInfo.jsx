@@ -4,13 +4,13 @@ import { motion } from "framer-motion";
 import {
   Award,
   Target,
-  Lightbulb,
   TrendingUp,
   BookOpen,
   Cpu,
   BarChart3,
   Shield,
   Atom,
+  Code2,
 } from "lucide-react";
 import { EditableRegion } from "inscribed";
 import PageLayout from "@/app/components/PageLayout";
@@ -28,19 +28,43 @@ import {
 
 const workingAreas = [
   {
-    id: "veri",
-    label: "Veri Bilimi",
-    icon: BarChart3,
+    id: "prog",
+    label: "Programlama",
+    icon: Code2,
     size: "lg",
     cx: 50,
     cy: 39,
   },
   { id: "yapay", label: "Yapay Zeka", icon: Cpu, size: "lg", cx: 30, cy: 52 },
   {
+    id: "num",
+    label: "Nümerik Analiz",
+    icon: BookOpen,
+    size: "lg",
+    cx: 65,
+    cy: 25,
+  },
+  {
+    id: "veri",
+    label: "Veri Bilimi",
+    icon: BarChart3,
+    size: "lg",
+    cx: 35,
+    cy: 25,
+  },
+  {
+    id: "dif",
+    label: "Diferansiyel Denklemler",
+    icon: Award,
+    size: "md",
+    cx: 80,
+    cy: 80,
+  },
+  {
     id: "opt",
     label: "Optimizasyon",
     icon: Target,
-    size: "lg",
+    size: "md",
     cx: 70,
     cy: 52,
   },
@@ -61,30 +85,6 @@ const workingAreas = [
     cy: 73,
   },
   {
-    id: "stok",
-    label: "Stokastik Süreçler",
-    icon: Lightbulb,
-    size: "md",
-    cx: 35,
-    cy: 25,
-  },
-  {
-    id: "num",
-    label: "Nümerik Analiz",
-    icon: BookOpen,
-    size: "md",
-    cx: 65,
-    cy: 25,
-  },
-  {
-    id: "dif",
-    label: "Diferansiyel Denklemler",
-    icon: Award,
-    size: "md",
-    cx: 80,
-    cy: 80,
-  },
-  {
     id: "ist",
     label: "İstatistik",
     icon: BarChart3,
@@ -103,17 +103,17 @@ const workingAreas = [
 ];
 
 const graphLinks = [
+  { source: "prog", target: "veri" },
+  { source: "prog", target: "opt" },
+  { source: "num", target: "dif" },
   { source: "veri", target: "yapay" },
-  { source: "veri", target: "opt" },
   { source: "veri", target: "ist" },
-  { source: "veri", target: "krip" },
-  { source: "yapay", target: "fin" },
-  { source: "yapay", target: "stok" },
+  { source: "veri", target: "opt" },
+  { source: "yapay", target: "prog" },
   { source: "opt", target: "num" },
-  { source: "opt", target: "dif" },
-  { source: "fonk", target: "stok" },
-  { source: "fonk", target: "fin" },
-  { source: "ist", target: "dif" },
+  { source: "krip", target: "prog" },
+  { source: "fin", target: "ist" },
+  { source: "fonk", target: "dif" },
 ];
 
 
