@@ -4,6 +4,7 @@ import { Mail } from "lucide-react";
 import { useCollection } from "inscribed/collections";
 
 import Avatar from "./Avatar";
+import { fullName } from "@/lib/person";
 
 export const STAFF_WINDOW = { limit: 100 };
 
@@ -14,9 +15,7 @@ export function staffKey(value) {
     .toLocaleLowerCase("tr");
 }
 
-export function fullName(person) {
-  return [person?.firstName, person?.lastName].filter(Boolean).join(" ");
-}
+export { fullName };
 
 export function useStaff(initial = []) {
   const { items, isLoading, error } = useCollection("staff", STAFF_WINDOW);

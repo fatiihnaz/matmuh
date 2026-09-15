@@ -132,3 +132,53 @@ export async function fetchCourseStatistics(lectureId, token) {
   const rows = body?.data ?? body ?? [];
   return toViewModel(Array.isArray(rows) ? rows : []);
 }
+
+const lectureKey = (offering) =>
+  offering.lecture?.id ?? offering.lecture?.code ?? "bilinmeyen";
+
+export function toStaffViewModel(offerings = []) {
+  const terms = new Map();
+
+  for (const offering of offerings) {
+    const label = termLabel(offering);
+    if (!terms.has(label)) {
+      terms.set(label, { name: label, order: termOrder(offering), lectures: new Map() });
+    }
+    const term = terms.get(label);
+
+    const key = lectureKey(offering);
+    if (!term.lectures.has(key)) {
+      term.lectures.set(key, {
+        code: offering.lecture?.code ?? null,
+        name: offering.lecture?.name ?? "Bilinmeyen ders",
+        sections: [],
+      });
+    }
+    term.lectures.get(key).sections.push(toSection(offering));
+  }
+
+  return [...terms.values()]
+    .map((term) => ({
+      name: term.name,
+      order: term.order,
+      lectures: [...term.lectures.values()]
+        .map((lecture) => ({
+          ...lecture,
+          sections: lecture.sections.sort(
+            (a, b) => Number(a.section) - Number(b.section),
+          ),
+        }))
+        .sort((a, b) => (a.code ?? "").localeCompare(b.code ?? "", "tr")),
+    }))
+    .sort((a, b) => b.order - a.order);
+}
+
+export async function fetchStaffOfferings(staffId, token) {
+  const res = await fetch(`${API}/staff/${staffId}/offerings`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`staff offerings ${res.status}`);
+  const body = await res.json();
+  const rows = body?.data ?? body ?? [];
+  return toStaffViewModel(Array.isArray(rows) ? rows : []);
+}

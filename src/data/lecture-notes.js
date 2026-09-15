@@ -220,3 +220,18 @@ export const NOTE_TYPES = [
 
 export const noteTypeLabel = (id) =>
   NOTE_TYPES.find((type) => type.id === id)?.label ?? null;
+
+export async function fetchStaffNotes(staffId, token, { search, page = 0, size = 20 } = {}) {
+  const params = new URLSearchParams({
+    page: String(page),
+    size: String(size),
+    sort: "createdAt,desc",
+  });
+  if (search) params.set("search", search);
+
+  const res = await fetch(`${API}/staff/${staffId}/notes?${params}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`staff notes ${res.status}`);
+  return toNoteList(await res.json());
+}

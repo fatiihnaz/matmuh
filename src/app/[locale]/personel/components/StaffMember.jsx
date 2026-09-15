@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Mail, ExternalLink } from "lucide-react";
 
 import Avatar from "@/app/components/Avatar";
@@ -11,7 +12,7 @@ export default function StaffMember({ member, idx }) {
   const isRoomNumber = office && (office.includes("-") || /^\d+$/.test(office));
 
   return (
-    <div className="group rounded-xl p-5 bg-white border border-primary-500/10 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary-500/20 hover:shadow-sm">
+    <div className="group relative cursor-pointer rounded-xl p-5 bg-white border border-primary-500/10 shadow-xs transition-all duration-200 hover:-translate-y-1 hover:border-primary-500/20 hover:shadow-sm">
       <div className="flex flex-col items-center text-center">
         <Avatar
           name={name}
@@ -21,9 +22,12 @@ export default function StaffMember({ member, idx }) {
           textSize="font-sans text-base tracking-wider"
         />
 
-        <div className="font-sans text-sm font-semibold text-primary-500 leading-tight transition-colors duration-200 group-hover:text-secondary-700">
+        <Link
+          href={`/personel/${member.slug}`}
+          className="font-sans text-sm font-semibold text-primary-500 leading-tight transition-colors duration-200 group-hover:text-secondary-700 outline-none after:absolute after:inset-0 after:rounded-xl focus-visible:after:ring-2 focus-visible:after:ring-secondary-500"
+        >
           {member.academicTitle} {name}
-        </div>
+        </Link>
 
         {member.role && (
           <div className="mt-1 font-sans text-xs font-semibold text-secondary-700 tracking-tight">
@@ -41,7 +45,7 @@ export default function StaffMember({ member, idx }) {
           </span>
         </div>
 
-        <div className="mt-4 flex items-center gap-2">
+        <div className="relative z-10 mt-4 flex items-center gap-2">
           {member.email && (
             <a
               href={`mailto:${member.email}`}

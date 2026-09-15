@@ -62,10 +62,11 @@ function toEntry(slot, lecture) {
 const empty = { term: null, entries: [] };
 
 export const getWeeklySchedule = cache(
-  async ({ academicYear, semester } = {}) => {
+  async ({ academicYear, semester, staffId } = {}) => {
     const params = new URLSearchParams();
     if (academicYear) params.set("academicYear", academicYear);
     if (semester) params.set("semester", semester);
+    if (staffId) params.set("staffId", staffId);
     const query = params.size > 0 ? `?${params}` : "";
 
     const res = await fetch(`${process.env.CMS_URL}/calendar/weekly${query}`, {
