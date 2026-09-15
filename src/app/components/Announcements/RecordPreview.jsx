@@ -6,8 +6,10 @@ import AnnouncementMeta from "./AnnouncementMeta";
 import AttachmentList from "./AttachmentList";
 import GalleryGrid from "./GalleryGrid";
 import { announcementFromData } from "@/data/content-shape";
+import { useT } from "@/i18n/useT";
 
 export default function RecordPreview({ values, collection }) {
+  const t = useT();
   const noun = collection === "news" ? "haberin" : "duyurunun";
   const shape = announcementFromData(values ?? {});
   const item = {
@@ -43,7 +45,7 @@ export default function RecordPreview({ values, collection }) {
       </Panel>
 
       {item.gallery.length > 0 && (
-        <PageSection title="Fotoğraflar" count={item.gallery.length}>
+        <PageSection title={t("Fotoğraflar")} count={item.gallery.length}>
           <GalleryGrid images={item.gallery} title={item.title} />
         </PageSection>
       )}

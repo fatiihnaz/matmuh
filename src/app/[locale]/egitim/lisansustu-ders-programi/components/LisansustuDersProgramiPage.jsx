@@ -5,6 +5,7 @@ import SubHeader from "@/app/components/Header/SubHeader";
 import PageLayout from "@/app/components/PageLayout";
 import ScheduleViews from "@/app/[locale]/egitim/components/ScheduleViews";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
+import { useT } from "@/i18n/useT";
 
 const LEVELS = [
   { id: "all", label: "Tümü" },
@@ -15,6 +16,7 @@ const LEVELS = [
 const isDoctorate = (entry) => entry.degreeLevels.includes("DOCTORATE");
 
 export default function LisansustuDersProgramiPage({ entries: all = [], term }) {
+  const t = useT();
   const [level, setLevel] = useState("all");
 
   const entries = useMemo(
@@ -32,7 +34,7 @@ export default function LisansustuDersProgramiPage({ entries: all = [], term }) 
   return (
     <>
       <SubHeader
-        title="Ders Programı"
+        title={t("Ders Programı")}
         subTitle={term ? `Lisansüstü · ${term}` : "Lisansüstü"}
       />
       <PageLayout>

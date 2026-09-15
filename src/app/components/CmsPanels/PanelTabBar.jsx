@@ -13,6 +13,7 @@
 
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { useT } from "@/i18n/useT";
 
 import {
   TABBAR_CHEVRON_CLASS,
@@ -38,6 +39,7 @@ const EASE = "cubic-bezier(0.32, 0.72, 0.18, 1)";
  * }} props
  */
 export default function PanelTabBar({ tabs, activeTab, onChange, accent }) {
+  const t = useT();
   const scrollRef = useRef(/** @type {HTMLDivElement|null} */ (null));
   const [overflow, setOverflow] = useState({ left: false, right: false });
   const [indicator, setIndicator] = useState(/** @type {{left: number, width: number}|null} */ (null));
@@ -102,7 +104,7 @@ export default function PanelTabBar({ tabs, activeTab, onChange, accent }) {
           onClick={() => nudge(-1)}
           className={TABBAR_CHEVRON_CLASS}
           style={tabBarChevronStyle}
-          aria-label="Önceki sekmeler"
+          aria-label={t("Önceki sekmeler")}
         >
           <ChevronLeft size={14} />
         </button>

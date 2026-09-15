@@ -5,8 +5,10 @@ import { SearchX, WifiOff } from "lucide-react";
 
 import { hrefForHit } from "./useSiteSearch";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
+import { useT } from "@/i18n/useT";
 
 export function SearchEmpty({ status, term }) {
+  const t = useT();
   const failed = status === "error";
   const Icon = failed ? WifiOff : SearchX;
 
@@ -18,7 +20,7 @@ export function SearchEmpty({ status, term }) {
           "Arama şu an yapılamıyor."
         ) : (
           <>
-            <span className="font-medium">“{term}”</span> için sonuç bulunamadı.
+            <span className="font-medium">“{term}”</span> {t("için sonuç bulunamadı.")}
           </>
         )}
       </p>
@@ -32,6 +34,7 @@ export function SearchEmpty({ status, term }) {
 }
 
 export default function SearchResults({ groups, term, onNavigate, id }) {
+  const t = useT();
   const { href } = useLocaleNav();
   return (
     <div id={id} className="overflow-hidden text-left">
@@ -70,7 +73,7 @@ export default function SearchResults({ groups, term, onNavigate, id }) {
         onClick={onNavigate}
         className="block bg-primary-500/3 px-4 py-2.5 text-center text-[11px] font-medium text-secondary-700 transition-colors hover:bg-primary-500/6"
       >
-        Duyurularda tümünü ara
+        {t("Duyurularda tümünü ara")}
       </Link>
     </div>
   );

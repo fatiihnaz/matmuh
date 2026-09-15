@@ -62,7 +62,7 @@ export default function StaffMember({ member, idx }) {
               href={avesisUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${name} AVESİS profili (yeni sekmede açılır)`}
+              aria-label={`${name} AVESİS`}
               className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
               onClick={(e) => e.stopPropagation()}
             >

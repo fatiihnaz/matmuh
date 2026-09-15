@@ -6,6 +6,7 @@ import PageSection from "@/app/components/PageSection";
 import Panel from "@/app/components/Panel";
 import DocumentLink from "@/app/components/DocumentLink";
 import { safeHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 function lines(text) {
   return String(text ?? "")
@@ -123,6 +124,7 @@ export function ApprovalPaths() {
 }
 
 export function Equivalence() {
+  const t = useT();
   return (
     <PageSection
       title={
@@ -145,7 +147,7 @@ export function Equivalence() {
 
           <div className="flex flex-col gap-3">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-              Örnek ifadeler
+              {t("Örnek ifadeler")}
             </span>
             <EditableList
               blockPath="equivalence.examples"

@@ -10,6 +10,7 @@ import Modal from "@/app/components/Modal";
 import RecordPreview from "./RecordPreview";
 import { useIsEditor } from "@/app/lib/cms-provider.jsx";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
+import { useT } from "@/i18n/useT";
 
 const PANES = [
   { id: "form", label: "Form" },
@@ -17,6 +18,7 @@ const PANES = [
 ];
 
 export default function NewRecordDialog({ collection, page, label, title, submitLabel }) {
+  const t = useT();
   const isEditor = useIsEditor();
   const router = useRouter();
   const { href } = useLocaleNav();
@@ -49,7 +51,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
               href={href(page)}
               className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/70 transition-colors hover:text-secondary-700"
             >
-              Sayfada aç
+              {t("Sayfada aç")}
               <ExternalLink className="size-3" />
             </Link>
             <button
@@ -57,7 +59,7 @@ export default function NewRecordDialog({ collection, page, label, title, submit
               onClick={() => setOpen(false)}
               className="rounded-md px-2 py-1 text-[11px] font-medium text-primary-500/70 transition-colors hover:bg-primary-500/5 hover:text-primary-500"
             >
-              Vazgeç
+              {t("Vazgeç")}
             </button>
           </div>
 
@@ -76,17 +78,18 @@ export default function NewRecordDialog({ collection, page, label, title, submit
 }
 
 function Composer({ collection, submitLabel, onCreated }) {
+  const t = useT();
   const { collections, isLoading } = useMyCollections();
   const meta = collections.find((entry) => entry.collectionKey === collection);
 
   if (isLoading) {
-    return <p className="p-5 text-[12px] text-primary-500/70">Yükleniyor…</p>;
+    return <p className="p-5 text-[12px] text-primary-500/70">{t("Yükleniyor…")}</p>;
   }
 
   if (!meta?.schema || !meta.canCreate) {
     return (
       <p className="p-5 text-[13px] text-primary-500/70">
-        Bu koleksiyonda kayıt oluşturma yetkiniz yok.
+        {t("Bu koleksiyonda kayıt oluşturma yetkiniz yok.")}
       </p>
     );
   }
@@ -103,6 +106,7 @@ function Composer({ collection, submitLabel, onCreated }) {
 }
 
 function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
+  const t = useT();
   const [pane, setPane] = useState("form");
   const { values, setValues, submit, reset, deleteDraft, hasServerDraft, isPending, error } =
     useCollectionCreate({ collectionKey, schema });
@@ -174,7 +178,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
               disabled={isPending}
               className="rounded-md px-3 py-1.5 text-[12px] font-medium text-primary-500/70 transition-colors hover:bg-primary-500/5 hover:text-primary-500 disabled:opacity-40"
             >
-              Taslağı temizle
+              {t("Taslağı temizle")}
             </button>
           )}
           <button

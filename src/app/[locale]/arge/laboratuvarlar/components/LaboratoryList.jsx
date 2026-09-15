@@ -4,6 +4,7 @@ import { Monitor, Users } from "lucide-react";
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
 import PageSection from "@/app/components/PageSection";
+import { useT } from "@/i18n/useT";
 
 function softwareList(value) {
   return String(value ?? "")
@@ -13,6 +14,7 @@ function softwareList(value) {
 }
 
 function LaboratoryCard({ lab }) {
+  const t = useT();
   return (
     <div className="flex flex-col gap-3 p-5 rounded-xl border border-primary-500/10 shadow-xs bg-white">
       <div className="flex items-center gap-2">
@@ -27,7 +29,7 @@ function LaboratoryCard({ lab }) {
 
       <div className="flex flex-col gap-1.5">
         <span className="text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
-          Kurulu Yazılımlar
+          {t("Kurulu Yazılımlar")}
         </span>
         <div className="flex flex-wrap gap-1.5">
           {softwareList(lab.software).map((item) => (

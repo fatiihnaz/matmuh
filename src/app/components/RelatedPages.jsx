@@ -1,13 +1,16 @@
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import MainCard from "./MainCard";
+import { getCmsRoute } from "@/app/lib/cms.jsx";
+import { translate } from "@/i18n";
 
-export default function RelatedPages({ items }) {
+export default async function RelatedPages({ items }) {
+  const { locale } = await getCmsRoute();
   if (!items?.length) return null;
 
   return (
-    <MainCard title="İlgili Sayfalar">
-      <nav aria-label="İlgili sayfalar" className="flex flex-col gap-0.5">
+    <MainCard title={translate(locale, "İlgili Sayfalar")}>
+      <nav aria-label={translate(locale, "İlgili sayfalar")} className="flex flex-col gap-0.5">
         {items.map((item) => (
           <Link
             key={item.href}

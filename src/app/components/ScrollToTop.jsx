@@ -3,10 +3,12 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
+import { useT } from "@/i18n/useT";
 
 const REVEAL_AT = 800;
 
 export default function ScrollToTop() {
+  const t = useT();
   const [visible, setVisible] = useState(false);
   const reducedMotion = useReducedMotion();
 
@@ -33,7 +35,7 @@ export default function ScrollToTop() {
       {visible && (
         <motion.button
           type="button"
-          aria-label="Sayfanın başına dön"
+          aria-label={t("Sayfanın başına dön")}
           onClick={() =>
             window.scrollTo({ top: 0, behavior: reducedMotion ? "auto" : "smooth" })
           }

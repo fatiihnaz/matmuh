@@ -23,7 +23,7 @@ export default function DersProgramiPage({ entries: all = [], term }) {
   return (
     <>
       <SubHeader
-        title="Ders Programı"
+        title={t("Ders Programı")}
         subTitle={term ? `Lisans · ${term}` : "Lisans"}
       />
       <PageLayout>

@@ -3,8 +3,10 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { Search, X } from "lucide-react";
+import { useT } from "@/i18n/useT";
 
 export default function AnnouncementFilters({ placeholder = "Duyurularda ara..." }) {
+  const t = useT();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -49,7 +51,7 @@ export default function AnnouncementFilters({ placeholder = "Duyurularda ara..."
         <button
           type="button"
           onClick={() => setValue("")}
-          aria-label="Aramayı temizle"
+          aria-label={t("Aramayı temizle")}
           className="absolute right-2 top-1/2 -translate-y-1/2 p-1 text-primary-500/70 hover:text-primary-500/70 transition-colors"
         >
           <X size={14} />

@@ -2,11 +2,17 @@ import Link from "next/link";
 import MainCard from "@/app/components/MainCard";
 import { announcementHref } from "@/data/content";
 import { formatTrDate } from "@/lib/date";
+import { translate } from "@/i18n";
 
 export default function RecentAnnouncements({ items, locale }) {
   if (!items.length) return null;
   return (
-    <MainCard title="Son Duyurular" buttonTitle="Tümü" href="/duyurular" prefetch={false}>
+    <MainCard
+      title={translate(locale, "Son Duyurular")}
+      buttonTitle={translate(locale, "Tümü")}
+      href={locale && locale !== "tr" ? `/${locale}/duyurular` : "/duyurular"}
+      prefetch={false}
+    >
       <nav aria-label="Son duyurular" className="flex flex-col divide-y divide-primary-500/6">
         {items.map((item) => (
           <Link

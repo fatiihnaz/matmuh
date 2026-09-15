@@ -7,6 +7,7 @@ import PageSection from "@/app/components/PageSection";
 import Panel from "@/app/components/Panel";
 import StatStrip from "@/app/components/StatStrip";
 import { safeHref, isExternalHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 function TrackLink({ value }) {
   const href = safeHref(value?.href);
@@ -26,6 +27,7 @@ function TrackLink({ value }) {
 }
 
 function ProgramCard({ program }) {
+  const t = useT();
   const hasAdmission = program.admissionScores || program.admissionFields;
 
   return (
@@ -43,7 +45,7 @@ function ProgramCard({ program }) {
       {hasAdmission && (
         <div className="flex flex-col gap-1 p-3 rounded-lg bg-primary-500/2 text-[12px] text-primary-500/70">
           <span className="text-[10px] font-semibold uppercase tracking-widest text-primary-500/70">
-            Başvuru Koşulları
+            {t("Başvuru Koşulları")}
           </span>
           {program.admissionScores && <span>{program.admissionScores}</span>}
           {program.admissionFields && <span>İlgili alan: {program.admissionFields}</span>}

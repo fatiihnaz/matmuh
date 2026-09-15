@@ -40,6 +40,7 @@ function Summary({ summary }) {
 }
 
 function LectureRow({ lecture, defaultOpen }) {
+  const t = useT();
   const [open, setOpen] = useState(defaultOpen);
 
   return (

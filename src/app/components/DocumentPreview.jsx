@@ -3,6 +3,7 @@
 import { Download, ExternalLink, FileText } from "lucide-react";
 import Modal from "./Modal";
 import { useMediaQuery } from "@/app/lib/useWideViewport";
+import { useT } from "@/i18n/useT";
 
 const IMAGE_KINDS = ["jpg", "jpeg", "png", "webp", "gif"];
 
@@ -22,13 +23,14 @@ const ACTION =
   "inline-flex items-center gap-1.5 shrink-0 rounded-md border border-white/15 px-3 py-1.5 text-[11px] text-white/70 hover:border-white/35 hover:text-white transition-colors";
 
 function PdfBody({ href, label, inline }) {
+  const t = useT();
   if (inline) return <iframe src={href} title={label} className="h-full w-full border-0" />;
 
   return (
     <div className="flex flex-col items-center justify-center gap-4 px-6 py-10 text-center">
       <FileText size={30} strokeWidth={1.25} className="text-primary-500/70" />
       <p className="text-[13px] text-primary-500/70">
-        Belge telefonda kendi görüntüleyicisinde daha iyi açılıyor.
+        {t("Belge telefonda kendi görüntüleyicisinde daha iyi açılıyor.")}
       </p>
       <a
         href={href}
@@ -36,7 +38,7 @@ function PdfBody({ href, label, inline }) {
         rel="noopener noreferrer"
         className="inline-flex items-center gap-1.5 rounded-lg bg-secondary-500 px-4 py-2 text-[13px] font-medium text-primary-500 transition-opacity hover:opacity-90"
       >
-        Belgeyi aç
+        {t("Belgeyi aç")}
         <ExternalLink className="size-3.5" />
       </a>
     </div>
@@ -44,6 +46,7 @@ function PdfBody({ href, label, inline }) {
 }
 
 export default function DocumentPreview({ open, onClose, label, href, kind, previewHref = null }) {
+  const t = useT();
   const inline = useMediaQuery("(min-width: 768px)");
   if (!open) return null;
 
@@ -92,7 +95,7 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
           )}
 
           <a href={source} target="_blank" rel="noopener noreferrer" className={ACTION}>
-            Yeni sekmede aç
+            {t("Yeni sekmede aç")}
             <ExternalLink className="size-3" />
           </a>
         </div>

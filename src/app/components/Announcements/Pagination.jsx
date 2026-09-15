@@ -1,5 +1,7 @@
 import Link from "next/link";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getCmsRoute } from "@/app/lib/cms.jsx";
+import { translate } from "@/i18n";
 
 function pageHref(basePath, params, page) {
   const next = new URLSearchParams(params);
@@ -9,7 +11,8 @@ function pageHref(basePath, params, page) {
   return query ? `${basePath}?${query}` : basePath;
 }
 
-export default function Pagination({ basePath, params, page, pageCount }) {
+export default async function Pagination({ basePath, params, page, pageCount }) {
+  const { locale } = await getCmsRoute();
   if (pageCount <= 1) return null;
 
   const pages = [];
@@ -23,7 +26,7 @@ export default function Pagination({ basePath, params, page, pageCount }) {
   return (
     <nav className="flex items-center justify-center gap-1 pt-6" aria-label="Sayfalar">
       {page > 1 && (
-        <Link href={pageHref(basePath, params, page - 1)} className={arrow} aria-label="Önceki sayfa">
+        <Link href={pageHref(basePath, params, page - 1)} className={arrow} aria-label={translate(locale, "Önceki sayfa")}>
           <ChevronLeft size={14} />
         </Link>
       )}
@@ -50,7 +53,7 @@ export default function Pagination({ basePath, params, page, pageCount }) {
       )}
 
       {page < pageCount && (
-        <Link href={pageHref(basePath, params, page + 1)} className={arrow} aria-label="Sonraki sayfa">
+        <Link href={pageHref(basePath, params, page + 1)} className={arrow} aria-label={translate(locale, "Sonraki sayfa")}>
           <ChevronRight size={14} />
         </Link>
       )}

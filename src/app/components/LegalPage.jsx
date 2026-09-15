@@ -8,6 +8,7 @@ import MainCard from "@/app/components/MainCard";
 import Panel from "@/app/components/Panel";
 import NewTabHint from "@/app/components/NewTabHint";
 import { ExternalLink } from "lucide-react";
+import { useT } from "@/i18n/useT";
 
 const YTU_SOURCES = [
   {
@@ -19,8 +20,9 @@ const YTU_SOURCES = [
 ];
 
 function Sources() {
+  const t = useT();
   return (
-    <MainCard title="Üniversite Metinleri">
+    <MainCard title={t("Üniversite Metinleri")}>
       <nav className="flex flex-col">
         {YTU_SOURCES.map(({ href, label }) => (
           <a

@@ -100,6 +100,7 @@ function ListRow({ entry, accent, courseHref }) {
 }
 
 function ScheduleList({ entries, courseHref, note }) {
+  const t = useT();
   const palette = useMemo(() => courseColors(entries), [entries]);
   const days = DAYS.map((label, index) => ({
     label,

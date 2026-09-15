@@ -1,8 +1,11 @@
 import { CalendarDays, RefreshCw } from "lucide-react";
 import { formatTrDate } from "@/lib/date";
 import CategoryTags from "./CategoryTags";
+import { getCmsRoute } from "@/app/lib/cms.jsx";
+import { translate } from "@/i18n";
 
-export default function AnnouncementMeta({ item }) {
+export default async function AnnouncementMeta({ item }) {
+  const { locale } = await getCmsRoute();
   return (
     <div className="flex items-center gap-3 flex-wrap pb-4 mb-4 border-b border-primary-500/6">
       <span className="inline-flex items-center gap-1.5 text-[12px] text-primary-500/70">
@@ -13,7 +16,7 @@ export default function AnnouncementMeta({ item }) {
       {item.updatedAt && (
         <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-sm bg-secondary-500/10 text-[10px] font-semibold uppercase tracking-wider text-secondary-700">
           <RefreshCw className="size-3" />
-          Güncellendi
+          {translate(locale, "Güncellendi")}
         </span>
       )}
 

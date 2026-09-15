@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { ArrowRight } from "lucide-react";
+import { useT } from "@/i18n/useT";
 
 const LOW_GRADES = new Set(["DD", "FD", "FF", "F0"]);
 
@@ -9,10 +10,11 @@ export const isLowGrade = (grade) => LOW_GRADES.has(grade);
 export const isHighlightGrade = (grade) => grade === "DC";
 
 export default function GradeDistribution({ data }) {
+  const t = useT();
   if (!data || data.length === 0) {
     return (
       <div className="text-sm font-medium text-primary-500/70 py-8 px-2 border border-dashed border-primary-500/20 rounded-xl text-center">
-        Bu aralık için dağılım verisi bulunmuyor.
+        {t("Bu aralık için dağılım verisi bulunmuyor.")}
       </div>
     );
   }
@@ -26,16 +28,16 @@ export default function GradeDistribution({ data }) {
     <div className="relative pt-2 sm:pt-0">
       <div className="sm:hidden absolute -top-5 right-0 flex justify-end pointer-events-none">
         <span className="text-[10px] flex items-center gap-1 text-primary-500/70">
-          Kaydırın <ArrowRight size={10} />
+          {t("Kaydırın")} <ArrowRight size={10} />
         </span>
       </div>
       <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="min-w-100 sm:min-w-0 space-y-2.5">
           <div className="flex text-[10px] font-bold text-primary-500/70 uppercase mb-4 px-1 tracking-widest">
             <div className="w-12">HARF</div>
-            <div className="w-10">BAŞ</div>
-            <div className="w-10">BİTİŞ</div>
-            <div className="flex-1">DAĞILIM</div>
+            <div className="w-10">{t("BAŞ")}</div>
+            <div className="w-10">{t("BİTİŞ")}</div>
+            <div className="flex-1">{t("DAĞILIM")}</div>
             <div className="w-10 text-right">SAY</div>
             <div className="w-12 text-right">ORN</div>
           </div>

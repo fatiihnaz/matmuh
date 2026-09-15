@@ -11,6 +11,7 @@ import DocumentLink from "@/app/components/DocumentLink";
 import Avatar from "@/app/components/Avatar";
 import { findPerson, fullName, useStaff } from "@/app/components/PersonRow";
 import { safeHref, isExternalHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 const COLUMNS = "sm:grid-cols-[1fr_8rem_9rem_2rem]";
 
@@ -104,6 +105,7 @@ export function Coordinators({ initialStaff = [] }) {
 }
 
 function AgreementRow({ item }) {
+  const t = useT();
   const href = safeHref(item.file?.href);
 
   return (
@@ -142,7 +144,7 @@ function AgreementRow({ item }) {
             href={href}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label="Anlaşmayı yeni sekmede indir"
+            aria-label={t("Anlaşmayı yeni sekmede indir")}
           >
             <FileDown className="size-3.5 text-primary-500/70 group-hover:text-secondary-700 transition-colors" />
           </a>
@@ -153,6 +155,7 @@ function AgreementRow({ item }) {
 }
 
 export function Agreements() {
+  const t = useT();
   const { value } = useCmsBlock("agreements.items");
   const items = Array.isArray(value) ? value : [];
 
@@ -181,7 +184,7 @@ export function Agreements() {
           className={`hidden sm:grid ${COLUMNS} gap-x-5 px-5 py-3 border-b border-primary-500/8 text-[10px] font-semibold uppercase tracking-widest text-primary-500/70`}
         >
           <div>Kurum</div>
-          <div>Ülke</div>
+          <div>{t("Ülke")}</div>
           <div className="whitespace-nowrap">Erasmus Kodu</div>
           <div />
         </div>

@@ -7,8 +7,10 @@ import { Search, X } from "lucide-react";
 import { useKeyboardInset } from "@/app/lib/useKeyboardInset";
 import SearchResults from "./SearchResults";
 import { MIN_CHARS, useSiteSearch } from "./useSiteSearch";
+import { useT } from "@/i18n/useT";
 
 export default function SearchOverlay({ open, onClose, fullScreen = false, layoutId }) {
+  const t = useT();
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
   const listId = useId();
@@ -60,7 +62,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
             transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
             role="dialog"
             aria-modal="true"
-            aria-label="Site araması"
+            aria-label={t("Site araması")}
             onClick={(event) => {
               event.stopPropagation();
               if (event.target === event.currentTarget) close();
@@ -92,7 +94,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
               <button
                 type="button"
                 onClick={close}
-                aria-label="Aramayı kapat"
+                aria-label={t("Aramayı kapat")}
                 className="shrink-0 rounded-lg p-1.5 text-primary-500/70 transition-colors hover:bg-primary-500/6 hover:text-primary-500"
               >
                 <X size={18} />
@@ -107,7 +109,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
             )}
 
             {term.length >= MIN_CHARS && !hasResults && (
-              <p className="mt-3 text-center text-[13px] text-white/60">Sonuç bulunamadı.</p>
+              <p className="mt-3 text-center text-[13px] text-white/60">{t("Sonuç bulunamadı.")}</p>
             )}
           </motion.div>
         </motion.div>

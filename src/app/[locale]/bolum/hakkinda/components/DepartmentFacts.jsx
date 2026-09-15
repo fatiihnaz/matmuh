@@ -6,6 +6,7 @@ import { Users, FlaskConical, BookOpen, Languages, Briefcase } from "lucide-reac
 
 import MainCard from "@/app/components/MainCard";
 import { useReducedMotion } from "@/app/components/Landing/components/heroMotion";
+import { useT } from "@/i18n/useT";
 
 function CountUp({ value, delay }) {
   const ref = useRef(null);
@@ -42,6 +43,7 @@ function CountUp({ value, delay }) {
 }
 
 export default function DepartmentFacts({ staff, curriculum }) {
+  const t = useT();
   const facts = [
     {
       icon: Users,
@@ -77,7 +79,7 @@ export default function DepartmentFacts({ staff, curriculum }) {
 
   return (
     <div className="mb-8">
-      <MainCard title="Sayılarla Bölüm" dark>
+      <MainCard title={t("Sayılarla Bölüm")} dark>
         <div className="grid grid-cols-1 gap-2 sm:grid-cols-3 sm:gap-x-6 sm:gap-y-4 lg:grid-cols-5">
           {facts.map((fact, index) => {
             const Icon = fact.icon;

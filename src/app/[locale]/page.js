@@ -17,6 +17,7 @@ import {
 import { Bell, Newspaper } from "lucide-react";
 import { formatTrDate } from "@/lib/date";
 import { EditableRegion } from "inscribed";
+import { translate } from "@/i18n";
 
 export const revalidate = 3600;
 
@@ -26,6 +27,9 @@ export default async function LandingPage({ params }) {
     getAnnouncements({ limit: 8, locale }),
     getNews({ limit: 3, locale }),
   ]);
+
+  const announcementsHref = locale && locale !== "tr" ? `/${locale}/duyurular` : "/duyurular";
+  const newsListHref = locale && locale !== "tr" ? `/${locale}/haberler` : "/haberler";
 
   const homeCategories = CONTENT_CATEGORIES.filter((c) =>
     HOME_CATEGORY_IDS.includes(c.id),
@@ -61,8 +65,8 @@ export default async function LandingPage({ params }) {
               />
             }
             icon={Bell}
-            buttonTitle="Tümünü Gör"
-            href="/duyurular"
+            buttonTitle={translate(locale, "Tümünü Gör")}
+            href={announcementsHref}
             prefetch={false}
             action={
               <NewRecordDialog
@@ -89,8 +93,8 @@ export default async function LandingPage({ params }) {
               />
             }
             icon={Newspaper}
-            buttonTitle="Tümünü Gör"
-            href="/haberler"
+            buttonTitle={translate(locale, "Tümünü Gör")}
+            href={newsListHref}
             prefetch={false}
             action={
               <NewRecordDialog

@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef } from "react";
 import Image from "next/image";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Modal from "@/app/components/Modal";
+import { useT } from "@/i18n/useT";
 
 function pointOnImage(container, x, y) {
   const img = container.querySelector("img");
@@ -23,6 +24,7 @@ function pointOnImage(container, x, y) {
 }
 
 export default function GalleryLightbox({ images, index, title, onIndexChange, onClose }) {
+  const t = useT();
   const open = index >= 0 && index < images.length;
 
   const step = useCallback(
@@ -130,10 +132,10 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
 
       {images.length > 1 && (
         <>
-          <button type="button" onClick={() => step(-1)} aria-label="Önceki fotoğraf" className={`${arrow} left-1 sm:left-4`}>
+          <button type="button" onClick={() => step(-1)} aria-label={t("Önceki fotoğraf")} className={`${arrow} left-1 sm:left-4`}>
             <ChevronLeft className="size-6" />
           </button>
-          <button type="button" onClick={() => step(1)} aria-label="Sonraki fotoğraf" className={`${arrow} right-1 sm:right-4`}>
+          <button type="button" onClick={() => step(1)} aria-label={t("Sonraki fotoğraf")} className={`${arrow} right-1 sm:right-4`}>
             <ChevronRight className="size-6" />
           </button>
         </>

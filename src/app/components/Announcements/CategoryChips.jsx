@@ -1,4 +1,6 @@
 import Link from "next/link";
+import { getCmsRoute } from "@/app/lib/cms.jsx";
+import { translate } from "@/i18n";
 
 function Chip({ href, active, children, count }) {
   return (
@@ -17,16 +19,17 @@ function Chip({ href, active, children, count }) {
   );
 }
 
-export default function CategoryChips({
+export default async function CategoryChips({
   categories,
   active,
   basePath = "/duyurular",
   showCounts = false,
 }) {
+  const { locale } = await getCmsRoute();
   return (
     <div className="flex items-center gap-1 overflow-x-auto no-scrollbar -mx-1 px-1 lg:overflow-visible lg:flex-wrap lg:mx-0 lg:px-0">
       <Chip href={basePath} active={!active}>
-        Tümü
+        {translate(locale, "Tümü")}
       </Chip>
       {categories.map((category) => (
         <Chip

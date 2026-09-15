@@ -295,7 +295,7 @@ export default function CourseInfo({ course, sections = [] }) {
                 strokeWidth={1.5}
                 className="text-primary-500/70"
               />
-              Bu ders bu dönem açılmamış veya program bilgisi girilmemiş.
+              {t("Bu ders bu dönem açılmamış veya program bilgisi girilmemiş.")}
             </div>
           )}
         </div>
@@ -410,14 +410,14 @@ export default function CourseInfo({ course, sections = [] }) {
                         Bu ders Matematik Mühendisliği bölümüne ait değil.
                         İçerik, kazanım ve değerlendirme bilgileri{" "}
                         <span className="font-semibold text-primary-500 group-hover:text-secondary-700 transition-colors">
-                          YTÜ Bologna kataloğunda
+                          {t("YTÜ Bologna kataloğunda")}
                         </span>{" "}
                         tutuluyor.
                       </span>
                     </a>
                   ) : (
                     <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1">
-                      Bu ders için içerik açıklaması girilmemiş.
+                      {t("Bu ders için içerik açıklaması girilmemiş.")}
                     </p>
                   )}
                 </div>
@@ -429,7 +429,7 @@ export default function CourseInfo({ course, sections = [] }) {
                         <div className="flex items-center gap-2 mb-3">
                           <div className="w-1 h-4 bg-secondary-500 rounded-full" />
                           <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-                            Değerlendirme
+                            {t("Değerlendirme")}
                           </h3>
                         </div>
                         <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
@@ -456,7 +456,7 @@ export default function CourseInfo({ course, sections = [] }) {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
                     <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
-                      Eğitim Dili
+                      {t("Eğitim Dili")}
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
                       {course.language ?? "-"}
@@ -464,7 +464,7 @@ export default function CourseInfo({ course, sections = [] }) {
                   </div>
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
                     <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
-                      Değerlendirme Sistemi
+                      {t("Değerlendirme Sistemi")}
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
                       {course.assessment
@@ -494,7 +494,7 @@ export default function CourseInfo({ course, sections = [] }) {
                       strokeWidth={1.5}
                     />
                     <span className="text-sm font-semibold text-primary-500">
-                      Haftalık İçerik
+                      {t("Haftalık İçerik")}
                     </span>
                   </div>
                   <span className="text-xs font-medium text-primary-500/70">
@@ -523,7 +523,7 @@ export default function CourseInfo({ course, sections = [] }) {
                         strokeWidth={1.5}
                         className="text-primary-500/70"
                       />
-                      Bu ders için haftalık içerik girilmemiş.
+                      {t("Bu ders için haftalık içerik girilmemiş.")}
                     </div>
                   )}
                 </div>
@@ -783,7 +783,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             <div className="flex items-center gap-2">
                               <div className="size-1.5 rounded-full bg-secondary-500 shrink-0" />
                               <span className="text-[10px] text-primary-500/70 w-8">
-                                Geçen
+                                {t("Geçen")}
                               </span>
                               <span className="font-bold text-primary-500 font-mono text-xs leading-none">
                                 {statsSummary.passed}

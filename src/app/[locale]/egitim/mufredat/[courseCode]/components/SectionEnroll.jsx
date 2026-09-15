@@ -6,6 +6,7 @@ import { CalendarPlus, Check, TriangleAlert, X } from "lucide-react";
 import { useAuth } from "@/lib/auth";
 import { enroll, fetchMyEnrollments, unenroll } from "@/data/enrollments";
 import { DAY_KEYS, DAYS } from "@/data/schedule-grid";
+import { useT } from "@/i18n/useT";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 
@@ -56,6 +57,7 @@ const BUTTON =
   "inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-[11px] font-medium transition-colors disabled:opacity-40";
 
 export default function SectionEnroll({ offeringId, schedule = [] }) {
+  const t = useT();
   const { isAuthenticated, getAccessToken } = useAuth();
   const [enrolled, setEnrolled] = useState(null);
   const [enrolledSlots, setEnrolledSlots] = useState([]);
@@ -109,7 +111,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
       <div className="mt-3 flex items-center gap-2">
         <span className="inline-flex items-center gap-1.5 text-[11px] font-medium text-secondary-700">
           <Check size={13} strokeWidth={2} />
-          Programında
+          {t("Programında")}
         </span>
         <button
           type="button"
@@ -153,13 +155,13 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
             className={`${BUTTON} text-primary-500/70 hover:text-primary-500`}
           >
             <X size={13} strokeWidth={2} />
-            Vazgeç
+            {t("Vazgeç")}
           </button>
         )}
       </div>
 
       {failed && (
-        <p className="mt-1.5 text-[11px] text-red-700/75">İşlem tamamlanamadı, tekrar deneyin.</p>
+        <p className="mt-1.5 text-[11px] text-red-700/75">{t("İşlem tamamlanamadı, tekrar deneyin.")}</p>
       )}
     </div>
   );
