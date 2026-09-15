@@ -15,7 +15,7 @@ import {
   newsHref,
 } from "@/data/content";
 import { Bell, Newspaper } from "lucide-react";
-import { formatTrDate } from "@/lib/date";
+import { formatDate } from "@/lib/date";
 import { EditableRegion } from "inscribed";
 import { translate } from "@/i18n";
 
@@ -37,16 +37,16 @@ export default async function LandingPage({ params }) {
 
   const highlights = [
     announcements[0] && {
-      label: "Son duyuru",
+      label: translate(locale, "Son duyuru"),
       title: announcements[0].title,
       href: announcementHref(announcements[0], locale),
-      date: formatTrDate(announcements[0].publishedAt),
+      date: formatDate(announcements[0].publishedAt, locale),
     },
     news[0] && {
-      label: "Son haber",
+      label: translate(locale, "Son haber"),
       title: news[0].title,
       href: newsHref(news[0], locale),
-      date: formatTrDate(news[0].publishedAt),
+      date: formatDate(news[0].publishedAt, locale),
     },
   ].filter(Boolean);
 

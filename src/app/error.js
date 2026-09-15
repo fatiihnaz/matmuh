@@ -2,23 +2,34 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Check, ChevronDown, Copy, Home, RotateCw } from "lucide-react";
 
 import Collapse from "./components/Collapse";
 import { IndeterminatePlot } from "./components/MathPlot";
+import { translate } from "@/i18n";
+
+function usePageLocale() {
+  const pathname = usePathname() ?? "";
+  const locale = pathname.split("/")[1] === "en" ? "en" : "tr";
+  return { locale, t: (text, vars) => translate(locale, text, vars) };
+}
 
 function errorReport(error) {
+  const locale = typeof window !== "undefined" && window.location.pathname.split("/")[1] === "en" ? "en" : "tr";
+  const t = (text) => translate(locale, text);
   return [
-    error?.digest && `Hata kodu: ${error.digest}`,
+    error?.digest && `${t("Hata kodu")}: ${error.digest}`,
     error?.name && error?.message && `${error.name}: ${error.message}`,
-    typeof window !== "undefined" && `Sayfa: ${window.location.href}`,
-    `Zaman: ${new Date().toLocaleString("tr-TR")}`,
+    typeof window !== "undefined" && `${t("Sayfa")}: ${window.location.href}`,
+    `${t("Zaman")}: ${new Date().toLocaleString(locale === "en" ? "en-GB" : "tr-TR")}`,
   ]
     .filter(Boolean)
     .join("\n");
 }
 
 function ErrorDetails({ error }) {
+  const { t } = usePageLocale();
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const [report, setReport] = useState("");
@@ -52,7 +63,7 @@ function ErrorDetails({ error }) {
             open ? "rotate-180" : ""
           }`}
         />
-        {open ? "Ayrıntıları gizle" : "Ayrıntıları göster"}
+        {open ? t("Ayrıntıları gizle") : t("Ayrıntıları göster")}
       </button>
 
       <Collapse open={open}>
@@ -62,7 +73,7 @@ function ErrorDetails({ error }) {
           </pre>
           <div className="mt-2 flex items-center justify-between gap-3 border-t border-primary-500/6 pt-2">
             <span className="text-[11px] text-primary-500/70">
-              Sorun sürerse bu bilgileri bize iletin.
+              {t("Sorun sürerse bu bilgileri bize iletin.")}
             </span>
             <button
               type="button"
@@ -74,7 +85,7 @@ function ErrorDetails({ error }) {
               ) : (
                 <Copy size={12} strokeWidth={2} />
               )}
-              {copied ? "Kopyalandı" : "Kopyala"}
+              {copied ? t("Kopyalandı") : t("Kopyala")}
             </button>
           </div>
         </div>
@@ -84,6 +95,7 @@ function ErrorDetails({ error }) {
 }
 
 export default function Error({ error, reset }) {
+  const { locale, t } = usePageLocale();
   useEffect(() => {
     console.error(error);
   }, [error]);
@@ -102,11 +114,10 @@ export default function Error({ error, reset }) {
           500
         </p>
 
-        <h1 className="mt-2 text-xl font-semibold text-primary-500">Bir şeyler ters gitti</h1>
+        <h1 className="mt-2 text-xl font-semibold text-primary-500">{t("Bir şeyler ters gitti")}</h1>
 
         <p className="mt-3 text-[13px] text-primary-500/70 leading-relaxed">
-          Beklenmeyen bir hata oluştu ve nedeni buradan belirlenemiyor.
-          Tekrar denemek çoğu zaman yeterli oluyor.
+          {t("Beklenmeyen bir hata oluştu ve nedeni buradan belirlenemiyor. Tekrar denemek çoğu zaman yeterli oluyor.")}
         </p>
 
         <ErrorDetails error={error} />
@@ -117,15 +128,15 @@ export default function Error({ error, reset }) {
             className="flex items-center gap-2 rounded-lg bg-primary-500 px-4 py-2 text-[13px] font-medium text-white transition-colors hover:bg-primary-400"
           >
             <RotateCw size={14} />
-            Tekrar dene
+            {t("Tekrar dene")}
           </button>
 
           <Link
-            href="/"
+            href={locale === "en" ? "/en" : "/"}
             className="flex items-center gap-2 rounded-lg border border-primary-500/10 bg-white px-4 py-2 text-[13px] font-medium text-primary-500/70 shadow-xs transition-colors hover:border-primary-500/20 hover:text-primary-500"
           >
             <Home size={14} className="text-secondary-700" />
-            Anasayfa
+            {t("Anasayfa")}
           </Link>
         </div>
       </div>

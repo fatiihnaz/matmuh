@@ -5,11 +5,13 @@ import { useState } from "react";
 import { Download, Eye, FileText } from "lucide-react";
 import { formatBytes } from "@/lib/format";
 import DocumentPreview, { canPreview, useEmbedsInline } from "./DocumentPreview";
+import { useT } from "@/i18n/useT";
 
 const ROW =
   "group flex items-center gap-3 p-3 rounded-lg bg-primary-500/2 border border-primary-500/5 hover:border-secondary-500/30 hover:bg-secondary-500/4 transition-colors";
 
 export default function DocumentLink({ label, href, kind, term, size, style, previewHref = null }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const embeds = useEmbedsInline(kind, previewHref);
   const previewable = canPreview(href, kind, previewHref) && embeds;
@@ -63,7 +65,7 @@ export default function DocumentLink({ label, href, kind, term, size, style, pre
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        aria-label="Belgeyi yeni sekmede indir"
+        aria-label={t("Belgeyi yeni sekmede indir")}
         className="shrink-0 -m-2 p-2 text-primary-500/70 hover:text-secondary-700 transition-colors"
       >
         <Download className="size-3.5" />

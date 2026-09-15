@@ -32,7 +32,7 @@ function Sources() {
             rel="noopener noreferrer"
             className="relative flex items-center gap-3 px-3 py-2.5 rounded-lg text-[13px] text-primary-500 hover:bg-gray-50 transition-colors"
           >
-            <span className="flex-1">{label}</span>
+            <span className="flex-1">{t(label)}</span>
             <ExternalLink className="w-3 h-3 shrink-0 text-primary-500/70" />
             <NewTabHint />
           </a>

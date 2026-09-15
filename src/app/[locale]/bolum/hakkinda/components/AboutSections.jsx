@@ -4,6 +4,7 @@ import { ArrowUpRight, Briefcase, GraduationCap, Lightbulb, Target } from "lucid
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
 import MainCard from "@/app/components/MainCard";
+import { useT } from "@/i18n/useT";
 
 function lines(text) {
   return String(text ?? "")
@@ -258,6 +259,7 @@ export function Milestones() {
 }
 
 export function InternshipSummary() {
+  const t = useT();
   return (
     <MainCard
       title={
@@ -267,7 +269,7 @@ export function InternshipSummary() {
           defaultValue="Staj Sistemi"
         />
       }
-      buttonTitle="Staj Sayfası"
+      buttonTitle={t("Staj Sayfası")}
       href="/egitim/staj"
     >
       <div className="flex flex-col gap-3 pt-2">

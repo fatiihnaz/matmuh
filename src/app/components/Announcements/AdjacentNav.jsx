@@ -1,7 +1,8 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
 import { announcementHref } from "@/data/content";
+import { translate } from "@/i18n";
 
 function Card({ item, label, direction, locale }) {
   if (!item) return <div className="hidden sm:block" />;
@@ -34,9 +35,9 @@ function Card({ item, label, direction, locale }) {
 export default function AdjacentNav({ older, newer, locale }) {
   if (!older && !newer) return null;
   return (
-    <nav aria-label="Önceki ve sonraki duyuru" className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-      <Card item={older} label="Önceki duyuru" direction="back" locale={locale} />
-      <Card item={newer} label="Sonraki duyuru" direction="forward" locale={locale} />
+    <nav aria-label={translate(locale, "Önceki ve sonraki duyuru")} className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <Card item={older} label={translate(locale, "Önceki duyuru")} direction="back" locale={locale} />
+      <Card item={newer} label={translate(locale, "Sonraki duyuru")} direction="forward" locale={locale} />
     </nav>
   );
 }

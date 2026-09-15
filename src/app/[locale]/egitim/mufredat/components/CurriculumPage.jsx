@@ -12,10 +12,12 @@ import {
   ListFilter,
   ExternalLink,
 } from "lucide-react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import PageLayout from "@/app/components/PageLayout";
 import SubHeader from "@/app/components/Header/SubHeader";
+import { useCmsRoute } from "inscribed";
 import { useT } from "@/i18n/useT";
+import { useLocaleNav } from "@/i18n/useLocaleNav";
 
 function sortRows(rows, col, dir) {
   if (!col) return rows;
@@ -103,12 +105,14 @@ function Colgroup() {
 
 export default function CurriculumPage({ semesters, summary }) {
   const t = useT();
+  const { locale } = useCmsRoute();
   const [activeTab, setActiveTab] = useState(0);
   const [sortCol, setSortCol] = useState(null);
   const [sortDir, setSortDir] = useState("asc");
   const [expandedGroup, setExpandedGroup] = useState(null);
   const [direction, setDirection] = useState(1);
   const router = useRouter();
+  const { href: localize } = useLocaleNav();
 
   const semester = semesters[activeTab];
   const rows = semester?.rows ?? [];
@@ -149,17 +153,17 @@ export default function CurriculumPage({ semesters, summary }) {
     <>
       <SubHeader
         title={t("Müfredat & Dersler")}
-        subTitle="Lisans programı ders planı ve kredi bilgileri"
+        subTitle={t("Lisans programı ders planı ve kredi bilgileri")}
       />
       <PageLayout>
         <div className="space-y-4">
           <div className="rounded-xl overflow-hidden border border-primary-500/10 shadow-xs bg-white">
             <div className="grid grid-cols-2 sm:grid-cols-4">
               {[
-                { val: String(summary.termCount), lbl: "Yarıyıl" },
-                { val: String(summary.totalEcts), lbl: "Toplam ECTS" },
-                { val: String(summary.courseCount), lbl: "Toplam Ders" },
-                { val: `${summary.yearCount} Yıl`, lbl: "Süre" },
+                { val: String(summary.termCount), lbl: t("Yarıyıl") },
+                { val: String(summary.totalEcts), lbl: t("Toplam ECTS") },
+                { val: String(summary.courseCount), lbl: t("Toplam Ders") },
+                { val: `${summary.yearCount} ${t("Yıl")}`, lbl: t("Süre") },
               ].map((s, i) => (
                 <div
                   key={s.lbl}
@@ -218,7 +222,7 @@ export default function CurriculumPage({ semesters, summary }) {
                         : "2px solid transparent",
                   }}
                 >
-                  {sem.number}. Yarıyıl
+                  {locale === "en" ? `${t("Yarıyıl")} ${sem.number}` : `${sem.number}. Yarıyıl`}
                 </button>
               ))}
             </div>
@@ -249,7 +253,12 @@ export default function CurriculumPage({ semesters, summary }) {
                 >
                   {expandedGroup
                     ? expandedGroup.groupTitle
-                    : (semester?.name ?? "")}
+                    : semester
+                      ? t("{year}. Yıl - {season} Yarıyılı", {
+                          year: Math.ceil(semester.number / 2),
+                          season: t(semester.number % 2 === 1 ? "Güz" : "Bahar"),
+                        })
+                      : ""}
                 </span>
                 {!expandedGroup && (
                   <span
@@ -270,8 +279,8 @@ export default function CurriculumPage({ semesters, summary }) {
                 style={{ fontSize: "0.75rem", color: "rgba(29,36,69,0.4)" }}
               >
                 {expandedGroup
-                  ? `${expandedGroup.options.length} ders`
-                  : `${rows.length} ders`}
+                  ? t("{count} ders", { count: expandedGroup.options.length })
+                  : t("{count} ders", { count: rows.length })}
               </span>
             </div>
 
@@ -293,8 +302,7 @@ export default function CurriculumPage({ semesters, summary }) {
                     color: "rgba(29,36,69,0.55)",
                   }}
                 >
-                  {expandedGroup.note} Ders içeriği için satırlar YTÜ Bologna
-                  kataloğuna açılır.
+                  {expandedGroup.note} {t("Ders içeriği için satırlar YTÜ Bologna kataloğuna açılır.")}
                 </span>
               </div>
             )}
@@ -326,7 +334,7 @@ export default function CurriculumPage({ semesters, summary }) {
                         >
                           {col.key !== "_action" && (
                             <SortBtn
-                              label={col.label}
+                              label={t(col.label)}
                               col={col.key}
                               sortCol={sortCol}
                               sortDir={sortDir}
@@ -520,7 +528,7 @@ export default function CurriculumPage({ semesters, summary }) {
                                     return;
                                   }
                                   startRouteProgress();
-                                  router.push(target);
+                                  router.push(localize(target));
                                 }}
                               >
                                 <td className="px-4 sm:px-6 py-3.5">
@@ -637,7 +645,7 @@ export default function CurriculumPage({ semesters, summary }) {
                       fontWeight: 400,
                     }}
                   >
-                    Toplam {rows.length} ders · {totalEcts} ECTS
+                    {t("Toplam {count} ders", { count: rows.length })} · {totalEcts} ECTS
                   </span>
                 )}
               </div>

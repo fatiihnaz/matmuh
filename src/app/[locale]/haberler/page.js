@@ -4,6 +4,7 @@ import NewsCard from "@/app/components/Announcements/NewsCard";
 import Pagination from "@/app/components/Announcements/Pagination";
 import NewRecordDialog from "@/app/components/Announcements/NewRecordDialog";
 import { getNews } from "@/data/content";
+import { translate } from "@/i18n";
 
 const PER_PAGE = 12;
 
@@ -25,13 +26,13 @@ export default async function NewsPage({ params: routeParams, searchParams }) {
   return (
     <>
       <SubHeader
-        title="Haberler"
-        subTitle="Mezuniyet törenleri, kariyer etkinlikleri ve bölüm haberleri"
+        title={translate(locale, "Haberler")}
+        subTitle={translate(locale, "Mezuniyet törenleri, kariyer etkinlikleri ve bölüm haberleri")}
       />
       <PageLayout>
         <div className="flex flex-col gap-5">
           <div className="flex items-center justify-between gap-3 px-1">
-            <span className="text-xs text-primary-500/70">{total} haber</span>
+            <span className="text-xs text-primary-500/70">{translate(locale, "{count} haber", { count: total })}</span>
             <NewRecordDialog collection="news" page="/haberler/yeni" label="Yeni haber" title="Yeni Haber" submitLabel="Yayımla" />
           </div>
 
@@ -43,7 +44,7 @@ export default async function NewsPage({ params: routeParams, searchParams }) {
             </div>
           ) : (
             <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
-              Henüz haber yayımlanmadı.
+              {translate(locale, "Henüz haber yayımlanmadı.")}
             </div>
           )}
 

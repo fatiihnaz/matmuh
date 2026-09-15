@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ChevronDown, Lock } from "lucide-react";
 
 import Collapse from "@/app/components/Collapse";
@@ -11,14 +11,16 @@ import { SkeletonBlock } from "@/app/components/Skeleton";
 import { useAuth } from "@/lib/auth";
 import { fetchStaffOfferings } from "@/data/statistics";
 import { useT } from "@/i18n/useT";
+import { localizeTerm } from "@/i18n";
 
 const STAT = "flex flex-col gap-0.5 rounded-lg bg-primary-500/2 px-3 py-2";
 
 function Summary({ summary }) {
+  const t = useT();
   const rows = [
-    ["Ortalama", summary.average?.toFixed?.(2) ?? summary.average],
-    ["Std. sapma", summary.stdDev?.toFixed?.(2) ?? summary.stdDev],
-    ["Katılan", summary.participantCount],
+    [t("Ortalama"), summary.average?.toFixed?.(2) ?? summary.average],
+    [t("Std. sapma"), summary.stdDev?.toFixed?.(2) ?? summary.stdDev],
+    [t("Katılan"), summary.participantCount],
   ].filter(([, value]) => value !== null && value !== undefined);
 
   if (rows.length === 0) return null;
@@ -58,7 +60,7 @@ function LectureRow({ lecture, defaultOpen }) {
           <span className="mt-0.5 block font-mono text-[11px] text-secondary-700">
             {lecture.code}
             <span className="ml-2 font-sans text-primary-500/70">
-              {lecture.sections.length} grup
+              {t("{count} grup", { count: lecture.sections.length })}
             </span>
           </span>
         </span>
@@ -81,7 +83,7 @@ function LectureRow({ lecture, defaultOpen }) {
           {lecture.sections.map((section) => (
             <div key={section.section} className="flex flex-col gap-3">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-                Grup {section.section}
+                {t("Grup")} {section.section}
               </span>
               <Summary summary={section.summary} />
               <GradeDistribution data={section.gradeDistribution} />
@@ -172,7 +174,7 @@ export default function StaffOfferings({ staffId }) {
       {terms.map((term, termIndex) => (
         <div key={term.name} className="flex flex-col gap-2">
           <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-            {term.name}
+            {localizeTerm(t, term.name)}
           </span>
           {term.lectures.map((lecture, index) => (
             <LectureRow

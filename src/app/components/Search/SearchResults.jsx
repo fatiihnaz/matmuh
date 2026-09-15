@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { SearchX, WifiOff } from "lucide-react";
 
 import { hrefForHit } from "./useSiteSearch";
@@ -17,7 +17,7 @@ export function SearchEmpty({ status, term }) {
       <Icon size={18} strokeWidth={1.5} className="text-primary-500/70" />
       <p className="text-[13px] text-primary-600">
         {failed ? (
-          "Arama şu an yapılamıyor."
+          t("Arama şu an yapılamıyor.")
         ) : (
           <>
             <span className="font-medium">“{term}”</span> {t("için sonuç bulunamadı.")}
@@ -26,8 +26,8 @@ export function SearchEmpty({ status, term }) {
       </p>
       <p className="text-[11px] text-primary-500/70">
         {failed
-          ? "Bağlantınızı kontrol edip tekrar deneyin."
-          : "Yazımı kontrol edin ya da daha kısa bir anahtar kelime deneyin."}
+          ? t("Bağlantınızı kontrol edip tekrar deneyin.")
+          : t("Yazımı kontrol edin ya da daha kısa bir anahtar kelime deneyin.")}
       </p>
     </div>
   );

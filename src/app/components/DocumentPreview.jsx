@@ -84,13 +84,13 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
 
           <a href={href} download={label} className={ACTION}>
             <Download className="size-3.5" />
-            {previewHref ? `Orijinali indir${kind ? ` (${kind.toUpperCase()})` : ""}` : "İndir"}
+            {previewHref ? `${t("Orijinali indir")}${kind ? ` (${kind.toUpperCase()})` : ""}` : t("İndir")}
           </a>
 
           {previewHref && (
             <a href={previewHref} download={`${label}.pdf`} className={ACTION}>
               <Download className="size-3.5" />
-              PDF indir
+              {t("PDF indir")}
             </a>
           )}
 

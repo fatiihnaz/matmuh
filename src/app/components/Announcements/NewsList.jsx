@@ -1,13 +1,14 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { newsHref } from "@/data/content";
-import { formatTrDate } from "@/lib/date";
+import { formatDate } from "@/lib/date";
 import NewsThumb from "./NewsThumb";
+import { translate } from "@/i18n";
 
 export default function NewsList({ items, locale }) {
   if (!items.length) {
     return (
       <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
-        Henüz haber yayımlanmadı.
+        {translate(locale, "Henüz haber yayımlanmadı.")}
       </div>
     );
   }
@@ -26,7 +27,7 @@ export default function NewsList({ items, locale }) {
               dateTime={item.publishedAt}
               className="block text-xs text-secondary-700 font-medium mb-1"
             >
-              {formatTrDate(item.publishedAt)}
+              {formatDate(item.publishedAt, locale)}
             </time>
             <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors mb-1 line-clamp-2">
               {item.title}

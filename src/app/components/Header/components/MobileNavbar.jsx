@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 
 import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
 import { Search, ChevronUp, ExternalLink } from "lucide-react";

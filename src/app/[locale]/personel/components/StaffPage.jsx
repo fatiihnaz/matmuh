@@ -140,7 +140,7 @@ function StaffContent({ initialStaff }) {
         <div className="flex min-w-0 flex-1 flex-wrap items-center gap-x-6 gap-y-3">
         <div className="flex min-w-0 flex-wrap items-center gap-1.5">
           <span className="hidden shrink-0 text-xs font-medium mr-1 lg:inline" style={{ color: "rgba(29,36,69,0.4)" }}>
-            Kategori:
+            {t("Kategori:")}
           </span>
           {categories.map((cat) => (
             <button
@@ -161,7 +161,7 @@ function StaffContent({ initialStaff }) {
         {availableRanks.length > 0 && (
         <div className="flex shrink-0 items-center gap-2">
           <span className="shrink-0 text-xs font-medium" style={{ color: "rgba(29,36,69,0.4)" }}>
-            Unvan:
+            {t("Unvan:")}
           </span>
           <div className="relative">
             <select

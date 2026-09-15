@@ -4,6 +4,7 @@ import { Github, Linkedin, Globe, Mail } from "lucide-react";
 
 import Avatar from "@/app/components/Avatar";
 import { safeHref, isExternalHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 export const LINK_FIELDS = [
   { key: "github", Icon: Github, label: "GitHub" },
@@ -13,6 +14,7 @@ export const LINK_FIELDS = [
 ];
 
 export default function CreditCard({ person, idx, coord, markClassName = "" }) {
+  const t = useT();
   const links = LINK_FIELDS.map((field) => ({
     ...field,
     href: safeHref(person?.[field.key]?.href),
@@ -54,7 +56,7 @@ export default function CreditCard({ person, idx, coord, markClassName = "" }) {
               <a
                 key={key}
                 href={href}
-                aria-label={`${person?.name ?? ""} ${label}`}
+                aria-label={`${person?.name ?? ""} ${t(label)}`}
                 {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                 className="flex size-9 items-center justify-center rounded-lg text-neutral-400 transition-colors hover:bg-white/10 hover:text-secondary-500"
               >

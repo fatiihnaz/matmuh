@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { CalendarRange, List, MapPin, User, Wifi } from "lucide-react";
 
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
@@ -126,7 +126,7 @@ function ScheduleList({ entries, courseHref, note }) {
           <div key={day.label}>
             <div className="bg-primary-500/2 px-4 py-1.5">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-                {day.label}
+                {t(day.label)}
               </span>
             </div>
             <ul className="flex flex-col gap-1 p-1">
@@ -182,7 +182,7 @@ function ScheduleBody({ entries = [], courseHref, note = null, legend = null }) 
               }`}
             >
               <Icon size={13} strokeWidth={2} />
-              {label}
+              {t(label)}
             </button>
           ))}
         </div>

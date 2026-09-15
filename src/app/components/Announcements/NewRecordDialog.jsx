@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { useRouter } from "next/navigation";
 import { ExternalLink, Plus } from "lucide-react";
 import { CollectionFieldsForm, useCollectionCreate, useMyCollections } from "inscribed/collections";

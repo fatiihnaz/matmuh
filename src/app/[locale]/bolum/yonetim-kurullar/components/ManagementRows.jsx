@@ -4,8 +4,10 @@ import { Mail } from "lucide-react";
 
 import Avatar from "@/app/components/Avatar";
 import { fullName, useStaff } from "@/app/components/PersonRow";
+import { useT } from "@/i18n/useT";
 
 export default function ManagementRows({ initialStaff = [] }) {
+  const t = useT();
   const { people } = useStaff(initialStaff);
   const management = people.filter((person) => person.groups?.includes("MANAGEMENT"));
 
@@ -25,13 +27,13 @@ export default function ManagementRows({ initialStaff = [] }) {
               </span>
               <span className="block text-[11px] text-primary-500/70 wrap-break-word">
                 {person.role && `${person.role} · `}
-                Oda {person.office} · {person.phone}
+                {t("Oda")} {person.office} · {person.phone}
               </span>
             </span>
             {person.email && (
               <a
                 href={`mailto:${person.email}`}
-          aria-label={`${name} kişisine e-posta gönder`}
+          aria-label={t("{name} kişisine e-posta gönder", { name })}
                 className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
               >
                 <Mail className="size-3.5" />

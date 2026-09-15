@@ -24,7 +24,7 @@ function LaboratoryCard({ lab }) {
 
       <div className="flex items-center gap-2 text-[12px] text-primary-500/70">
         <Users className="size-3.5 text-primary-500/70" />
-        {lab.capacity} kapasiteli
+        {lab.capacity} {t("kapasiteli")}
       </div>
 
       <div className="flex flex-col gap-1.5">

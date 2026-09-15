@@ -45,7 +45,8 @@ function findClash(schedule, enrolledSlots, ownOfferingId) {
           day: DAYS[own.dayIndex],
           from: clock(Math.max(own.startMin, other.startMin)),
           to: clock(Math.min(own.endMin, other.endMin)),
-          with: `${other.lectureCode} grup ${other.groupNumber}`,
+          code: other.lectureCode,
+          group: other.groupNumber,
         };
       }
     }
@@ -119,7 +120,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
           disabled={busy}
           className={`${BUTTON} text-primary-500/70 hover:bg-primary-500/5 hover:text-primary-500`}
         >
-          {busy ? "…" : "Kaldır"}
+          {busy ? "…" : t("Kaldır")}
         </button>
       </div>
     );
@@ -131,8 +132,13 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
         <p className="mb-2 flex items-start gap-1.5 rounded-lg bg-amber-50 px-2.5 py-2 text-[11px] leading-relaxed text-amber-800">
           <TriangleAlert size={13} strokeWidth={2} className="mt-px shrink-0" />
           <span>
-            {clash.day} {clash.from}–{clash.to} arası {clash.with} ile çakışıyor. Yine de
-            eklemek için tekrar dokun.
+            {t("{day} {from}–{to} arası {code} grup {group} ile çakışıyor. Yine de eklemek için tekrar dokun.", {
+              day: t(clash.day),
+              from: clash.from,
+              to: clash.to,
+              code: clash.code,
+              group: clash.group,
+            })}
           </span>
         </p>
       )}
@@ -145,7 +151,7 @@ export default function SectionEnroll({ offeringId, schedule = [] }) {
           className={`${BUTTON} border border-secondary-500/40 text-secondary-700 hover:bg-secondary-500/10`}
         >
           <CalendarPlus size={13} strokeWidth={2} />
-          {busy ? "…" : clash ? "Yine de ekle" : "Programıma ekle"}
+          {busy ? "…" : clash ? t("Yine de ekle") : t("Programıma ekle")}
         </button>
 
         {clash && (

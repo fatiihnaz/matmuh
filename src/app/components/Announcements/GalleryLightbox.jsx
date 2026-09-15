@@ -84,7 +84,7 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
     <Modal
       open={open}
       onClose={onClose}
-      label={title ? `${title} - fotoğraf galerisi` : "Fotoğraf galerisi"}
+      label={title ? `${title} - ${t("fotoğraf galerisi")}` : t("Fotoğraf galerisi")}
       contentClassName="flex flex-col py-14 px-4 sm:px-16"
     >
       <div
@@ -119,7 +119,7 @@ export default function GalleryLightbox({ images, index, title, onIndexChange, o
                 key={img.src}
                 type="button"
                 onClick={() => onIndexChange(i)}
-                aria-label={`${i + 1}. fotoğrafa git`}
+                aria-label={t("{n}. fotoğrafa git", { n: i + 1 })}
                 aria-current={i === index}
                 className={`size-1.5 rounded-full transition-colors ${
                   i === index ? "bg-white" : "bg-white/30 hover:bg-white/50"

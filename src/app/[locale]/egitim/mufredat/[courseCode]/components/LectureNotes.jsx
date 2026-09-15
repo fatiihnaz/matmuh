@@ -50,12 +50,11 @@ function LoginPanel({ loading, onSignIn }) {
             {t("Giriş Yapmanız Gerekmektedir")}
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
-            Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak
-            için{" "}
+            {t("Ders notlarını görüntülemek, indirmek ve kendi notunuzu paylaşmak için")}{" "}
             <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
               @std.yildiz.edu.tr
             </span>{" "}
-            hesabınızla giriş yapmalısınız.
+            {t("hesabınızla giriş yapmalısınız.")}
           </p>
           <button
             onClick={onSignIn}
@@ -89,7 +88,7 @@ function LoginPanel({ loading, onSignIn }) {
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
                 <div className="text-sm font-semibold text-primary-700 truncate mb-1.5">
-                  {item.title}
+                  {t(item.title)}
                 </div>
                 <span className="text-[11px] text-gray-400 font-mono">
                   {item.meta}
@@ -122,7 +121,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
         <button
           type="button"
           onClick={() => setPreview(true)}
-          aria-label={`${note.title} dosyasını önizle`}
+          aria-label={t("{title} dosyasını önizle", { title: note.title })}
           className="absolute inset-0 z-0 cursor-pointer rounded-xl outline-offset-2"
         />
       )}
@@ -140,17 +139,17 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
           </span>
           {noteTypeLabel(note.type) && note.type !== "OTHER" && (
             <span className="shrink-0 rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/70">
-              {noteTypeLabel(note.type)}
+              {t(noteTypeLabel(note.type))}
             </span>
           )}
           {pending &&
             (rejected ? (
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-red-700 bg-red-500/12 px-1.5 py-0.5 rounded-sm shrink-0">
-                <X size={9} strokeWidth={2.5} /> Reddedildi
+                <X size={9} strokeWidth={2.5} /> {t("Reddedildi")}
               </span>
             ) : (
               <span className="inline-flex items-center gap-1 text-[10px] font-bold text-amber-700 bg-amber-500/15 px-1.5 py-0.5 rounded-sm shrink-0">
-                <Clock3 size={9} strokeWidth={2.5} /> Onay bekliyor
+                <Clock3 size={9} strokeWidth={2.5} /> {t("Onay bekliyor")}
               </span>
             ))}
         </div>
@@ -220,7 +219,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             disabled={cancelling}
             className="inline-flex items-center justify-center rounded-md px-3 py-1.5 text-[11px] font-medium text-primary-500/70 transition-colors hover:bg-red-50 hover:text-red-700 disabled:opacity-40"
           >
-            {cancelling ? "…" : rejected ? "Kaldır" : "İptal et"}
+            {cancelling ? "…" : rejected ? t("Kaldır") : t("İptal et")}
           </button>
         )}
       </div>
@@ -253,9 +252,9 @@ function UploadForm({ lectureId, onUploaded }) {
   }, []);
 
   const missing =
-    [!title.trim() && "Başlık", !file && "dosya"]
+    [!title.trim() && t("Başlık"), !file && t("dosya")]
       .filter(Boolean)
-      .join(" ve ") || null;
+      .join(` ${t("ve")} `) || null;
 
   const reset = useCallback(() => {
     setTitle("");
@@ -350,7 +349,7 @@ function UploadForm({ lectureId, onUploaded }) {
             setOpen(false);
           }}
           className="text-primary-500/70 hover:text-primary-500 transition-colors"
-          aria-label="Kapat"
+          aria-label={t("Kapat")}
         >
           <X size={16} strokeWidth={2} />
         </button>
@@ -384,7 +383,7 @@ function UploadForm({ lectureId, onUploaded }) {
         >
           {NOTE_TYPES.map((option) => (
             <option key={option.id} value={option.id}>
-              {option.label}
+              {t(option.label)}
             </option>
           ))}
         </select>
@@ -425,13 +424,13 @@ function UploadForm({ lectureId, onUploaded }) {
           {file
             ? file.name
             : dragOver
-              ? "Bırakın"
-              : "Dosyayı sürükleyin veya seçin"}
+              ? t("Bırakın")
+              : t("Dosyayı sürükleyin veya seçin")}
         </span>
         <span className="text-[11px] text-primary-500/70">
           {file
             ? formatSize(file.size)
-            : "PDF, Office, ZIP, görsel · en fazla 25 MB"}
+            : t("PDF, Office, ZIP, görsel · en fazla 25 MB")}
         </span>
         <input
           ref={inputRef}
@@ -443,7 +442,7 @@ function UploadForm({ lectureId, onUploaded }) {
         />
       </label>
 
-      {error && <p className="text-xs text-red-600">{error}</p>}
+      {error && <p className="text-xs text-red-600">{t(error)}</p>}
 
       <div className="flex items-center gap-3">
         <button
@@ -451,12 +450,12 @@ function UploadForm({ lectureId, onUploaded }) {
           disabled={busy || !file || !title.trim()}
           className="inline-flex items-center gap-2 px-4 py-2 rounded-lg bg-secondary-500 text-primary-500 text-xs font-semibold hover:bg-secondary-500/80 disabled:opacity-50 transition-colors"
         >
-          <Upload size={14} strokeWidth={2} /> {busy ? "Yükleniyor…" : "Gönder"}
+          <Upload size={14} strokeWidth={2} /> {busy ? t("Yükleniyor…") : t("Gönder")}
         </button>
 
         {!busy && missing && (
           <span className="text-[11px] text-primary-500/70">
-            {missing} girin
+            {t("{fields} girin", { fields: missing })}
           </span>
         )}
       </div>
@@ -539,16 +538,14 @@ export default function LectureNotes({ lectureId, onSignIn }) {
             ))}
           </div>
           <p className="text-[11px] text-primary-500/70 mt-2.5">
-            Bu notlar yalnızca size görünür. Onaylananlar aşağıdaki listeye
-            geçer.
+            {t("Bu notlar yalnızca size görünür. Onaylananlar aşağıdaki listeye geçer.")}
           </p>
         </div>
       )}
 
       {failed ? (
         <p className="text-sm text-primary-500/70 py-12 text-center border border-dashed border-primary-500/20 rounded-xl">
-          Ders notları alınamadı. Oturumunuz sona ermiş olabilir, sayfayı
-          yenileyin.
+          {t("Ders notları alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyin.")}
         </p>
       ) : notes === null ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

@@ -1,14 +1,16 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { EditableList, EditableRegion } from "inscribed";
 
 import MainCard from "@/app/components/MainCard";
 import Collapse from "@/app/components/Collapse";
+import { useT } from "@/i18n/useT";
 
 function Question({ item }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const href = item?.link?.href;
 
@@ -39,7 +41,7 @@ function Question({ item }) {
               tabIndex={open ? undefined : -1}
               className="mt-2.5 inline-flex items-center gap-1.5 text-xs font-medium text-secondary-700 transition-colors hover:text-secondary-700"
             >
-              {item?.link?.label || "Detaylı bilgi"}
+              {item?.link?.label || t("Detaylı bilgi")}
               <ArrowRight size={13} strokeWidth={2} />
             </Link>
           )}

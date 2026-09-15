@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";

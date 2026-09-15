@@ -23,6 +23,7 @@ function lines(text) {
 }
 
 function CoordinatorRow({ person, idx }) {
+  const t = useT();
   const name = fullName(person);
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
@@ -32,13 +33,13 @@ function CoordinatorRow({ person, idx }) {
           {person.academicTitle} {name}
         </span>
         <span className="block text-[11px] text-primary-500/70 wrap-break-word">
-          Oda {person.office} · {person.phone}
+          {t("Oda")} {person.office} · {person.phone}
         </span>
       </span>
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          aria-label={`${name} kişisine e-posta gönder`}
+          aria-label={t("{name} kişisine e-posta gönder", { name })}
           className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />
@@ -183,9 +184,9 @@ export function Agreements() {
         <div
           className={`hidden sm:grid ${COLUMNS} gap-x-5 px-5 py-3 border-b border-primary-500/8 text-[10px] font-semibold uppercase tracking-widest text-primary-500/70`}
         >
-          <div>Kurum</div>
+          <div>{t("Kurum")}</div>
           <div>{t("Ülke")}</div>
-          <div className="whitespace-nowrap">Erasmus Kodu</div>
+          <div className="whitespace-nowrap">{t("Erasmus Kodu")}</div>
           <div />
         </div>
 

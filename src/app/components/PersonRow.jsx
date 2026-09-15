@@ -5,6 +5,7 @@ import { useCollection } from "inscribed/collections";
 
 import Avatar from "./Avatar";
 import { fullName } from "@/lib/person";
+import { useT } from "@/i18n/useT";
 
 export const STAFF_WINDOW = { limit: 100 };
 
@@ -35,6 +36,7 @@ export function findPerson(people, id) {
 export default function PersonRow({ id, idx = 0, staff = [] }) {
   const { people } = useStaff(staff);
   const person = findPerson(people, id);
+  const t = useT();
   if (!person) return null;
 
   const name = fullName(person);
@@ -48,13 +50,13 @@ export default function PersonRow({ id, idx = 0, staff = [] }) {
         </span>
         <span className="block text-[11px] text-primary-500/70 wrap-break-word">
           {person.role && `${person.role} · `}
-          Oda {person.office} · {person.phone}
+          {t("Oda")} {person.office} · {person.phone}
         </span>
       </span>
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          aria-label={`${name} kişisine e-posta gönder`}
+          aria-label={t("{name} kişisine e-posta gönder", { name })}
           className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />

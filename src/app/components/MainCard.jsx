@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ChevronRight } from "lucide-react";
 
 export default function MainCard({ title, buttonTitle, href, prefetch, action, children, dark }) {

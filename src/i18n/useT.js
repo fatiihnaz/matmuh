@@ -7,5 +7,5 @@ import { translate } from "./index";
 
 export function useT() {
   const { locale } = useCmsRoute();
-  return useCallback((text) => translate(locale, text), [locale]);
+  return useCallback((text, vars) => translate(locale, text, vars), [locale]);
 }

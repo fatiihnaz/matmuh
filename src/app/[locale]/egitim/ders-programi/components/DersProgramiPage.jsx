@@ -6,8 +6,9 @@ import PageLayout from "@/app/components/PageLayout";
 import ScheduleViews from "@/app/[locale]/egitim/components/ScheduleViews";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
 import { useT } from "@/i18n/useT";
+import { localizeTerm } from "@/i18n";
 
-const CLASSES = [1, 2, 3, 4].map((id) => ({ id, label: `${id}. Sınıf` }));
+const CLASSES = [1, 2, 3, 4].map((id) => ({ id }));
 
 const classOf = (entry) => (entry.term ? Math.ceil(entry.term / 2) : null);
 
@@ -24,7 +25,7 @@ export default function DersProgramiPage({ entries: all = [], term }) {
     <>
       <SubHeader
         title={t("Ders Programı")}
-        subTitle={term ? `Lisans · ${term}` : "Lisans"}
+        subTitle={term ? `${t("Lisans")} · ${localizeTerm(t, term)}` : t("Lisans")}
       />
       <PageLayout>
         <div className="space-y-4">
@@ -47,14 +48,14 @@ export default function DersProgramiPage({ entries: all = [], term }) {
                           : "transparent",
                     }}
                   >
-                    {cls.label}
+                    {t("{n}. Sınıf", { n: cls.id })}
                   </button>
                 ))}
               </div>
               <div className="flex items-center gap-2 text-primary-500/70">
                 <CalendarDays size={14} strokeWidth={1.5} />
                 <span style={{ fontSize: "0.75rem" }}>
-                  {entries.length} ders bloğu
+                  {t("{count} ders bloğu", { count: entries.length })}
                 </span>
               </div>
             </div>

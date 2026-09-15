@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useMemo, useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowRight,
@@ -58,7 +58,7 @@ function EnrollAction({ entry }) {
           disabled={busy}
           className={`${MINI_BUTTON} text-primary-500/70 hover:bg-primary-500/6 hover:text-primary-500`}
         >
-          {busy ? "…" : "Kaldır"}
+          {busy ? "…" : t("Kaldır")}
         </button>
       </span>
     );
@@ -81,8 +81,12 @@ function EnrollAction({ entry }) {
         <span className="mb-1 flex items-start gap-1 rounded-sm bg-amber-50 px-1.5 py-1 text-[9.5px] leading-snug text-amber-800">
           <TriangleAlert size={9} strokeWidth={2.25} className="mt-px shrink-0" />
           <span>
-            {DAYS[clash.day]} {rangeOf(clash)} · {clash.code} Gr.{clash.group} ile
-            çakışıyor.
+            {t("{day} {range} · {code} Gr.{group} ile çakışıyor.", {
+              day: t(DAYS[clash.day]),
+              range: rangeOf(clash),
+              code: clash.code,
+              group: clash.group,
+            })}
           </span>
         </span>
       )}
@@ -99,7 +103,7 @@ function EnrollAction({ entry }) {
           ) : (
             <>
               <Plus size={9} strokeWidth={2.5} />
-              {clash ? "Yine de ekle" : "Programıma ekle"}
+              {clash ? t("Yine de ekle") : t("Programıma ekle")}
             </>
           )}
         </button>
@@ -186,9 +190,9 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
 
   const label = [
     `${entry.code} ${entry.name}`,
-    `${entry.group}. grup`,
-    entry.cont ? "devam eden oturum" : null,
-    entry.online ? "çevrimiçi" : null,
+    t("{group}. grup", { group: entry.group }),
+    entry.cont ? t("devam eden oturum") : null,
+    entry.online ? t("çevrimiçi") : null,
     ...meta,
   ]
     .filter(Boolean)
@@ -268,12 +272,12 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
               style={{ borderColor: `rgba(${NAVY},0.07)` }}
             >
               <span className="block font-mono text-[9.5px] text-primary-500/70">
-                {DAYS[entry.day]} · {rangeOf(entry)}
+                {t(DAYS[entry.day])} · {rangeOf(entry)}
               </span>
 
               <span className="mt-1 flex flex-wrap items-center gap-1">
                 <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/70">
-                  {entry.group}. grup
+                  {t("{group}. grup", { group: entry.group })}
                 </span>
                 {(entry.badge || entry.type) && (
                   <span
@@ -285,7 +289,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                         : "rgba(29,36,69,0.6)",
                     }}
                   >
-                    {entry.badge || entry.type}
+                    {t(entry.badge || entry.type)}
                   </span>
                 )}
                 {entry.english && (
@@ -406,7 +410,7 @@ function Cell({
             strokeWidth={2.25}
             className={`transition-transform ${expanded ? "rotate-180" : ""}`}
           />
-          {expanded ? "Daralt" : `+${items.length - VISIBLE} grup`}
+          {expanded ? t("Daralt") : t("+{count} grup", { count: items.length - VISIBLE })}
         </button>
       )}
     </div>
@@ -493,7 +497,7 @@ export default function WeeklySchedule({
               }}
             >
               <span className="text-[10px] font-semibold tracking-widest text-primary-500/70 uppercase">
-                Saat
+                {t("Saat")}
               </span>
             </div>
 
@@ -512,7 +516,7 @@ export default function WeeklySchedule({
                 }}
               >
                 <span className="text-[12px] font-semibold text-primary-500">
-                  {day}
+                  {t(day)}
                 </span>
               </div>
             ))}
@@ -538,7 +542,7 @@ export default function WeeklySchedule({
                     }}
                   >
                     <span className="font-mono text-[9px] tracking-wide text-primary-500/70">
-                      {startOf(row.from)} – {endOf(row.to)} · ders yok
+                      {startOf(row.from)} – {endOf(row.to)} · {t("ders yok")}
                     </span>
                   </div>,
                 ];
@@ -600,7 +604,7 @@ export default function WeeklySchedule({
 
       {note && (
         <div className="border-t border-primary-500/6 px-4 py-2.5 text-center">
-          <span className="text-[11px] text-primary-500/70">{note}</span>
+          <span className="text-[11px] text-primary-500/70">{t(note)}</span>
         </div>
       )}
 

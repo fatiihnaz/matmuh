@@ -2,7 +2,7 @@
 
 import NewTabHint from "@/app/components/NewTabHint";
 import { createElement } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import {
   ExternalLink,
   Monitor,
@@ -17,6 +17,7 @@ import {
 import { EditableList, useCmsBlock } from "inscribed";
 
 import MainCard from "./MainCard";
+import { useT } from "@/i18n/useT";
 import { safeHref, isExternalHref } from "@/lib/href";
 
 const ICONS = {
@@ -125,6 +126,7 @@ function MobileStrip({ items }) {
 }
 
 function QuickLinksFull({ title }) {
+  const t = useT();
   const { value } = useCmsBlock("quicklinks.items");
   const items = Array.isArray(value) ? value : [];
 
@@ -133,7 +135,7 @@ function QuickLinksFull({ title }) {
       <MobileStrip items={items} />
 
       <div className="hidden lg:block">
-        <MainCard title={title}>
+        <MainCard title={t(title)}>
           <EditableList
             blockPath="quicklinks.items"
             scope="global"
@@ -211,6 +213,7 @@ function QuickLinksFull({ title }) {
 }
 
 function QuickLinksExternal({ title }) {
+  const t = useT();
   const { value } = useCmsBlock("quicklinks.items");
   const items = (Array.isArray(value) ? value : []).filter((item) =>
     isExternalHref(item?.link?.href),
@@ -221,8 +224,8 @@ function QuickLinksExternal({ title }) {
       <MobileStrip items={items} />
 
       <div className="hidden lg:block">
-        <MainCard title={title}>
-          <nav aria-label={title} className="space-y-1">
+        <MainCard title={t(title)}>
+          <nav aria-label={t(title)} className="space-y-1">
             {items.map((item, index) => (
               <QuickLinkRow key={index} item={item} />
             ))}

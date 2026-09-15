@@ -1,9 +1,18 @@
-const MONTHS = [
-  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
-];
+const MONTHS = {
+  tr: [
+    "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
+    "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
+  ],
+  en: [
+    "January", "February", "March", "April", "May", "June",
+    "July", "August", "September", "October", "November", "December",
+  ],
+};
 
-const SHORT = ["OCA", "ŞUB", "MAR", "NİS", "MAY", "HAZ", "TEM", "AĞU", "EYL", "EKİ", "KAS", "ARA"];
+const SHORT = {
+  tr: ["OCA", "ŞUB", "MAR", "NİS", "MAY", "HAZ", "TEM", "AĞU", "EYL", "EKİ", "KAS", "ARA"],
+  en: ["JAN", "FEB", "MAR", "APR", "MAY", "JUN", "JUL", "AUG", "SEP", "OCT", "NOV", "DEC"],
+};
 
 function parts(iso) {
   if (typeof iso !== "string" || iso.length < 10) return null;
@@ -14,14 +23,16 @@ function parts(iso) {
   return { year, month, day };
 }
 
-export function formatTrDate(iso) {
+export function formatDate(iso, locale) {
   const p = parts(iso);
   if (!p) return "";
-  return `${Number(p.day)} ${MONTHS[p.month - 1]} ${p.year}`;
+  const day = Number(p.day);
+  const month = (MONTHS[locale] ?? MONTHS.tr)[p.month - 1];
+  return locale === "en" ? `${month} ${day}, ${p.year}` : `${day} ${month} ${p.year}`;
 }
 
-export function formatTrDayMonth(iso) {
+export function formatDayMonth(iso, locale) {
   const p = parts(iso);
   if (!p) return { day: "", month: "" };
-  return { day: String(Number(p.day)), month: SHORT[p.month - 1] };
+  return { day: String(Number(p.day)), month: (SHORT[locale] ?? SHORT.tr)[p.month - 1] };
 }

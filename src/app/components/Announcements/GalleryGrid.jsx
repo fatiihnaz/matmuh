@@ -3,8 +3,10 @@
 import { useState } from "react";
 import Image from "next/image";
 import GalleryLightbox from "./GalleryLightbox";
+import { useT } from "@/i18n/useT";
 
 export default function GalleryGrid({ images, title }) {
+  const t = useT();
   const [openIndex, setOpenIndex] = useState(-1);
 
   if (!images.length) return null;
@@ -17,7 +19,7 @@ export default function GalleryGrid({ images, title }) {
             key={image.src}
             type="button"
             onClick={() => setOpenIndex(index)}
-            aria-label={`${index + 1}. fotoğrafı büyüt`}
+            aria-label={t("{n}. fotoğrafı büyüt", { n: index + 1 })}
             className="group relative aspect-4/3 rounded-lg overflow-hidden bg-primary-500/4 cursor-pointer"
           >
             <Image

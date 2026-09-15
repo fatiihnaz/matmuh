@@ -5,6 +5,7 @@ import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 import PageSection from "@/app/components/PageSection";
 import Panel from "@/app/components/Panel";
 import Avatar from "@/app/components/Avatar";
+import { useT } from "@/i18n/useT";
 
 function BoardMemberRow({ member, idx }) {
   return (
@@ -24,6 +25,7 @@ function BoardMemberRow({ member, idx }) {
 }
 
 export default function AdvisoryBoard() {
+  const t = useT();
   const { value } = useCmsBlock("board.members");
   const count = Array.isArray(value) ? value.length : 0;
 
@@ -44,7 +46,7 @@ export default function AdvisoryBoard() {
             blockType="ShortText"
             defaultValue="2025"
           />{" "}
-          Güncel
+          {t("Güncel")}
         </span>
       }
     >

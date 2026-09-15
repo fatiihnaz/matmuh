@@ -15,6 +15,7 @@ import {
 import { EditableRegion } from "inscribed";
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
+import { useT } from "@/i18n/useT";
 import DepartmentFacts from "./DepartmentFacts";
 import FrequentQuestions from "./FrequentQuestions";
 import {
@@ -132,6 +133,7 @@ function subscribeToWidth(onChange) {
 const neverChanges = () => () => {};
 
 function NodeGraphCanvas() {
+  const t = useT();
   const [hoveredNode, setHoveredNode] = useState(null);
   const isMounted = useSyncExternalStore(neverChanges, () => true, () => false);
   const isMobile = useSyncExternalStore(
@@ -283,7 +285,7 @@ function NodeGraphCanvas() {
                 }}
                 transition={{ duration: 0.3, delay: 0.5 + idx * 0.05 }}
               >
-                {node.label}
+                {t(node.label)}
               </motion.text>
             </g>
           );
@@ -295,6 +297,7 @@ function NodeGraphCanvas() {
 
 
 export default function DepartmentInfo({ staff, curriculum }) {
+  const t = useT();
   return (
     <PageLayout>
       <DepartmentFacts staff={staff} curriculum={curriculum} />
@@ -352,7 +355,7 @@ export default function DepartmentInfo({ staff, curriculum }) {
                               : "text-[12px] text-primary-500/70"
                           }`}
                         >
-                          {area.label}
+                          {t(area.label)}
                         </span>
                       </div>
                     );

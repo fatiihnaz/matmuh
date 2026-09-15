@@ -9,6 +9,7 @@ import CategoryChips from "@/app/components/Announcements/CategoryChips";
 import Pagination from "@/app/components/Announcements/Pagination";
 import NewRecordDialog from "@/app/components/Announcements/NewRecordDialog";
 import { PAGE_SIZE, getAnnouncements, getCategoriesWithCounts } from "@/data/content";
+import { translate } from "@/i18n";
 
 export const metadata = {
   title: "Duyurular",
@@ -35,8 +36,8 @@ export default async function AnnouncementsPage({ params: routeParams, searchPar
   return (
     <>
       <SubHeader
-        title="Duyurular"
-        subTitle="Sınav programları, staj, mezuniyet ve bölüm duyuruları"
+        title={translate(locale, "Duyurular")}
+        subTitle={translate(locale, "Sınav programları, staj, mezuniyet ve bölüm duyuruları")}
       />
       <PageLayout sidebar={<QuickLinks />}>
         <div className="flex flex-col gap-5">
@@ -51,7 +52,7 @@ export default async function AnnouncementsPage({ params: routeParams, searchPar
 
           <div className="flex items-center justify-between gap-3 px-1">
             <span className="text-xs text-primary-500/70">
-              {total} duyuru{q ? ` · "${q}" için sonuçlar` : ""}
+              {translate(locale, "{count} duyuru", { count: total })}{q ? ` · ${translate(locale, "\"{q}\" için sonuçlar", { q })}` : ""}
             </span>
             <NewRecordDialog collection="announcements" page="/duyurular/yeni" label="Yeni duyuru" title="Yeni Duyuru" submitLabel="Yayımla" />
           </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import {
   CalendarDays,
   Eye,
@@ -21,11 +21,12 @@ import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 import { useT } from "@/i18n/useT";
+import { useCmsRoute } from "inscribed";
+import { formatDate } from "@/lib/date";
 import {
   NOTE_STATUS,
   fetchMyNotes,
   fetchMySchedule,
-  formatDay,
   scheduleDays,
   weekdayOf,
 } from "@/data/profile";
@@ -53,6 +54,7 @@ function Empty({ children }) {
 }
 
 function NoteThumb({ note }) {
+  const t = useT();
   const [preview, setPreview] = useState(false);
   const kind = String(note.extension ?? "").toLowerCase();
   const previewable = canPreview(note.href, kind, note.previewHref);
@@ -79,7 +81,7 @@ function NoteThumb({ note }) {
       <button
         type="button"
         onClick={() => setPreview(true)}
-        aria-label={`${note.title} dosyasını önizle`}
+        aria-label={t("{title} dosyasını önizle", { title: note.title })}
         className="mt-0.5 flex size-9 shrink-0 cursor-pointer flex-col items-center justify-center rounded-lg bg-primary-500/5 transition-colors hover:bg-secondary-500/15"
       >
         {face}
@@ -112,6 +114,7 @@ function NotesBody({
   onNavigate,
 }) {
   const t = useT();
+  const { locale } = useCmsRoute();
   const { href } = useLocaleNav();
   const [query, setQuery] = useState("");
   const [status, setStatus] = useState("all");
@@ -136,7 +139,7 @@ function NotesBody({
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Not veya ders kodu ara…"
+            placeholder={t("Not veya ders kodu ara…")}
             aria-label={t("Notlarımda ara")}
             className="w-full rounded-lg border border-primary-500/10 bg-primary-500/2 px-3 py-1.5 text-[13px] text-primary-600 outline-none! focus:border-secondary-500/50"
           />
@@ -152,7 +155,7 @@ function NotesBody({
                     : "text-primary-500/70 hover:text-primary-500"
                 }`}
               >
-                {filter.label}
+                {t(filter.label)}
               </button>
             ))}
           </div>
@@ -177,11 +180,11 @@ function NotesBody({
                     <span
                       className={`rounded-sm px-1.5 py-0.5 text-[10px] font-semibold ${badge.tone}`}
                     >
-                      {badge.label}
+                      {t(badge.label)}
                     </span>
                     {note.type !== "OTHER" && noteTypeLabel(note.type) && (
                       <span className="rounded-sm bg-primary-500/6 px-1.5 py-0.5 text-[10px] font-semibold text-primary-500/70">
-                        {noteTypeLabel(note.type)}
+                        {t(noteTypeLabel(note.type))}
                       </span>
                     )}
                   </span>
@@ -198,7 +201,7 @@ function NotesBody({
                         <span aria-hidden>·</span>
                       </>
                     )}
-                    {formatDay(note.createdAt)}
+                    {formatDate(note.createdAt, locale)}
                     {note.offering?.instructor && (
                       <>
                         <span aria-hidden>·</span>
@@ -277,7 +280,7 @@ function ScheduleEntry({ entry, conflict }) {
         <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-primary-500/70">
           {entry.online ? (
             <span className="inline-flex items-center gap-1">
-              <Wifi size={11} strokeWidth={1.5} /> Çevrimiçi
+              <Wifi size={11} strokeWidth={1.5} /> {t("Çevrimiçi")}
             </span>
           ) : entry.classroom ? (
             <span className="inline-flex items-center gap-1">
@@ -337,7 +340,7 @@ function EnrolledCourses({ onChanged }) {
               type="button"
               onClick={() => void onRemove(row.offeringId)}
               disabled={busyId === row.offeringId}
-              aria-label={`${row.lectureName || row.lectureCode} dersini programdan kaldır`}
+              aria-label={t("{course} dersini programdan kaldır", { course: row.lectureName || row.lectureCode })}
               className="shrink-0 rounded-sm p-0.5 text-primary-500/70 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
             >
               <X size={12} strokeWidth={2} />
@@ -384,6 +387,7 @@ function ScheduleBody(props) {
 }
 
 function ScheduleTabs({ items, onChanged }) {
+  const t = useT();
   const [tab, setTab] = useState("week");
 
   return (
@@ -403,7 +407,7 @@ function ScheduleTabs({ items, onChanged }) {
                 : "text-primary-500/70 hover:text-primary-500"
             }`}
           >
-            {entry.label}
+            {t(entry.label)}
           </button>
         ))}
       </div>
@@ -415,6 +419,7 @@ function ScheduleTabs({ items, onChanged }) {
 
 function DatedSchedule({ items }) {
   const t = useT();
+  const { locale } = useCmsRoute();
   if (items.length === 0) {
     return <Empty>{t("Bu hafta için ders kaydınız görünmüyor.")}</Empty>;
   }
@@ -425,10 +430,10 @@ function DatedSchedule({ items }) {
         <div key={date} className="px-4 py-3">
           <div className="mb-2 flex items-baseline gap-2">
             <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-              {weekdayOf(date)}
+              {t(weekdayOf(date))}
             </span>
             <span className="text-[11px] text-primary-500/70">
-              {formatDay(date)}
+              {formatDate(date, locale)}
             </span>
           </div>
           <div className="space-y-1.5">
@@ -440,7 +445,7 @@ function DatedSchedule({ items }) {
                 >
                   <p className="flex items-center gap-1.5 px-1.5 pb-1.5 text-[11px] font-semibold text-amber-700">
                     <TriangleAlert size={12} strokeWidth={2} />
-                    Çakışma
+                    {t("Çakışma")}
                     {overlap && (
                       <span className="font-mono font-normal text-amber-700/70">
                         {overlap}
@@ -541,13 +546,13 @@ export default function ProfilePanel({ view, onClose }) {
     <Modal
       open
       onClose={onClose}
-      label={label}
+      label={t(label)}
       contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
     >
       <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
         <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
           <Icon size={16} strokeWidth={1.5} className="text-secondary-700" />
-          <h2 className="text-sm font-semibold text-primary-600">{label}</h2>
+          <h2 className="text-sm font-semibold text-primary-600">{t(label)}</h2>
           {status === "ready" && state.items.length > 0 && (
             <span className="ml-auto text-[11px] text-primary-500/70">
               {state.items.length} kayıt

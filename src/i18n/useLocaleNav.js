@@ -18,8 +18,9 @@ export function useLocaleNav() {
 
   const href = useCallback(
     (path) => {
-      if (!path?.startsWith("/") || locale === DEFAULT_LOCALE) return path;
+      if (typeof path !== "string" || !path.startsWith("/") || locale === DEFAULT_LOCALE) return path;
       const [route, query] = path.split("?");
+      if (LOCALE_PREFIX.test(route)) return path;
       const prefixed = route === "/" ? `/${locale}` : `/${locale}${route}`;
       return query ? `${prefixed}?${query}` : prefixed;
     },

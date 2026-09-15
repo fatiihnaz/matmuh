@@ -6,6 +6,7 @@ import PageLayout from "@/app/components/PageLayout";
 import ScheduleViews from "@/app/[locale]/egitim/components/ScheduleViews";
 import ScheduleLegend from "@/app/[locale]/egitim/components/ScheduleLegend";
 import { useT } from "@/i18n/useT";
+import { localizeTerm } from "@/i18n";
 
 const LEVELS = [
   { id: "all", label: "Tümü" },
@@ -35,7 +36,7 @@ export default function LisansustuDersProgramiPage({ entries: all = [], term }) 
     <>
       <SubHeader
         title={t("Ders Programı")}
-        subTitle={term ? `Lisansüstü · ${term}` : "Lisansüstü"}
+        subTitle={term ? `${t("Lisansüstü")} · ${localizeTerm(t, term)}` : t("Lisansüstü")}
       />
       <PageLayout>
         <div className="space-y-4">
@@ -57,14 +58,14 @@ export default function LisansustuDersProgramiPage({ entries: all = [], term }) 
                           : "transparent",
                     }}
                   >
-                    {lv.label}
+                    {t(lv.label)}
                   </button>
                 ))}
               </div>
               <div className="flex items-center gap-2 text-primary-500/70">
                 <CalendarDays size={14} strokeWidth={1.5} />
                 <span style={{ fontSize: "0.75rem" }}>
-                  {entries.length} ders bloğu
+                  {t("{count} ders bloğu", { count: entries.length })}
                 </span>
               </div>
             </div>
@@ -75,8 +76,8 @@ export default function LisansustuDersProgramiPage({ entries: all = [], term }) 
             legend={
               <ScheduleLegend
                 items={[
-                  { color: "rgba(29,36,69,0.15)", label: "Yüksek Lisans" },
-                  { color: "rgba(173,151,111,0.4)", label: "Doktora" },
+                  { color: "rgba(29,36,69,0.15)", label: t("Yüksek Lisans") },
+                  { color: "rgba(173,151,111,0.4)", label: t("Doktora") },
                 ]}
               />
             }

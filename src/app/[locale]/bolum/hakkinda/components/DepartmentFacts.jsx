@@ -48,32 +48,32 @@ export default function DepartmentFacts({ staff, curriculum }) {
     {
       icon: Users,
       value: staff.faculty,
-      label: "Öğretim Üyesi",
-      sub: `${staff.professor} profesör · ${staff.associate} doçent · ${staff.assistant} dr. öğr. üyesi`,
+      label: t("Öğretim Üyesi"),
+      sub: `${staff.professor} ${t("profesör")} · ${staff.associate} ${t("doçent")} · ${staff.assistant} ${t("dr. öğr. üyesi")}`,
     },
     {
       icon: FlaskConical,
       value: staff.research,
-      label: "Araştırma Görevlisi",
-      sub: "Öğretim ve araştırma kadrosu",
+      label: t("Araştırma Görevlisi"),
+      sub: t("Öğretim ve araştırma kadrosu"),
     },
     {
       icon: BookOpen,
       value: curriculum.totalEcts,
       label: "AKTS",
-      sub: `${curriculum.termCount} yarıyıl · ${curriculum.courseCount} ders`,
+      sub: `${curriculum.termCount} ${t("yarıyıl")} · ${curriculum.courseCount} ${t("ders")}`,
     },
     {
       icon: Languages,
       value: 2,
-      label: "Lisans Programı",
-      sub: "%100 ve %30 İngilizce",
+      label: t("Lisans Programı"),
+      sub: t("%100 ve %30 İngilizce"),
     },
     {
       icon: Briefcase,
       value: 40,
-      label: "İş Günü Staj",
-      sub: "Mezuniyet için zorunlu",
+      label: t("İş Günü Staj"),
+      sub: t("Mezuniyet için zorunlu"),
     },
   ];
 

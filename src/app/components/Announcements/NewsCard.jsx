@@ -1,6 +1,6 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { newsHref } from "@/data/content";
-import { formatTrDate } from "@/lib/date";
+import { formatDate } from "@/lib/date";
 import CategoryTags from "./CategoryTags";
 import NewsThumb from "./NewsThumb";
 
@@ -21,7 +21,7 @@ export default function NewsCard({ item, locale, priority = false }) {
           dateTime={item.publishedAt}
           className="text-xs font-medium text-secondary-700"
         >
-          {formatTrDate(item.publishedAt)}
+          {formatDate(item.publishedAt, locale)}
         </time>
         <h2 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors line-clamp-2">
           {item.title}

@@ -1,10 +1,11 @@
 import AnnouncementItem from "./AnnouncementItem";
+import { translate } from "@/i18n";
 
 export default function AnnouncementList({ items, variant = "compact", locale, emptyMessage = "Bu kriterlere uygun duyuru bulunamadı." }) {
   if (!items.length) {
     return (
       <div className="py-16 text-center text-sm text-primary-500/70 font-medium border border-dashed border-primary-500/10 rounded-xl">
-        {emptyMessage}
+        {translate(locale, emptyMessage)}
       </div>
     );
   }

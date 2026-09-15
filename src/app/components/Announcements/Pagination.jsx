@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { getCmsRoute } from "@/app/lib/cms.jsx";
 import { translate } from "@/i18n";
@@ -24,7 +24,7 @@ export default async function Pagination({ basePath, params, page, pageCount }) 
   const arrow = "flex items-center justify-center size-8 rounded-lg border border-primary-500/8 text-primary-500/70 hover:border-secondary-500/30 hover:text-secondary-700 transition-colors";
 
   return (
-    <nav className="flex items-center justify-center gap-1 pt-6" aria-label="Sayfalar">
+    <nav className="flex items-center justify-center gap-1 pt-6" aria-label={translate(locale, "Sayfalar")}>
       {page > 1 && (
         <Link href={pageHref(basePath, params, page - 1)} className={arrow} aria-label={translate(locale, "Önceki sayfa")}>
           <ChevronLeft size={14} />

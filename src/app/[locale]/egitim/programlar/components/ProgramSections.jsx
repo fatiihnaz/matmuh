@@ -48,7 +48,7 @@ function ProgramCard({ program }) {
             {t("Başvuru Koşulları")}
           </span>
           {program.admissionScores && <span>{program.admissionScores}</span>}
-          {program.admissionFields && <span>İlgili alan: {program.admissionFields}</span>}
+          {program.admissionFields && <span>{t("İlgili alan:")} {program.admissionFields}</span>}
         </div>
       )}
 

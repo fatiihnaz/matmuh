@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ChevronRight } from "lucide-react";
 import MainCard from "./MainCard";
 import { getCmsRoute } from "@/app/lib/cms.jsx";
@@ -20,7 +20,7 @@ export default async function RelatedPages({ items }) {
             {item.icon && (
               <item.icon className="size-4 shrink-0 text-primary-500/70" />
             )}
-            <span className="flex-1">{item.label}</span>
+            <span className="flex-1">{translate(locale, item.label)}</span>
             <ChevronRight className="size-3.5 shrink-0 text-primary-500/20 group-hover:text-secondary-700 group-hover:translate-x-0.5 transition-all" />
           </Link>
         ))}

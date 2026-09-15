@@ -1,11 +1,12 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { Paperclip, ImageIcon, Pin } from "lucide-react";
 import { announcementHref } from "@/data/content";
-import { formatTrDayMonth } from "@/lib/date";
+import { formatDayMonth } from "@/lib/date";
+import { translate } from "@/i18n";
 import CategoryTags from "./CategoryTags";
 
 export default function AnnouncementItem({ item, variant = "compact", locale }) {
-  const { day, month } = formatTrDayMonth(item.publishedAt);
+  const { day, month } = formatDayMonth(item.publishedAt, locale);
   const full = variant === "full";
 
   return (
@@ -24,7 +25,7 @@ export default function AnnouncementItem({ item, variant = "compact", locale }) 
       <div className="min-w-0 flex-1 py-0.5">
         <p className="text-sm text-primary-700 group-hover:text-secondary-700 transition-colors">
           {item.pinned && (
-            <Pin className="inline size-3 mr-1.5 -mt-0.5 text-secondary-700" aria-label="Sabitlenmiş" />
+            <Pin className="inline size-3 mr-1.5 -mt-0.5 text-secondary-700" aria-label={translate(locale, "Sabitlenmiş")} />
           )}
           {item.title}
         </p>

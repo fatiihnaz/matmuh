@@ -1,7 +1,9 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { Home, Bell, GraduationCap } from "lucide-react";
 
 import { UndefinedPlot } from "./components/MathPlot";
+import { getCmsRoute } from "@/app/lib/cms.jsx";
+import { translate } from "@/i18n";
 
 export const metadata = {
   title: "Sayfa bulunamadı",
@@ -13,7 +15,10 @@ const KISAYOLLAR = [
   { href: "/egitim/mufredat", label: "Müfredat", icon: GraduationCap },
 ];
 
-export default function NotFound() {
+export default async function NotFound() {
+  const { locale } = await getCmsRoute();
+  const t = (text) => translate(locale, text);
+  const prefix = locale && locale !== "tr" ? `/${locale}` : "";
   return (
     <div className="w-full flex-1 py-20">
       <div className="max-w-2xl mx-auto px-4 text-center">
@@ -28,22 +33,21 @@ export default function NotFound() {
           404
         </p>
 
-        <h1 className="mt-2 text-xl font-semibold text-primary-500">Sayfa bulunamadı</h1>
+        <h1 className="mt-2 text-xl font-semibold text-primary-500">{t("Sayfa bulunamadı")}</h1>
 
         <p className="mt-3 text-[13px] text-primary-500/70 leading-relaxed">
-          Sıfıra bölmek gibi: aradığınız adresin bir karşılığı yok. Sayfa taşınmış,
-          adı değişmiş ya da hiç var olmamış olabilir.
+          {t("Sıfıra bölmek gibi: aradığınız adresin bir karşılığı yok. Sayfa taşınmış, adı değişmiş ya da hiç var olmamış olabilir.")}
         </p>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-2">
           {KISAYOLLAR.map(({ href, label, icon: Icon }) => (
             <Link
               key={href}
-              href={href}
+              href={`${prefix}${href === "/" && prefix ? "" : href}`}
               className="flex items-center gap-2 rounded-lg border border-primary-500/10 bg-white px-4 py-2 text-[13px] font-medium text-primary-500/70 shadow-xs transition-colors hover:border-primary-500/20 hover:text-primary-500"
             >
               <Icon size={14} className="text-secondary-700" />
-              {label}
+              {t(label)}
             </Link>
           ))}
         </div>

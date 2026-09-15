@@ -1,11 +1,13 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { Mail, ExternalLink } from "lucide-react";
 
 import Avatar from "@/app/components/Avatar";
 import { safeHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 import { fullName } from "@/app/components/PersonRow";
 
 export default function StaffMember({ member, idx }) {
+  const t = useT();
   const name = fullName(member);
   const avesisUrl = safeHref(member.avesisLink);
   const office = member.office ?? "";
@@ -36,12 +38,12 @@ export default function StaffMember({ member, idx }) {
         )}
 
         <div className="mt-2 pt-1 font-sans text-xs text-primary-500/70 leading-tight">
-          Tel: {member.phone}
+          {t("Tel:")} {member.phone}
         </div>
 
         <div className="mt-2">
           <span className="text-xs font-bold text-secondary-700 bg-secondary-500/10 px-2 py-1 rounded-md">
-            {isRoomNumber ? `Oda: ${office}` : office}
+            {isRoomNumber ? `${t("Oda")}: ${office}` : office}
           </span>
         </div>
 
@@ -49,7 +51,7 @@ export default function StaffMember({ member, idx }) {
           {member.email && (
             <a
               href={`mailto:${member.email}`}
-              aria-label={`${name} kişisine e-posta gönder`}
+              aria-label={t("{name} kişisine e-posta gönder", { name })}
               className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
               onClick={(e) => e.stopPropagation()}
             >
@@ -62,7 +64,7 @@ export default function StaffMember({ member, idx }) {
               href={avesisUrl}
               target="_blank"
               rel="noopener noreferrer"
-              aria-label={`${name} AVESİS`}
+              aria-label={`${name} ${t("AVESİS")}`}
               className="rounded-md p-1.5 text-primary-500/70 transition-all duration-200 hover:bg-secondary-500/10 hover:text-secondary-700"
               onClick={(e) => e.stopPropagation()}
             >

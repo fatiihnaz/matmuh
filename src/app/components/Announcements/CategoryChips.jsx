@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { getCmsRoute } from "@/app/lib/cms.jsx";
 import { translate } from "@/i18n";
 
@@ -38,7 +38,7 @@ export default async function CategoryChips({
           active={active === category.id}
           count={showCounts ? category.count : null}
         >
-          {category.label}
+          {translate(locale, category.label)}
         </Chip>
       ))}
     </div>

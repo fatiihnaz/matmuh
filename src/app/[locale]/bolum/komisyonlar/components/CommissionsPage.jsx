@@ -11,6 +11,7 @@ import PageSection from "@/app/components/PageSection";
 import Avatar from "@/app/components/Avatar";
 import DocumentLink from "@/app/components/DocumentLink";
 import { safeHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 const TITLE_TAIL = new Set(["Üyesi"]);
 
@@ -33,6 +34,7 @@ function parseMembers(text) {
 }
 
 function CommissionCard({ commission }) {
+  const t = useT();
   const [open, setOpen] = useState(false);
   const members = parseMembers(commission.members);
   const chair = commission.chair?.trim();
@@ -51,7 +53,7 @@ function CommissionCard({ commission }) {
             {commission.name}
           </span>
           <span className="block text-[11px] text-primary-500/70 wrap-break-word">
-            {chair ? chair : `${total} üye`}
+            {chair ? chair : `${total} ${t("üye")}`}
           </span>
         </span>
         <span className="shrink-0 text-[10px] text-primary-500/70">{total}</span>

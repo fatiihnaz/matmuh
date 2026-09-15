@@ -1,7 +1,7 @@
 "use client";
 import React, { useRef, useState, useEffect } from "react";
 import { motion, useMotionValue, useSpring, useTransform } from "framer-motion";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ChevronRight } from "lucide-react";
 import { EditableRegion } from "inscribed";
 import BackgroundVisuals from "./BackgroundVisuals";

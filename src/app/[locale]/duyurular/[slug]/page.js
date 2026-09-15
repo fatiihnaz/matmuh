@@ -14,6 +14,7 @@ import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
 import { getAdjacent, getAnnouncementBySlug, getAnnouncements } from "@/data/content";
 import { alternateLanguages } from "@/app/lib/hreflang.js";
+import { translate } from "@/i18n";
 
 export async function generateMetadata({ params }) {
   const { slug } = await params;
@@ -77,7 +78,7 @@ export default async function AnnouncementDetailPage({ params }) {
             </div>
             {!item.body && (
               <p className="text-[13px] text-primary-500/70">
-                Bu duyurunun ayrıntıları ekli belgede yer alıyor.
+                {translate(locale, "Bu duyurunun ayrıntıları ekli belgede yer alıyor.")}
               </p>
             )}
             {item.attachments.length > 0 && (
@@ -88,7 +89,7 @@ export default async function AnnouncementDetailPage({ params }) {
           </Panel>
 
           {item.gallery.length > 0 && (
-            <PageSection title="Fotoğraflar" count={item.gallery.length}>
+            <PageSection title={translate(locale, "Fotoğraflar")} count={item.gallery.length}>
               <GalleryGrid images={item.gallery} title={item.title} />
             </PageSection>
           )}

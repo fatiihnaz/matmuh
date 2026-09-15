@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { Plus } from "lucide-react";
 
 import { useIsEditor } from "@/app/lib/cms-provider.jsx";

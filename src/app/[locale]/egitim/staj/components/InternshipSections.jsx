@@ -1,7 +1,7 @@
 "use client";
 
 import { Fragment } from "react";
-import Link from "next/link";
+import Link from "@/app/components/LocaleLink";
 import { ArrowUpRight, Mail } from "lucide-react";
 import { EditableList, EditableRegion, useCmsBlock } from "inscribed";
 
@@ -15,6 +15,7 @@ import DocumentLink from "@/app/components/DocumentLink";
 import Avatar from "@/app/components/Avatar";
 import { findPerson, fullName, useStaff } from "@/app/components/PersonRow";
 import { safeHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 function lines(text) {
   return String(text ?? "")
@@ -37,6 +38,7 @@ function Bullets({ items }) {
 }
 
 function StaffCard({ person, idx }) {
+  const t = useT();
   const name = fullName(person);
   return (
     <div className="flex items-center gap-3 p-2.5 rounded-lg bg-primary-500/2 border border-primary-500/5">
@@ -47,13 +49,13 @@ function StaffCard({ person, idx }) {
         </span>
         <span className="block text-[11px] text-primary-500/70 wrap-break-word">
           {person.role && `${person.role} · `}
-          Oda {person.office} · {person.phone}
+          {t("Oda")} {person.office} · {person.phone}
         </span>
       </span>
       {person.email && (
         <a
           href={`mailto:${person.email}`}
-          aria-label={`${name} kişisine e-posta gönder`}
+          aria-label={t("{name} kişisine e-posta gönder", { name })}
           className="shrink-0 flex items-center justify-center size-7 rounded-lg text-primary-500/70 hover:bg-secondary-500/10 hover:text-secondary-700 transition-colors"
         >
           <Mail className="size-3.5" />
@@ -64,6 +66,7 @@ function StaffCard({ person, idx }) {
 }
 
 export function MandatoryInternships() {
+  const t = useT();
   const { value } = useCmsBlock("mandatory.items");
   const items = Array.isArray(value) ? value : [];
   const perType = Number(items[0]?.days) || 0;
@@ -73,9 +76,9 @@ export function MandatoryInternships() {
     <>
       <StatStrip
         items={[
-          { value: items.length, label: "Zorunlu staj", hint: "1. ve 2. staj" },
-          { value: perType, label: "Tür başına", hint: "iş günü" },
-          { value: total, label: "Toplam", hint: "iş günü" },
+          { value: items.length, label: t("Zorunlu staj"), hint: t("1. ve 2. staj") },
+          { value: perType, label: t("Tür başına"), hint: t("iş günü") },
+          { value: total, label: t("Toplam"), hint: t("iş günü") },
         ]}
       />
 
@@ -146,8 +149,8 @@ export function MandatoryInternships() {
                 </span>
                 <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[11px] text-primary-500/70">
                   <span className="font-mono">{item.code}</span>
-                  <span>{item.days} iş günü</span>
-                  <span>{item.ects} AKTS</span>
+                  <span>{item.days} {t("iş günü")}</span>
+                  <span>{item.ects} {t("AKTS")}</span>
                   <span>{item.term}</span>
                 </div>
               </Link>
@@ -369,6 +372,7 @@ export function InternshipDocuments() {
 }
 
 export function Commission({ initialStaff = [] }) {
+  const t = useT();
   const { people } = useStaff(initialStaff);
   const chair = useCmsBlock("commission.chair", {
     blockType: "ShortText",
@@ -449,13 +453,13 @@ Gerek gördüğünde, Bölüm Sekreterliği aracılığıyla öğrencilere staj 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 pt-2 border-t border-primary-500/5">
             <div className="flex flex-col gap-2 pt-3">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-                Oluşumu
+                {t("Oluşumu")}
               </span>
               <Bullets items={lines(composition.value)} />
             </div>
             <div className="flex flex-col gap-2 lg:pt-3">
               <span className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-                Görevleri
+                {t("Görevleri")}
               </span>
               <Bullets items={lines(duties.value)} />
             </div>

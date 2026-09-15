@@ -84,7 +84,7 @@ export default function UserLogin() {
     );
   }
 
-  const name = user?.name || "Ad Soyad";
+  const name = user?.name || t("Ad Soyad");
   const email = user?.email || "";
   const initials = user?.name
     ? user.name
@@ -229,7 +229,7 @@ export default function UserLogin() {
                     {pending > 0 && (
                       <span
                         className="shrink-0 rounded-full bg-amber-500/15 px-1.5 py-0.5 font-mono text-[10px] font-semibold text-amber-700"
-                        aria-label={`${pending} not onay bekliyor`}
+                        aria-label={t("{count} not onay bekliyor", { count: pending })}
                       >
                         {pending}
                       </span>

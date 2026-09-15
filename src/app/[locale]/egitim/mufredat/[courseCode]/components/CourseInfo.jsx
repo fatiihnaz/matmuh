@@ -35,6 +35,7 @@ import LectureNotes from "./LectureNotes";
 import SectionEnroll from "./SectionEnroll";
 import { useAuth } from "@/lib/auth";
 import { useT } from "@/i18n/useT";
+import { localizeTerm } from "@/i18n";
 
 function SectionRow({ section, defaultOpen }) {
   const t = useT();
@@ -63,11 +64,11 @@ function SectionRow({ section, defaultOpen }) {
             {section.instructor}
           </span>
           <span className="mt-0.5 block text-[11px] text-primary-500/70">
-            Grup {section.groupNo}
+            {t("Grup")} {section.groupNo}
             {!open && first && (
               <>
                 <span aria-hidden> · </span>
-                {first.day} {first.time.split(" - ")[0]}
+                {t(first.day)} {first.time.split(" - ")[0]}
                 {section.schedule.length > 1 &&
                   ` +${section.schedule.length - 1}`}
               </>
@@ -91,7 +92,7 @@ function SectionRow({ section, defaultOpen }) {
             >
               <div className="flex justify-between items-center mb-1">
                 <span className="text-xs font-bold text-primary-500">
-                  {slot.day}
+                  {t(slot.day)}
                 </span>
                 {slot.online && (
                   <span className="inline-flex items-center gap-1 text-[10px] font-bold text-secondary-700 bg-secondary-500/10 px-2 py-0.5 rounded-sm uppercase tracking-wider">
@@ -223,7 +224,7 @@ export default function CourseInfo({ course, sections = [] }) {
         passed: 0,
         failed: 0,
         passRate: 0,
-        avgLevel: "Veri Yok",
+        avgLevel: t("Veri Yok"),
       };
     }
 
@@ -245,9 +246,9 @@ export default function CourseInfo({ course, sections = [] }) {
       passed: passed,
       failed: enrolled - passed,
       passRate: enrolled > 0 ? ((passed / enrolled) * 100).toFixed(1) : 0,
-      avgLevel: average >= 65 ? "Yüksek" : average >= 45 ? "Orta" : "Düşük",
+      avgLevel: average >= 65 ? t("Yüksek") : average >= 45 ? t("Orta") : t("Düşük"),
     };
-  }, [activeStats]);
+  }, [activeStats, t]);
 
   if (!course) return null;
 
@@ -301,18 +302,18 @@ export default function CourseInfo({ course, sections = [] }) {
         </div>
       </MainCard>
 
-      <MainCard title="Ders Bilgileri">
+      <MainCard title={t("Ders Bilgileri")}>
         <div className="space-y-3 pt-2">
           {[
             { label: "T+U+L", value: course.hours },
             { label: "ECTS", value: course.ects ?? "-" },
             {
-              label: "Yarıyıl",
-              value: course.semester ? `${course.semester}. Yarıyıl` : "-",
+              label: t("Yarıyıl"),
+              value: course.semester ? t("{n}. Yarıyıl", { n: course.semester }) : "-",
             },
             { label: t("Tür"), value: t(course.type) },
-            { label: "Kategori", value: course.category ?? "-" },
-            { label: "Dil", value: course.language ?? "-" },
+            { label: t("Kategori"), value: course.category ? t(course.category) : "-" },
+            { label: t("Dil"), value: course.language ? course.language.split(",").map((part) => t(part.trim())).join(", ") : "-" },
           ].map((item, i) => (
             <div key={i} className="flex items-center justify-between text-xs">
               <span className="text-primary-500/70 font-medium">
@@ -353,7 +354,7 @@ export default function CourseInfo({ course, sections = [] }) {
                   }
                 />
               )}
-              {tab.label}
+              {t(tab.label)}
               {tab.badge && (
                 <span className="bg-primary-500/5 text-primary-500/70 text-[10px] px-2 py-0.5 rounded-md font-bold ml-1 font-mono">
                   {tab.badge}
@@ -407,12 +408,11 @@ export default function CourseInfo({ course, sections = [] }) {
                         <ExternalLink size={14} strokeWidth={2} />
                       </div>
                       <span className="text-sm text-primary-500/70 leading-relaxed">
-                        Bu ders Matematik Mühendisliği bölümüne ait değil.
-                        İçerik, kazanım ve değerlendirme bilgileri{" "}
+                        {t("Bu ders Matematik Mühendisliği bölümüne ait değil. İçerik, kazanım ve değerlendirme bilgileri")}{" "}
                         <span className="font-semibold text-primary-500 group-hover:text-secondary-700 transition-colors">
                           {t("YTÜ Bologna kataloğunda")}
                         </span>{" "}
-                        tutuluyor.
+                        {t("tutuluyor.")}
                       </span>
                     </a>
                   ) : (
@@ -443,7 +443,7 @@ export default function CourseInfo({ course, sections = [] }) {
                         <div className="flex items-center gap-2 mb-3">
                           <div className="w-1 h-4 bg-secondary-500 rounded-full" />
                           <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-                            Kaynaklar
+                            {t("Kaynaklar")}
                           </h3>
                         </div>
                         <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
@@ -468,7 +468,7 @@ export default function CourseInfo({ course, sections = [] }) {
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
                       {course.assessment
-                        ? `Vize %${course.assessment.midterm?.weight ?? 0} + Final %${course.assessment.final?.weight ?? 0}`
+                        ? t("Vize %{midterm} + Final %{final}", { midterm: course.assessment.midterm?.weight ?? 0, final: course.assessment.final?.weight ?? 0 })
                         : "-"}
                     </p>
                   </div>
@@ -498,7 +498,7 @@ export default function CourseInfo({ course, sections = [] }) {
                     </span>
                   </div>
                   <span className="text-xs font-medium text-primary-500/70">
-                    {weekCount} hafta
+                    {t("{count} hafta", { count: weekCount })}
                   </span>
                 </div>
                 <div className="mb-8 h-px w-full bg-primary-500/10" />
@@ -563,7 +563,7 @@ export default function CourseInfo({ course, sections = [] }) {
                 ) : statsFailed ? (
                   <EmptyStats
                     code={searchCode}
-                    message="İstatistikler alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyip tekrar deneyin."
+                    message={t("İstatistikler alınamadı. Oturumunuz sona ermiş olabilir, sayfayı yenileyip tekrar deneyin.")}
                   />
                 ) : terms === null ? (
                   <StatsSkeleton />
@@ -582,9 +582,9 @@ export default function CourseInfo({ course, sections = [] }) {
                             }}
                             className="w-full appearance-none bg-white border border-primary-500/10 rounded-xl px-4 py-2.5 pr-10 text-sm font-medium text-primary-500 outline-none hover:border-primary-500/20 transition-colors cursor-pointer shadow-xs"
                           >
-                            {availableTerms.map((t) => (
-                              <option key={t.name} value={t.name}>
-                                {t.name}
+                            {availableTerms.map((term) => (
+                              <option key={term.name} value={term.name}>
+                                {localizeTerm(t, term.name)}
                               </option>
                             ))}
                           </select>
@@ -628,7 +628,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             >
                               {availableSections.map((s) => (
                                 <option key={s.section} value={s.section}>
-                                  Şube {s.section}
+                                  {t("Şube")} {s.section}
                                 </option>
                               ))}
                             </select>
@@ -664,23 +664,23 @@ export default function CourseInfo({ course, sections = [] }) {
                     <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mt-8 font-sans text-primary-500">
                       {[
                         {
-                          label: "Sınıf Ortalaması",
+                          label: t("Sınıf Ortalaması"),
                           val: statsSummary.average,
-                          sub: `Sınıf Düzeyi: ${statsSummary.avgLevel}`,
+                          sub: t("Sınıf Düzeyi: {level}", { level: statsSummary.avgLevel }),
                           icon: GraduationCap,
                         },
                         {
-                          label: "Standart Sapma",
+                          label: t("Standart Sapma"),
                           val: statsSummary.stdDev,
-                          sub: "σ dağılımı",
+                          sub: t("σ dağılımı"),
                           icon: Sigma,
                         },
                         {
-                          label: "Dersi Alan",
+                          label: t("Dersi Alan"),
                           val: statsSummary.enrolled,
-                          sub: `Geçme: %${statsSummary.passRate}`,
+                          sub: t("Geçme: %{rate}", { rate: statsSummary.passRate }),
                           icon: User,
-                          suffix: "Öğrenci",
+                          suffix: t("Öğrenci"),
                         },
                       ].map((stat, i) => (
                         <div
@@ -792,7 +792,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             <div className="flex items-center gap-2">
                               <div className="size-1.5 rounded-full bg-primary-500/20 shrink-0" />
                               <span className="text-[10px] text-primary-500/70 w-8">
-                                Kalan
+                                {t("Kalan")}
                               </span>
                               <span className="font-bold text-primary-500 font-mono text-xs leading-none">
                                 {statsSummary.failed}
@@ -821,7 +821,7 @@ export default function CourseInfo({ course, sections = [] }) {
                                 )}
                               </div>
                               <span className="text-[11px] font-bold text-primary-500/70 uppercase tracking-wider leading-none">
-                                {exam.name}
+                                {t(exam.name)}
                               </span>
                             </div>
 
@@ -848,7 +848,7 @@ export default function CourseInfo({ course, sections = [] }) {
                                   {exam.average}
                                 </span>
                                 <span className="text-[10px] sm:text-xs font-sans text-primary-500/70 sm:text-primary-500">
-                                  ORT
+                                  {t("ORT")}
                                 </span>
                               </div>
                               <div className="hidden sm:block w-px h-8 bg-primary-500/10" />
@@ -863,7 +863,7 @@ export default function CourseInfo({ course, sections = [] }) {
                                     : exam.attended}
                                 </span>
                                 <span className="text-[10px] sm:text-xs font-sans text-primary-500/70 sm:text-primary-500">
-                                  {exam.total ? "GİREN" : "ÖĞR"}
+                                  {exam.total ? t("GİREN") : t("ÖĞR")}
                                 </span>
                               </div>
                             </div>
@@ -890,7 +890,7 @@ export default function CourseInfo({ course, sections = [] }) {
                 ) : (
                   <EmptyStats
                     code={searchCode}
-                    message="Bu derse ait güncel istatistik verisi henüz yüklenmemiş olabilir."
+                    message={t("Bu derse ait güncel istatistik verisi henüz yüklenmemiş olabilir.")}
                   />
                 )}
               </motion.div>
@@ -993,7 +993,7 @@ function StatsPreview() {
                 <div className="mb-6 flex items-center gap-3">
                   <div className="h-5 w-1 rounded-full bg-secondary-500" />
                   <span className="text-xs font-semibold uppercase tracking-widest text-primary-700">
-                    {title}
+                    {t(title)}
                   </span>
                 </div>
                 <div className="space-y-3.5">
@@ -1029,12 +1029,12 @@ function StatsPreview() {
         <div className="mt-6 grid grid-cols-2 gap-4 lg:grid-cols-3">
           {[
             {
-              label: "Sınıf Ortalaması",
+              label: t("Sınıf Ortalaması"),
               val: "64.8",
-              sub: "Sınıf Düzeyi: Orta",
+              sub: t("Sınıf Düzeyi: {level}", { level: t("Orta") }),
             },
-            { label: "Standart Sapma", val: "12.4", sub: "σ dağılımı" },
-            { label: "Dersi Alan", val: "86", sub: "Geçme: %92.1" },
+            { label: t("Standart Sapma"), val: "12.4", sub: t("σ dağılımı") },
+            { label: t("Dersi Alan"), val: "86", sub: t("Geçme: %{rate}", { rate: "92.1" }) },
           ].map((stat) => (
             <div
               key={stat.label}
@@ -1073,12 +1073,11 @@ function LoginGate({ loading, onSignIn, code }) {
             {t("Giriş Yapmanız Gerekmektedir")}
           </h4>
           <p className="text-[13px] text-gray-500 leading-relaxed mb-4">
-            {code} dersinin geçmiş dönem sınıf ortalamalarını, harf
-            dağılımlarını ve eğitmen bilgilerini görüntülemek için{" "}
+            {t("{code} dersinin geçmiş dönem sınıf ortalamalarını, harf dağılımlarını ve eğitmen bilgilerini görüntülemek için", { code })}{" "}
             <span className="font-mono text-[11px] font-bold text-secondary-700 bg-secondary-500/5 px-1 py-0.5 rounded-sm">
               @std.yildiz.edu.tr
             </span>{" "}
-            hesabınızla giriş yapmalısınız.
+            {t("hesabınızla giriş yapmalısınız.")}
           </p>
           <button
             onClick={onSignIn}

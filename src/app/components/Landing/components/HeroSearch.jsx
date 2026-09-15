@@ -8,10 +8,12 @@ import { Search } from "lucide-react";
 import SearchResults, { SearchEmpty } from "@/app/components/Search/SearchResults";
 import { useSiteSearch } from "@/app/components/Search/useSiteSearch";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
+import { useT } from "@/i18n/useT";
 
 const neverChanges = () => () => {};
 
 export default function HeroSearch() {
+  const t = useT();
   const [query, setQuery] = useState("");
   const [dismissed, setDismissed] = useState("");
   const boxRef = useRef(null);
@@ -70,9 +72,9 @@ export default function HeroSearch() {
             onChange={(event) => setQuery(event.target.value)}
             onFocus={() => setDismissed("")}
             onKeyDown={(event) => event.key === "Escape" && setDismissed(term)}
-            placeholder="Duyuru, haber, ders veya personel ara..."
+            placeholder={t("Duyuru, haber, ders veya personel ara...")}
             role="combobox"
-            aria-label="Sitede ara"
+            aria-label={t("Sitede ara")}
             aria-autocomplete="list"
             aria-expanded={open}
             aria-controls={listId}
@@ -81,7 +83,7 @@ export default function HeroSearch() {
           />
           <button
             type="submit"
-            aria-label="Ara"
+            aria-label={t("Ara")}
             className="px-6 py-3 text-slate-400 hover:text-primary-500 transition-colors flex items-center justify-center"
           >
             <Search size={22} />

@@ -2,11 +2,6 @@ import { sameOrigin, toOffering } from "./lecture-notes";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
 
-const AY = [
-  "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran",
-  "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık",
-];
-
 const GUN = ["Pazar", "Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
 
 export const NOTE_STATUS = {
@@ -14,12 +9,6 @@ export const NOTE_STATUS = {
   PENDING: { label: "Onay bekliyor", tone: "text-amber-700 bg-amber-500/15" },
   REJECTED: { label: "Reddedildi", tone: "text-red-700 bg-red-500/12" },
 };
-
-export function formatDay(iso) {
-  if (!iso) return "";
-  const [y, m, d] = iso.slice(0, 10).split("-").map(Number);
-  return `${d} ${AY[m - 1]} ${y}`;
-}
 
 export function weekdayOf(iso) {
   if (!iso) return "";

@@ -11,6 +11,7 @@ import Panel from "@/app/components/Panel";
 import PageSection from "@/app/components/PageSection";
 import DocumentLink from "@/app/components/DocumentLink";
 import { safeHref } from "@/lib/href";
+import { useT } from "@/i18n/useT";
 
 const TABS = [
   { id: "ogrenci", label: "Öğrenci", blockPath: "forms.student" },
@@ -139,6 +140,7 @@ function StaffForms({ items }) {
 }
 
 export default function FormsPage({ sidebar }) {
+  const t = useT();
   const [activeTab, setActiveTab] = useState(TABS[0].id);
   const active = TABS.find((tab) => tab.id === activeTab);
 
@@ -193,7 +195,7 @@ export default function FormsPage({ sidebar }) {
                           : "transparent",
                     }}
                   >
-                    {tab.label}
+                    {t(tab.label)}
                   </button>
                 ))}
               </div>

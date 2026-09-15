@@ -34,12 +34,12 @@ export default function GradeDistribution({ data }) {
       <div className="overflow-x-auto no-scrollbar -mx-4 px-4 sm:mx-0 sm:px-0">
         <div className="min-w-100 sm:min-w-0 space-y-2.5">
           <div className="flex text-[10px] font-bold text-primary-500/70 uppercase mb-4 px-1 tracking-widest">
-            <div className="w-12">HARF</div>
+            <div className="w-12">{t("HARF")}</div>
             <div className="w-10">{t("BAŞ")}</div>
             <div className="w-10">{t("BİTİŞ")}</div>
             <div className="flex-1">{t("DAĞILIM")}</div>
-            <div className="w-10 text-right">SAY</div>
-            <div className="w-12 text-right">ORN</div>
+            <div className="w-10 text-right">{t("SAY")}</div>
+            <div className="w-12 text-right">{t("ORN")}</div>
           </div>
           {data.map((item, idx) => {
             const count = Number(item.count) || 0;
