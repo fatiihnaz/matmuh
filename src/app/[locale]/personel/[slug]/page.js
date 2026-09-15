@@ -1,7 +1,6 @@
 import { notFound } from "next/navigation";
 
 import SubHeader from "@/app/components/Header/SubHeader";
-import PageLayout from "@/app/components/PageLayout";
 import { getStaff } from "@/app/lib/staff.js";
 import { getWeeklySchedule } from "@/data/schedule";
 import { fullName } from "@/lib/person";
@@ -40,9 +39,7 @@ export default async function Page({ params }) {
         subTitle={person.role}
         lastLabel={name}
       />
-      <PageLayout>
-        <StaffDetail person={person} entries={entries} locale={locale} />
-      </PageLayout>
+      <StaffDetail person={person} entries={entries} locale={locale} />
     </>
   );
 }

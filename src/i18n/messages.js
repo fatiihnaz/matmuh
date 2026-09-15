@@ -155,6 +155,10 @@ export const messages = {
     "Bu ders için henüz onaylanmış not yok.": "No approved notes for this course yet.",
     "İlk notu siz yükleyebilirsiniz.": "You can upload the first one.",
     "AVESİS profili": "AVESIS profile",
+    Profil: "Profile",
+    Oda: "Office",
+    "Bu dönem için ders programı girilmemiş.":
+      "No timetable has been entered for this term.",
     "Haftalık Ders Programı": "Weekly Schedule",
     "Verdiği Dersler": "Courses Taught",
     "Ders Notları": "Course Notes",

@@ -1,7 +1,8 @@
-import { Mail, ExternalLink, Phone, MapPin } from "lucide-react";
+import { CalendarOff, Mail, ExternalLink, Phone, MapPin } from "lucide-react";
 
 import Avatar from "@/app/components/Avatar";
-import Panel from "@/app/components/Panel";
+import MainCard from "@/app/components/MainCard";
+import PageLayout from "@/app/components/PageLayout";
 import PageSection from "@/app/components/PageSection";
 import StaffSchedule from "./StaffSchedule";
 import StaffOfferings from "./StaffOfferings";
@@ -22,7 +23,7 @@ function Contact({ person, locale }) {
       {office && (
         <span className={LINE}>
           <MapPin className="size-4 shrink-0 text-secondary-700" />
-          {isRoom ? `Oda ${office}` : office}
+          {isRoom ? `${translate(locale, "Oda")} ${office}` : office}
         </span>
       )}
       {person.phone && (
@@ -55,10 +56,10 @@ function Contact({ person, locale }) {
 export default function StaffDetail({ person, entries, locale }) {
   const name = fullName(person);
 
-  return (
-    <div className="flex flex-col gap-8">
-      <Panel padding="p-5 sm:p-6">
-        <div className="flex flex-col items-center gap-5 text-center sm:flex-row sm:items-start sm:text-left">
+  const profile = (
+    <div className="flex flex-col gap-5 lg:sticky lg:top-8">
+      <MainCard title={translate(locale, "Profil")}>
+        <div className="flex flex-col items-center gap-4 text-center">
           <Avatar
             name={name}
             photo={person.photo}
@@ -66,35 +67,46 @@ export default function StaffDetail({ person, entries, locale }) {
             size="h-24 w-24 shrink-0"
             textSize="font-sans text-xl tracking-wider"
           />
-          <div className="flex min-w-0 flex-1 flex-col gap-3">
-            <div>
-              <h2 className="text-base font-semibold text-primary-600 wrap-break-word">
-                {person.academicTitle} {name}
-              </h2>
-              {person.role && (
-                <p className="mt-1 text-[13px] font-medium text-secondary-700">
-                  {person.role}
-                </p>
-              )}
-            </div>
-            <Contact person={person} locale={locale} />
+          <div className="min-w-0">
+            <h2 className="text-sm font-semibold text-primary-600 wrap-break-word">
+              {person.academicTitle} {name}
+            </h2>
+            {person.role && (
+              <p className="mt-1 text-[12px] font-medium text-secondary-700">
+                {person.role}
+              </p>
+            )}
           </div>
         </div>
-      </Panel>
-
-      {entries.length > 0 && (
-        <PageSection title={translate(locale, "Haftalık Ders Programı")}>
-          <StaffSchedule entries={entries} />
-        </PageSection>
-      )}
-
-      <PageSection title={translate(locale, "Verdiği Dersler")}>
-        <StaffOfferings staffId={person.id} />
-      </PageSection>
-
-      <PageSection title={translate(locale, "Ders Notları")}>
-        <StaffNotes staffId={person.id} />
-      </PageSection>
+        <div className="mt-5 border-t border-primary-500/10 pt-5">
+          <Contact person={person} locale={locale} />
+        </div>
+      </MainCard>
     </div>
+  );
+
+  return (
+    <PageLayout sidebar={profile}>
+      <div className="flex flex-col gap-8">
+        <PageSection title={translate(locale, "Haftalık Ders Programı")}>
+          {entries.length > 0 ? (
+            <StaffSchedule entries={entries} />
+          ) : (
+            <div className="flex flex-col items-center gap-2 rounded-xl border border-dashed border-primary-500/20 px-4 py-8 text-center text-sm font-medium text-primary-500/70">
+              <CalendarOff size={18} strokeWidth={1.5} className="text-primary-500/70" />
+              {translate(locale, "Bu dönem için ders programı girilmemiş.")}
+            </div>
+          )}
+        </PageSection>
+
+        <PageSection title={translate(locale, "Verdiği Dersler")}>
+          <StaffOfferings staffId={person.id} />
+        </PageSection>
+
+        <PageSection title={translate(locale, "Ders Notları")}>
+          <StaffNotes staffId={person.id} />
+        </PageSection>
+      </div>
+    </PageLayout>
   );
 }
