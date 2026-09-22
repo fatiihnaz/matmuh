@@ -8,6 +8,7 @@ import StaffMember from "./StaffMember";
 import PageLayout from "@/app/components/PageLayout";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
 import { fullName, useStaff } from "@/app/components/PersonRow";
+import { byLeadership } from "@/lib/person";
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 
@@ -92,7 +93,7 @@ function StaffContent({ initialStaff }) {
 
   const filteredStaff = useMemo(() => {
     const query = searchQuery.toLocaleLowerCase("tr");
-    return roster.filter((member) => {
+    const matches = roster.filter((member) => {
       if (!member.groups?.includes(activeCategory.group)) return false;
 
       const title = member.academicTitle ?? "";
@@ -107,6 +108,7 @@ function StaffContent({ initialStaff }) {
       const matchesSearch = fullName(member).toLocaleLowerCase("tr").includes(query);
       return matchesRank && matchesSearch;
     });
+    return activeCategory.group === "MANAGEMENT" ? matches.sort(byLeadership) : matches;
   }, [roster, activeCategory, rankFilter, searchQuery, availableRanks]);
 
   return (

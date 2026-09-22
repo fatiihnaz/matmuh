@@ -10,6 +10,7 @@ import PageSection from "@/app/components/PageSection";
 import DocumentLink from "@/app/components/DocumentLink";
 import Avatar from "@/app/components/Avatar";
 import { findPerson, fullName, useStaff } from "@/app/components/PersonRow";
+import { contactLine } from "@/lib/person";
 import { safeHref, isExternalHref } from "@/lib/href";
 import { useT } from "@/i18n/useT";
 
@@ -32,9 +33,11 @@ function CoordinatorRow({ person, idx }) {
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}
         </span>
-        <span className="block text-[11px] text-primary-500/70 wrap-break-word">
-          {t("Oda")} {person.office} · {person.phone}
-        </span>
+        {contactLine(person, t, { withRole: false }) && (
+          <span className="block text-[11px] text-primary-500/70 wrap-break-word">
+            {contactLine(person, t, { withRole: false })}
+          </span>
+        )}
       </span>
       {person.email && (
         <a

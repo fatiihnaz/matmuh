@@ -37,15 +37,19 @@ export default function StaffMember({ member, idx }) {
           </div>
         )}
 
-        <div className="mt-2 pt-1 font-sans text-xs text-primary-500/70 leading-tight">
-          {t("Tel:")} {member.phone}
-        </div>
+        {member.phone && (
+          <div className="mt-2 pt-1 font-sans text-xs text-primary-500/70 leading-tight">
+            {t("Tel:")} {member.phone}
+          </div>
+        )}
 
-        <div className="mt-2">
-          <span className="text-xs font-bold text-secondary-700 bg-secondary-500/10 px-2 py-1 rounded-md">
-            {isRoomNumber ? `${t("Oda")}: ${office}` : office}
-          </span>
-        </div>
+        {office && (
+          <div className="mt-2">
+            <span className="text-xs font-bold text-secondary-700 bg-secondary-500/10 px-2 py-1 rounded-md">
+              {isRoomNumber ? `${t("Oda")}: ${office}` : office}
+            </span>
+          </div>
+        )}
 
         <div className="relative z-10 mt-4 flex items-center gap-2">
           {member.email && (

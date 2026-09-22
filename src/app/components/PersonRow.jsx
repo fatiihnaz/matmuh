@@ -5,7 +5,7 @@ import { useCmsRoute } from "inscribed";
 import { useCollection } from "inscribed/collections";
 
 import Avatar from "./Avatar";
-import { fullName, localizePerson } from "@/lib/person";
+import { contactLine, fullName, localizePerson } from "@/lib/person";
 import { useT } from "@/i18n/useT";
 
 export const STAFF_WINDOW = { limit: 100 };
@@ -50,10 +50,11 @@ export default function PersonRow({ id, idx = 0, staff = [] }) {
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}
         </span>
-        <span className="block text-[11px] text-primary-500/70 wrap-break-word">
-          {person.role && `${person.role} · `}
-          {t("Oda")} {person.office} · {person.phone}
-        </span>
+        {contactLine(person, t) && (
+          <span className="block text-[11px] text-primary-500/70 wrap-break-word">
+            {contactLine(person, t)}
+          </span>
+        )}
       </span>
       {person.email && (
         <a

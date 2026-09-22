@@ -14,6 +14,7 @@ import StatStrip from "@/app/components/StatStrip";
 import DocumentLink from "@/app/components/DocumentLink";
 import Avatar from "@/app/components/Avatar";
 import { findPerson, fullName, useStaff } from "@/app/components/PersonRow";
+import { contactLine } from "@/lib/person";
 import { safeHref } from "@/lib/href";
 import { useT } from "@/i18n/useT";
 
@@ -47,10 +48,11 @@ function StaffCard({ person, idx }) {
         <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
           {person.academicTitle} {name}
         </span>
-        <span className="block text-[11px] text-primary-500/70 wrap-break-word">
-          {person.role && `${person.role} · `}
-          {t("Oda")} {person.office} · {person.phone}
-        </span>
+        {contactLine(person, t) && (
+          <span className="block text-[11px] text-primary-500/70 wrap-break-word">
+            {contactLine(person, t)}
+          </span>
+        )}
       </span>
       {person.email && (
         <a

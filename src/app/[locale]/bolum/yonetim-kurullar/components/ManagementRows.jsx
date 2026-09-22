@@ -4,12 +4,13 @@ import { Mail } from "lucide-react";
 
 import Avatar from "@/app/components/Avatar";
 import { fullName, useStaff } from "@/app/components/PersonRow";
+import { byLeadership, contactLine } from "@/lib/person";
 import { useT } from "@/i18n/useT";
 
 export default function ManagementRows({ initialStaff = [] }) {
   const t = useT();
   const { people } = useStaff(initialStaff);
-  const management = people.filter((person) => person.groups?.includes("MANAGEMENT"));
+  const management = people.filter((person) => person.groups?.includes("MANAGEMENT")).sort(byLeadership);
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -25,10 +26,11 @@ export default function ManagementRows({ initialStaff = [] }) {
               <span className="block text-[13px] font-medium text-primary-500 leading-snug wrap-break-word">
                 {person.academicTitle} {name}
               </span>
-              <span className="block text-[11px] text-primary-500/70 wrap-break-word">
-                {person.role && `${person.role} · `}
-                {t("Oda")} {person.office} · {person.phone}
-              </span>
+              {contactLine(person, t) && (
+                <span className="block text-[11px] text-primary-500/70 wrap-break-word">
+                  {contactLine(person, t)}
+                </span>
+              )}
             </span>
             {person.email && (
               <a
