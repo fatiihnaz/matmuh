@@ -48,6 +48,7 @@ export const navigationItems = [
       {
         category: "Lisansüstü",
         items: [
+          { label: "Müfredat", href: "/egitim/lisansustu-mufredat", icon: BookOpen, description: "Ders içerikleri ve krediler" },
           { label: "Ders Programı", href: "/egitim/lisansustu-ders-programi", icon: CalendarDays, description: "Haftalık ders programı" },
           { label: "Programlar", href: "/egitim/programlar", icon: Library, description: "Yüksek lisans ve doktora" },
           { label: "Tez Arşivi", href: "https://tez.yok.gov.tr/UlusalTezMerkezi/", icon: Archive, description: "YÖK Ulusal Tez Merkezi", external: true },

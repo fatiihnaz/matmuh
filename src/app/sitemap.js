@@ -15,6 +15,7 @@ const STATIC_ROUTES = [
   { path: "/egitim/mufredat", priority: 0.8, changeFrequency: "monthly" },
   { path: "/egitim/ders-programi", priority: 0.6, changeFrequency: "weekly" },
   { path: "/egitim/lisansustu-ders-programi", priority: 0.5, changeFrequency: "weekly" },
+  { path: "/egitim/lisansustu-mufredat", priority: 0.6, changeFrequency: "yearly" },
   { path: "/egitim/programlar", priority: 0.5, changeFrequency: "monthly" },
   { path: "/egitim/staj", priority: 0.7, changeFrequency: "monthly" },
   { path: "/egitim/yaz-okulu", priority: 0.4, changeFrequency: "monthly" },

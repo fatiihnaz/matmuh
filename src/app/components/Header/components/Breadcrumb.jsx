@@ -21,6 +21,7 @@ const labelMap = {
   mufredat: "Müfredat",
   yonetmelikler: "Yönetmelikler",
   "lisansustu-ders-programi": "Lisansüstü Ders Programı",
+  "lisansustu-mufredat": "Lisansüstü Müfredat",
   programlar: "Programlar",
   "tez-arsivi": "Tez Arşivi",
   "lisansustu-yonetmelikler": "Lisansüstü Yönetmelikler",

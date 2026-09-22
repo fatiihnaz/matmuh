@@ -103,7 +103,12 @@ function Colgroup() {
   );
 }
 
-export default function CurriculumPage({ semesters, summary }) {
+export default function CurriculumPage({
+  semesters,
+  summary,
+  title = "Müfredat & Dersler",
+  subTitle = "Lisans programı ders planı ve kredi bilgileri",
+}) {
   const t = useT();
   const { locale } = useCmsRoute();
   const [activeTab, setActiveTab] = useState(0);
@@ -151,10 +156,7 @@ export default function CurriculumPage({ semesters, summary }) {
 
   return (
     <>
-      <SubHeader
-        title={t("Müfredat & Dersler")}
-        subTitle={t("Lisans programı ders planı ve kredi bilgileri")}
-      />
+      <SubHeader title={t(title)} subTitle={t(subTitle)} />
       <PageLayout>
         <div className="space-y-4">
           <div className="rounded-xl overflow-hidden border border-primary-500/10 shadow-xs bg-white">
@@ -255,8 +257,8 @@ export default function CurriculumPage({ semesters, summary }) {
                     ? expandedGroup.groupTitle
                     : semester
                       ? t("{year}. Yıl - {season} Yarıyılı", {
-                          year: Math.ceil(semester.number / 2),
-                          season: t(semester.number % 2 === 1 ? "Güz" : "Bahar"),
+                          year: semester.label.year,
+                          season: t(semester.label.season),
                         })
                       : ""}
                 </span>

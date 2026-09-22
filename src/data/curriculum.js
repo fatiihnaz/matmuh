@@ -5,12 +5,30 @@ import { cmsConfig } from "@/app/lib/cms-config.js";
 
 const PAGE = 100;
 const TERMS = [1, 2, 3, 4, 5, 6, 7, 8];
+const GRADUATE_TERMS = [1, 2, 3];
+const GRADUATE_TERM_LABEL = {
+  1: { year: 1, season: "Güz" },
+  2: { year: 1, season: "Bahar" },
+  3: { year: 2, season: "Güz ve Bahar" },
+};
+const GRADUATE_LEVELS = ["MASTERS", "DOCTORATE"];
 
 const emptyPage = { items: [], total: 0 };
 
-function semesterName(term) {
-  return `${Math.ceil(term / 2)}. Yıl - ${term % 2 === 1 ? "Güz" : "Bahar"} Yarıyılı`;
+function semesterLabel(term, graduate) {
+  if (graduate) return GRADUATE_TERM_LABEL[term] ?? { year: term, season: "Güz" };
+  return { year: Math.ceil(term / 2), season: term % 2 === 1 ? "Güz" : "Bahar" };
 }
+
+function semesterName(term, graduate) {
+  const { year, season } = semesterLabel(term, graduate);
+  return `${year}. Yıl - ${season} Yarıyılı`;
+}
+
+const isGraduate = (entry) =>
+  (entry.degreeLevels ?? []).some((level) => GRADUATE_LEVELS.includes(level));
+
+const matchesProgram = (entry, graduate) => (graduate ? isGraduate(entry) : !isGraduate(entry));
 
 function hoursOf(lecture) {
   const { theoryHours: t, practiceHours: p, labHours: l } = lecture;
@@ -83,16 +101,18 @@ function groupRow(group, byId, locale) {
 
 const byCode = (a, b) => a.code.localeCompare(b.code, "tr");
 
-export const getCurriculum = cache(async (locale = "tr") => {
-  const [lectures, groups] = await Promise.all([getLectures(), getElectiveGroups()]);
+export const getCurriculum = cache(async (locale = "tr", graduate = false) => {
+  const [allLectures, allGroups] = await Promise.all([getLectures(), getElectiveGroups()]);
+  const lectures = allLectures.filter((l) => matchesProgram(l, graduate));
+  const groups = allGroups.filter((g) => matchesProgram(g, graduate));
 
-  const byId = new Map(lectures.map((l) => [l.id, l]));
+  const byId = new Map(allLectures.map((l) => [l.id, l]));
   const inGroup = new Set();
   for (const group of groups) {
     for (const option of group.options ?? []) inGroup.add(option.id);
   }
 
-  return TERMS.map((term) => {
+  return (graduate ? GRADUATE_TERMS : TERMS).map((term) => {
     const courses = lectures
       .filter((l) => l.term === term && !inGroup.has(l.id))
       .map((lecture) => courseRow(lecture, locale))
@@ -103,18 +123,24 @@ export const getCurriculum = cache(async (locale = "tr") => {
       .sort(byCode);
     const rows = [...courses, ...slots];
     const totalEcts = rows.reduce((sum, r) => sum + (Number(r.ects) || 0), 0);
-    return { number: term, name: semesterName(term), totalEcts, rows };
+    return {
+      number: term,
+      name: semesterName(term, graduate),
+      label: semesterLabel(term, graduate),
+      totalEcts,
+      rows,
+    };
   });
 });
 
-export const getCurriculumSummary = cache(async () => {
-  const semesters = await getCurriculum();
+export const getCurriculumSummary = cache(async (graduate = false) => {
+  const semesters = await getCurriculum("tr", graduate);
   const active = semesters.filter((s) => s.rows.length > 0);
   return {
     termCount: active.length,
     totalEcts: active.reduce((sum, s) => sum + s.totalEcts, 0),
     courseCount: active.reduce((sum, s) => sum + s.rows.length, 0),
-    yearCount: Math.ceil(active.length / 2),
+    yearCount: graduate ? 2 : Math.ceil(active.length / 2),
   };
 });
 
