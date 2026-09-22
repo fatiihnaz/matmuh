@@ -6,7 +6,7 @@ import { getCourseByCode } from "@/data/curriculum";
 
 export default async function CourseLayout({ params, children }) {
   const { courseCode, locale } = await params;
-  const course = await getCourseByCode(courseCode);
+  const course = await getCourseByCode(courseCode, locale);
 
   if (!course) notFound();
 

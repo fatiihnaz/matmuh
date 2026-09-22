@@ -4,6 +4,15 @@ export const DAY_KEYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
 
 export const FIRST_HOUR = 9;
 
+export function weeklySlots(body) {
+  const data = body?.data;
+  if (Array.isArray(data)) return data;
+  return Array.isArray(data?.slots) ? data.slots : [];
+}
+
+export const weeklyTerm = (body) =>
+  Array.isArray(body?.data) ? null : (body?.data?.term ?? null);
+
 export const TIME_SLOTS = Array.from({ length: 12 }, (_, i) => {
   const hour = String(FIRST_HOUR + i).padStart(2, "0");
   return `${hour}.00 - ${hour}.50`;

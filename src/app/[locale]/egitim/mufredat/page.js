@@ -7,7 +7,8 @@ export const metadata = {
   description: "Matematik Mühendisliği Bölümü lisans programı ders planı ve kredi bilgileri",
 };
 
-export default async function Page() {
-  const [semesters, summary] = await Promise.all([getCurriculum(), getCurriculumSummary()]);
+export default async function Page({ params }) {
+  const { locale } = await params;
+  const [semesters, summary] = await Promise.all([getCurriculum(locale), getCurriculumSummary()]);
   return <CurriculumPage semesters={semesters} summary={summary} />;
 }

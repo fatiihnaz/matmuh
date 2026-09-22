@@ -5,7 +5,7 @@ import { CalendarPlus, Check, TriangleAlert, X } from "lucide-react";
 
 import { useAuth } from "@/lib/auth";
 import { enroll, fetchMyEnrollments, unenroll } from "@/data/enrollments";
-import { DAY_KEYS, DAYS } from "@/data/schedule-grid";
+import { DAY_KEYS, DAYS, weeklySlots } from "@/data/schedule-grid";
 import { useT } from "@/i18n/useT";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
@@ -20,7 +20,7 @@ async function fetchEnrolledSlots(offeringIds) {
   const res = await fetch(`${API}/calendar/weekly`).catch(() => null);
   if (!res?.ok) return [];
   const body = await res.json().catch(() => null);
-  return (body?.data ?? [])
+  return weeklySlots(body)
     .filter((slot) => offeringIds.has(slot.offeringId))
     .map((slot) => ({
       offeringId: slot.offeringId,

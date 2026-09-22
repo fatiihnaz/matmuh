@@ -1,10 +1,11 @@
 "use client";
 
 import { Mail } from "lucide-react";
+import { useCmsRoute } from "inscribed";
 import { useCollection } from "inscribed/collections";
 
 import Avatar from "./Avatar";
-import { fullName } from "@/lib/person";
+import { fullName, localizePerson } from "@/lib/person";
 import { useT } from "@/i18n/useT";
 
 export const STAFF_WINDOW = { limit: 100 };
@@ -19,12 +20,13 @@ export function staffKey(value) {
 export { fullName };
 
 export function useStaff(initial = []) {
+  const { locale } = useCmsRoute();
   const { items, isLoading, error } = useCollection("staff", STAFF_WINDOW);
   const people = (items ?? []).map((item) => ({
     ...item.data,
     slug: item.slug,
   }));
-  const roster = people.length > 0 ? people : initial;
+  const roster = (people.length > 0 ? people : initial).map((person) => localizePerson(person, locale));
   return { people: roster, isLoading, error };
 }
 

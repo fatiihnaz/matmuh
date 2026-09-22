@@ -45,29 +45,35 @@ const getElectiveGroups = cache(async () =>
 
 const linksOffsite = (lecture) => !lecture.about && Boolean(lecture.bolognaLink);
 
-function courseRow(lecture) {
+const bolognaHref = (link, locale) =>
+  link && locale === "en" && !/[?&]lang=/.test(link) ? `${link}&lang=en` : link;
+
+export const localized = (tr, en, locale) =>
+  locale === "en" && typeof en === "string" && en.trim() ? en : tr;
+
+function courseRow(lecture, locale) {
   const internal = `/egitim/mufredat/${lecture.code}`;
   const offsite = linksOffsite(lecture);
   return {
     isGroup: false,
     code: lecture.code,
-    name: (lecture.name ?? lecture.code).trim(),
+    name: localized(lecture.name ?? lecture.code, lecture.nameEn, locale).trim(),
     hours: hoursOf(lecture) ?? "-",
     ects: lecture.ects ?? "-",
     status: lecture.type === "REQUIRED" ? "Zorunlu" : "Seçmeli",
-    href: offsite ? lecture.bolognaLink : internal,
+    href: offsite ? bolognaHref(lecture.bolognaLink, locale) : internal,
     external: offsite,
   };
 }
 
-function groupRow(group, byId) {
+function groupRow(group, byId, locale) {
   const options = (group.options ?? []).map((o) => byId.get(o.id)).filter(Boolean);
-  const rows = options.map(courseRow);
+  const rows = options.map((lecture) => courseRow(lecture, locale));
   return {
     isGroup: true,
     code: group.code,
-    groupTitle: group.name,
-    note: group.about || null,
+    groupTitle: localized(group.name, group.nameEn, locale),
+    note: localized(group.about, group.aboutEn, locale) || null,
     hours: group.weeklyHours ?? uniform(options.map(hoursOf)) ?? "-",
     ects: group.ects ?? uniform(options.map((o) => o.ects)) ?? "-",
     selectionCount: group.selectionCount ?? 1,
@@ -77,7 +83,7 @@ function groupRow(group, byId) {
 
 const byCode = (a, b) => a.code.localeCompare(b.code, "tr");
 
-export const getCurriculum = cache(async () => {
+export const getCurriculum = cache(async (locale = "tr") => {
   const [lectures, groups] = await Promise.all([getLectures(), getElectiveGroups()]);
 
   const byId = new Map(lectures.map((l) => [l.id, l]));
@@ -89,11 +95,11 @@ export const getCurriculum = cache(async () => {
   return TERMS.map((term) => {
     const courses = lectures
       .filter((l) => l.term === term && !inGroup.has(l.id))
-      .map(courseRow)
+      .map((lecture) => courseRow(lecture, locale))
       .sort(byCode);
     const slots = groups
       .filter((g) => g.term === term)
-      .map((g) => groupRow(g, byId))
+      .map((g) => groupRow(g, byId, locale))
       .sort(byCode);
     const rows = [...courses, ...slots];
     const totalEcts = rows.reduce((sum, r) => sum + (Number(r.ects) || 0), 0);
@@ -121,17 +127,31 @@ const CATEGORY_LABEL = {
   GENERAL_CULTURE: "Genel Kültür",
 };
 
-function lectureView(lecture) {
+const LANGUAGE_ORDER = ["TURKISH", "ENGLISH"];
+const LANGUAGE_LABEL = {
+  TURKISH: { tr: "Türkçe", en: "Turkish" },
+  ENGLISH: { tr: "İngilizce", en: "English" },
+};
+
+function languageLabel(languages, locale) {
+  const labels = LANGUAGE_ORDER.filter((code) => (languages ?? []).includes(code)).map(
+    (code) => LANGUAGE_LABEL[code][locale === "en" ? "en" : "tr"],
+  );
+  return labels.length > 0 ? labels.join(", ") : null;
+}
+
+function lectureView(lecture, locale) {
   const midterm = lecture.midtermWeight;
   return {
     id: lecture.id,
     code: lecture.code,
     slug: lecture.slug,
-    title: (lecture.name ?? lecture.code).trim(),
-    content: lecture.about ?? null,
-    gradingPolicy: lecture.gradingPolicy ?? null,
-    resources: lecture.resources ?? null,
-    language: lecture.language ?? null,
+    title: localized(lecture.name ?? lecture.code, lecture.nameEn, locale).trim(),
+    content: localized(lecture.about, lecture.aboutEn, locale) ?? null,
+    gradingPolicy: localized(lecture.gradingPolicy, lecture.gradingPolicyEn, locale) ?? null,
+    resources: localized(lecture.resources, lecture.resourcesEn, locale) ?? null,
+    languages: lecture.languages ?? [],
+    language: languageLabel(lecture.languages, locale),
     ects: lecture.ects ?? null,
     hours: hoursOf(lecture) ?? "-",
     semester: lecture.term ?? null,
@@ -139,14 +159,14 @@ function lectureView(lecture) {
     category: CATEGORY_LABEL[lecture.category] ?? null,
     syllabus: (lecture.syllabus ?? []).map((row, index) => ({
       week: row.week ?? index + 1,
-      topic: row.topic ?? "",
+      topic: localized(row.topic, row.topicEn, locale) ?? "",
     })),
     assessment:
       midterm == null
         ? null
         : { midterm: { weight: midterm }, final: { weight: lecture.finalWeight ?? 0 } },
     noteCount: lecture.noteCount ?? 0,
-    bolognaLink: lecture.bolognaLink ?? null,
+    bolognaLink: bolognaHref(lecture.bolognaLink, locale) ?? null,
     notesLink: lecture.notesLink ?? null,
   };
 }
@@ -163,8 +183,8 @@ export const getCourseCodes = cache(async () =>
     .sort((x, y) => x.localeCompare(y, "tr")),
 );
 
-export const getCourseByCode = cache(async (code) => {
+export const getCourseByCode = cache(async (code, locale = "tr") => {
   if (!code) return null;
   const lecture = await getLectureBySlug(String(code).toLowerCase());
-  return lecture ? lectureView(lecture) : null;
+  return lecture ? lectureView(lecture, locale) : null;
 });

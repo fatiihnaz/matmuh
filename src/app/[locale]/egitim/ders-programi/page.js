@@ -7,8 +7,9 @@ export const metadata = {
   description: "Matematik Mühendisliği Bölümü lisans haftalık ders programı.",
 };
 
-export default async function Page() {
-  const { term, entries } = await getWeeklySchedule();
+export default async function Page({ params }) {
+  const { locale } = await params;
+  const { term, entries } = await getWeeklySchedule({ locale });
   const undergraduate = entries.filter((entry) =>
     entry.degreeLevels.includes("UNDERGRADUATE"),
   );

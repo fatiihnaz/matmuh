@@ -1,12 +1,14 @@
 import { cache } from "react";
 
-import { getLectures } from "./curriculum.js";
+import { getLectures, localized } from "./curriculum.js";
 import {
   DAY_KEYS,
   DAYS,
   FIRST_HOUR,
   TIME_SLOTS,
   coalesceEntries,
+  weeklySlots,
+  weeklyTerm,
 } from "./schedule-grid.js";
 
 const SEMESTER_LABEL = { FALL: "Güz", SPRING: "Bahar", SUMMER: "Yaz" };
@@ -31,7 +33,7 @@ function degreeOf(lecture, code) {
   return ["DOCTORATE"];
 }
 
-function toEntry(slot, lecture) {
+function toEntry(slot, lecture, locale) {
   const day = DAY_KEYS.indexOf(slot.dayOfWeek);
   if (day === -1) return null;
 
@@ -47,7 +49,7 @@ function toEntry(slot, lecture) {
     slot: index,
     span: Math.max(1, Math.ceil((end - start) / 60)),
     code: slot.lectureCode ?? "",
-    name: slot.lectureName ?? slot.lectureCode ?? "",
+    name: localized(lecture?.name ?? slot.lectureName, lecture?.nameEn, locale) ?? slot.lectureCode ?? "",
     group: slot.groupNumber ?? 1,
     instructor: slot.staffName || "-",
     room: slot.classroom || "-",
@@ -62,7 +64,7 @@ function toEntry(slot, lecture) {
 const empty = { term: null, entries: [] };
 
 export const getWeeklySchedule = cache(
-  async ({ academicYear, semester, staffId } = {}) => {
+  async ({ academicYear, semester, staffId, locale } = {}) => {
     const params = new URLSearchParams();
     if (academicYear) params.set("academicYear", academicYear);
     if (semester) params.set("semester", semester);
@@ -76,7 +78,7 @@ export const getWeeklySchedule = cache(
     if (!res?.ok) return empty;
 
     const body = await res.json().catch(() => null);
-    const slots = body?.data ?? [];
+    const slots = weeklySlots(body);
     if (!Array.isArray(slots) || slots.length === 0) return empty;
 
     const lectures = await getLectures();
@@ -85,12 +87,13 @@ export const getWeeklySchedule = cache(
     const entries = coalesceEntries(
       slots
         .map((slot) =>
-          toEntry(slot, byCode.get(slot.lectureCode?.toUpperCase())),
+          toEntry(slot, byCode.get(slot.lectureCode?.toUpperCase()), locale),
         )
         .filter(Boolean),
     );
 
-    const term = academicYear && semester ? { academicYear, semester } : null;
+    const term =
+      weeklyTerm(body) ?? (academicYear && semester ? { academicYear, semester } : null);
     return { term, entries };
   },
 );

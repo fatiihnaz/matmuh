@@ -6,8 +6,8 @@ import { getCourseSections } from "@/data/schedule";
 import CourseInfo from "./components/CourseInfo";
 
 export async function generateMetadata({ params }) {
-  const { courseCode } = await params;
-  const course = await getCourseByCode(courseCode);
+  const { courseCode, locale } = await params;
+  const course = await getCourseByCode(courseCode, locale);
   if (!course) return { title: "Ders bulunamadı" };
 
   return {
@@ -17,8 +17,8 @@ export async function generateMetadata({ params }) {
 }
 
 export default async function CoursePage({ params }) {
-  const { courseCode } = await params;
-  const course = await getCourseByCode(courseCode);
+  const { courseCode, locale } = await params;
+  const course = await getCourseByCode(courseCode, locale);
   if (!course) notFound();
 
   const sections = await getCourseSections(course.code);

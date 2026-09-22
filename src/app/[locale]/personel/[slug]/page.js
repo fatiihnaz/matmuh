@@ -3,17 +3,17 @@ import { notFound } from "next/navigation";
 import SubHeader from "@/app/components/Header/SubHeader";
 import { getStaff } from "@/app/lib/staff.js";
 import { getWeeklySchedule } from "@/data/schedule";
-import { fullName } from "@/lib/person";
+import { fullName, localizePerson } from "@/lib/person";
 import StaffDetail from "./components/StaffDetail";
 
-async function findPerson(slug) {
+async function findPerson(slug, locale) {
   const people = await getStaff();
-  return people.find((person) => person.slug === slug) ?? null;
+  return localizePerson(people.find((person) => person.slug === slug) ?? null, locale);
 }
 
 export async function generateMetadata({ params }) {
-  const { slug } = await params;
-  const person = await findPerson(slug);
+  const { slug, locale } = await params;
+  const person = await findPerson(slug, locale);
   if (!person) return {};
   const name = [person.academicTitle, fullName(person)].filter(Boolean).join(" ");
   return {
@@ -26,10 +26,10 @@ export async function generateMetadata({ params }) {
 
 export default async function Page({ params }) {
   const { slug, locale } = await params;
-  const person = await findPerson(slug);
+  const person = await findPerson(slug, locale);
   if (!person) notFound();
 
-  const { entries } = await getWeeklySchedule({ staffId: person.id });
+  const { entries } = await getWeeklySchedule({ staffId: person.id, locale });
   const name = fullName(person);
 
   return (

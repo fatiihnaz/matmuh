@@ -9,8 +9,9 @@ export const metadata = {
 
 const GRADUATE = new Set(["MASTERS", "DOCTORATE"]);
 
-export default async function Page() {
-  const { term, entries } = await getWeeklySchedule();
+export default async function Page({ params }) {
+  const { locale } = await params;
+  const { term, entries } = await getWeeklySchedule({ locale });
   const graduate = entries.filter((entry) =>
     entry.degreeLevels.some((level) => GRADUATE.has(level)),
   );

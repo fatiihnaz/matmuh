@@ -3,6 +3,7 @@ import {
   FIRST_HOUR,
   TIME_SLOTS,
   coalesceEntries,
+  weeklySlots,
 } from "./schedule-grid.js";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
@@ -51,7 +52,7 @@ export async function fetchWeeklyEntries(offeringIds) {
   const body = await res.json().catch(() => null);
 
   return coalesceEntries(
-    (body?.data ?? [])
+    weeklySlots(body)
       .filter((slot) => offeringIds.has(slot.offeringId))
       .map(toGridEntry)
       .filter(Boolean),
