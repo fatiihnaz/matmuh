@@ -14,13 +14,15 @@ export default function AnnouncementItem({ item, variant = "compact", locale }) 
       href={announcementHref(item, locale)}
       className="group flex items-start gap-3.5 py-2.5 px-2 rounded-lg hover:bg-gray-50 transition-colors"
     >
-      <time
-        dateTime={item.publishedAt}
-        className="flex flex-col py-1.5 items-center justify-center w-13 shrink-0 bg-primary-500/3 border border-primary-500/6 rounded-lg"
-      >
-        <span className="text-lg font-bold text-primary-700 leading-tight">{day}</span>
-        <span className="text-[11px] font-medium text-secondary-700 uppercase">{month}</span>
-      </time>
+      {day && (
+        <time
+          dateTime={item.publishedAt}
+          className="flex flex-col py-1.5 items-center justify-center w-13 shrink-0 bg-primary-500/3 border border-primary-500/6 rounded-lg"
+        >
+          <span className="text-lg font-bold text-primary-700 leading-tight">{day}</span>
+          <span className="text-[11px] font-medium text-secondary-700 uppercase">{month}</span>
+        </time>
+      )}
 
       <div className="min-w-0 flex-1 py-0.5">
         <p className="text-sm text-primary-700 group-hover:text-secondary-700 transition-colors">

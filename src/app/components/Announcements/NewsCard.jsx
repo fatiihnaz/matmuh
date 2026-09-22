@@ -17,12 +17,14 @@ export default function NewsCard({ item, locale, priority = false }) {
       />
 
       <div className="flex flex-col gap-1.5 p-5 pt-4">
-        <time
-          dateTime={item.publishedAt}
-          className="text-xs font-medium text-secondary-700"
-        >
-          {formatDate(item.publishedAt, locale)}
-        </time>
+        {item.publishedAt && (
+          <time
+            dateTime={item.publishedAt}
+            className="text-xs font-medium text-secondary-700"
+          >
+            {formatDate(item.publishedAt, locale)}
+          </time>
+        )}
         <h2 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors line-clamp-2">
           {item.title}
         </h2>

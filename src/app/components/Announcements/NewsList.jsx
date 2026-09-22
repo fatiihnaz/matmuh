@@ -23,12 +23,14 @@ export default function NewsList({ items, locale }) {
             className="w-28 shrink-0 rounded-lg sm:mb-3 sm:w-auto"
           />
           <div className="min-w-0">
-            <time
-              dateTime={item.publishedAt}
-              className="block text-xs text-secondary-700 font-medium mb-1"
-            >
-              {formatDate(item.publishedAt, locale)}
-            </time>
+            {item.publishedAt && (
+              <time
+                dateTime={item.publishedAt}
+                className="block text-xs text-secondary-700 font-medium mb-1"
+              >
+                {formatDate(item.publishedAt, locale)}
+              </time>
+            )}
             <h3 className="text-sm font-semibold text-primary-700 group-hover:text-secondary-700 transition-colors mb-1 line-clamp-2">
               {item.title}
             </h3>
