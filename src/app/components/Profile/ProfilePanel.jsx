@@ -4,6 +4,8 @@ import { Fragment, useEffect, useState } from "react";
 import Link from "@/app/components/LocaleLink";
 import {
   CalendarDays,
+  CalendarPlus,
+  Download,
   Eye,
   FileText,
   Info,
@@ -17,6 +19,7 @@ import Modal from "@/app/components/Modal";
 import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
 import { MyScheduleProvider, useMySchedule } from "@/data/useMySchedule";
+import { buildIcs, downloadIcs } from "@/lib/calendar-export";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -301,11 +304,57 @@ function ScheduleEntry({ entry, conflict }) {
   );
 }
 
+const CALENDAR_LINK =
+  "inline-flex items-center gap-1.5 rounded-md border border-primary-500/10 px-2.5 py-1.5 text-[11.5px] font-medium text-primary-600 transition-colors hover:border-secondary-500/40 hover:text-secondary-700";
+
+function CalendarTargets({ rows, onDownload }) {
+  const t = useT();
+  const { locale } = useCmsRoute();
+  const ids = rows.map((row) => row.offeringId).filter(Boolean).join(",");
+  const feed = `${window.location.host}/takvim.ics?o=${ids}&lang=${locale}`;
+  const https = `${window.location.protocol}//${feed}`;
+  const webcal = `webcal://${feed}`;
+  const targets = [
+    { label: "Google Takvim", href: `https://calendar.google.com/calendar/render?cid=${encodeURIComponent(webcal)}` },
+    { label: t("Apple Takvim (iPhone, Mac)"), href: webcal },
+    {
+      label: "Outlook",
+      href: `https://outlook.live.com/calendar/0/addfromweb?url=${encodeURIComponent(https)}&name=${encodeURIComponent(t("YTÜ Ders Programım"))}`,
+    },
+  ];
+
+  return (
+    <div className="mb-3 rounded-lg bg-primary-500/3 p-2.5">
+      <div className="flex flex-wrap gap-1.5">
+        {targets.map((target) => (
+          <a key={target.label} href={target.href} target="_blank" rel="noopener noreferrer" className={CALENDAR_LINK}>
+            {target.label}
+          </a>
+        ))}
+        <button type="button" onClick={onDownload} className={CALENDAR_LINK}>
+          <Download size={12} strokeWidth={2} />
+          {t("Dosya olarak indir")}
+        </button>
+      </div>
+      <p className="mt-2 text-[11px] leading-relaxed text-primary-500/70">
+        {t("Takviminiz bu programı kendiliğinden günceller. Yeni bir ders eklerseniz aktarmayı tekrarlayın.")}
+      </p>
+    </div>
+  );
+}
+
 function EnrolledCourses({ onChanged }) {
   const t = useT();
-  const { rows, busyId, remove } = useMySchedule();
+  const { rows, entries, term, busyId, remove } = useMySchedule();
+  const [exportOpen, setExportOpen] = useState(false);
 
   if (rows.length === 0) return null;
+
+  const exportable = entries.length > 0 && term?.startDate && term?.endDate;
+  const exportCalendar = () => {
+    const text = buildIcs(entries, term, { t, name: t("YTÜ Ders Programım") });
+    if (text) downloadIcs(text, `ders-programi-${term.academicYear ?? ""}.ics`);
+  };
 
   const onRemove = async (offeringId) => {
     await remove(offeringId);
@@ -314,9 +363,25 @@ function EnrolledCourses({ onChanged }) {
 
   return (
     <div className="border-b border-primary-500/8 px-4 py-3">
-      <p className="mb-2 text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
-        {t("Kayıtlı dersler")}
-      </p>
+      <div className="mb-2 flex items-center justify-between gap-3">
+        <p className="text-[11px] font-semibold uppercase tracking-widest text-primary-500/70">
+          {t("Kayıtlı dersler")}
+        </p>
+        {exportable && (
+          <button
+            type="button"
+            onClick={() => setExportOpen((open) => !open)}
+            aria-expanded={exportOpen}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-secondary-500/10 px-2.5 py-1 text-[11px] font-medium text-secondary-700 transition-colors hover:bg-secondary-500/15"
+          >
+            <CalendarPlus size={12} strokeWidth={2} />
+            {t("Takvime aktar")}
+          </button>
+        )}
+      </div>
+      {exportable && exportOpen && (
+        <CalendarTargets rows={rows} onDownload={exportCalendar} />
+      )}
       <ul className="space-y-0.5">
         {rows.map((row) => (
           <li

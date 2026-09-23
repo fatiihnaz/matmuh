@@ -14,6 +14,7 @@ import {
   enroll,
   fetchMyEnrollments,
   fetchWeeklyEntries,
+  fetchWeeklyWithTerm,
   unenroll,
 } from "./enrollments";
 
@@ -47,10 +48,10 @@ export function MyScheduleProvider({ children }) {
       try {
         const token = await getAccessToken();
         const rows = await fetchMyEnrollments(token);
-        const entries = await fetchWeeklyEntries(
+        const { term, entries } = await fetchWeeklyWithTerm(
           new Set(rows.map((row) => row.offeringId)),
         );
-        if (alive) setState({ status: "ready", rows, entries });
+        if (alive) setState({ status: "ready", rows, entries, term });
       } catch {
         if (alive) setState({ status: "error", rows: [], entries: [] });
       }
@@ -128,6 +129,7 @@ export function MyScheduleProvider({ children }) {
       status: state.status,
       rows: state.rows,
       entries: state.entries,
+      term: state.term ?? null,
       busyId,
       failedId,
       isEnrolled: (offeringId) => ids.has(offeringId),

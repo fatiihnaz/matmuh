@@ -4,6 +4,7 @@ import {
   TIME_SLOTS,
   coalesceEntries,
   weeklySlots,
+  weeklyTerm,
 } from "./schedule-grid.js";
 
 const API = process.env.NEXT_PUBLIC_API_URL || "/api";
@@ -44,19 +45,26 @@ export async function fetchMyEnrollments(token, academicYear) {
   }));
 }
 
-export async function fetchWeeklyEntries(offeringIds) {
-  if (offeringIds.size === 0) return [];
+export async function fetchWeeklyWithTerm(offeringIds) {
+  if (offeringIds.size === 0) return { term: null, entries: [] };
 
   const res = await fetch(`${API}/calendar/weekly`).catch(() => null);
-  if (!res?.ok) return [];
+  if (!res?.ok) return { term: null, entries: [] };
   const body = await res.json().catch(() => null);
 
-  return coalesceEntries(
-    weeklySlots(body)
-      .filter((slot) => offeringIds.has(slot.offeringId))
-      .map(toGridEntry)
-      .filter(Boolean),
-  );
+  return {
+    term: weeklyTerm(body),
+    entries: coalesceEntries(
+      weeklySlots(body)
+        .filter((slot) => offeringIds.has(slot.offeringId))
+        .map(toGridEntry)
+        .filter(Boolean),
+    ),
+  };
+}
+
+export async function fetchWeeklyEntries(offeringIds) {
+  return (await fetchWeeklyWithTerm(offeringIds)).entries;
 }
 
 const SLOT_COUNT = TIME_SLOTS.length;
