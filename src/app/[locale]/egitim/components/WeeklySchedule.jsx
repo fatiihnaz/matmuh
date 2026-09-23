@@ -14,7 +14,7 @@ import {
   X,
 } from "lucide-react";
 import { useMySchedule } from "@/data/useMySchedule";
-import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
+import { DAYS, TIME_SLOTS, visibleDayIndexes } from "@/data/schedule-grid";
 import { useT } from "@/i18n/useT";
 import {
   GOLD_RGB as GOLD,
@@ -354,6 +354,8 @@ function Cell({
   onOpen,
   expanded,
   onExpand,
+  column,
+  columnCount,
 }) {
   const t = useT();
   const conflict = clash && items.length > 1;
@@ -364,7 +366,7 @@ function Cell({
     <div
       className="flex flex-col gap-1 p-1"
       style={{
-        gridColumn: day + 2,
+        gridColumn: column + 2,
         gridRow: row,
         backgroundColor: conflict
           ? "rgba(180,120,20,0.05)"
@@ -373,7 +375,7 @@ function Cell({
             : "transparent",
         borderBottom: `1px solid rgba(${NAVY},0.05)`,
         borderRight:
-          day < DAYS.length - 1 ? `1px solid rgba(${NAVY},0.04)` : "none",
+          column < columnCount - 1 ? `1px solid rgba(${NAVY},0.04)` : "none",
       }}
     >
       {conflict && (
@@ -445,6 +447,7 @@ export default function WeeklySchedule({
 
   const cells = useMemo(() => buildCells(entries), [entries]);
   const rows = useMemo(() => buildRows(entries), [entries]);
+  const dayIndexes = useMemo(() => visibleDayIndexes(entries), [entries]);
   const palette = useMemo(() => courseColors(entries), [entries]);
 
   useEffect(() => {
@@ -471,11 +474,11 @@ export default function WeeklySchedule({
       </div>
 
       <div className="overflow-x-auto">
-        <div style={{ minWidth: 852 }}>
+        <div style={{ minWidth: 72 + 156 * dayIndexes.length }}>
           <div
             className="grid"
             style={{
-              gridTemplateColumns: "72px repeat(5, minmax(156px, 1fr))",
+              gridTemplateColumns: `72px repeat(${dayIndexes.length}, minmax(156px, 1fr))`,
               gridTemplateRows: `40px ${rows
                 .map((row) =>
                   row.type === "edge"
@@ -501,22 +504,22 @@ export default function WeeklySchedule({
               </span>
             </div>
 
-            {DAYS.map((day, di) => (
+            {dayIndexes.map((di, col) => (
               <div
-                key={day}
+                key={DAYS[di]}
                 className="flex items-center justify-center"
                 style={{
-                  gridColumn: di + 2,
+                  gridColumn: col + 2,
                   gridRow: 1,
                   borderBottom: `1px solid rgba(${NAVY},0.08)`,
                   borderRight:
-                    di < DAYS.length - 1
+                    col < dayIndexes.length - 1
                       ? `1px solid rgba(${NAVY},0.05)`
                       : "none",
                 }}
               >
                 <span className="text-[12px] font-semibold text-primary-500">
-                  {t(day)}
+                  {t(DAYS[di])}
                 </span>
               </div>
             ))}
@@ -576,7 +579,7 @@ export default function WeeklySchedule({
                     {endOf(row.slot)}
                   </span>
                 </TimeLabel>,
-                ...DAYS.map((_, di) => {
+                ...dayIndexes.map((di, col) => {
                   const key = `${di}-${row.slot}`;
                   return (
                     <Cell
@@ -584,6 +587,8 @@ export default function WeeklySchedule({
                       cellKey={key}
                       items={cells.get(key) ?? []}
                       day={di}
+                      column={col}
+                      columnCount={dayIndexes.length}
                       row={gridRow}
                       odd={ri % 2 === 1}
                       palette={palette}

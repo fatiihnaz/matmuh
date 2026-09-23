@@ -1,8 +1,10 @@
-export const DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma"];
+export const DAYS = ["Pazartesi", "Salı", "Çarşamba", "Perşembe", "Cuma", "Cumartesi"];
 
-export const DAY_KEYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"];
+export const CORE_DAY_COUNT = 5;
 
-export const FIRST_HOUR = 9;
+export const DAY_KEYS = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY"];
+
+export const FIRST_HOUR = 8;
 
 export function weeklySlots(body) {
   const data = body?.data;
@@ -13,10 +15,17 @@ export function weeklySlots(body) {
 export const weeklyTerm = (body) =>
   Array.isArray(body?.data) ? null : (body?.data?.term ?? null);
 
-export const TIME_SLOTS = Array.from({ length: 12 }, (_, i) => {
+export const TIME_SLOTS = Array.from({ length: 13 }, (_, i) => {
   const hour = String(FIRST_HOUR + i).padStart(2, "0");
   return `${hour}.00 - ${hour}.50`;
 });
+
+export function visibleDayIndexes(entries) {
+  const extra = DAYS.map((_, index) => index)
+    .filter((index) => index >= CORE_DAY_COUNT)
+    .filter((index) => entries.some((entry) => entry.day === index));
+  return [...Array.from({ length: CORE_DAY_COUNT }, (_, i) => i), ...extra];
+}
 
 export function coalesceEntries(entries) {
   const byKey = new Map();
