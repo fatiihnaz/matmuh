@@ -1,4 +1,4 @@
-import Link from "@/app/components/LocaleLink";
+import Link from "next/link";
 import { Home, Bell, GraduationCap } from "lucide-react";
 
 import { UndefinedPlot } from "./components/MathPlot";

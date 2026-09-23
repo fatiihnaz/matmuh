@@ -4,7 +4,8 @@ import { useEffect, useState } from "react";
 import Link from "@/app/components/LocaleLink";
 import { useRouter } from "next/navigation";
 import { ExternalLink, Plus } from "lucide-react";
-import { CollectionFieldsForm, useCollectionCreate, useMyCollections } from "inscribed/collections";
+import { useMyCollections } from "inscribed/collections";
+import { CollectionFieldsForm, useCollectionCreate } from "inscribed/compose";
 
 import Modal from "@/app/components/Modal";
 import RecordPreview from "./RecordPreview";
@@ -34,19 +35,19 @@ export default function NewRecordDialog({ collection, page, label, title, submit
         className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-secondary-500/10 px-3 py-1.5 text-[12px] font-medium text-secondary-700 transition-colors hover:bg-secondary-500/15"
       >
         <Plus className="size-3.5" />
-        {label}
+        {t(label)}
       </button>
 
       <Modal
         open={open}
         onClose={() => setOpen(false)}
-        label={title}
+        label={t(title)}
         dismissible={false}
         contentClassName="flex items-start justify-center px-3 py-14 sm:px-6"
       >
         <div className="flex max-h-full w-full max-w-6xl flex-col overflow-hidden rounded-xl bg-white shadow-2xl">
           <div className="flex shrink-0 items-center gap-3 border-b border-primary-500/8 px-5 py-3.5">
-            <h2 className="flex-1 text-sm font-semibold text-primary-600">{title}</h2>
+            <h2 className="flex-1 text-sm font-semibold text-primary-600">{t(title)}</h2>
             <Link
               href={href(page)}
               className="inline-flex items-center gap-1.5 text-[11px] font-medium text-primary-500/70 transition-colors hover:text-secondary-700"
@@ -133,7 +134,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
                 : "text-primary-500/70 hover:bg-primary-500/5"
             }`}
           >
-            {entry.label}
+            {t(entry.label)}
           </button>
         ))}
       </div>
@@ -187,7 +188,7 @@ function ComposerPanes({ collectionKey, schema, submitLabel, onCreated }) {
             disabled={isPending}
             className="rounded-md bg-secondary-500/10 px-4 py-1.5 text-[12px] font-medium text-secondary-700 transition-colors hover:bg-secondary-500/15 disabled:opacity-40"
           >
-            {isPending ? "Kaydediliyor…" : submitLabel}
+            {isPending ? t("Kaydediliyor…") : t(submitLabel)}
           </button>
         </div>
       </div>

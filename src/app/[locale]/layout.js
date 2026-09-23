@@ -1,13 +1,37 @@
 import { notFound } from "next/navigation";
 
-// [locale] is a dynamic segment, so it greedily matches any single path
-// segment. Reject anything that isn't a real locale, otherwise a missing static
-// file (/whatever.png) falls through to this segment and soft-404s as the home
-// page instead of returning a real 404.
-const LOCALES = ["tr", "en"];
+import { CmsPage } from "@/app/lib/cms.jsx";
+import { translate } from "@/i18n";
+import { AlternateLocaleProvider } from "@/app/lib/alternate-locale.jsx";
+import HtmlLang from "@/app/lib/html-lang.jsx";
+import Header from "@/app/components/Header/Header";
+import Footer from "@/app/components/Footer";
+import ScrollToTop from "@/app/components/ScrollToTop";
+import { locales } from "../../../cms.config.mjs";
 
 export default async function LocaleLayout({ children, params }) {
   const { locale } = await params;
-  if (!LOCALES.includes(locale)) notFound();
-  return children;
+  if (!locales.includes(locale)) notFound();
+
+  return (
+    <CmsPage locale={locale}>
+      <AlternateLocaleProvider>
+        <HtmlLang />
+        <div className="flex flex-col min-h-svh">
+          <a
+            href="#icerik"
+            className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-500 focus:shadow-lg"
+          >
+            {translate(locale, "İçeriğe atla")}
+          </a>
+          <Header />
+          <main id="icerik" className="flex-1">
+            {children}
+          </main>
+          <Footer />
+          <ScrollToTop />
+        </div>
+      </AlternateLocaleProvider>
+    </CmsPage>
+  );
 }

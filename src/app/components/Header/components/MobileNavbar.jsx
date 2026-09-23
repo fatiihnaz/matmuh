@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "@/app/components/LocaleLink";
+import NextLink from "next/link";
 
 import { motion, AnimatePresence, MotionConfig, useReducedMotion } from "framer-motion";
 import { Search, ChevronUp, ExternalLink } from "lucide-react";
@@ -163,13 +164,13 @@ export default function MobileNavbar({ isOpen, onClose }) {
 
               <div className="flex items-center justify-between gap-3 text-[11px]">
                 <div className="flex items-center gap-1.5 tracking-wide">
-                  <Link href={localeHref("tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
+                  <NextLink href={localeHref("tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
                     TR
-                  </Link>
+                  </NextLink>
                   <span className="text-white/60 font-light">/</span>
-                  <Link href={localeHref("en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
+                  <NextLink href={localeHref("en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
                     EN
-                  </Link>
+                  </NextLink>
                 </div>
 
                 <a href={YTU_ANA_SITE} target="_blank" rel="noopener noreferrer"
