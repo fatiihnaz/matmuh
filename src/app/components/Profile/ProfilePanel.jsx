@@ -4,7 +4,6 @@ import { Fragment, useEffect, useState } from "react";
 import Link from "@/app/components/LocaleLink";
 import {
   CalendarDays,
-  CalendarPlus,
   Download,
   Eye,
   FileText,
@@ -20,7 +19,7 @@ import DocumentPreview, { canPreview } from "@/app/components/DocumentPreview";
 import { deleteNote, noteTypeLabel } from "@/data/lecture-notes";
 import { MyScheduleProvider, useMySchedule } from "@/data/useMySchedule";
 import { buildIcs, downloadIcs } from "@/lib/calendar-export";
-import CalendarExportDialog from "./CalendarExportDialog";
+import CalendarExportMenu from "./CalendarExportMenu";
 import WeeklySchedule from "@/app/[locale]/egitim/components/WeeklySchedule";
 import { useAuth } from "@/lib/auth";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
@@ -308,7 +307,6 @@ function ScheduleEntry({ entry, conflict }) {
 function CalendarExportAction() {
   const t = useT();
   const { rows, entries, term } = useMySchedule();
-  const [open, setOpen] = useState(false);
 
   if (entries.length === 0 || !term?.startDate || !term?.endDate) return null;
 
@@ -318,23 +316,10 @@ function CalendarExportAction() {
   };
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={() => setOpen(true)}
-        aria-haspopup="dialog"
-        className="inline-flex shrink-0 items-center gap-1.5 rounded-md bg-secondary-500/10 px-2.5 py-1 text-[11px] font-medium text-secondary-700 transition-colors hover:bg-secondary-500/15"
-      >
-        <CalendarPlus size={12} strokeWidth={2} />
-        {t("Takvime aktar")}
-      </button>
-      <CalendarExportDialog
-        open={open}
-        onClose={() => setOpen(false)}
-        offeringIds={rows.map((row) => row.offeringId).filter(Boolean)}
-        onDownload={download}
-      />
-    </>
+    <CalendarExportMenu
+      offeringIds={rows.map((row) => row.offeringId).filter(Boolean)}
+      onDownload={download}
+    />
   );
 }
 
@@ -586,7 +571,7 @@ export default function ProfilePanel({ view, onClose }) {
         contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
       >
         <div className="flex h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-144 sm:max-w-3xl lg:h-168 lg:max-w-5xl">
-          <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
+          <div className="relative z-30 flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
             <Icon size={16} strokeWidth={1.5} className="text-secondary-700" />
             <h2 className="text-sm font-semibold text-primary-600">
               {t(label)}
