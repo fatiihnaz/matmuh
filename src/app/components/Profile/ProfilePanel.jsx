@@ -137,7 +137,7 @@ function NotesBody({
   return (
     <>
       {items.length > 3 && (
-        <div className="sticky top-0 z-10 space-y-2 border-b border-primary-500/6 bg-white/95 px-4 py-2.5 backdrop-blur-sm">
+        <div className="sticky top-0 z-10 space-y-2 border-b border-primary-500/6 bg-white px-4 py-2.5">
           <input
             type="search"
             value={query}

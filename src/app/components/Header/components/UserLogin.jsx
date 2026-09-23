@@ -139,7 +139,7 @@ export default function UserLogin() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.16 }}
             onClick={() => setOpen(false)}
-            className="fixed inset-0 z-40 touch-none bg-primary-700/55 backdrop-blur-[2px] sm:hidden"
+            className="fixed inset-0 z-40 touch-none bg-primary-700/55 sm:hidden"
           />
         )}
       </AnimatePresence>

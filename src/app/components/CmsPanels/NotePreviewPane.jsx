@@ -75,7 +75,7 @@ export default function NotePreviewPane({ note, onClose, anchorRef }) {
       role="dialog"
       aria-modal="true"
       aria-label={`${note.title} önizleme`}
-      className="fixed top-0 bottom-0 right-0 bg-primary-700/92 backdrop-blur-xs"
+      className="fixed top-0 bottom-0 right-0 bg-primary-700/92"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.18 }}
