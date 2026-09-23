@@ -434,7 +434,7 @@ export function ErasmusSidebarCards() {
               href: "mailto:mtmerasmus@yildiz.edu.tr",
               label: "mtmerasmus@yildiz.edu.tr",
             }}
-            className="min-w-0 truncate text-primary-500 hover:text-secondary-700 transition-colors"
+            className="min-w-0 break-all text-primary-500 hover:text-secondary-700 transition-colors"
           />
         </div>
       </MainCard>

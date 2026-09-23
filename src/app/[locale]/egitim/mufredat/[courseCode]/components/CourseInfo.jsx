@@ -27,6 +27,7 @@ import {
 import PageLayout from "@/app/components/PageLayout";
 import MainCard from "@/app/components/MainCard";
 import Collapse from "@/app/components/Collapse";
+import Link from "@/app/components/LocaleLink";
 import { fetchCourseStatistics } from "@/data/statistics";
 import GradeDistribution, { isLowGrade } from "@/app/components/GradeDistribution";
 import { SkeletonBlock, SkeletonLine } from "@/app/components/Skeleton";
@@ -44,14 +45,16 @@ function SectionRow({ section, defaultOpen }) {
 
   return (
     <div className="rounded-lg border border-primary-500/8">
-      <button
-        type="button"
-        onClick={() => setOpen((prev) => !prev)}
-        aria-expanded={open}
-        className="flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 text-left transition-colors hover:bg-primary-500/3"
-      >
+      <div className="relative flex w-full items-center gap-3 rounded-lg px-2.5 py-2.5 transition-colors has-[button:hover]:bg-primary-500/3">
+        <button
+          type="button"
+          onClick={() => setOpen((prev) => !prev)}
+          aria-expanded={open}
+          aria-label={`${section.instructor} · ${t("Grup")} ${section.groupNo}`}
+          className="absolute inset-0 rounded-lg focus-visible:outline-2 focus-visible:outline-secondary-500"
+        />
         <span
-          className="size-9 shrink-0 rounded-full flex items-center justify-center text-[11px] font-semibold"
+          className="pointer-events-none size-9 shrink-0 rounded-full flex items-center justify-center text-[11px] font-semibold"
           style={{
             backgroundColor: "var(--color-primary-500)",
             color: "var(--color-secondary-500, #AD976F)",
@@ -59,10 +62,19 @@ function SectionRow({ section, defaultOpen }) {
         >
           {initials(section.instructor)}
         </span>
-        <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-semibold leading-tight text-primary-500">
-            {section.instructor}
-          </span>
+        <span className="pointer-events-none min-w-0 flex-1">
+          {section.staffSlug ? (
+            <Link
+              href={`/personel/${section.staffSlug}`}
+              className="pointer-events-auto relative z-10 block wrap-break-word text-[13px] font-semibold leading-tight text-primary-500 transition-colors hover:text-secondary-700"
+            >
+              {section.instructor}
+            </Link>
+          ) : (
+            <span className="block wrap-break-word text-[13px] font-semibold leading-tight text-primary-500">
+              {section.instructor}
+            </span>
+          )}
           <span className="mt-0.5 block text-[11px] text-primary-500/70">
             {t("Grup")} {section.groupNo}
             {!open && first && (
@@ -77,11 +89,11 @@ function SectionRow({ section, defaultOpen }) {
         </span>
         <ChevronDown
           size={15}
-          className={`shrink-0 text-primary-500/70 transition-transform duration-200 ${
+          className={`pointer-events-none shrink-0 text-primary-500/70 transition-transform duration-200 ${
             open ? "rotate-180" : ""
           }`}
         />
-      </button>
+      </div>
 
       <Collapse open={open}>
         <div className="space-y-2 px-2.5 pb-2.5">
@@ -422,22 +434,8 @@ export default function CourseInfo({ course, sections = [] }) {
                   )}
                 </div>
 
-                {(course.gradingPolicy || course.resources) && (
+                {course.resources && (
                   <div className="flex flex-col gap-6">
-                    {course.gradingPolicy && (
-                      <div>
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="w-1 h-4 bg-secondary-500 rounded-full" />
-                          <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
-                            {t("Değerlendirme")}
-                          </h3>
-                        </div>
-                        <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
-                          {course.gradingPolicy}
-                        </p>
-                      </div>
-                    )}
-
                     {course.resources && (
                       <div>
                         <div className="flex items-center gap-2 mb-3">
@@ -459,18 +457,35 @@ export default function CourseInfo({ course, sections = [] }) {
                       {t("Eğitim Dili")}
                     </span>
                     <p className="text-sm font-semibold text-primary-500">
-                      {course.language ?? "-"}
+                      {course.language
+                        ? course.language.split(",").map((part) => t(part.trim())).join(", ")
+                        : "-"}
                     </p>
                   </div>
                   <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
                     <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
                       {t("Değerlendirme Sistemi")}
                     </span>
-                    <p className="text-sm font-semibold text-primary-500">
-                      {course.assessment
-                        ? t("Vize %{midterm} + Final %{final}", { midterm: course.assessment.midterm?.weight ?? 0, final: course.assessment.final?.weight ?? 0 })
-                        : "-"}
-                    </p>
+                    {course.assessment && (
+                      <p className="text-sm font-semibold text-primary-500">
+                        {t("Yarıyıl içi %{midterm} + Final %{final}", {
+                          midterm: course.assessment.midterm?.weight ?? 0,
+                          final: course.assessment.final?.weight ?? 0,
+                        })}
+                      </p>
+                    )}
+                    {course.gradingPolicy && (
+                      <p
+                        className={`text-[13px] leading-relaxed text-primary-500/70 whitespace-pre-line ${
+                          course.assessment ? "mt-2 border-t border-primary-500/8 pt-2" : ""
+                        }`}
+                      >
+                        {course.gradingPolicy}
+                      </p>
+                    )}
+                    {!course.assessment && !course.gradingPolicy && (
+                      <p className="text-sm font-semibold text-primary-500">-</p>
+                    )}
                   </div>
                 </div>
               </motion.div>

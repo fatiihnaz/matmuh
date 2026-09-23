@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 
 import { getCourseByCode } from "@/data/curriculum";
 import { getCourseSections } from "@/data/schedule";
+import { getStaff } from "@/app/lib/staff.js";
 
 import CourseInfo from "./components/CourseInfo";
 
@@ -21,7 +22,12 @@ export default async function CoursePage({ params }) {
   const course = await getCourseByCode(courseCode, locale);
   if (!course) notFound();
 
-  const sections = await getCourseSections(course.code);
+  const [rawSections, staff] = await Promise.all([getCourseSections(course.code), getStaff()]);
+  const slugById = new Map(staff.map((person) => [person.id, person.slug]));
+  const sections = rawSections.map((section) => ({
+    ...section,
+    staffSlug: slugById.get(section.staffId) ?? null,
+  }));
 
   return (
     <div className="container mx-auto">

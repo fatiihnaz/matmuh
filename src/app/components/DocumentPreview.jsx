@@ -78,7 +78,7 @@ export default function DocumentPreview({ open, onClose, label, href, kind, prev
         </div>
 
         <div className="shrink-0 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 pt-3">
-          <span className="w-full sm:w-auto sm:flex-1 min-w-0 truncate text-center sm:text-left text-[11px] text-white/60">
+          <span className="w-full sm:w-auto sm:flex-1 min-w-0 wrap-break-word text-center sm:text-left text-[11px] text-white/60">
             {label}
           </span>
 

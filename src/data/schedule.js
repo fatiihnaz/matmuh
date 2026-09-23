@@ -52,6 +52,7 @@ function toEntry(slot, lecture, locale) {
     name: localized(lecture?.name ?? slot.lectureName, lecture?.nameEn, locale) ?? slot.lectureCode ?? "",
     group: slot.groupNumber ?? 1,
     instructor: slot.staffName || "-",
+    staffId: slot.staffId ?? null,
     room: slot.classroom || "-",
     online: Boolean(slot.online),
     english: slot.language === "ENGLISH",
@@ -111,6 +112,7 @@ export const getCourseSections = cache(async (code) => {
         groupNo: entry.group,
         offeringId: entry.offeringId,
         instructor: entry.instructor,
+        staffId: entry.staffId,
         schedule: [],
       });
     }

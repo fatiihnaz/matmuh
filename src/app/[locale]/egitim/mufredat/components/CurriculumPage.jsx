@@ -434,7 +434,7 @@ export default function CurriculumPage({
                                         }}
                                       />
                                       <span
-                                        className="truncate"
+                                        className="wrap-break-word"
                                         style={{
                                           fontSize: "0.8125rem",
                                           fontWeight: 450,
@@ -555,7 +555,7 @@ export default function CurriculumPage({
                                           rel: "noopener noreferrer",
                                         }
                                       : {})}
-                                    className="hover:text-secondary-700 transition-colors block truncate"
+                                    className="hover:text-secondary-700 transition-colors block wrap-break-word"
                                     style={{
                                       fontSize: "0.8125rem",
                                       fontWeight: 450,

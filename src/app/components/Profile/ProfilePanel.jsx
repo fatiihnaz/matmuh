@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import Link from "@/app/components/LocaleLink";
 import {
   CalendarDays,
@@ -205,7 +205,7 @@ function NotesBody({
                     {note.offering?.instructor && (
                       <>
                         <span aria-hidden>·</span>
-                        <span className="truncate">
+                        <span className="wrap-break-word">
                           {note.offering.instructor}
                         </span>
                       </>
@@ -273,7 +273,7 @@ function ScheduleEntry({ entry, conflict }) {
         <span className="block text-primary-500/70">{entry.endTime}</span>
       </span>
       <span className="min-w-0 flex-1">
-        <span className="block truncate text-[13px] font-medium text-primary-600">
+        <span className="block wrap-break-word text-[13px] font-medium text-primary-600">
           {entry.lectureCode ? `${entry.lectureCode} · ` : ""}
           {entry.title}
         </span>
@@ -288,7 +288,7 @@ function ScheduleEntry({ entry, conflict }) {
             </span>
           ) : null}
           {entry.staffName && (
-            <span className="truncate">{entry.staffName}</span>
+            <span className="wrap-break-word">{entry.staffName}</span>
           )}
           {entry.examType && (
             <span className="rounded-sm bg-secondary-500/12 px-1.5 py-0.5 text-[10px] font-semibold text-secondary-700">
@@ -340,7 +340,9 @@ function EnrolledCourses({ onChanged }) {
               type="button"
               onClick={() => void onRemove(row.offeringId)}
               disabled={busyId === row.offeringId}
-              aria-label={t("{course} dersini programdan kaldır", { course: row.lectureName || row.lectureCode })}
+              aria-label={t("{course} dersini programdan kaldır", {
+                course: row.lectureName || row.lectureCode,
+              })}
               className="shrink-0 rounded-sm p-0.5 text-primary-500/70 transition-colors hover:bg-primary-500/8 hover:text-red-700 disabled:opacity-40"
             >
               <X size={12} strokeWidth={2} />
@@ -377,14 +379,6 @@ const SCHEDULE_TABS = [
   { id: "week", label: "Hafta" },
   { id: "dated", label: "Bu hafta" },
 ];
-
-function ScheduleBody(props) {
-  return (
-    <MyScheduleProvider>
-      <ScheduleTabs {...props} />
-    </MyScheduleProvider>
-  );
-}
 
 function ScheduleTabs({ items, onChanged }) {
   const t = useT();
@@ -482,7 +476,8 @@ const VIEWS = {
     label: "Ders Programım",
     icon: CalendarDays,
     load: fetchMySchedule,
-    Body: ScheduleBody,
+    Body: ScheduleTabs,
+    Provider: MyScheduleProvider,
   },
 };
 
@@ -539,49 +534,53 @@ export default function ProfilePanel({ view, onClose }) {
 
   if (!view) return null;
 
-  const { label, icon: Icon, Body } = VIEWS[view];
+  const { label, icon: Icon, Body, Provider = Fragment } = VIEWS[view];
   const status = state.view === view ? state.status : "loading";
 
   return (
-    <Modal
-      open
-      onClose={onClose}
-      label={t(label)}
-      contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
-    >
-      <div className="flex max-h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:max-h-144 sm:max-w-3xl lg:max-h-168 lg:max-w-5xl">
-        <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
-          <Icon size={16} strokeWidth={1.5} className="text-secondary-700" />
-          <h2 className="text-sm font-semibold text-primary-600">{t(label)}</h2>
-          {status === "ready" && state.items.length > 0 && (
-            <span className="ml-auto text-[11px] text-primary-500/70">
-              {state.items.length} kayıt
-            </span>
-          )}
-        </div>
+    <Provider>
+      <Modal
+        open
+        onClose={onClose}
+        label={t(label)}
+        contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
+      >
+        <div className="flex h-[68svh] w-full max-w-sm flex-col overflow-hidden rounded-xl bg-white shadow-2xl sm:h-144 sm:max-w-3xl lg:h-168 lg:max-w-5xl">
+          <div className="flex shrink-0 items-center gap-2.5 border-b border-primary-500/8 px-5 py-3.5">
+            <Icon size={16} strokeWidth={1.5} className="text-secondary-700" />
+            <h2 className="text-sm font-semibold text-primary-600">
+              {t(label)}
+            </h2>
+            {status === "ready" && state.items.length > 0 && (
+              <span className="ml-auto text-[11px] text-primary-500/70">
+                {t("{count} kayıt", { count: state.items.length })}
+              </span>
+            )}
+          </div>
 
-        {actionError && (
-          <p className="shrink-0 border-b border-red-500/15 bg-red-50 px-4 py-2 text-[11px] text-red-700">
-            {actionError}
-          </p>
-        )}
-
-        <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
-          {status === "loading" && <Skeleton />}
-          {status === "error" && <Empty>{t("Bilgiler alınamadı.")}</Empty>}
-          {status === "ready" && (
-            <Body
-              items={state.items}
-              busyId={busyId}
-              confirmId={confirmId}
-              onRemove={removeNote}
-              onConfirm={setConfirmId}
-              onNavigate={onClose}
-              onChanged={() => setReloadKey((n) => n + 1)}
-            />
+          {actionError && (
+            <p className="shrink-0 border-b border-red-500/15 bg-red-50 px-4 py-2 text-[11px] text-red-700">
+              {actionError}
+            </p>
           )}
+
+          <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain">
+            {status === "loading" && <Skeleton />}
+            {status === "error" && <Empty>{t("Bilgiler alınamadı.")}</Empty>}
+            {status === "ready" && (
+              <Body
+                items={state.items}
+                busyId={busyId}
+                confirmId={confirmId}
+                onRemove={removeNote}
+                onConfirm={setConfirmId}
+                onNavigate={onClose}
+                onChanged={() => setReloadKey((n) => n + 1)}
+              />
+            )}
+          </div>
         </div>
-      </div>
-    </Modal>
+      </Modal>
+    </Provider>
   );
 }

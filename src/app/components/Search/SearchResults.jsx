@@ -55,11 +55,11 @@ export default function SearchResults({ groups, term, onNavigate, id }) {
               onClick={onNavigate}
               className="block px-4 py-2 transition-colors hover:bg-primary-500/4"
             >
-              <span className="block truncate text-[13px] font-medium text-primary-600">
+              <span className="block wrap-break-word text-[13px] font-medium text-primary-600">
                 {hit.title}
               </span>
               {hit.subtitle && (
-                <span className="block truncate text-[11px] text-primary-500/70">
+                <span className="block wrap-break-word text-[11px] text-primary-500/70">
                   {hit.subtitle}
                 </span>
               )}

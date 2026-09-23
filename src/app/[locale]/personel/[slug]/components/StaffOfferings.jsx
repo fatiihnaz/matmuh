@@ -54,7 +54,7 @@ function LectureRow({ lecture, defaultOpen }) {
         className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-left transition-colors hover:bg-primary-500/3"
       >
         <span className="min-w-0 flex-1">
-          <span className="block truncate text-[13px] font-semibold text-primary-500">
+          <span className="block wrap-break-word text-[13px] font-semibold text-primary-500">
             {lecture.name}
           </span>
           <span className="mt-0.5 block font-mono text-[11px] text-secondary-700">

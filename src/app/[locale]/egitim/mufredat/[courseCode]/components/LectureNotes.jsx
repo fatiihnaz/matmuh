@@ -87,7 +87,7 @@ function LoginPanel({ loading, onSignIn }) {
                 />
               </div>
               <div className="flex-1 min-w-0 pt-0.5">
-                <div className="text-sm font-semibold text-primary-700 truncate mb-1.5">
+                <div className="text-sm font-semibold text-primary-700 wrap-break-word mb-1.5">
                   {t(item.title)}
                 </div>
                 <span className="text-[11px] text-gray-400 font-mono">
@@ -134,7 +134,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
       </span>
       <div className="flex-1 min-w-0 pt-0.5">
         <div className="flex items-center gap-2 flex-wrap mb-1">
-          <span className="text-sm font-semibold text-primary-700 truncate">
+          <span className="min-w-0 text-sm font-semibold text-primary-700 wrap-break-word">
             {note.title}
           </span>
           {noteTypeLabel(note.type) && note.type !== "OTHER" && (
@@ -185,7 +185,7 @@ function NoteCard({ note, pending = false, onCancel, cancelling = false }) {
             </span>
           )}
           {note.uploadedBy && (
-            <span className="text-[11px] text-primary-500/70 truncate">
+            <span className="text-[11px] text-primary-500/70 wrap-break-word">
               {note.uploadedBy}
             </span>
           )}
@@ -420,7 +420,7 @@ function UploadForm({ lectureId, onUploaded }) {
             className="text-secondary-700"
           />
         </span>
-        <span className="max-w-full truncate text-[13px] font-medium text-primary-600">
+        <span className="max-w-full wrap-break-word text-[13px] font-medium text-primary-600">
           {file
             ? file.name
             : dragOver

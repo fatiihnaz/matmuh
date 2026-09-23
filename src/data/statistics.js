@@ -86,10 +86,18 @@ const toSection = (offering) => {
   };
 };
 
+const hasStatistics = (section) =>
+  section.gradeDistribution.length > 0 ||
+  section.makeupDistribution.length > 0 ||
+  section.exams.length > 0 ||
+  section.summary.average != null;
+
 export function toViewModel(offerings = []) {
   const terms = new Map();
 
   for (const offering of offerings) {
+    const section = toSection(offering);
+    if (!hasStatistics(section)) continue;
     const label = termLabel(offering);
     if (!terms.has(label)) {
       terms.set(label, { name: label, order: termOrder(offering), instructors: new Map() });
@@ -104,7 +112,7 @@ export function toViewModel(offerings = []) {
         sections: [],
       });
     }
-    term.instructors.get(key).sections.push(toSection(offering));
+    term.instructors.get(key).sections.push(section);
   }
 
   return [...terms.values()]

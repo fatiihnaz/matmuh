@@ -555,7 +555,7 @@ export function InternshipContact() {
               href: "mailto:mtmstaj@yildiz.edu.tr",
               label: "mtmstaj@yildiz.edu.tr",
             }}
-            className="min-w-0 truncate text-primary-500 hover:text-secondary-700 transition-colors"
+            className="min-w-0 break-all text-primary-500 hover:text-secondary-700 transition-colors"
           />
         </div>
         <EditableRegion
