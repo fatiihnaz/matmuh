@@ -84,7 +84,16 @@ function GroupLine({ group, showEnglish }) {
       {group.instructor && group.instructor !== "-" && (
         <span className="inline-flex min-w-0 items-center gap-1">
           <User size={11} strokeWidth={1.5} className="shrink-0" />
-          <span className="wrap-break-word">{group.instructor}</span>
+          {group.staffSlug ? (
+            <Link
+              href={`/personel/${group.staffSlug}`}
+              className="relative z-10 wrap-break-word underline decoration-primary-500/20 underline-offset-2 transition-colors hover:text-secondary-700 hover:decoration-secondary-500"
+            >
+              {group.instructor}
+            </Link>
+          ) : (
+            <span className="wrap-break-word">{group.instructor}</span>
+          )}
         </span>
       )}
       {group.online ? (
@@ -111,7 +120,7 @@ function ListRow({ block, accent, courseHref }) {
 
   const body = (
     <div
-      className="flex items-start gap-3 rounded-lg px-3 py-2.5 transition-[filter] hover:brightness-95"
+      className="relative flex items-start gap-3 rounded-lg px-3 py-2.5 transition-[filter] hover:brightness-95 has-[a:focus-visible]:outline-2 has-[a:focus-visible]:outline-offset-2 has-[a:focus-visible]:outline-secondary-500"
       style={{
         backgroundColor: tintOf(isElective),
         borderLeft: `2.5px solid ${accent}`,
@@ -126,7 +135,16 @@ function ListRow({ block, accent, courseHref }) {
           <span className="font-mono text-[11px] font-semibold" style={{ color: accent }}>
             {block.code}
           </span>
-          <span className="text-[13px] font-medium text-primary-600">{block.name}</span>
+          {href ? (
+            <Link
+              href={href}
+              className="text-[13px] font-medium text-primary-600 outline-none after:absolute after:inset-0 after:rounded-lg"
+            >
+              {block.name}
+            </Link>
+          ) : (
+            <span className="text-[13px] font-medium text-primary-600">{block.name}</span>
+          )}
           {block.english && (
             <span className="font-mono text-[9.5px] font-semibold tracking-wide text-secondary-700">
               EN
@@ -143,17 +161,7 @@ function ListRow({ block, accent, courseHref }) {
     </div>
   );
 
-  if (!href) return <li>{body}</li>;
-  return (
-    <li>
-      <Link
-        href={href}
-        className="block rounded-lg focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-secondary-500"
-      >
-        {body}
-      </Link>
-    </li>
-  );
+  return <li>{body}</li>;
 }
 
 function ScheduleList({ entries, courseHref, note }) {
@@ -284,7 +292,16 @@ function ScheduleTable({ entries, courseHref, note }) {
                         {group.online ? t("Çevrimiçi") : group.room !== "-" ? group.room : ""}
                       </td>
                       <td className={`${TD} text-[12.5px] text-primary-600`}>
-                        {group.instructor !== "-" ? group.instructor : ""}
+                        {group.instructor === "-" ? null : group.staffSlug ? (
+                          <Link
+                            href={`/personel/${group.staffSlug}`}
+                            className="transition-colors hover:text-secondary-700 hover:underline"
+                          >
+                            {group.instructor}
+                          </Link>
+                        ) : (
+                          group.instructor
+                        )}
                       </td>
                     </tr>
                   );

@@ -1,6 +1,7 @@
 import { cache } from "react";
 
 import { getLectures, localized } from "./curriculum.js";
+import { getStaff } from "@/app/lib/staff.js";
 import {
   DAY_KEYS,
   DAYS,
@@ -82,13 +83,17 @@ export const getWeeklySchedule = cache(
     const slots = weeklySlots(body);
     if (!Array.isArray(slots) || slots.length === 0) return empty;
 
-    const lectures = await getLectures();
+    const [lectures, staff] = await Promise.all([getLectures(), getStaff()]);
     const byCode = new Map(lectures.map((l) => [l.code?.toUpperCase(), l]));
+    const slugById = new Map(staff.map((person) => [person.id, person.slug]));
 
     const entries = coalesceEntries(
       slots
         .map((slot) =>
           toEntry(slot, byCode.get(slot.lectureCode?.toUpperCase()), locale),
+        )
+        .map((entry) =>
+          entry ? { ...entry, staffSlug: slugById.get(entry.staffId) ?? null } : entry,
         )
         .filter(Boolean),
     );
@@ -113,6 +118,7 @@ export const getCourseSections = cache(async (code) => {
         offeringId: entry.offeringId,
         instructor: entry.instructor,
         staffId: entry.staffId,
+        staffSlug: entry.staffSlug,
         schedule: [],
       });
     }

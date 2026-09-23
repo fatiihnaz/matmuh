@@ -219,7 +219,16 @@ function GroupDetail({ entry, single }) {
       {entry.instructor && entry.instructor !== "-" && (
         <span className="flex items-start gap-1">
           <User size={10} strokeWidth={1.5} className="mt-px shrink-0" />
-          {entry.instructor}
+          {entry.staffSlug ? (
+            <Link
+              href={`/personel/${entry.staffSlug}`}
+              className="underline decoration-primary-500/20 underline-offset-2 transition-colors hover:text-secondary-700 hover:decoration-secondary-500"
+            >
+              {entry.instructor}
+            </Link>
+          ) : (
+            entry.instructor
+          )}
         </span>
       )}
       {entry.online ? (
