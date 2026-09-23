@@ -135,34 +135,42 @@ function metaOf(entry) {
   ].filter(Boolean);
 }
 
-function buildCells(entries) {
-  const cells = new Map();
-
+function buildClusters(entries) {
+  const blocks = new Map();
   for (const entry of entries) {
-    const span = spanOf(entry);
-    for (let k = 0; k < span; k++) {
-      const key = `${entry.day}-${entry.slot + k}`;
-      if (!cells.has(key)) cells.set(key, new Map());
-      const cont = k > 0;
-      const courses = cells.get(key);
-      const id = `${entry.code}|${cont}`;
-      if (!courses.has(id)) courses.set(id, { ...entry, cont, groups: [] });
-      courses.get(id).groups.push(entry);
-    }
+    const key = `${entry.day}|${entry.slot}|${spanOf(entry)}|${entry.code}`;
+    if (!blocks.has(key)) blocks.set(key, { ...entry, span: spanOf(entry), groups: [] });
+    blocks.get(key).groups.push(entry);
   }
 
-  const merged = new Map();
-  for (const [key, courses] of cells) {
-    const items = [...courses.values()];
-    for (const item of items) {
-      item.groups.sort((a, b) => (a.group || 0) - (b.group || 0));
-      item.english = item.groups.every((group) => group.english);
-      item.online = item.groups.every((group) => group.online);
-    }
-    items.sort((a, b) => Number(a.cont) - Number(b.cont) || a.code.localeCompare(b.code, "tr"));
-    merged.set(key, items);
+  const byDay = new Map();
+  for (const block of blocks.values()) {
+    block.groups.sort((a, b) => (a.group || 0) - (b.group || 0));
+    block.english = block.groups.every((group) => group.english);
+    block.online = block.groups.every((group) => group.online);
+    if (!byDay.has(block.day)) byDay.set(block.day, []);
+    byDay.get(block.day).push(block);
   }
-  return merged;
+
+  const clusters = new Map();
+  for (const [day, list] of byDay) {
+    list.sort(
+      (a, b) => a.slot - b.slot || b.span - a.span || a.code.localeCompare(b.code, "tr"),
+    );
+    const out = [];
+    for (const block of list) {
+      const end = block.slot + block.span - 1;
+      const last = out[out.length - 1];
+      if (last && block.slot <= last.to) {
+        last.blocks.push(block);
+        last.to = Math.max(last.to, end);
+      } else {
+        out.push({ from: block.slot, to: end, blocks: [block] });
+      }
+    }
+    clusters.set(day, out);
+  }
+  return clusters;
 }
 
 function buildRows(entries) {
@@ -200,7 +208,7 @@ function GroupDetail({ entry, single }) {
     <span className="flex flex-col gap-1 text-[10px] leading-snug text-primary-500/70">
       {!single && (
         <span className="flex items-center gap-1 font-mono text-[9.5px] font-semibold text-primary-600">
-          {t("{group}. grup", { group: entry.group })}
+          {t("Grup {group}", { group: entry.group })}
           {entry.english && (
             <span className="rounded-sm bg-secondary-500/12 px-1 py-px font-sans text-[9px] font-medium text-secondary-700">
               {t("İngilizce")}
@@ -233,20 +241,20 @@ function GroupDetail({ entry, single }) {
   );
 }
 
-function Strip({ entry, color, slim, active, href, onToggle }) {
+function Strip({ entry, color, slim, fill, showRange, active, href, onToggle }) {
   const t = useT();
   const elective = entry.type === "Seçmeli";
   const groups = entry.groups ?? [entry];
   const single = groups.length === 1;
   const meta = single ? metaOf(groups[0]) : [t("{count} grup", { count: groups.length })];
-  const detailed = !slim && !entry.cont && meta.length > 0;
+  const detailed = !slim && meta.length > 0;
 
   const label = [
     `${entry.code} ${entry.name}`,
     single
-      ? t("{group}. grup", { group: groups[0].group })
+      ? t("Grup {group}", { group: groups[0].group })
       : t("{count} grup", { count: groups.length }),
-    entry.cont ? t("devam eden oturum") : null,
+    rangeOf(entry),
     entry.online ? t("çevrimiçi") : null,
     ...(single ? meta : []),
   ]
@@ -255,10 +263,10 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
 
   return (
     <div
-      className="overflow-hidden rounded-md"
+      className={`overflow-hidden rounded-md ${fill ? "flex-1" : ""}`}
       style={{
-        backgroundColor: tintOf(elective, entry.cont && !active),
-        borderLeft: `2.5px ${entry.cont ? "dashed" : "solid"} ${color}`,
+        backgroundColor: tintOf(elective, false),
+        borderLeft: `2.5px solid ${color}`,
       }}
     >
       <button
@@ -270,7 +278,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
       >
         <span className="flex items-center gap-1">
           <span
-            className={`shrink-0 font-mono text-[9.5px] font-semibold ${entry.cont && !active ? "opacity-60" : ""}`}
+            className="shrink-0 font-mono text-[9.5px] font-semibold"
             style={{ color }}
           >
             {entry.code}
@@ -299,13 +307,16 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
           />
         </span>
         <span
-          className={`mt-0.5 block text-[11px] leading-snug font-medium ${
-            entry.cont && !active ? "text-primary-500/70" : "text-primary-600"
-          }`}
+          className="mt-0.5 block text-[11px] leading-snug font-medium text-primary-600"
         >
           {entry.name}
         </span>
 
+        {showRange && !active && (
+          <span className="mt-px block font-mono text-[9px] text-primary-500/70">
+            {rangeOf(entry)}
+          </span>
+        )}
         {detailed && !active && (
           <span className="mt-px block wrap-break-word text-[9.5px] leading-snug text-primary-500/70">
             {meta.join(" · ")}
@@ -324,9 +335,7 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
             className="overflow-hidden"
           >
             <div
-              className="border-t px-1.5 pt-1.5 pb-1.5"
-              style={{ borderColor: `rgba(${NAVY},0.07)` }}
-            >
+              className="px-1.5 pb-1.5">
               <span className="block font-mono text-[9.5px] text-primary-500/70">
                 {t(DAYS[entry.day])} · {rangeOf(entry)}
               </span>
@@ -352,7 +361,10 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                 )}
               </span>
 
-              <span className="mt-1.5 flex flex-col gap-2">
+              <span
+                className="mt-1.5 flex flex-col gap-2 border-t pt-1.5"
+                style={{ borderColor: `rgba(${NAVY},0.1)` }}
+              >
                 {groups.map((group) => (
                   <span
                     key={`${group.group}-${group.offeringId ?? ""}`}
@@ -381,12 +393,12 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
   );
 }
 
-function Cell({
-  cellKey,
-  items,
-  day,
-  row,
-  odd,
+function Cluster({
+  clusterKey,
+  cluster,
+  rowStart,
+  rowEnd,
+  column,
   palette,
   courseHref,
   clash,
@@ -394,28 +406,21 @@ function Cell({
   onOpen,
   expanded,
   onExpand,
-  column,
-  columnCount,
 }) {
   const t = useT();
-  const conflict = clash && items.length > 1;
+  const items = cluster.blocks;
+  const single = items.length === 1;
+  const conflict = clash && !single;
   const overflow = items.length > VISIBLE + 1;
   const shown = overflow && !expanded ? items.slice(0, VISIBLE) : items;
 
   return (
     <div
-      className="flex flex-col gap-1 p-1"
+      className="relative z-10 flex flex-col gap-1 p-1"
       style={{
         gridColumn: column + 2,
-        gridRow: row,
-        backgroundColor: conflict
-          ? "rgba(180,120,20,0.05)"
-          : odd
-            ? `rgba(${NAVY},0.012)`
-            : "transparent",
-        borderBottom: `1px solid rgba(${NAVY},0.05)`,
-        borderRight:
-          column < columnCount - 1 ? `1px solid rgba(${NAVY},0.04)` : "none",
+        gridRow: `${rowStart} / ${rowEnd + 1}`,
+        backgroundColor: conflict ? "rgba(180,120,20,0.05)" : undefined,
       }}
     >
       {conflict && (
@@ -426,13 +431,15 @@ function Cell({
       )}
 
       {shown.map((entry, index) => {
-        const id = `${cellKey}#${index}`;
+        const id = `${clusterKey}#${index}`;
         return (
           <Strip
-            key={`${entry.code}-${entry.cont}-${index}`}
+            key={`${entry.code}-${entry.slot}-${entry.span}`}
             entry={entry}
             color={colorOf(palette, entry.code)}
             slim={index >= VISIBLE}
+            fill={single}
+            showRange={!single || entry.span > 1}
             active={openId === id}
             href={courseHref?.(entry.code) || null}
             onToggle={() => onOpen(openId === id ? null : id)}
@@ -485,8 +492,15 @@ export default function WeeklySchedule({
   const [openId, setOpenId] = useState(null);
   const [expanded, setExpanded] = useState(() => new Set());
 
-  const cells = useMemo(() => buildCells(entries), [entries]);
+  const clusters = useMemo(() => buildClusters(entries), [entries]);
   const rows = useMemo(() => buildRows(entries), [entries]);
+  const rowOfSlot = useMemo(
+    () =>
+      new Map(
+        rows.flatMap((row, ri) => (row.type === "slot" ? [[row.slot, ri + 2]] : [])),
+      ),
+    [rows],
+  );
   const dayIndexes = useMemo(() => visibleDayIndexes(entries), [entries]);
   const palette = useMemo(() => courseColors(entries), [entries]);
 
@@ -619,30 +633,66 @@ export default function WeeklySchedule({
                     {endOf(row.slot)}
                   </span>
                 </TimeLabel>,
-                ...dayIndexes.map((di, col) => {
-                  const key = `${di}-${row.slot}`;
-                  return (
-                    <Cell
-                      key={`cell-${key}`}
-                      cellKey={key}
-                      items={cells.get(key) ?? []}
-                      day={di}
-                      column={col}
-                      columnCount={dayIndexes.length}
-                      row={gridRow}
-                      odd={ri % 2 === 1}
-                      palette={palette}
-                      courseHref={courseHref}
-                      clash={clash}
-                      openId={openId}
-                      onOpen={setOpenId}
-                      expanded={expanded.has(key)}
-                      onExpand={() => toggleExpand(key)}
-                    />
-                  );
-                }),
+                ...dayIndexes.map((di, col) => (
+                  <div
+                    key={`bg-${di}-${row.slot}`}
+                    style={{
+                      gridColumn: col + 2,
+                      gridRow,
+                      backgroundColor: ri % 2 === 1 ? `rgba(${NAVY},0.012)` : "transparent",
+                      borderBottom: `1px solid rgba(${NAVY},0.05)`,
+                      borderRight:
+                        col < dayIndexes.length - 1 ? `1px solid rgba(${NAVY},0.04)` : "none",
+                    }}
+                  />
+                )),
               ];
             })}
+
+            {dayIndexes.flatMap((di, col) =>
+              (clusters.get(di) ?? []).map((cluster) => {
+                const key = `${di}-${cluster.from}`;
+                return (
+                  <Cluster
+                    key={`cluster-${key}`}
+                    clusterKey={key}
+                    cluster={cluster}
+                    rowStart={rowOfSlot.get(cluster.from)}
+                    rowEnd={rowOfSlot.get(cluster.to)}
+                    column={col}
+                    palette={palette}
+                    courseHref={courseHref}
+                    clash={clash}
+                    openId={openId}
+                    onOpen={setOpenId}
+                    expanded={expanded.has(key)}
+                    onExpand={() => toggleExpand(key)}
+                  />
+                );
+              }),
+            )}
+
+            {dayIndexes.flatMap((di, col) =>
+              (clusters.get(di) ?? []).flatMap((cluster) => {
+                const key = `${di}-${cluster.from}`;
+                const block = cluster.blocks[0];
+                if (cluster.blocks.length > 1 || block.span < 2) return [];
+                if (openId?.startsWith(`${key}#`)) return [];
+                return Array.from({ length: block.span - 1 }, (_, k) => (
+                  <div
+                    key={`break-${key}-${k}`}
+                    aria-hidden
+                    className="pointer-events-none relative z-20 self-start"
+                    style={{
+                      gridColumn: col + 2,
+                      gridRow: rowOfSlot.get(block.slot + k + 1),
+                      margin: "0 4px 0 7px",
+                      borderTop: `1px dashed rgba(${NAVY},0.16)`,
+                    }}
+                  />
+                ));
+              }),
+            )}
           </div>
         </div>
       </div>
