@@ -19,6 +19,7 @@ import {
 import { useCmsBlock, useCmsRoute } from "inscribed";
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
+import { useAlternateLocalePaths } from "@/app/lib/alternate-locale.jsx";
 
 const BURGER_BAR =
   "absolute top-1/2 left-0 -mt-px h-0.5 w-full rounded-full bg-current transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]";
@@ -29,6 +30,8 @@ export default function Header() {
   const { locale, slug, localePath } = useCmsRoute();
   const t = useT();
   const { href } = useLocaleNav();
+  const alternates = useAlternateLocalePaths();
+  const localeHref = (target) => alternates[target] ?? localePath(slug, target);
   const { value: eposta } = useCmsBlock("footer.contact.email");
   const epostaAdresi = eposta?.label || DEPARTMENT_EMAIL;
   const epostaBagi = eposta?.href || `mailto:${DEPARTMENT_EMAIL}`;
@@ -58,7 +61,7 @@ export default function Header() {
             <div className="w-px h-3 bg-neutral-600"></div>
             <div className="flex items-center gap-1.5 text-[11px] tracking-wide">
               <Link
-                href={localePath(slug, "tr")}
+                href={localeHref("tr")}
                 className={
                   locale === "tr"
                     ? "text-white font hover:opacity-80 transition-opacity"
@@ -69,7 +72,7 @@ export default function Header() {
               </Link>
               <span className="text-white/60 font-light">/</span>
               <Link
-                href={localePath(slug, "en")}
+                href={localeHref("en")}
                 className={
                   locale === "en"
                     ? "text-white hover:opacity-80 transition-opacity"

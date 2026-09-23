@@ -13,7 +13,8 @@ import RecentAnnouncements from "@/app/components/Announcements/RecentAnnounceme
 import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
 import { getAdjacent, getAnnouncementBySlug, getAnnouncements } from "@/data/content";
-import { alternateLanguages } from "@/app/lib/hreflang.js";
+import { alternateLanguages, alternatePaths } from "@/app/lib/hreflang.js";
+import AlternateLocalePaths from "@/app/lib/alternate-locale.jsx";
 import { translate } from "@/i18n";
 
 export async function generateMetadata({ params }) {
@@ -44,7 +45,7 @@ export default async function AnnouncementDetailPage({ params }) {
   if (!item) notFound();
 
   const [{ older, newer }, { items: recent }] = await Promise.all([
-    getAdjacent(slug),
+    getAdjacent(slug, locale),
     getAnnouncements({ limit: 6, locale }),
   ]);
 
@@ -60,6 +61,7 @@ export default async function AnnouncementDetailPage({ params }) {
 
   return (
     <CollectionItem collection="announcements" slug={slug} label={item.title}>
+      <AlternateLocalePaths paths={alternatePaths(item, "/duyurular")} />
       <SubHeader
         title={<CollectionField name="title" />}
         lastLabel={item.title}

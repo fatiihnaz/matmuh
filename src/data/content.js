@@ -112,6 +112,9 @@ const mergedWithFallback = cache(async (key, locale) => {
   return [...translated, ...missing].sort(byRank);
 });
 
+const orderedFor = async (key, locale) =>
+  !locale || locale === DEFAULT_LOCALE ? allOrdered(key, locale) : mergedWithFallback(key, locale);
+
 const localePage = async (key, category, q, limit, offset, locale) => {
   if (!locale || locale === DEFAULT_LOCALE) {
     return queryPage(key, category ?? null, q || null, limit, offset, locale);
@@ -140,8 +143,8 @@ export const getAnnouncementBySlug = cache(async (slug) => bySlug("announcements
 
 export const getNewsBySlug = cache(async (slug) => bySlug("news", slug));
 
-export const getAdjacent = cache(async (slug) => {
-  const items = await allOrdered("announcements");
+export const getAdjacent = cache(async (slug, locale, key = "announcements") => {
+  const items = await orderedFor(key, locale);
   const index = items.findIndex((item) => item.slug === slug);
   if (index === -1) return { newer: null, older: null };
   const brief = (item) => (item ? { slug: item.slug, title: item.title } : null);

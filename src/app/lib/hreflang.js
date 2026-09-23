@@ -3,6 +3,16 @@ import { locales } from "../../../cms.config.mjs";
 
 const DEFAULT_LOCALE = locales[0];
 
+export function alternatePaths(item, basePath) {
+  const own = item.locale ?? DEFAULT_LOCALE;
+  const paths = { [own]: localePath(`${basePath}/${item.slug}`, own) };
+  for (const sibling of item.translations ?? []) {
+    if (!sibling?.locale || !sibling?.slug || sibling.locale === own) continue;
+    paths[sibling.locale] = localePath(`${basePath}/${sibling.slug}`, sibling.locale);
+  }
+  return paths;
+}
+
 export function alternateLanguages(item, basePath) {
   const own = item.locale ?? DEFAULT_LOCALE;
   const entries = [[own, `${basePath}/${item.slug}`]];

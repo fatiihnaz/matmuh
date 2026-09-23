@@ -11,7 +11,8 @@ import GalleryGrid from "@/app/components/Announcements/GalleryGrid";
 import QuickLinks from "@/app/components/QuickLinks";
 import { CollectionItem } from "@/app/lib/cms.jsx";
 import { getNewsBySlug } from "@/data/content";
-import { alternateLanguages } from "@/app/lib/hreflang.js";
+import { alternateLanguages, alternatePaths } from "@/app/lib/hreflang.js";
+import AlternateLocalePaths from "@/app/lib/alternate-locale.jsx";
 import { translate } from "@/i18n";
 
 export async function generateMetadata({ params }) {
@@ -49,6 +50,7 @@ export default async function NewsDetailPage({ params }) {
 
   return (
     <CollectionItem collection="news" slug={slug} label={item.title}>
+      <AlternateLocalePaths paths={alternatePaths(item, "/haberler")} />
       <SubHeader title={<CollectionField name="title" />} lastLabel={item.title} />
       <PageLayout sidebar={sidebar}>
         <div className="flex flex-col gap-6">

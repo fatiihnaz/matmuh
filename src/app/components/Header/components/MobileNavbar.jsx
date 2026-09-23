@@ -10,6 +10,7 @@ import SearchOverlay from "@/app/components/Search/SearchOverlay";
 import { useT } from "@/i18n/useT";
 import { useLocaleNav } from "@/i18n/useLocaleNav";
 import { useCmsRoute } from "inscribed";
+import { useAlternateLocalePaths } from "@/app/lib/alternate-locale.jsx";
 
 
 function hasCategories(children) {
@@ -109,6 +110,8 @@ function AccordionSection({ item, onNavigate }) {
 export default function MobileNavbar({ isOpen, onClose }) {
   const t = useT();
   const { locale, slug, localePath } = useCmsRoute();
+  const alternates = useAlternateLocalePaths();
+  const localeHref = (target) => alternates[target] ?? localePath(slug, target);
   const reduce = useReducedMotion();
   const [searchOpen, setSearchOpen] = useState(false);
 
@@ -160,11 +163,11 @@ export default function MobileNavbar({ isOpen, onClose }) {
 
               <div className="flex items-center justify-between gap-3 text-[11px]">
                 <div className="flex items-center gap-1.5 tracking-wide">
-                  <Link href={localePath(slug, "tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
+                  <Link href={localeHref("tr")} onClick={onClose} className={locale === "tr" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
                     TR
                   </Link>
                   <span className="text-white/60 font-light">/</span>
-                  <Link href={localePath(slug, "en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
+                  <Link href={localeHref("en")} onClick={onClose} className={locale === "en" ? "text-white" : "text-white/60 hover:text-white transition-colors"}>
                     EN
                   </Link>
                 </div>

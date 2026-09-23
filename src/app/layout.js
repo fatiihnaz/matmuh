@@ -3,6 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { Providers } from "@/app/providers";
 import { CmsPage, getCmsRoute } from "@/app/lib/cms.jsx";
 import { translate } from "@/i18n";
+import { AlternateLocaleProvider } from "@/app/lib/alternate-locale.jsx";
 
 import Header from "./components/Header/Header";
 import Footer from "./components/Footer";
@@ -63,20 +64,22 @@ export default async function RootLayout({ children }) {
           suppressHydrationWarning
         >
           <CmsPage>
-            <div className="flex flex-col min-h-svh">
-              <a
-                href="#icerik"
-                className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-500 focus:shadow-lg"
-              >
-                {translate(locale, "İçeriğe atla")}
-              </a>
-              <Header />
-              <main id="icerik" className="flex-1">
-                {children}
-              </main>
-              <Footer />
-              <ScrollToTop />
-            </div>
+            <AlternateLocaleProvider>
+              <div className="flex flex-col min-h-svh">
+                <a
+                  href="#icerik"
+                  className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-100 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-500 focus:shadow-lg"
+                >
+                  {translate(locale, "İçeriğe atla")}
+                </a>
+                <Header />
+                <main id="icerik" className="flex-1">
+                  {children}
+                </main>
+                <Footer />
+                <ScrollToTop />
+              </div>
+            </AlternateLocaleProvider>
           </CmsPage>
         </body>
       </Providers>
