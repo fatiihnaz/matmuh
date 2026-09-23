@@ -26,6 +26,8 @@ const ROLE_LABELS = {
 
 const SLOT = "w-9 h-9 sm:w-16";
 
+const MENU_CLOSE_DELAY = 220;
+
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut, getAccessToken } =
     useAuth();
@@ -194,8 +196,8 @@ export default function UserLogin() {
                   key={id}
                   type="button"
                   onClick={() => {
-                    setOpen(false);
                     setPanel(id);
+                    setTimeout(() => setOpen(false), MENU_CLOSE_DELAY);
                   }}
                   className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                 >

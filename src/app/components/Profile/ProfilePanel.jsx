@@ -548,6 +548,7 @@ const VIEWS = {
 
 export default function ProfilePanel({ view, onClose }) {
   const t = useT();
+  const [shownView, setShownView] = useState(view);
   const { getAccessToken } = useAuth();
   const [state, setState] = useState({
     view: null,
@@ -597,15 +598,16 @@ export default function ProfilePanel({ view, onClose }) {
     };
   }, [view, getAccessToken, reloadKey]);
 
-  if (!view) return null;
+  if (view && view !== shownView) setShownView(view);
+  if (!shownView) return null;
 
-  const { label, icon: Icon, Body, Provider = Fragment } = VIEWS[view];
-  const status = state.view === view ? state.status : "loading";
+  const { label, icon: Icon, Body, Provider = Fragment } = VIEWS[shownView];
+  const status = state.view === shownView ? state.status : "loading";
 
   return (
     <Provider>
       <Modal
-        open
+        open={Boolean(view)}
         onClose={onClose}
         label={t(label)}
         contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"
