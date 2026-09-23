@@ -86,7 +86,7 @@ export default function StaffDetail({ person, entries, locale }) {
   );
 
   return (
-    <PageLayout sidebar={profile}>
+    <PageLayout sidebar={profile} sidebarFirst>
       <div className="flex flex-col gap-8">
         <PageSection title={translate(locale, "Haftalık Ders Programı")}>
           {entries.length > 0 ? (
