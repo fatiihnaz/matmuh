@@ -499,5 +499,6 @@ export const messages = {
     "Takviminiz bu programı kendiliğinden günceller. Yeni bir ders eklerseniz aktarmayı tekrarlayın.": "Your calendar keeps this timetable up to date. If you add a course, add it to your calendar again.",
     "Daha az göster": "Show less",
     "+{count} kaynak daha": "+{count} more resources",
+    "İngilizce ders": "Taught in English",
   },
 };

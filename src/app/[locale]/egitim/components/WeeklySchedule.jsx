@@ -680,28 +680,6 @@ export default function WeeklySchedule({
                 );
               }),
             )}
-
-            {dayIndexes.flatMap((di, col) =>
-              (clusters.get(di) ?? []).flatMap((cluster) => {
-                const key = `${di}-${cluster.from}`;
-                const block = cluster.blocks[0];
-                if (cluster.blocks.length > 1 || block.span < 2) return [];
-                if (openId?.startsWith(`${key}#`)) return [];
-                return Array.from({ length: block.span - 1 }, (_, k) => (
-                  <div
-                    key={`break-${key}-${k}`}
-                    aria-hidden
-                    className="pointer-events-none relative z-20 self-start"
-                    style={{
-                      gridColumn: col + 2,
-                      gridRow: rowOfSlot.get(block.slot + k + 1),
-                      margin: "0 4px 0 7px",
-                      borderTop: `1px dashed rgba(${NAVY},0.16)`,
-                    }}
-                  />
-                ));
-              }),
-            )}
           </div>
         </div>
       </div>

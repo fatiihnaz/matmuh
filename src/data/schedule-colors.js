@@ -26,5 +26,11 @@ export function courseColors(entries) {
 
 export const colorOf = (palette, code) => palette.get(code) ?? COURSE_COLORS[0];
 
+const overWhite = (rgb, alpha) =>
+  `rgb(${rgb
+    .split(",")
+    .map((channel) => Math.round(255 + (Number(channel) - 255) * alpha))
+    .join(",")})`;
+
 export const tintOf = (elective, faded = false) =>
-  `rgba(${elective ? GOLD_RGB : NAVY_RGB},${faded ? 0.035 : elective ? 0.1 : 0.05})`;
+  overWhite(elective ? GOLD_RGB : NAVY_RGB, faded ? 0.035 : elective ? 0.1 : 0.05);
