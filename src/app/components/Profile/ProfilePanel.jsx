@@ -566,6 +566,7 @@ export default function ProfilePanel({ view, onClose }) {
     <Provider>
       <Modal
         open={Boolean(view)}
+        instantContent
         onClose={onClose}
         label={t(label)}
         contentClassName="flex items-center justify-center px-4 py-16 sm:px-6"

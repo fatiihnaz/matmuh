@@ -10,7 +10,15 @@ const FOCUSABLE =
 
 const neverChanges = () => () => {};
 
-export default function Modal({ open, onClose, label, contentClassName = "", dismissible = true, children }) {
+export default function Modal({
+  open,
+  onClose,
+  label,
+  contentClassName = "",
+  dismissible = true,
+  instantContent = false,
+  children,
+}) {
   const mounted = useSyncExternalStore(neverChanges, () => true, () => false);
   const panelRef = useRef(null);
   const restoreRef = useRef(null);
@@ -64,13 +72,20 @@ export default function Modal({ open, onClose, label, contentClassName = "", dis
     <AnimatePresence>
       {open && (
         <motion.div
-          className="fixed inset-0 z-[10050] flex items-center justify-center bg-primary-700/92"
-          initial={{ opacity: 0 }}
+          className="fixed inset-0 z-[10050]"
+          initial={{ opacity: instantContent ? 1 : 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: reducedMotion ? 0 : 0.18 }}
           onClick={dismissible ? onClose : undefined}
         >
+          <motion.div
+            aria-hidden
+            className="absolute inset-0 bg-primary-700/92"
+            initial={{ opacity: instantContent ? 0 : 1 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: reducedMotion ? 0 : 0.18 }}
+          />
           <div
             ref={panelRef}
             role="dialog"
