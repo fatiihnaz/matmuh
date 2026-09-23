@@ -38,6 +38,53 @@ import { useAuth } from "@/lib/auth";
 import { useT } from "@/i18n/useT";
 import { localizeTerm } from "@/i18n";
 
+const RESOURCES_SHOWN = 5;
+
+function resourceLines(text) {
+  return String(text ?? "")
+    .split(/\r?\n/)
+    .map((line) =>
+      line
+        .trim()
+        .replace(/^([-•*·]|\d+[.)])\s*/, "")
+        .replace(/,(?=\S)/g, ", ")
+        .replace(/\s{2,}/g, " "),
+    )
+    .filter(Boolean);
+}
+
+function ResourceList({ text }) {
+  const t = useT();
+  const [all, setAll] = useState(false);
+  const lines = resourceLines(text);
+  const hidden = lines.length - RESOURCES_SHOWN;
+  const shown = all || hidden <= 1 ? lines : lines.slice(0, RESOURCES_SHOWN);
+
+  return (
+    <div className="border-l-2 border-primary-500/10 pl-5">
+      <ul className="flex flex-col gap-2">
+        {shown.map((line, index) => (
+          <li key={index} className="flex gap-2.5 text-[13px] leading-relaxed text-primary-500/80">
+            <span aria-hidden className="mt-[0.6em] size-1 shrink-0 rounded-full bg-secondary-500" />
+            <span className="min-w-0 wrap-break-word">{line}</span>
+          </li>
+        ))}
+      </ul>
+      {hidden > 1 && (
+        <button
+          type="button"
+          onClick={() => setAll((value) => !value)}
+          aria-expanded={all}
+          className="mt-2 inline-flex items-center gap-1 text-[12px] font-medium text-secondary-700 hover:underline"
+        >
+          <ChevronDown size={13} className={`transition-transform ${all ? "rotate-180" : ""}`} />
+          {all ? t("Daha az göster") : t("+{count} kaynak daha", { count: hidden })}
+        </button>
+      )}
+    </div>
+  );
+}
+
 function SectionRow({ section, defaultOpen }) {
   const t = useT();
   const [open, setOpen] = useState(defaultOpen);
@@ -444,9 +491,7 @@ export default function CourseInfo({ course, sections = [] }) {
                             {t("Kaynaklar")}
                           </h3>
                         </div>
-                        <p className="text-sm text-primary-500/70 leading-relaxed border-l-2 border-primary-500/10 pl-5 py-1 whitespace-pre-line">
-                          {course.resources}
-                        </p>
+                        <ResourceList text={course.resources} />
                       </div>
                     )}
                   </div>

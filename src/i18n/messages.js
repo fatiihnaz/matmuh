@@ -492,5 +492,7 @@ export const messages = {
     "Öğretim Elemanı": "Instructor",
     "+{count} ders": "+{count} courses",
     "Ders": "Course",
+    "Daha az göster": "Show less",
+    "+{count} kaynak daha": "+{count} more resources",
   },
 };
