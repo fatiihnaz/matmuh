@@ -26,7 +26,14 @@ const ROLE_LABELS = {
 
 const SLOT = "w-9 h-9 sm:w-16";
 
-const MENU_CLOSE_DELAY = 220;
+const BACKDROP_HOLD = 220;
+
+const MENU_MOTION = {
+  hidden: { opacity: 0, y: -6, scale: 0.97 },
+  shown: { opacity: 1, y: 0, scale: 1 },
+  exit: (instant) =>
+    instant ? { opacity: 0, transition: { duration: 0 } } : { opacity: 0, y: -6, scale: 0.97 },
+};
 
 export default function UserLogin() {
   const { user, isAuthenticated, isLoading, signIn, signOut, getAccessToken } =
@@ -35,6 +42,8 @@ export default function UserLogin() {
 
   const t = useT();
   const [open, setOpen] = useState(false);
+  const [instantClose, setInstantClose] = useState(false);
+  const [holdBackdrop, setHoldBackdrop] = useState(false);
   const [panel, setPanel] = useState(null);
   const [pending, setPending] = useState(null);
   const ref = useRef(null);
@@ -43,6 +52,7 @@ export default function UserLogin() {
 
   const toggle = () => {
     const next = !open;
+    if (next) setInstantClose(false);
     setOpen(next);
     if (!next || !moderates) return;
     getAccessToken()
@@ -131,7 +141,7 @@ export default function UserLogin() {
       </button>
 
       <AnimatePresence>
-        {open && (
+        {(open || holdBackdrop) && (
           <motion.div
             aria-hidden
             initial={{ opacity: 0 }}
@@ -144,13 +154,15 @@ export default function UserLogin() {
         )}
       </AnimatePresence>
 
-      <AnimatePresence>
+      <AnimatePresence custom={instantClose}>
         {open && (
           <motion.div
             role="menu"
-            initial={{ opacity: 0, y: -6, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -6, scale: 0.97 }}
+            custom={instantClose}
+            variants={MENU_MOTION}
+            initial="hidden"
+            animate="shown"
+            exit="exit"
             transition={{ duration: 0.16, ease: [0.4, 0, 0.2, 1] }}
             className="fixed right-3 top-(--header-h) z-50 w-[min(20rem,calc(100vw-1.5rem))] origin-top-right overflow-hidden rounded-xl bg-white shadow-xl shadow-primary-500/25 ring-1 ring-primary-500/10 sm:absolute sm:right-0 sm:top-full sm:mt-2 sm:w-[clamp(15rem,88vw,21rem)]"
           >
@@ -197,7 +209,10 @@ export default function UserLogin() {
                   type="button"
                   onClick={() => {
                     setPanel(id);
-                    setTimeout(() => setOpen(false), MENU_CLOSE_DELAY);
+                    setInstantClose(true);
+                    setHoldBackdrop(true);
+                    setOpen(false);
+                    setTimeout(() => setHoldBackdrop(false), BACKDROP_HOLD);
                   }}
                   className="flex items-center gap-2 w-full px-2.5 py-2 text-[12px] text-primary-500/70 hover:bg-primary-500/4 transition-colors rounded-lg"
                 >
