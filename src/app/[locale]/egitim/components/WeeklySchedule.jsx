@@ -142,19 +142,27 @@ function buildCells(entries) {
     const span = spanOf(entry);
     for (let k = 0; k < span; k++) {
       const key = `${entry.day}-${entry.slot + k}`;
-      if (!cells.has(key)) cells.set(key, []);
-      cells.get(key).push({ ...entry, cont: k > 0 });
+      if (!cells.has(key)) cells.set(key, new Map());
+      const cont = k > 0;
+      const courses = cells.get(key);
+      const id = `${entry.code}|${cont}`;
+      if (!courses.has(id)) courses.set(id, { ...entry, cont, groups: [] });
+      courses.get(id).groups.push(entry);
     }
   }
 
-  for (const items of cells.values()) {
-    items.sort(
-      (a, b) =>
-        a.code.localeCompare(b.code, "tr") || (a.group || 0) - (b.group || 0),
-    );
+  const merged = new Map();
+  for (const [key, courses] of cells) {
+    const items = [...courses.values()];
+    for (const item of items) {
+      item.groups.sort((a, b) => (a.group || 0) - (b.group || 0));
+      item.english = item.groups.every((group) => group.english);
+      item.online = item.groups.every((group) => group.online);
+    }
+    items.sort((a, b) => Number(a.cont) - Number(b.cont) || a.code.localeCompare(b.code, "tr"));
+    merged.set(key, items);
   }
-
-  return cells;
+  return merged;
 }
 
 function buildRows(entries) {
@@ -182,18 +190,65 @@ function buildRows(entries) {
   return rows;
 }
 
+function groupLabel(groups) {
+  return groups.length === 1 ? `Gr.${groups[0].group}` : `Gr.${groups.map((group) => group.group).join("·")}`;
+}
+
+function GroupDetail({ entry, single }) {
+  const t = useT();
+  return (
+    <span className="flex flex-col gap-1 text-[10px] leading-snug text-primary-500/70">
+      {!single && (
+        <span className="flex items-center gap-1 font-mono text-[9.5px] font-semibold text-primary-600">
+          {t("{group}. grup", { group: entry.group })}
+          {entry.english && (
+            <span className="rounded-sm bg-secondary-500/12 px-1 py-px font-sans text-[9px] font-medium text-secondary-700">
+              {t("İngilizce")}
+            </span>
+          )}
+        </span>
+      )}
+      {entry.instructor && entry.instructor !== "-" && (
+        <span className="flex items-start gap-1">
+          <User size={10} strokeWidth={1.5} className="mt-px shrink-0" />
+          {entry.instructor}
+        </span>
+      )}
+      {entry.online ? (
+        <span className="flex items-center gap-1 text-secondary-700">
+          <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
+          {t("Çevrimiçi")}
+        </span>
+      ) : (
+        entry.room &&
+        entry.room !== "-" && (
+          <span className="flex items-center gap-1 font-mono">
+            <MapPin size={10} strokeWidth={1.5} className="shrink-0" />
+            {entry.room}
+          </span>
+        )
+      )}
+      <EnrollAction entry={entry} />
+    </span>
+  );
+}
+
 function Strip({ entry, color, slim, active, href, onToggle }) {
   const t = useT();
   const elective = entry.type === "Seçmeli";
-  const meta = metaOf(entry);
+  const groups = entry.groups ?? [entry];
+  const single = groups.length === 1;
+  const meta = single ? metaOf(groups[0]) : [t("{count} grup", { count: groups.length })];
   const detailed = !slim && !entry.cont && meta.length > 0;
 
   const label = [
     `${entry.code} ${entry.name}`,
-    t("{group}. grup", { group: entry.group }),
+    single
+      ? t("{group}. grup", { group: groups[0].group })
+      : t("{count} grup", { count: groups.length }),
     entry.cont ? t("devam eden oturum") : null,
     entry.online ? t("çevrimiçi") : null,
-    ...meta,
+    ...(single ? meta : []),
   ]
     .filter(Boolean)
     .join(", ");
@@ -213,26 +268,20 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
         aria-label={label}
         className="block min-h-6 w-full py-1.5 pr-1.5 pl-1.5 text-left transition-colors hover:bg-primary-500/4 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-secondary-500"
       >
-        <span className="flex items-baseline gap-1">
+        <span className="flex items-center gap-1">
           <span
             className={`shrink-0 font-mono text-[9.5px] font-semibold ${entry.cont && !active ? "opacity-60" : ""}`}
             style={{ color }}
           >
             {entry.code}
           </span>
-          <span
-            className={`min-w-0 flex-1 truncate text-[11px] leading-snug font-medium ${
-              entry.cont && !active ? "text-primary-500/70" : "text-primary-600"
-            }`}
-          >
-            {entry.name}
-          </span>
+          <span className="flex-1" />
           {entry.online && (
             <Wifi
               size={9}
               strokeWidth={2.25}
               aria-hidden
-              className="shrink-0 self-center text-secondary-700"
+              className="shrink-0 text-secondary-700"
             />
           )}
           {entry.english && (
@@ -241,17 +290,24 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
             </span>
           )}
           <span className="shrink-0 font-mono text-[9px] text-primary-500/70">
-            Gr.{entry.group}
+            {groupLabel(groups)}
           </span>
           <ChevronDown
             size={10}
             strokeWidth={2.25}
-            className={`shrink-0 self-center text-primary-500/70 transition-transform ${active ? "rotate-180" : ""}`}
+            className={`shrink-0 text-primary-500/70 transition-transform ${active ? "rotate-180" : ""}`}
           />
+        </span>
+        <span
+          className={`mt-0.5 block text-[11px] leading-snug font-medium ${
+            entry.cont && !active ? "text-primary-500/70" : "text-primary-600"
+          }`}
+        >
+          {entry.name}
         </span>
 
         {detailed && !active && (
-          <span className="mt-px block truncate text-[9.5px] leading-snug text-primary-500/70">
+          <span className="mt-px block wrap-break-word text-[9.5px] leading-snug text-primary-500/70">
             {meta.join(" · ")}
           </span>
         )}
@@ -276,9 +332,6 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
               </span>
 
               <span className="mt-1 flex flex-wrap items-center gap-1">
-                <span className="rounded-sm bg-primary-500/6 px-1 py-px font-mono text-[9px] text-primary-500/70">
-                  {t("{group}. grup", { group: entry.group })}
-                </span>
                 {(entry.badge || entry.type) && (
                   <span
                     className="rounded-sm px-1 py-px text-[9px] font-medium"
@@ -292,34 +345,23 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                     {t(entry.badge || entry.type)}
                   </span>
                 )}
-                {entry.english && (
+                {single && entry.english && (
                   <span className="rounded-sm bg-secondary-500/12 px-1 py-px text-[9px] font-medium text-secondary-700">
                     {t("İngilizce")}
                   </span>
                 )}
               </span>
 
-              <span className="mt-1.5 flex flex-col gap-1 text-[10px] leading-snug text-primary-500/70">
-                {entry.instructor && entry.instructor !== "-" && (
-                  <span className="flex items-start gap-1">
-                    <User size={10} strokeWidth={1.5} className="mt-px shrink-0" />
-                    {entry.instructor}
+              <span className="mt-1.5 flex flex-col gap-2">
+                {groups.map((group) => (
+                  <span
+                    key={`${group.group}-${group.offeringId ?? ""}`}
+                    className={single ? "" : "border-t pt-1.5 first:border-t-0 first:pt-0"}
+                    style={single ? undefined : { borderColor: `rgba(${NAVY},0.06)` }}
+                  >
+                    <GroupDetail entry={group} single={single} />
                   </span>
-                )}
-                {entry.online ? (
-                  <span className="flex items-center gap-1 text-secondary-700">
-                    <Wifi size={10} strokeWidth={1.75} className="shrink-0" />
-                    {t("Çevrimiçi")}
-                  </span>
-                ) : (
-                  entry.room &&
-                  entry.room !== "-" && (
-                    <span className="flex items-center gap-1 font-mono">
-                      <MapPin size={10} strokeWidth={1.5} className="shrink-0" />
-                      {entry.room}
-                    </span>
-                  )
-                )}
+                ))}
               </span>
 
               {href && (
@@ -331,8 +373,6 @@ function Strip({ entry, color, slim, active, href, onToggle }) {
                   <ArrowRight size={10} strokeWidth={2} />
                 </Link>
               )}
-
-              <EnrollAction entry={entry} />
             </div>
           </motion.div>
         )}
@@ -389,7 +429,7 @@ function Cell({
         const id = `${cellKey}#${index}`;
         return (
           <Strip
-            key={`${entry.code}-${entry.group}-${entry.slot}-${index}`}
+            key={`${entry.code}-${entry.cont}-${index}`}
             entry={entry}
             color={colorOf(palette, entry.code)}
             slim={index >= VISIBLE}
@@ -412,7 +452,7 @@ function Cell({
             strokeWidth={2.25}
             className={`transition-transform ${expanded ? "rotate-180" : ""}`}
           />
-          {expanded ? t("Daralt") : t("+{count} grup", { count: items.length - VISIBLE })}
+          {expanded ? t("Daralt") : t("+{count} ders", { count: items.length - VISIBLE })}
         </button>
       )}
     </div>

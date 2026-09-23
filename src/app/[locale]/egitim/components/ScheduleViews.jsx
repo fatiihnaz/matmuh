@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "@/app/components/LocaleLink";
-import { CalendarRange, List, MapPin, User, Wifi } from "lucide-react";
+import { CalendarRange, List, MapPin, Table2, User, Wifi } from "lucide-react";
 
 import { DAYS, TIME_SLOTS } from "@/data/schedule-grid";
 import { MyScheduleProvider } from "@/data/useMySchedule";
@@ -13,7 +13,17 @@ import { useT } from "@/i18n/useT";
 const VIEWS = [
   { id: "grid", label: "Izgara", icon: CalendarRange },
   { id: "list", label: "Liste", icon: List },
+  { id: "table", label: "Tablo", icon: Table2 },
 ];
+
+const LANGUAGES = [
+  { id: "all", label: "Tümü" },
+  { id: "tr", label: "Türkçe" },
+  { id: "en", label: "İngilizce" },
+];
+
+const byLanguage = (language) => (entry) =>
+  language === "all" || (language === "en" ? entry.english : !entry.english);
 
 const rangeOf = (entry) => {
   const start = TIME_SLOTS[entry.slot]?.split(" - ")[0] ?? "";
@@ -63,9 +73,9 @@ function ListRow({ entry, accent, courseHref }) {
 
         <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-primary-500/70">
           {entry.instructor && entry.instructor !== "-" && (
-            <span className="inline-flex items-center gap-1">
+            <span className="inline-flex min-w-0 items-center gap-1">
               <User size={11} strokeWidth={1.5} className="shrink-0" />
-              <span className="truncate">{entry.instructor}</span>
+              <span className="wrap-break-word">{entry.instructor}</span>
             </span>
           )}
           {entry.online ? (
@@ -152,6 +162,109 @@ function ScheduleList({ entries, courseHref, note }) {
   );
 }
 
+function ScheduleTable({ entries, courseHref, note }) {
+  const t = useT();
+  const days = DAYS.map((label, index) => ({
+    label,
+    items: entries
+      .filter((entry) => entry.day === index)
+      .sort(
+        (a, b) =>
+          a.slot - b.slot ||
+          a.code.localeCompare(b.code, "tr") ||
+          (a.group || 0) - (b.group || 0),
+      ),
+  })).filter((day) => day.items.length > 0);
+
+  if (days.length === 0) {
+    return (
+      <div className="rounded-xl border border-primary-500/8 bg-white py-12 text-center">
+        <span className="text-[13px] text-primary-500/70">
+          {t("Bu dönem için ders bulunamadı.")}
+        </span>
+      </div>
+    );
+  }
+
+  const HEAD = "px-2.5 py-1.5 text-left text-[10px] font-semibold uppercase tracking-wider text-primary-500/70";
+  const CELL = "px-2.5 py-1.5 align-top text-[12px] text-primary-600";
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="grid grid-cols-1 gap-3 xl:grid-cols-2">
+        {days.map((day) => (
+          <div
+            key={day.label}
+            className="overflow-hidden rounded-xl border border-primary-500/8 bg-white"
+          >
+            <div className="bg-primary-500 px-3 py-1.5">
+              <span className="text-[12px] font-semibold text-white">{t(day.label)}</span>
+            </div>
+            <div className="overflow-x-auto">
+              <table className="w-full min-w-136 table-fixed border-collapse">
+                <thead>
+                  <tr className="border-b border-primary-500/8">
+                    <th className={`${HEAD} w-26`}>{t("Saat")}</th>
+                    <th className={`${HEAD} w-26`}>{t("Ders Kodu")}</th>
+                    <th className={HEAD}>{t("Ders Adı")}</th>
+                    <th className={`${HEAD} w-22`}>{t("Derslik")}</th>
+                    <th className={`${HEAD} w-[30%]`}>{t("Öğretim Elemanı")}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {day.items.map((entry) => {
+                    const href = courseHref?.(entry.code) || null;
+                    return (
+                      <tr
+                        key={`${entry.code}-${entry.group}-${entry.slot}`}
+                        className="border-b border-primary-500/5 last:border-b-0 odd:bg-primary-500/2"
+                      >
+                        <td className={`${CELL} font-mono text-[11px] whitespace-nowrap`}>
+                          {rangeOf(entry)}
+                        </td>
+                        <td className={`${CELL} font-mono text-[11px] whitespace-nowrap`}>
+                          {href ? (
+                            <Link href={href} className="hover:text-secondary-700 hover:underline">
+                              {entry.code}
+                            </Link>
+                          ) : (
+                            entry.code
+                          )}
+                          <span className="text-primary-500/70">({entry.group})</span>
+                        </td>
+                        <td className={CELL}>
+                          {entry.name}
+                          {entry.english && (
+                            <span className="ml-1.5 inline-block rounded-sm bg-secondary-500/12 px-1 py-px font-mono text-[9px] font-semibold whitespace-nowrap text-secondary-700">
+                              EN
+                            </span>
+                          )}
+                        </td>
+                        <td className={`${CELL} font-mono text-[11px]`}>
+                          {entry.online ? t("Çevrimiçi") : entry.room !== "-" ? entry.room : ""}
+                        </td>
+                        <td className={CELL}>
+                          {entry.instructor !== "-" ? entry.instructor : ""}
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {note && (
+        <div className="px-4 text-center">
+          <span className="text-[11px] text-primary-500/70">{t(note)}</span>
+        </div>
+      )}
+    </div>
+  );
+}
+
 export default function ScheduleViews(props) {
   return (
     <MyScheduleProvider>
@@ -163,12 +276,35 @@ export default function ScheduleViews(props) {
 function ScheduleBody({ entries = [], courseHref, note = null, legend = null }) {
   const t = useT();
   const [view, setView] = useState("grid");
+  const [language, setLanguage] = useState("all");
+  const shown = useMemo(() => entries.filter(byLanguage(language)), [entries, language]);
 
   return (
     <div className="flex flex-col gap-3">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
         {legend ? <div className="min-w-0">{legend}</div> : <span />}
-        <div className="flex shrink-0 gap-1.5">
+        <div className="flex shrink-0 flex-wrap items-center gap-1.5">
+          <div
+            role="group"
+            aria-label={t("Eğitim dili")}
+            className="flex items-center gap-0.5 rounded-md border border-primary-500/8 p-0.5"
+          >
+            {LANGUAGES.map((option) => (
+              <button
+                key={option.id}
+                type="button"
+                onClick={() => setLanguage(option.id)}
+                aria-pressed={language === option.id}
+                className={`rounded px-2 py-1 text-[11px] font-medium transition-colors ${
+                  language === option.id
+                    ? "bg-primary-500 text-white"
+                    : "text-primary-500/70 hover:bg-primary-500/4 hover:text-primary-500"
+                }`}
+              >
+                {t(option.label)}
+              </button>
+            ))}
+          </div>
           {VIEWS.map(({ id, label, icon: Icon }) => (
             <button
               key={id}
@@ -189,9 +325,11 @@ function ScheduleBody({ entries = [], courseHref, note = null, legend = null }) 
       </div>
 
       {view === "grid" ? (
-        <WeeklySchedule entries={entries} courseHref={courseHref} note={note} />
+        <WeeklySchedule entries={shown} courseHref={courseHref} note={note} />
+      ) : view === "table" ? (
+        <ScheduleTable entries={shown} courseHref={courseHref} note={note} />
       ) : (
-        <ScheduleList entries={entries} courseHref={courseHref} note={note} />
+        <ScheduleList entries={shown} courseHref={courseHref} note={note} />
       )}
     </div>
   );
