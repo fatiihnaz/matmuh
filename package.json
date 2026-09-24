@@ -16,7 +16,7 @@
     "framer-motion": "^12.34.3",
     "inscribed": "^5.0.0",
     "lucide-react": "^0.575.0",
-    "next": "^16.2.12",
+    "next": "16.3.6",
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "recharts": "^3.7.0"
@@ -26,7 +26,7 @@
     "@types/node": "25.3.0",
     "@types/react": "19.2.14",
     "eslint": "^9",
-    "eslint-config-next": "16.1.6",
+    "eslint-config-next": "16.3.6",
     "tailwindcss": "^4",
     "typescript": "5.9.3"
   }
