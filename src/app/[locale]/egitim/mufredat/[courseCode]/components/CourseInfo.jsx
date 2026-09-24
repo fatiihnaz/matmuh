@@ -99,76 +99,77 @@ function policyItems(text) {
   return items.length > 0 && items.every(Boolean) ? items : null;
 }
 
+function assessmentGroups(assessment, items) {
+  const final = assessment.final?.weight ?? 0;
+  const last = items?.at(-1);
+  const finalItem = last && last.weight === final ? last : null;
+  const termItems = (items ?? []).filter((item) => item !== finalItem);
+  return [
+    { key: "term", label: "Yarıyıl içi", weight: assessment.midterm?.weight ?? 0, items: termItems },
+    { key: "final", label: "Final", weight: final, items: [], note: "Dönem sonu sınavı" },
+  ].filter((group) => group.weight > 0);
+}
+
 function Assessment({ assessment, policy }) {
   const t = useT();
   const items = policyItems(policy);
 
-  if (!assessment && !policy) {
-    return <p className="text-sm text-primary-500/70 border-l-2 border-primary-500/10 pl-5 py-1">-</p>;
+  if (!assessment) {
+    return (
+      <p className="text-sm leading-relaxed text-primary-500/70 whitespace-pre-line border-l-2 border-primary-500/10 pl-5 py-1">
+        {policy || "-"}
+      </p>
+    );
   }
 
-  const midterm = assessment?.midterm?.weight ?? 0;
-  const final = assessment?.final?.weight ?? 0;
-  const isFinal = (item, index) => index === items.length - 1 && item.weight === final;
+  const groups = assessmentGroups(assessment, items);
 
   return (
-    <div className="border-l-2 border-primary-500/10 pl-5 py-1 space-y-5">
-      {assessment && (
-        <div className="flex h-9 overflow-hidden rounded-lg text-xs font-semibold">
-          {midterm > 0 && (
-            <div
-              className="flex items-center min-w-0 px-3 bg-secondary-500/15 text-secondary-700"
-              style={{ width: `${midterm}%` }}
-            >
-              <span className="truncate">
-                {t("Yarıyıl içi")} {t("%{n}", { n: midterm })}
-              </span>
+    <div>
+      <div className="flex flex-col sm:flex-row rounded-xl border border-primary-500/10 bg-primary-500/2 overflow-hidden">
+        {groups.map((group) => (
+          <section
+            key={group.key}
+            style={{ flexGrow: group.weight }}
+            className="min-w-0 sm:basis-0 border-primary-500/10 not-first:border-t sm:not-first:border-t-0 sm:not-first:border-l"
+          >
+            <div className={`h-1.5 ${group.key === "final" ? "bg-primary-500" : "bg-secondary-500"}`} />
+            <div className="p-4">
+              <div className="flex items-baseline justify-between gap-3">
+                <h4 className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest">
+                  {t(group.label)}
+                </h4>
+                <span className="text-xl font-semibold text-primary-500 tabular-nums">
+                  {t("%{n}", { n: group.weight })}
+                </span>
+              </div>
+              {group.items.length > 0 ? (
+                <ul className="mt-3 divide-y divide-primary-500/8 border-t border-primary-500/8">
+                  {group.items.map((item, index) => (
+                    <li key={`${item.label}-${index}`} className="flex items-baseline justify-between gap-3 py-2 text-sm">
+                      <span className="min-w-0 text-primary-500/80">
+                        {item.label}
+                        {item.count > 1 && (
+                          <span className="ml-1.5 text-xs text-primary-500/50">
+                            {t("{n} adet", { n: item.count })}
+                          </span>
+                        )}
+                      </span>
+                      <span className="shrink-0 font-mono text-xs font-semibold text-primary-500">
+                        {t("%{n}", { n: item.weight })}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                group.note && <p className="mt-1 text-xs text-primary-500/60">{t(group.note)}</p>
+              )}
             </div>
-          )}
-          {final > 0 && (
-            <div
-              className="flex items-center min-w-0 px-3 bg-primary-500 text-white"
-              style={{ width: `${final}%` }}
-            >
-              <span className="truncate">
-                {t("Final")} {t("%{n}", { n: final })}
-              </span>
-            </div>
-          )}
-        </div>
-      )}
-
-      {items ? (
-        <ul className="space-y-2.5">
-          {items.map((item, index) => (
-            <li
-              key={`${item.label}-${index}`}
-              className="grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[14rem_minmax(0,1fr)_3rem] items-center gap-x-4 gap-y-1.5 text-sm"
-            >
-              <span className="text-primary-500/80">
-                {item.label}
-                {item.count > 1 && (
-                  <span className="ml-1.5 font-mono text-xs text-primary-500/50">×{item.count}</span>
-                )}
-              </span>
-              <span className="col-span-2 row-start-2 sm:col-span-1 sm:row-start-auto h-1.5 rounded-full bg-primary-500/6">
-                <span
-                  className={`block h-full rounded-full ${
-                    isFinal(item, index) ? "bg-primary-500" : "bg-secondary-500"
-                  }`}
-                  style={{ width: `${Math.min(item.weight, 100)}%` }}
-                />
-              </span>
-              <span className="row-start-1 col-start-2 sm:row-start-auto sm:col-start-auto text-right font-mono text-xs font-semibold text-primary-500">
-                {t("%{n}", { n: item.weight })}
-              </span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        policy && (
-          <p className="text-[13px] leading-relaxed text-primary-500/70 whitespace-pre-line">{policy}</p>
-        )
+          </section>
+        ))}
+      </div>
+      {!items && policy && (
+        <p className="mt-3 text-[13px] leading-relaxed text-primary-500/70 whitespace-pre-line">{policy}</p>
       )}
     </div>
   );

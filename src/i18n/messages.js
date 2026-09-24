@@ -487,6 +487,8 @@ export const messages = {
     "{count} kayıt": "{count} records",
     "%{n}": "{n}%",
     "Yarıyıl içi": "In-term",
+    "Dönem sonu sınavı": "End-of-term exam",
+    "{n} adet": "{n} items",
     "Eğitim dili": "Language of instruction",
     "Derslik": "Room",
     "Öğretim Elemanı": "Instructor",
