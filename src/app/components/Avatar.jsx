@@ -9,13 +9,20 @@ export function getInitials(name) {
   return (parts[0][0] + parts[parts.length - 1][0]).toUpperCase();
 }
 
-export default function Avatar({ name, photo, idx = 0, size = "size-9", textSize = "text-[11px]" }) {
+export default function Avatar({
+  name,
+  photo,
+  idx = 0,
+  size = "size-9",
+  textSize = "text-[11px]",
+  sizes = "96px",
+}) {
   const src = typeof photo === "string" ? photo : photo?.src;
 
   if (src) {
     return (
       <span className={`relative shrink-0 overflow-hidden rounded-full ${size}`}>
-        <Image src={src} alt={photo?.alt || name} fill sizes="96px" className="object-cover" />
+        <Image src={src} alt={photo?.alt || name} fill sizes={sizes} className="object-cover" />
       </span>
     );
   }

@@ -35,6 +35,7 @@ export default function CreditCard({ person, idx, coord, markClassName = "" }) {
         photo={person?.photo}
         idx={idx}
         size="size-28"
+        sizes="112px"
         textSize="text-2xl"
       />
 
