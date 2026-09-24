@@ -11,6 +11,7 @@ const nextConfig = {
   allowedDevOrigins: lanOrigins,
   experimental: {
     staleTimes: { dynamic: 30 },
+    cpus: 1,
   },
   async rewrites() {
     const target = process.env.API_PROXY_TARGET;

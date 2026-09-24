@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "dev:frontend": "next dev --webpack",
-    "build": "next build",
+    "build": "NODE_OPTIONS=--max-old-space-size=640 next build --webpack",
+    "build:local": "NODE_OPTIONS=--max-old-space-size=640 next build --webpack",
     "prebuild": "npm run sync",
     "start": "next start",
     "lint": "eslint",
