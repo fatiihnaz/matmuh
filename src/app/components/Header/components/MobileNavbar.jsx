@@ -188,7 +188,13 @@ export default function MobileNavbar({ isOpen, onClose }) {
     </AnimatePresence>
 
 
-    <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} fullScreen layoutId="mm-arama-kutusu" />
+    <SearchOverlay
+      open={searchOpen}
+      onClose={() => setSearchOpen(false)}
+      onNavigate={onClose}
+      fullScreen
+      layoutId="mm-arama-kutusu"
+    />
     </MotionConfig>
   );
 }

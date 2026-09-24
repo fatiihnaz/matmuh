@@ -85,6 +85,95 @@ function ResourceList({ text }) {
   );
 }
 
+const POLICY_LINE = /^(.+?):\s*(\d+)\s*×\s*%\s*(\d+(?:[.,]\d+)?)$/;
+
+function policyItems(text) {
+  if (!text) return null;
+  const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  const items = lines.map((line) => {
+    const match = line.match(POLICY_LINE);
+    return match
+      ? { label: match[1].trim(), count: Number(match[2]), weight: Number(match[3].replace(",", ".")) }
+      : null;
+  });
+  return items.length > 0 && items.every(Boolean) ? items : null;
+}
+
+function Assessment({ assessment, policy }) {
+  const t = useT();
+  const items = policyItems(policy);
+
+  if (!assessment && !policy) {
+    return <p className="text-sm text-primary-500/70 border-l-2 border-primary-500/10 pl-5 py-1">-</p>;
+  }
+
+  const midterm = assessment?.midterm?.weight ?? 0;
+  const final = assessment?.final?.weight ?? 0;
+  const isFinal = (item, index) => index === items.length - 1 && item.weight === final;
+
+  return (
+    <div className="border-l-2 border-primary-500/10 pl-5 py-1 space-y-5">
+      {assessment && (
+        <div className="flex h-9 overflow-hidden rounded-lg text-xs font-semibold">
+          {midterm > 0 && (
+            <div
+              className="flex items-center min-w-0 px-3 bg-secondary-500/15 text-secondary-700"
+              style={{ width: `${midterm}%` }}
+            >
+              <span className="truncate">
+                {t("Yarıyıl içi")} {t("%{n}", { n: midterm })}
+              </span>
+            </div>
+          )}
+          {final > 0 && (
+            <div
+              className="flex items-center min-w-0 px-3 bg-primary-500 text-white"
+              style={{ width: `${final}%` }}
+            >
+              <span className="truncate">
+                {t("Final")} {t("%{n}", { n: final })}
+              </span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {items ? (
+        <ul className="space-y-2.5">
+          {items.map((item, index) => (
+            <li
+              key={`${item.label}-${index}`}
+              className="grid grid-cols-[minmax(0,1fr)_auto] sm:grid-cols-[14rem_minmax(0,1fr)_3rem] items-center gap-x-4 gap-y-1.5 text-sm"
+            >
+              <span className="text-primary-500/80">
+                {item.label}
+                {item.count > 1 && (
+                  <span className="ml-1.5 font-mono text-xs text-primary-500/50">×{item.count}</span>
+                )}
+              </span>
+              <span className="col-span-2 row-start-2 sm:col-span-1 sm:row-start-auto h-1.5 rounded-full bg-primary-500/6">
+                <span
+                  className={`block h-full rounded-full ${
+                    isFinal(item, index) ? "bg-primary-500" : "bg-secondary-500"
+                  }`}
+                  style={{ width: `${Math.min(item.weight, 100)}%` }}
+                />
+              </span>
+              <span className="row-start-1 col-start-2 sm:row-start-auto sm:col-start-auto text-right font-mono text-xs font-semibold text-primary-500">
+                {t("%{n}", { n: item.weight })}
+              </span>
+            </li>
+          ))}
+        </ul>
+      ) : (
+        policy && (
+          <p className="text-[13px] leading-relaxed text-primary-500/70 whitespace-pre-line">{policy}</p>
+        )
+      )}
+    </div>
+  );
+}
+
 function SectionRow({ section, defaultOpen }) {
   const t = useT();
   const [open, setOpen] = useState(defaultOpen);
@@ -496,42 +585,14 @@ export default function CourseInfo({ course, sections = [] }) {
                     )}
                   </div>
                 )}
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
-                    <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
-                      {t("Eğitim Dili")}
-                    </span>
-                    <p className="text-sm font-semibold text-primary-500">
-                      {course.language
-                        ? course.language.split(",").map((part) => t(part.trim())).join(", ")
-                        : "-"}
-                    </p>
-                  </div>
-                  <div className="p-4 rounded-xl bg-primary-500/2 border border-primary-500/10">
-                    <span className="text-[10px] font-bold text-secondary-700 uppercase tracking-widest block mb-2">
+                <div>
+                  <div className="flex items-center gap-2 mb-4">
+                    <div className="w-1 h-4 bg-secondary-500 rounded-full" />
+                    <h3 className="text-xs font-bold text-primary-500 uppercase tracking-widest">
                       {t("Değerlendirme Sistemi")}
-                    </span>
-                    {course.assessment && (
-                      <p className="text-sm font-semibold text-primary-500">
-                        {t("Yarıyıl içi %{midterm} + Final %{final}", {
-                          midterm: course.assessment.midterm?.weight ?? 0,
-                          final: course.assessment.final?.weight ?? 0,
-                        })}
-                      </p>
-                    )}
-                    {course.gradingPolicy && (
-                      <p
-                        className={`text-[13px] leading-relaxed text-primary-500/70 whitespace-pre-line ${
-                          course.assessment ? "mt-2 border-t border-primary-500/8 pt-2" : ""
-                        }`}
-                      >
-                        {course.gradingPolicy}
-                      </p>
-                    )}
-                    {!course.assessment && !course.gradingPolicy && (
-                      <p className="text-sm font-semibold text-primary-500">-</p>
-                    )}
+                    </h3>
                   </div>
+                  <Assessment assessment={course.assessment} policy={course.gradingPolicy} />
                 </div>
               </motion.div>
             )}

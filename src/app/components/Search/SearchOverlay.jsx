@@ -9,7 +9,7 @@ import SearchResults from "./SearchResults";
 import { MIN_CHARS, useSiteSearch } from "./useSiteSearch";
 import { useT } from "@/i18n/useT";
 
-export default function SearchOverlay({ open, onClose, fullScreen = false, layoutId }) {
+export default function SearchOverlay({ open, onClose, onNavigate, fullScreen = false, layoutId }) {
   const t = useT();
   const [query, setQuery] = useState("");
   const inputRef = useRef(null);
@@ -40,6 +40,11 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
   const close = () => {
     setQuery("");
     onClose();
+  };
+
+  const navigate = () => {
+    close();
+    onNavigate?.();
   };
 
   return (
@@ -104,7 +109,7 @@ export default function SearchOverlay({ open, onClose, fullScreen = false, layou
             {hasResults && (
               <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain rounded-xl border border-primary-500/10 bg-white shadow-2xl shadow-primary-700/30 sm:flex-none sm:max-h-[65svh]"
                 style={{ marginTop: 8, marginBottom: keyboardInset || undefined }}>
-                <SearchResults id={listId} groups={groups} term={term} onNavigate={close} />
+                <SearchResults id={listId} groups={groups} term={term} onNavigate={navigate} />
               </div>
             )}
 
