@@ -9,8 +9,9 @@ import * as cms from "../cms.config.mjs";
 export const proxy = createCmsMiddleware(cms);
 
 export const config = {
-  // Exclude API, Next internals, and any path with a file extension (a dot):
-  // static assets like /main-logo.svg and metadata routes (robots.txt,
-  // sitemap.xml) must not be rewritten onto the [locale] segment.
-  matcher: ["/((?!api|_next/static|_next/image|.*\\..*).*)"],
+  // Exclude API, the backend's revalidation route, Next internals, and any
+  // path with a file extension (a dot): static assets like /main-logo.svg and
+  // metadata routes (robots.txt, sitemap.xml) must not be rewritten onto the
+  // [locale] segment.
+  matcher: ["/((?!api|cms-revalidate|_next/static|_next/image|.*\\..*).*)"],
 };
