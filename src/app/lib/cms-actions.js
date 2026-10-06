@@ -3,9 +3,9 @@
 import { revalidateTag } from "next/cache";
 import { revalidateCmsCollection } from "inscribed/actions";
 
-const FEEDS_SCHEDULE = new Set(["lecture-offerings", "academic-terms", "lectures"]);
+import { scheduleTags } from "./schedule-feeds.js";
 
 export async function revalidateCollection(key, slug) {
   await revalidateCmsCollection(key, slug);
-  if (FEEDS_SCHEDULE.has(key)) revalidateTag("schedule");
+  for (const tag of scheduleTags([key])) revalidateTag(tag, "max");
 }
